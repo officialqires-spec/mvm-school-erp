@@ -33,6 +33,27 @@
 
         .module-box { background: #ffffff; padding: 30px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #e5e5ea; margin-bottom: 20px; }
         .module-box h2 { margin-bottom: 15px; font-size: 18px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        /* Mobile Responsive Code */
+        @media (max-width: 768px) {
+            body { flex-direction: column; overflow: auto; height: auto; }
+            .sidebar { width: 100%; border-right: none; border-bottom: 1px solid #eaeaea; padding: 10px; height: auto; }
+            .school-brand { padding: 0 10px 10px 10px; border-bottom: none; margin-bottom: 0; text-align: center; }
+            /* Mobile me left menu horizontally scroll hoga */
+            .nav-menu { display: flex; flex-direction: row; overflow-y: hidden; overflow-x: auto; padding: 5px 0; margin-top: 5px; gap: 8px; -webkit-overflow-scrolling: touch; }
+            .nav-menu::-webkit-scrollbar { display: none; } 
+            .nav-item { padding: 10px 16px; margin: 0; white-space: nowrap; font-size: 13px; }
+            .main-content { height: auto; overflow: visible; }
+            .top-header { padding: 15px 20px; height: auto; flex-direction: column; gap: 12px; text-align: center; }
+            .workspace { padding: 20px 15px; }
+            .stats-row { flex-direction: column; gap: 12px; }
+            /* Mobile par grid ko 1 line me kar dega */
+            .grid-dashboard { grid-template-columns: 1fr !important; gap: 20px; }
+            div[style*="display: grid"], div[style*="display:grid"], .profile-grid, .cctv-grid, .badges-grid { grid-template-columns: 1fr !important; gap: 12px !important; align-items: stretch !important; }
+            input, select, textarea, button { width: 100% !important; margin-bottom: 10px !important; }
+            /* Profile Card & Tables fix */
+            .profile-card { flex-direction: column; text-align: center; }
+            .data-table { display: block; overflow-x: auto; white-space: nowrap; }
+        }
     </style>
 </head>
 <body>
