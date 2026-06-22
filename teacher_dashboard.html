@@ -103,29 +103,51 @@
         .profile-item label { display: block; font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: bold; margin-bottom: 4px; }
         .profile-item span { font-size: 15px; font-weight: 600; color: var(--text-color); }
         /* Mobile Responsive Code */
+        /* 🔥 TRUE MOBILE APP UI (Slide-in Menu & Minimal UI) */
         @media (max-width: 768px) {
-            body { flex-direction: column; overflow: auto; height: auto; }
-            .sidebar { width: 100%; border-right: none; border-bottom: 1px solid #eaeaea; padding: 10px; height: auto; }
-            .school-brand { padding: 0 10px 10px 10px; border-bottom: none; margin-bottom: 0; text-align: center; }
-            /* Mobile me left menu horizontally scroll hoga */
-            .nav-menu { display: flex; flex-direction: row; overflow-y: hidden; overflow-x: auto; padding: 5px 0; margin-top: 5px; gap: 8px; -webkit-overflow-scrolling: touch; }
-            .nav-menu::-webkit-scrollbar { display: none; } 
-            .nav-item { padding: 10px 16px; margin: 0; white-space: nowrap; font-size: 13px; }
-            .main-content { height: auto; overflow: visible; }
-            .top-header { padding: 15px 20px; height: auto; flex-direction: column; gap: 12px; text-align: center; }
-            .workspace { padding: 20px 15px; }
-            .stats-row { flex-direction: column; gap: 12px; }
-            /* Mobile par grid ko 1 line me kar dega */
-            .grid-dashboard { grid-template-columns: 1fr !important; gap: 20px; }
-            div[style*="display: grid"], div[style*="display:grid"], .profile-grid, .cctv-grid, .badges-grid { grid-template-columns: 1fr !important; gap: 12px !important; align-items: stretch !important; }
-            input, select, textarea, button { width: 100% !important; margin-bottom: 10px !important; }
-            /* Profile Card & Tables fix */
-            .profile-card { flex-direction: column; text-align: center; }
-            .data-table { display: block; overflow-x: auto; white-space: nowrap; }
+            body { flex-direction: column; overflow-x: hidden; background-color: #f4f4f6; }
+            
+            /* App ka Top Bar (Header) */
+            .mobile-header { display: flex !important; justify-content: space-between; align-items: center; padding: 15px 20px; background: #fff; border-bottom: 1px solid #eaeaea; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+            .menu-btn { font-size: 26px; cursor: pointer; background: none; border: none; color: #000; padding: 0 10px 0 0; }
+            
+            /* Desktop Header Hide kar do (Annoying lagta hai) */
+            .top-header { display: none; }
+            
+            /* 📱 Slide-in Hamburger Menu (App Drawer) */
+            .sidebar { position: fixed; top: 0; left: -100%; width: 270px; height: 100%; background: #fff; z-index: 999; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 5px 0 20px rgba(0,0,0,0.2); padding-top: 10px; overflow-y: auto; }
+            .sidebar.open { left: 0; }
+            .close-sidebar { display: block !important; position: absolute; top: 15px; right: 20px; font-size: 30px; cursor: pointer; color: #000; background: none; border: none; }
+            
+            /* Nav Menu ko clean list me badal diya */
+            .nav-menu { flex-direction: column; display: block; padding-top: 20px; overflow-y: visible; }
+            .nav-item { padding: 16px 20px; font-size: 15px; border-radius: 0; border-bottom: 1px solid #f5f5f5; margin: 0; }
+            
+            /* 🧹 MINIMAL DASHBOARD FIX */
+            .workspace { padding: 15px; padding-bottom: 80px; } 
+            .stats-row { flex-direction: column; gap: 10px; }
+            .stat-box { padding: 15px; border-radius: 12px; }
+            .grid-dashboard, div[style*="display: grid"] { grid-template-columns: 1fr !important; gap: 15px !important; }
+            
+            /* Ye class jis element pe lagaoge, wo mobile par hide ho jayega */
+            .hide-on-mobile { display: none !important; }
+            
+            .card { padding: 15px; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
+            input, select, textarea, button { width: 100% !important; margin-bottom: 10px; padding: 14px; border-radius: 10px; }
+            
+            /* Andhera overlay jab menu khulega */
+            .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 998; backdrop-filter: blur(2px); }
+            .sidebar-overlay.open { display: block; }
         }
     </style>
 </head>
 <body>
+    <div class="mobile-header" style="display: none;">
+        <button class="menu-btn" onclick="toggleAppMenu()">☰</button>
+        <h2 style="font-size: 18px; font-weight: 800; margin: 0; letter-spacing: 1px;" id="mobile-title">MVM PUBLIC</h2>
+        <div class="avatar" style="width: 35px; height: 35px; background: #000; color: #fff; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 14px; font-weight: bold;" id="mobile-avatar">A</div>
+    </div>
+    <div class="sidebar-overlay" onclick="toggleAppMenu()"></div>
     <div id="global-sos-screen" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#b71c1c; color:white; z-index:999999; flex-direction:column; justify-content:center; align-items:center; text-align:center;">
         <h1 style="font-size: 80px; margin-bottom: 20px;">🚨 SYSTEM LOCKDOWN 🚨</h1>
         <h2>Emergency SOS Activated by Vice Principal</h2>
@@ -133,6 +155,7 @@
     </div>
 
     <div class="sidebar">
+        <button class="close-sidebar" onclick="toggleAppMenu()" style="display: none;">×</button>
         <div class="school-brand">
             <h2>MVM PUBLIC</h2>
             <div class="role-badge">STAFF PORTAL</div>
@@ -176,7 +199,7 @@
                 <div class="profile-details">
                     <h2 id="profile-name-large">S. K. Mishra</h2>
                     <p style="color: var(--text-muted); font-weight: 600;">Employee ID: MVM-T-104</p>
-                    <div class="profile-grid">
+                    <div class="profile-grid hide-on-mobile"></div>
                         <div class="profile-item"><label>Department</label><span>Science Faculty</span></div>
                         <div class="profile-item"><label>Class Teacher</label><span>Class 10 - B</span></div>
                         <div class="profile-item"><label>Joining Date</label><span>05 July 2018</span></div>
@@ -571,9 +594,14 @@
             document.getElementById(tabId).classList.add('active');
             
             let cleanTitle = element.innerText.replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]|\u200D|\uFE0F|[\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|\uD83E[\uDD10-\uDDFF]/g, '').trim();
-            document.getElementById('page-title').innerText = cleanTitle;
             
-            // Refresh data dynamically when tabs are clicked
+            if(document.getElementById('page-title')) document.getElementById('page-title').innerText = cleanTitle;
+            if(document.getElementById('mobile-title')) document.getElementById('mobile-title').innerText = cleanTitle;
+
+            // 📱 Mobile me tab click karte hi menu band ho jayega
+            if(window.innerWidth <= 768) { toggleAppMenu(); }
+            
+            // 🚨 Refresh data dynamically when tabs are clicked
             if(tabId === 'homework') loadHomeworks();
             if(tabId === 'leaves') loadLeaves();
             if(tabId === 'dashboard') refreshDashStats();
