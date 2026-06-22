@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MVM Public School - Director's Portal</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { display: flex; height: 100vh; background-color: #f4f4f6; color: #111; overflow: hidden; }
+
+        /* Executive Sidebar */
+        .sidebar { width: 280px; background-color: #0a0a0a; color: #fff; border-right: 1px solid #222; display: flex; flex-direction: column; padding: 20px 0; z-index: 10; }
+        .school-brand { padding: 0 20px 20px 20px; border-bottom: 1px solid #222; margin-bottom: 10px; }
+        .school-brand h2 { font-size: 22px; font-weight: 800; color: #fff; letter-spacing: 1px; }
+        .role-badge { display: inline-block; background: #cfb53b; color: #000; padding: 4px 10px; font-size: 11px; border-radius: 12px; font-weight: bold; margin-top: 5px; letter-spacing: 1px; text-transform: uppercase; }
+
+        .nav-menu { flex-grow: 1; overflow-y: auto; padding: 0 15px; margin-top: 10px; }
+        .nav-item { padding: 12px 15px; margin: 4px 0; border-radius: 12px; cursor: pointer; font-size: 14px; font-weight: 600; color: #aaa; transition: all 0.2s ease; display: flex; align-items: center; gap: 10px; }
+        .nav-item:hover { background-color: #1a1a1a; color: #cfb53b; }
+        .nav-item.active { background-color: #cfb53b; color: #000; box-shadow: 0 6px 15px rgba(207, 181, 59, 0.2); transform: translateX(5px); }
+
+        /* Main Workspace */
+        .main-content { flex-grow: 1; display: flex; flex-direction: column; background-color: #f4f4f6; overflow-y: auto; }
+        .top-header { height: 75px; background-color: #fff; border-bottom: 1px solid #eaeaea; display: flex; justify-content: space-between; align-items: center; padding: 0 40px; position: sticky; top: 0; z-index: 5; }
+        .top-header h1 { font-size: 24px; font-weight: 800; }
+        
+        .header-info { display: flex; align-items: center; gap: 20px; }
+        .user-profile { display: flex; align-items: center; gap: 12px; border-left: 1px solid #eee; padding-left: 20px; }
+        .avatar { width: 42px; height: 42px; background: #000; color: #cfb53b; border: 2px solid #cfb53b; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 18px; }
+        
+        .workspace { display: none; padding: 40px; animation: fadeIn 0.4s ease; }
+        .workspace.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Grid & Cards */
+        .grid-dashboard { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .card { background: #fff; padding: 25px; border-radius: 20px; border: 1px solid #eaeaea; box-shadow: 0 10px 30px rgba(0,0,0,0.03); margin-bottom: 30px; }
+        .card h3 { font-size: 18px; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #eee; }
+        
+        .stats-row { display: flex; gap: 20px; margin-bottom: 30px; }
+        .stat-box { flex: 1; background: #fff; color: #000; border: 1px solid #eaeaea; padding: 20px; border-radius: 16px; position: relative; box-shadow: 0 5px 15px rgba(0,0,0,0.02); }
+        .stat-box.dark { background: #0a0a0a; color: #cfb53b; border: none; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .stat-box h4 { font-size: 13px; opacity: 0.8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; color: #666; }
+        .stat-box.dark h4 { color: #aaa; }
+        .stat-box h2 { font-size: 32px; font-weight: 800; }
+
+        /* Simple Bar Chart Mockup */
+        .bar-chart { display: flex; align-items: flex-end; gap: 15px; height: 150px; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 20px; }
+        .bar-col { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 5px; }
+        .bar { width: 100%; background: #111; border-radius: 4px 4px 0 0; transition: 0.3s; }
+        .bar.expense { background: #d32f2f; }
+        .bar-label { font-size: 11px; font-weight: bold; color: #666; }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="school-brand">
+            <h2>MVM PUBLIC</h2>
+            <div class="role-badge">DIRECTOR / OWNER</div>
+        </div>
+        
+        <div class="nav-menu">
+            <div class="nav-item active" onclick="switchTab('dashboard', this)">👑 Executive Dashboard</div>
+            <div class="nav-item" onclick="switchTab('finance', this)">💹 Financial Analytics</div>
+            <div class="nav-item" onclick="switchTab('predictive', this)">🧠 AI Predictive Forecast</div>
+            <div class="nav-item" onclick="switchTab('branches', this)">🏢 Multi-Branch Status</div>
+            <div class="nav-item" onclick="switchTab('audit', this)">📄 Audit & Master Reports</div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="top-header">
+            <h1 id="page-title">Executive Dashboard</h1>
+            <div class="header-info">
+                <span style="font-size: 13px; font-weight: bold; color: #0a0a0a; background: #cfb53b; padding: 6px 12px; border-radius: 20px;">Financial Year 2026-27</span>
+                <div class="user-profile">
+                    <div style="text-align: right;">
+                        <strong style="font-size: 15px; display: block;" id="owner-name">User</strong>
+                        <span style="font-size: 12px; color: #888; font-weight: 600;">School Director</span>
+                    </div>
+                    <div class="avatar" id="owner-avatar">O</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="dashboard" class="workspace active">
+            <div class="stats-row">
+                <div class="stat-box dark"><h4>Total Revenue (MTD)</h4><h2>₹42.5 L</h2></div>
+                <div class="stat-box"><h4>Total Expenses (MTD)</h4><h2 style="color: #d32f2f;">₹18.2 L</h2></div>
+                <div class="stat-box"><h4>Net Profit Margin</h4><h2 style="color: #2e7d32;">57.1% ⬆️</h2></div>
+            </div>
+            <div class="grid-dashboard">
+                <div class="card">
+                    <h3>Revenue vs Expense (Last 6 Months)</h3>
+                    <div class="bar-chart">
+                        <div class="bar-col"><div class="bar" style="height: 40%;"></div><span class="bar-label">Jan</span></div>
+                        <div class="bar-col"><div class="bar expense" style="height: 30%;"></div><span class="bar-label">Feb</span></div>
+                        <div class="bar-col"><div class="bar" style="height: 60%;"></div><span class="bar-label">Mar</span></div>
+                        <div class="bar-col"><div class="bar expense" style="height: 50%;"></div><span class="bar-label">Apr</span></div>
+                        <div class="bar-col"><div class="bar" style="height: 80%;"></div><span class="bar-label">May</span></div>
+                        <div class="bar-col"><div class="bar" style="height: 95%; background: #cfb53b;"></div><span class="bar-label">Jun</span></div>
+                    </div>
+                    <div style="text-align: center; margin-top: 15px; font-size: 12px; color: #666;">Black: Revenue | Red: Expenses | Gold: Current Month Projection</div>
+                </div>
+                <div class="card">
+                    <h3>Director's Quick Alerts</h3>
+                    <div style="padding: 15px; border-left: 4px solid #f44336; background: #ffebee; margin-bottom: 10px; border-radius: 0 8px 8px 0; font-size: 14px;">
+                        <strong>High Expense Alert:</strong> Transport maintenance cost exceeded budget by 15% this month.
+                    </div>
+                    <div style="padding: 15px; border-left: 4px solid #cfb53b; background: #fffde7; margin-bottom: 10px; border-radius: 0 8px 8px 0; font-size: 14px;">
+                        <strong>Pending Approval:</strong> HR requested budget approval for 2 new PGT recruitment.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="finance" class="workspace">
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3 style="margin: 0; font-size: 22px;">💹 Detailed Financial Analytics</h3>
+                    <select style="padding: 10px; border-radius: 8px; border: 1px solid #ccc; outline: none;"><option>This Quarter (Q2)</option><option>Last Quarter (Q1)</option></select>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                    <div>
+                        <h4 style="margin-bottom: 15px; color: #555;">Income Breakdown</h4>
+                        <div style="display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid #eee; font-size: 14px;"><span>Tuition Fees</span> <strong>₹28,50,000</strong></div>
+                        <div style="display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid #eee; font-size: 14px;"><span>Transport Fees</span> <strong>₹8,20,000</strong></div>
+                        <div style="display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid #eee; font-size: 14px;"><span>New Admissions</span> <strong>₹5,80,000</strong></div>
+                    </div>
+                    <div>
+                        <h4 style="margin-bottom: 15px; color: #555;">Expense Breakdown</h4>
+                        <div style="display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid #eee; font-size: 14px;"><span>Staff Payroll</span> <strong style="color: #d32f2f;">₹12,40,000</strong></div>
+                        <div style="display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid #eee; font-size: 14px;"><span>Infra & Maintenance</span> <strong style="color: #d32f2f;">₹3,10,000</strong></div>
+                        <div style="display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid #eee; font-size: 14px;"><span>Marketing/Ads</span> <strong style="color: #d32f2f;">₹1,50,000</strong></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="predictive" class="workspace">
+            <div class="stats-row">
+                <div class="stat-box" style="border-top: 4px solid #1e88e5;">
+                    <h4>Expected Collection (Next Month)</h4><h2 style="color: #1e88e5;">₹48.0 L</h2>
+                    <p style="font-size: 11px; color: #666; margin-top: 5px;">Based on historical payment trends</p>
+                </div>
+                <div class="stat-box" style="border-top: 4px solid #e53935;">
+                    <h4>Students at Dropout Risk</h4><h2 style="color: #e53935;">12</h2>
+                    <p style="font-size: 11px; color: #666; margin-top: 5px;">Flags: Low Attendance + Fee Dues</p>
+                </div>
+            </div>
+            <div class="card">
+                <h3 style="font-size: 20px; margin-bottom: 20px;">🧠 AI Churn Risk Analysis (Dropout Warning)</h3>
+                <div style="border: 1px solid #eee; border-radius: 12px; overflow: hidden;">
+                    <div style="display: flex; justify-content: space-between; padding: 15px 20px; background: #f9f9f9; font-weight: bold; border-bottom: 1px solid #eee;">
+                        <span style="flex: 2;">Student Name & Class</span>
+                        <span style="flex: 2;">Risk Factors Identified by AI</span>
+                        <span style="flex: 1; text-align: right;">Risk Level</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 15px 20px; border-bottom: 1px solid #eee; align-items: center;">
+                        <span style="flex: 2; font-weight: bold;">Ravi Sharma (Class 8)</span>
+                        <span style="flex: 2; font-size: 13px; color: #555;">Attendance < 60% + Fees pending for 3 months</span>
+                        <span style="flex: 1; text-align: right;"><span style="background: #ffebee; color: #c62828; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: bold;">HIGH RISK</span></span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 15px 20px; align-items: center;">
+                        <span style="flex: 2; font-weight: bold;">Ananya Singh (Class 10)</span>
+                        <span style="flex: 2; font-size: 13px; color: #555;">Academic drop by 40% + Parent disputes logged</span>
+                        <span style="flex: 1; text-align: right;"><span style="background: #fff3e0; color: #ef6c00; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: bold;">MEDIUM RISK</span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="card" style="background: #0a0a0a; border: 1px solid #222; padding: 25px; border-radius: 20px; margin-top: 30px; border-left: 5px solid #cfb53b;">
+    <h3 style="color: #cfb53b; font-size: 20px; margin-bottom: 20px;">👑 Register School Principal</h3>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <div>
+            <label style="font-size: 13px; font-weight: bold; color: #888;">Principal Full Name</label>
+            <input type="text" id="prin-name" placeholder="e.g., Dr. AK Singh" style="width: 100%; padding: 12px; margin-top: 5px; border-radius: 8px; border: 1px solid #222; background: #111; color: #fff; outline: none;">
+        </div>
+        <div>
+            <label style="font-size: 13px; font-weight: bold; color: #888;">Principal Login ID / Email</label>
+            <input type="email" id="prin-email" placeholder="e.g., principal@mvm.com" style="width: 100%; padding: 12px; margin-top: 5px; border-radius: 8px; border: 1px solid #222; background: #111; color: #fff; outline: none;">
+        </div>
+        <div>
+            <label style="font-size: 13px; font-weight: bold; color: #888;">Set Strong Password</label>
+            <input type="password" id="prin-password" placeholder="Create password" style="width: 100%; padding: 12px; margin-top: 5px; border-radius: 8px; border: 1px solid #222; background: #111; color: #fff; outline: none;">
+        </div>
+    </div>
+    <button onclick="createPrincipalAccount()" style="margin-top: 20px; padding: 15px; width: 100%; background: #cfb53b; color: #000; font-weight: bold; border: none; border-radius: 8px; cursor: pointer; transition: 0.3s; font-size: 15px;">
+        ⚡ Deploy Principal & Sync Database
+    </button>
+</div>
+        </div>
+
+        <div id="branches" class="workspace">
+            <h2 style="margin-bottom: 20px;">🏢 Multi-Branch Performance Snapshot</h2>
+            <div class="grid-dashboard">
+                <div class="card" style="border-top: 4px solid #cfb53b;">
+                    <h3 style="font-size: 20px;">📍 MVM Main Campus (Mirzapur)</h3>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 15px;"><span>Total Students:</span> <strong>1,500</strong></div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 15px;"><span>Revenue (YTD):</span> <strong style="color: #2e7d32;">₹2.5 Cr</strong></div>
+                    <div style="display: flex; justify-content: space-between; font-size: 15px;"><span>Performance:</span> <strong>Excellent</strong></div>
+                </div>
+                <div class="card" style="border-top: 4px solid #111;">
+                    <h3 style="font-size: 20px;">📍 MVM City Branch (Vindhyachal)</h3>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 15px;"><span>Total Students:</span> <strong>850</strong></div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 15px;"><span>Revenue (YTD):</span> <strong style="color: #2e7d32;">₹1.2 Cr</strong></div>
+                    <div style="display: flex; justify-content: space-between; font-size: 15px;"><span>Performance:</span> <strong style="color: #f57c00;">Needs Marketing</strong></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="audit" class="workspace">
+            <div class="card">
+                <h3 style="font-size: 22px; margin-bottom: 20px;">📄 Generate Master Audit Reports</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; align-items: end; margin-bottom: 30px;">
+                    <div>
+                        <label style="font-size: 13px; font-weight: bold; color: #555;">Report Type</label>
+                        <select style="width: 100%; padding: 14px; margin-top: 8px; border-radius: 10px; border: 1px solid #ccc; outline: none;">
+                            <option>Complete Financial Audit</option>
+                            <option>Staff Payroll Summary</option>
+                            <option>Defaulter (Due Fees) List</option>
+                            <option>Asset & Inventory Report</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="font-size: 13px; font-weight: bold; color: #555;">Date Range</label>
+                        <input type="date" style="width: 100%; padding: 13px; margin-top: 8px; border-radius: 10px; border: 1px solid #ccc; outline: none;">
+                    </div>
+                    <button style="padding: 15px; background: #0a0a0a; color: #cfb53b; border: none; border-radius: 10px; font-weight: bold; font-size: 15px; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.2);">
+                        📥 Generate & Export (Excel/PDF)
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const loggedInUser = localStorage.getItem("loggedInUser") || "Director";
+        document.getElementById("owner-name").innerText = loggedInUser;
+        document.getElementById("owner-avatar").innerText = loggedInUser.charAt(0);
+
+        function switchTab(tabId, element) {
+            document.querySelectorAll('.nav-item').forEach(tab => tab.classList.remove('active'));
+            element.classList.add('active');
+            document.querySelectorAll('.workspace').forEach(ws => ws.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            document.getElementById('page-title').innerText = element.innerText.substring(3);
+        }
+        // 🔥 OWNER ENGINE: Sirf Principal account banane ke liye
+async function createPrincipalAccount() {
+    const name = document.getElementById("prin-name").value;
+    const email = document.getElementById("prin-email").value.toLowerCase().trim();
+    const password = document.getElementById("prin-password").value;
+    const role = "principal"; // Fixed power
+
+    if (!name || !email || !password) {
+        alert("Sir, Principal ki saari details bharna zaroori hai!");
+        return;
+    }
+
+    try {
+        const response = await fetch("http://127.0.0.1:8000/create-user/", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                "name": name,
+                "email": email,
+                "password": password,
+                "role": role
+            })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            alert("Boom! 💥 Principal Account Neon DB me safe save ho gaya!");
+            document.getElementById("prin-name").value = "";
+            document.getElementById("prin-email").value = "";
+            document.getElementById("prin-password").value = "";
+        } else {
+            alert("Error: " + data.detail);
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        alert("Server se connect nahi ho pa raha hai.");
+    }
+}
+    </script>
+</body>
+</html>

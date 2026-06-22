@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MVM Public School - Portal</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { margin: 0; height: 100vh; display: flex; justify-content: center; align-items: center; perspective: 1000px; overflow: hidden; background-color: #000; }
+        
+        /* 🔱 MAHADEV VIDEO BACKGROUND */
+        #bg-video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: -3;
+            transform: translateX(-50%) translateY(-50%);
+            object-fit: cover;
+        }
+        
+        /* 🎨 THEME BLENDING: Overlay with cosmic purple/blue tint */
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(10, 10, 26, 0.8) 0%, rgba(35, 10, 50, 0.6) 100%); 
+            z-index: -2;
+        }
+
+        /* Orbs matched to cosmic purple energy */
+        .orb { position: absolute; border-radius: 50%; background: rgba(100, 50, 255, 0.08); filter: blur(50px); animation: float 10s ease-in-out infinite; z-index: -1; }
+        .orb:nth-child(1) { width: 400px; height: 400px; top: -15%; left: 15%; animation-delay: 0s; }
+        .orb:nth-child(2) { width: 500px; height: 500px; bottom: -15%; right: 15%; animation-delay: 4s; }
+        @keyframes float { 0% { transform: translateY(0px) scale(1); } 50% { transform: translateY(-40px) scale(1.05); } 100% { transform: translateY(0px) scale(1); } }
+        
+        /* 🚨 SMART UPDATE: Dark Mystic Glassmorphism (Standout kam kiya) */
+        .login-box { 
+            /* Dark transparent background matched to cosmic blues */
+            background: rgba(10, 10, 20, 0.4); 
+            backdrop-filter: blur(20px); 
+            /* Faint glowing gold border matching divine ornaments */
+            border: 1px solid rgba(212, 175, 55, 0.3); 
+            padding: 50px 45px; 
+            border-radius: 24px; 
+            /* Divine golden glow instead of harsh shadow */
+            box-shadow: 0 0 50px rgba(212, 175, 55, 0.1); 
+            width: 420px; 
+            text-align: center; 
+            z-index: 1; 
+            
+            /* Cinematic Transition Properties */
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.8s ease, filter 0.8s ease, box-shadow 0.3s ease; 
+            opacity: 0;
+            pointer-events: none;
+            filter: blur(15px);
+            transform: scale(0.9) translateZ(-50px);
+        }
+        
+        /* entry trigger class */
+        .login-box.show-now {
+            opacity: 1;
+            pointer-events: auto;
+            filter: blur(0px);
+            transform: scale(1) translateZ(0px);
+        }
+        
+        .login-box.show-now:hover { 
+            transform: translateZ(25px) rotateX(2deg) rotateY(-2deg); 
+            /* Intense gold glow on hover */
+            box-shadow: 0 0 70px rgba(245, 166, 35, 0.25); 
+        }
+        
+        /* Titles - Light Cosmic Latte / Soft Gold */
+        .login-box h1 { color: rgba(255, 248, 220, 0.9); font-size: 26px; margin-bottom: 5px; text-transform: uppercase; font-weight: 800; text-shadow: 0 0 10px rgba(255, 248, 220, 0.5); }
+        
+        /* Badge - Subtle golden glow */
+        .badge { background: rgba(212, 175, 55, 0.1); color: rgba(212, 175, 55, 1); padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: bold; margin-bottom: 30px; display: inline-block; letter-spacing: 1px; border: 1px solid rgba(212, 175, 55, 0.4); text-shadow: 0 0 5px rgba(212, 175, 55, 0.5); }
+        
+        .input-group { margin-bottom: 22px; position: relative; }
+        
+        /* Inputs - Very dark, high transparency */
+        .input-group input { width: 100%; padding: 16px 20px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; color: #ffffff; font-size: 15px; outline: none; transition: all 0.3s ease; }
+        
+        /* Focus - Electric Blue glow (matches cosmic energy) */
+        .input-group input:focus { background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(100, 200, 255, 0.6); transform: translateZ(10px); box-shadow: 0 0 20px rgba(100, 200, 255, 0.2); }
+        
+        /* placeholder color */
+        .input-group input::placeholder { color: rgba(255, 255, 255, 0.4); }
+        
+        /* Button - Blazing Divine Fire Gradient (Standout with purpose) */
+        .btn { width: 100%; padding: 16px; background: linear-gradient(135deg, #d4af37 0%, #f5a623 50%, #e65100 100%); color: #000; border: none; border-radius: 12px; font-size: 16px; font-weight: 800; cursor: pointer; box-shadow: 0 10px 20px rgba(230, 81, 0, 0.2); transition: all 0.3s ease; letter-spacing: 1px; margin-top: 5px; text-transform: uppercase; text-shadow: 0 1px 2px rgba(255,255,255,0.3); }
+        
+        .btn:hover { transform: translateY(-4px) translateZ(20px); box-shadow: 0 15px 30px rgba(245, 166, 35, 0.4); filter: brightness(1.1); }
+        
+        /* Toggle text - subtle blending */
+        .toggle-text { margin-top: 25px; font-size: 13px; color: rgba(212, 175, 55, 0.7); font-weight: 600; cursor: pointer; transition: 0.2s; text-shadow: 0 0 2px rgba(0,0,0,0.5); }
+        .toggle-text:hover { color: rgba(255, 248, 220, 1); text-decoration: underline; text-shadow: 0 0 8px rgba(212, 175, 55, 0.8); }
+    </style>
+</head>
+<body>
+
+    <video id="bg-video" autoplay muted playsinline>
+        <source src="YouCut_20260621_194335289.mp4" type="video/mp4">
+    </video>
+    <div class="video-overlay"></div>
+
+    <div class="orb"></div>
+    <div class="orb"></div>
+
+    <div class="login-box">
+        <h1>MVM PUBLIC SCHOOL</h1>
+        <div class="badge" id="portal-badge">STUDENT PORTAL</div>
+        
+        <div class="input-group">
+            <input type="email" placeholder="Student Email (or 'vp@mvm.in')" id="email">
+        </div>
+        
+        <div class="input-group">
+            <input type="password" placeholder="Password (e.g. 'vp')" id="password">
+        </div>
+        
+        <button class="btn" onclick="loginFunction()">Secure Login</button>
+        
+        <div class="toggle-text" onclick="togglePortal()">Are you Staff/Principal? Click here</div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const bgVideo = document.getElementById("bg-video");
+            const loginBox = document.querySelector(".login-box");
+            let executionGuard = false; 
+            
+            let playPromise = bgVideo.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    executionGuard = true;
+                    loginBox.classList.add("show-now");
+                });
+            }
+            
+            bgVideo.addEventListener("timeupdate", function() {
+                if (this.duration > 0) {
+                    let triggerTime = Math.min(2.8, this.duration - 0.1); 
+                    
+                    if (this.currentTime >= triggerTime && !executionGuard) {
+                        this.pause(); 
+                        executionGuard = true;
+                        loginBox.classList.add("show-now");
+                    }
+                }
+            });
+
+            bgVideo.addEventListener("ended", function() {
+                if (!executionGuard) {
+                    executionGuard = true;
+                    loginBox.classList.add("show-now");
+                }
+            });
+
+            setTimeout(function() {
+                if (!executionGuard) {
+                    executionGuard = true;
+                    loginBox.classList.add("show-now");
+                }
+            }, 3500);
+        });
+
+        let isStaffPortal = false;
+
+        function togglePortal() {
+            isStaffPortal = !isStaffPortal;
+            document.getElementById('portal-badge').innerText = isStaffPortal ? "STAFF & ADMIN PORTAL" : "STUDENT PORTAL";
+            document.querySelector('.toggle-text').innerText = isStaffPortal ? "Are you a Student? Click here" : "Are you Staff/Principal? Click here";
+        }
+
+       // 🔥 THE REAL LOGIN ENGINE (Neon DB + FastAPI)
+// 🔥 THE STRICT LOGIN ENGINE (Neon DB + FastAPI)
+async function loginFunction(portalType) {
+    const email = document.getElementById("email").value.toLowerCase().trim();
+    const password = document.getElementById("password").value;
+
+    if (email === "" || password === "") {
+        alert("Bhai, email aur password dono daalna zaroori hai!"); 
+        return;
+    }
+
+    try {
+        const response = await fetch("http://127.0.0.1:8000/login/", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ "email": email, "password": password })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            const role = data.role.toLowerCase();
+
+            // 🛑 BUG FIX SECURITY CHECK 1: Agar student portal par staff login karne aaye
+            if (portalType === 'student' && role !== 'student') {
+                alert("Bhai, yeh section sirf Students ke liye hai! Staff neeche/doosre portal se login karein.");
+                return;
+            }
+
+            // 🛑 BUG FIX SECURITY CHECK 2: Agar staff portal par student login karne aaye
+            if (portalType === 'staff' && role === 'student') {
+                alert("Bhai, Students ke liye alag portal hai! Yahan sirf Staff aur Authority login kar sakte hain.");
+                return;
+            }
+
+            // Agar sab sahi hai toh normal login hone do
+            localStorage.setItem("loggedInUser", data.user_name);
+            localStorage.setItem("userRole", role);
+
+            // Redirect logic
+            if (role === "student") window.location.href = "student_dashboard.html";
+            else if (role === "teacher") window.location.href = "teacher_dashboard.html";
+            else if (role === "vp") window.location.href = "vp_dashboard.html";
+            else if (role === "principal") window.location.href = "principal_dashboard.html";
+            else if (role === "hr") window.location.href = "hr_dashboard.html";
+            else if (role === "transport") window.location.href = "transport_dashboard.html";
+            else if (role === "admin") window.location.href = "admin_dashboard.html";
+            else if (role === "owner") window.location.href = "owner_dashboard.html";
+            else window.location.href = "dashboard.html";
+            
+        } else {
+            alert("Login Failed: " + data.detail); 
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        alert("Server se connect nahi ho paa raha hai.");
+    }
+}
+    </script>
+</body>
+</html>
