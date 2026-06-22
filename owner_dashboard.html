@@ -51,31 +51,54 @@
         .bar.expense { background: #d32f2f; }
         .bar-label { font-size: 11px; font-weight: bold; color: #666; }
         /* Mobile Responsive Code */
+        /* 🔥 TRUE MOBILE APP UI (Slide-in Menu & Minimal UI) */
         @media (max-width: 768px) {
-            body { flex-direction: column; overflow: auto; height: auto; }
-            .sidebar { width: 100%; border-right: none; border-bottom: 1px solid #eaeaea; padding: 10px; height: auto; }
-            .school-brand { padding: 0 10px 10px 10px; border-bottom: none; margin-bottom: 0; text-align: center; }
-            /* Mobile me left menu horizontally scroll hoga */
-            .nav-menu { display: flex; flex-direction: row; overflow-y: hidden; overflow-x: auto; padding: 5px 0; margin-top: 5px; gap: 8px; -webkit-overflow-scrolling: touch; }
-            .nav-menu::-webkit-scrollbar { display: none; } 
-            .nav-item { padding: 10px 16px; margin: 0; white-space: nowrap; font-size: 13px; }
-            .main-content { height: auto; overflow: visible; }
-            .top-header { padding: 15px 20px; height: auto; flex-direction: column; gap: 12px; text-align: center; }
-            .workspace { padding: 20px 15px; }
-            .stats-row { flex-direction: column; gap: 12px; }
-            /* Mobile par grid ko 1 line me kar dega */
-            .grid-dashboard { grid-template-columns: 1fr !important; gap: 20px; }
-            div[style*="display: grid"], div[style*="display:grid"], .profile-grid, .cctv-grid, .badges-grid { grid-template-columns: 1fr !important; gap: 12px !important; align-items: stretch !important; }
-            input, select, textarea, button { width: 100% !important; margin-bottom: 10px !important; }
-            /* Profile Card & Tables fix */
-            .profile-card { flex-direction: column; text-align: center; }
-            .data-table { display: block; overflow-x: auto; white-space: nowrap; }
+            body { flex-direction: column; overflow-x: hidden; background-color: #f4f4f6; }
+            
+            /* App ka Top Bar (Header) */
+            .mobile-header { display: flex !important; justify-content: space-between; align-items: center; padding: 15px 20px; background: #fff; border-bottom: 1px solid #eaeaea; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+            .menu-btn { font-size: 26px; cursor: pointer; background: none; border: none; color: #000; padding: 0 10px 0 0; }
+            
+            /* Desktop Header Hide kar do (Annoying lagta hai) */
+            .top-header { display: none; }
+            
+            /* 📱 Slide-in Hamburger Menu (App Drawer) */
+            .sidebar { position: fixed; top: 0; left: -100%; width: 270px; height: 100%; background: #fff; z-index: 999; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 5px 0 20px rgba(0,0,0,0.2); padding-top: 10px; overflow-y: auto; }
+            .sidebar.open { left: 0; }
+            .close-sidebar { display: block !important; position: absolute; top: 15px; right: 20px; font-size: 30px; cursor: pointer; color: #000; background: none; border: none; }
+            
+            /* Nav Menu ko clean list me badal diya */
+            .nav-menu { flex-direction: column; display: block; padding-top: 20px; overflow-y: visible; }
+            .nav-item { padding: 16px 20px; font-size: 15px; border-radius: 0; border-bottom: 1px solid #f5f5f5; margin: 0; }
+            
+            /* 🧹 MINIMAL DASHBOARD FIX */
+            .workspace { padding: 15px; padding-bottom: 80px; } 
+            .stats-row { flex-direction: column; gap: 10px; }
+            .stat-box { padding: 15px; border-radius: 12px; }
+            .grid-dashboard, div[style*="display: grid"] { grid-template-columns: 1fr !important; gap: 15px !important; }
+            
+            /* Ye class jis element pe lagaoge, wo mobile par hide ho jayega */
+            .hide-on-mobile { display: none !important; }
+            
+            .card { padding: 15px; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
+            input, select, textarea, button { width: 100% !important; margin-bottom: 10px; padding: 14px; border-radius: 10px; }
+            
+            /* Andhera overlay jab menu khulega */
+            .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 998; backdrop-filter: blur(2px); }
+            .sidebar-overlay.open { display: block; }
         }
     </style>
 </head>
 <body>
+    <div class="mobile-header" style="display: none;">
+        <button class="menu-btn" onclick="toggleAppMenu()">☰</button>
+        <h2 style="font-size: 18px; font-weight: 800; margin: 0; letter-spacing: 1px;" id="mobile-title">MVM PUBLIC</h2>
+        <div class="avatar" style="width: 35px; height: 35px; background: #000; color: #fff; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 14px; font-weight: bold;" id="mobile-avatar">A</div>
+    </div>
+    <div class="sidebar-overlay" onclick="toggleAppMenu()"></div>
 
     <div class="sidebar">
+        <button class="close-sidebar" onclick="toggleAppMenu()" style="display: none;">×</button>
         <div class="school-brand">
             <h2>MVM PUBLIC</h2>
             <div class="role-badge">DIRECTOR / OWNER</div>
@@ -112,7 +135,7 @@
                 <div class="stat-box"><h4>Net Profit Margin</h4><h2 style="color: #2e7d32;">57.1% ⬆️</h2></div>
             </div>
             <div class="grid-dashboard">
-                <div class="card">
+                <div class="card hide-on-mobile"></div>
                     <h3>Revenue vs Expense (Last 6 Months)</h3>
                     <div class="bar-chart">
                         <div class="bar-col"><div class="bar" style="height: 40%;"></div><span class="bar-label">Jan</span></div>
@@ -190,7 +213,7 @@
                     </div>
                 </div>
             </div>
-            <div class="card" style="background: #0a0a0a; border: 1px solid #222; padding: 25px; border-radius: 20px; margin-top: 30px; border-left: 5px solid #cfb53b;">
+            <div class="card hide-on-mobile" style="background: #0a0a0a; border: 1px solid #222; padding: 25px; border-radius: 20px; margin-top: 30px; border-left: 5px solid #cfb53b;"></div>
     <h3 style="color: #cfb53b; font-size: 20px; margin-bottom: 20px;">👑 Register School Principal</h3>
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
         <div>
@@ -261,13 +284,34 @@
         document.getElementById("owner-name").innerText = loggedInUser;
         document.getElementById("owner-avatar").innerText = loggedInUser.charAt(0);
 
+        // 🔥 Mobile Menu Toggle Logic
+        function toggleAppMenu() {
+            document.querySelector('.sidebar').classList.toggle('open');
+            document.querySelector('.sidebar-overlay').classList.toggle('open');
+        }
+
+        // 🔥 Naya Switch Tab (Jo click karte hi menu band kar dega)
         function switchTab(tabId, element) {
             document.querySelectorAll('.nav-item').forEach(tab => tab.classList.remove('active'));
             element.classList.add('active');
             document.querySelectorAll('.workspace').forEach(ws => ws.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
-            document.getElementById('page-title').innerText = element.innerText.substring(3);
+            
+            let tabName = element.innerText.replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]|[\u2600-\u27FF]/g, '').trim(); // Emoji hatane ke liye
+            if(document.getElementById('page-title')) document.getElementById('page-title').innerText = tabName;
+            if(document.getElementById('mobile-title')) document.getElementById('mobile-title').innerText = tabName;
+            
+            // Mobile me tab click karte hi menu automatically band ho jayega
+            if(window.innerWidth <= 768) { toggleAppMenu(); }
         }
+
+        // Top avatar me user ka pehla letter set karna
+        setTimeout(() => {
+            const user = localStorage.getItem("loggedInUser") || "U";
+            if(document.getElementById("mobile-avatar")) {
+                document.getElementById("mobile-avatar").innerText = user.charAt(0).toUpperCase();
+            }
+        }, 500);
         // 🔥 OWNER ENGINE: Sirf Principal account banane ke liye
 async function createPrincipalAccount() {
     const name = document.getElementById("prin-name").value;
