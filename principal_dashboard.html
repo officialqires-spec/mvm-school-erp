@@ -171,7 +171,7 @@
                     <div style="display: flex; justify-content: space-between; font-size: 14px;"><span>Teacher Attendance Avg:</span> <strong style="color: #2e7d32;">96%</strong></div>
                 </div>
             </div>
-            <div class="card" style="margin-top: 30px; border-left: 5px solid var(--btn-fire); background: var(--card-bg); padding: 25px; border-radius: 20px; border: 1px solid var(--border-color);">
+            <div class="card hide-on-mobile" style="margin-top: 30px; border-left: 5px solid var(--btn-fire); background: var(--card-bg); padding: 25px; border-radius: 20px; border: 1px solid var(--border-color);">
     <h3 style="font-size: 20px; margin-bottom: 20px; color: var(--text-color);">👑 Register New Account (Staff / Student)</h3>
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
         <div>
@@ -499,7 +499,12 @@
             document.getElementById(tabId).classList.add('active');
             
             let cleanTitle = element.innerText.replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]|\u200D|\uFE0F|[\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|\uD83E[\uDD10-\uDDFF]/g, '').trim();
-            document.getElementById('page-title').innerText = cleanTitle;
+            
+            if(document.getElementById('page-title')) document.getElementById('page-title').innerText = cleanTitle;
+            if(document.getElementById('mobile-title')) document.getElementById('mobile-title').innerText = cleanTitle;
+
+            // 📱 Mobile me tab click karte hi menu band ho jayega
+            if(window.innerWidth <= 768) { toggleAppMenu(); }
 
             // 🚨 INSTANT SYNC: Jaise hi Principal tab click karega, live data fetch hoga!
             if(tabId === 'audit') loadTeacherAudits();
