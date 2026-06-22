@@ -260,7 +260,7 @@ async function createPrincipalAccount() {
     }
 
     try {
-        const response = await fetch("http://127.0.0.1:8000/create-user/", {
+        const response = await fetch("https://mvm-backend-file-1.onrender.com/create-user/", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
