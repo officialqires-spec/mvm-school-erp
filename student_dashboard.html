@@ -150,6 +150,27 @@
         .profile-item { background: var(--notice-bg); padding: 12px 15px; border-radius: 10px; border: 1px solid var(--border-color); }
         .profile-item label { display: block; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-weight: bold; margin-bottom: 4px; }
         .profile-item span { font-size: 15px; font-weight: 600; color: var(--text-color); }
+        /* Mobile Responsive Code */
+        @media (max-width: 768px) {
+            body { flex-direction: column; overflow: auto; height: auto; }
+            .sidebar { width: 100%; border-right: none; border-bottom: 1px solid #eaeaea; padding: 10px; height: auto; }
+            .school-brand { padding: 0 10px 10px 10px; border-bottom: none; margin-bottom: 0; text-align: center; }
+            /* Mobile me left menu horizontally scroll hoga */
+            .nav-menu { display: flex; flex-direction: row; overflow-y: hidden; overflow-x: auto; padding: 5px 0; margin-top: 5px; gap: 8px; -webkit-overflow-scrolling: touch; }
+            .nav-menu::-webkit-scrollbar { display: none; } 
+            .nav-item { padding: 10px 16px; margin: 0; white-space: nowrap; font-size: 13px; }
+            .main-content { height: auto; overflow: visible; }
+            .top-header { padding: 15px 20px; height: auto; flex-direction: column; gap: 12px; text-align: center; }
+            .workspace { padding: 20px 15px; }
+            .stats-row { flex-direction: column; gap: 12px; }
+            /* Mobile par grid ko 1 line me kar dega */
+            .grid-dashboard { grid-template-columns: 1fr !important; gap: 20px; }
+            div[style*="display: grid"], div[style*="display:grid"], .profile-grid, .cctv-grid, .badges-grid { grid-template-columns: 1fr !important; gap: 12px !important; align-items: stretch !important; }
+            input, select, textarea, button { width: 100% !important; margin-bottom: 10px !important; }
+            /* Profile Card & Tables fix */
+            .profile-card { flex-direction: column; text-align: center; }
+            .data-table { display: block; overflow-x: auto; white-space: nowrap; }
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
