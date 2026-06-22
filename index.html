@@ -102,16 +102,31 @@
         .toggle-text { margin-top: 25px; font-size: 13px; color: rgba(212, 175, 55, 0.7); font-weight: 600; cursor: pointer; transition: 0.2s; text-shadow: 0 0 2px rgba(0,0,0,0.5); }
         .toggle-text:hover { color: rgba(255, 248, 220, 1); text-decoration: underline; text-shadow: 0 0 8px rgba(212, 175, 55, 0.8); }
         /* Mobile Responsive for Login Portal */
+        /* 🔥 MOBILE APP FIX: Login Portal */
         @media (max-width: 768px) {
+            body { 
+                position: fixed; /* 🚨 Isse page ekdum lock ho jayega, scroll bilkul nahi hoga */
+                width: 100vw; 
+                height: 100vh; /* Fixed height for mobile */
+                overflow: hidden;
+            }
+            #bg-video {
+                width: 100vw;
+                height: 100vh;
+                object-fit: cover;
+                object-position: center 20%; /* 🚨 Video ko center aur thoda upar focus karega, crop nahi hoga */
+            }
             .login-box { 
                 width: 90%; 
                 padding: 30px 20px; 
+                transform: scale(0.95); 
+                margin-top: -10%; /* Keyboard aane par jagah banayega */
             }
-            .login-box h1 { 
-                font-size: 22px; 
+            .login-box.show-now {
+                transform: scale(1) translateZ(0px); 
             }
-            .orb:nth-child(1) { width: 200px; height: 200px; top: -5%; left: -5%; }
-            .orb:nth-child(2) { width: 250px; height: 250px; bottom: -5%; right: -5%; }
+            /* Faltu glowing gole mobile par hide kar denge taaki clean dikhe */
+            .orb:nth-child(1), .orb:nth-child(2) { display: none; } 
         }
     </style>
 </head>
