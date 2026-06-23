@@ -19,12 +19,11 @@
 
         /* 🌌 MAHADEV COSMIC THEME (Dark Mode) */
         body.dark-mode {
-            --bg-color: #05030a; /* Deep space void */
-            --card-bg: rgba(18, 12, 35, 0.65); /* Translucent cosmic violet */
-            --text-main: #f8fafc; --text-muted: #a78bfa; /* Glowing lilac */
-            --border-color: rgba(139, 92, 246, 0.25); /* Cosmic purple borders */
+            --bg-color: #05030a; 
+            --card-bg: rgba(18, 12, 35, 0.65); 
+            --text-main: #f8fafc; --text-muted: #a78bfa; 
+            --border-color: rgba(139, 92, 246, 0.25); 
             --sidebar-bg: rgba(10, 6, 20, 0.95);
-            /* Bhasma/Gold and Galaxy Blue gradients for buttons */
             --accent-color: linear-gradient(135deg, #4c1d95 0%, #312e81 100%); 
             --accent-hover: linear-gradient(135deg, #5b21b6 0%, #3730a3 100%);
             --accent-text: #ffffff;
@@ -82,7 +81,6 @@
         .stat-box h4 { font-size: 12px; opacity: 0.8; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; }
         .stat-box h2 { font-size: 28px; font-weight: 800; margin: 0; }
 
-        /* Modern List Cards (Replacing old tables for mobile) */
         .list-card { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 14px; padding: 15px; margin-bottom: 12px; transition: var(--transition); }
         .list-card:active { transform: scale(0.98); }
         .list-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
@@ -91,7 +89,6 @@
         .list-subtitle { font-size: 12px; color: var(--text-muted); font-weight: 600; }
         .status-badge { padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 800; text-transform: uppercase; }
 
-        /* Form Elements */
         input, select, textarea { width: 100%; background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border-color); padding: 14px 16px; border-radius: 12px; font-size: 15px; margin-bottom: 15px; outline: none; transition: var(--transition); font-weight: 500; }
         input:focus, select:focus, textarea:focus { border-color: var(--info); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
         label { display: block; font-size: 13px; font-weight: 700; color: var(--text-muted); margin-bottom: 6px; margin-left: 4px; }
@@ -102,13 +99,18 @@
         .btn-danger { background: var(--danger); color: #fff; }
         .btn-outline { background: transparent; border: 2px solid var(--border-color); color: var(--text-main); box-shadow: none; }
 
-        /* Desktop Adjustments */
+        /* Toast Notification */
+        #toast-container { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 10000; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 400px; pointer-events: none; }
+        .toast { padding: 15px 20px; border-radius: 12px; color: white; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.3); font-size: 14px; animation: slideUpToast 0.4s ease forwards; text-align: center; }
+        @keyframes slideUpToast { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeOutToast { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-20px); } }
+
         @media (min-width: 769px) {
             body { flex-direction: row; }
             .mobile-header { display: none !important; }
             .sidebar { position: relative; left: 0; box-shadow: none; border-right: 1px solid var(--border-color); }
             .close-sidebar { display: none !important; }
-            .grid-1 { grid-template-columns: 2fr 1fr; } /* Desktop grids */
+            .grid-1 { grid-template-columns: 2fr 1fr; } 
             .grid-2 { grid-template-columns: 1fr 1fr 1fr; }
             .workspace { padding: 40px; }
         }
@@ -116,7 +118,8 @@
 </head>
 <body>
 
-    <!-- 📱 MOBILE STICKY HEADER -->
+    <div id="toast-container"></div>
+
     <div class="mobile-header">
         <div class="header-left">
             <button class="menu-btn" onclick="toggleAppMenu()">☰</button>
@@ -128,10 +131,8 @@
         </div>
     </div>
 
-    <!-- 🌑 SIDEBAR OVERLAY -->
     <div class="sidebar-overlay" onclick="toggleAppMenu()"></div>
 
-    <!-- 🍔 APP SIDEBAR -->
     <div class="sidebar">
         <div class="sidebar-header">
             <button class="close-sidebar" onclick="toggleAppMenu()">×</button>
@@ -144,17 +145,16 @@
         <div class="nav-menu">
             <div class="nav-item active" onclick="switchTab('dashboard', this)">📊 HR Overview</div>
             <div class="nav-item" onclick="switchTab('profiling', this)">🗂️ Staff & Docs</div>
-            <div class="nav-item" onclick="switchTab('payroll', this)">💸 Payroll System</div>
+            <div class="nav-item" onclick="switchTab('payroll', this)">💸 Payroll & Tax</div>
+            <div class="nav-item" onclick="switchTab('helpdesk', this)">🛠️ Staff Helpdesk</div>
             <div class="nav-item" onclick="switchTab('attendance', this)">📍 App Attendance</div>
             <div class="nav-item" onclick="switchTab('leave', this)">📅 Approvals</div>
             <div class="nav-item" onclick="switchTab('recruitment', this)">🎯 Recruitment</div>
         </div>
     </div>
 
-    <!-- 🏢 MAIN CONTENT AREA -->
     <div class="main-content">
         
-        <!-- 1. DASHBOARD OVERVIEW -->
         <div id="dashboard" class="workspace active">
             <div class="grid-2">
                 <div class="stat-box primary"><h4>Active Staff</h4><h2>42</h2></div>
@@ -163,6 +163,18 @@
             </div>
 
             <div class="grid-1" style="margin-top: 25px;">
+                
+                <div class="card">
+                    <div class="card-header">🎂 HR Culture & Events</div>
+                    <div class="list-card" style="border-left: 4px solid var(--info);">
+                        <div class="list-row">
+                            <div class="list-title">Neha Gupta (English)</div>
+                            <div class="status-badge" style="background: rgba(59, 130, 246, 0.1); color: var(--info);">Birthday Today</div>
+                        </div>
+                        <button class="btn btn-outline" style="margin-top:10px; padding: 10px;" onclick="sendWishes()">🎉 Send App Notification</button>
+                    </div>
+                </div>
+
                 <div class="card">
                     <div class="card-header">Recent HR Alerts</div>
                     <div class="list-card" style="border-left: 4px solid var(--warning);">
@@ -173,27 +185,34 @@
                         <div class="list-title">Late Check-in</div>
                         <div class="list-subtitle">3 staff members marked late today via App.</div>
                     </div>
-                    <div class="list-card" style="border-left: 4px solid var(--success);">
-                        <div class="list-title">New Application</div>
-                        <div class="list-subtitle">5 resumes received for PGT English.</div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">Quick Actions</div>
-                    <button class="btn" onclick="switchTab('leave', document.querySelectorAll('.nav-item')[4])">Review Leaves</button>
-                    <button class="btn btn-outline" style="margin-top: 15px;" onclick="switchTab('recruitment', document.querySelectorAll('.nav-item')[5])">+ Post New Job</button>
                 </div>
             </div>
         </div>
 
-        <!-- 2. STAFF PROFILING -->
         <div id="profiling" class="workspace">
+            
+            <div class="card" style="border: 2px solid var(--info); background: rgba(59, 130, 246, 0.05);">
+                <div class="card-header" style="color: var(--info);">🖨️ Auto Doc & Letter Generator</div>
+                <label>Select Staff Member</label>
+                <select id="doc-staff">
+                    <option>S.K. Mishra (T-104)</option>
+                    <option>Rahul Kumar (T-108)</option>
+                    <option>Neha Gupta (T-112)</option>
+                </select>
+                <label>Select Document Type</label>
+                <select id="doc-type">
+                    <option>Digital ID Card</option>
+                    <option>Official Offer Letter</option>
+                    <option>Experience Certificate</option>
+                    <option>Relieving Letter</option>
+                </select>
+                <button class="btn" style="background: var(--info); color: #fff;" onclick="generateLetter()">Download PDF Template</button>
+            </div>
+
             <div class="card">
-                <div class="card-header">Staff Profiling & Docs</div>
+                <div class="card-header">Staff Database</div>
                 <input type="text" placeholder="Search staff by name or ID...">
                 
-                <!-- App List Card instead of Table -->
                 <div class="list-card">
                     <div class="list-row">
                         <div>
@@ -209,57 +228,85 @@
                         <button style="padding: 6px 12px; background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border-color); border-radius: 8px; font-size: 12px; font-weight: bold;">View Docs 🔒</button>
                     </div>
                 </div>
-
-                <div class="list-card">
-                    <div class="list-row">
-                        <div>
-                            <div class="list-title">Rahul Kumar</div>
-                            <div class="list-subtitle">TGT Math | ID: T-108</div>
-                        </div>
-                        <div style="text-align: right;">
-                            <div class="status-badge" style="background: rgba(16, 185, 129, 0.1); color: var(--success);">Active</div>
-                        </div>
-                    </div>
-                    <div class="list-row" style="margin-top: 15px; border-top: 1px dashed var(--border-color); padding-top: 10px;">
-                        <span class="list-subtitle">Joined: 05 Jul 2022</span>
-                        <button style="padding: 6px 12px; background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border-color); border-radius: 8px; font-size: 12px; font-weight: bold;">View Docs 🔒</button>
-                    </div>
-                </div>
             </div>
         </div>
 
-        <!-- 3. PAYROLL -->
         <div id="payroll" class="workspace">
+            
+            <div class="card" style="border-left: 4px solid var(--warning);">
+                <div class="card-header">💸 Salary Advance Requests</div>
+                <div class="list-card" id="advance-req-1">
+                    <div class="list-row">
+                        <div class="list-title">Rahul Kumar (T-108)</div>
+                        <div class="list-title" style="color: var(--danger);">₹5,000</div>
+                    </div>
+                    <div class="list-subtitle" style="margin-top: 5px;">Reason: Medical Emergency (Deduct next month)</div>
+                    <div style="display: flex; gap: 10px; margin-top: 15px;">
+                        <button class="btn btn-success" style="padding: 10px; font-size: 13px;" onclick="handleAdvance('advance-req-1', 'Approved')">Approve</button>
+                        <button class="btn btn-danger" style="padding: 10px; font-size: 13px;" onclick="handleAdvance('advance-req-1', 'Rejected')">Reject</button>
+                    </div>
+                </div>
+            </div>
+
             <div class="card">
                 <div class="card-header"><span>Dynamic Payroll</span> <span style="font-size: 12px; color: var(--text-muted);">June 2026</span></div>
                 
                 <div class="list-card">
                     <div class="list-row">
                         <div class="list-title">Ramesh (Librarian)</div>
-                        <div class="list-title" style="color: var(--success);">Net: ₹24,200</div>
+                        <div class="list-title" style="color: var(--success); font-size: 18px;">Net: ₹22,700</div>
                     </div>
                     <div class="list-row" style="margin-top: 5px;">
                         <span class="list-subtitle">Base: ₹25,000</span>
-                        <span class="list-subtitle" style="color: var(--danger);">-₹800 (1 Leave)</span>
+                        <span class="list-subtitle" style="color: var(--danger);">- PF: ₹1500 | TDS: ₹0</span>
+                    </div>
+                    <div class="list-row" style="margin-top: 5px;">
+                        <span class="list-subtitle" style="color: var(--warning);">- Advance Deduction: ₹800</span>
                     </div>
                 </div>
 
                 <div class="list-card">
                     <div class="list-row">
                         <div class="list-title">Gupta Sir (Hindi)</div>
-                        <div class="list-title" style="color: var(--success);">Net: ₹35,000</div>
+                        <div class="list-title" style="color: var(--success); font-size: 18px;">Net: ₹30,800</div>
                     </div>
                     <div class="list-row" style="margin-top: 5px;">
                         <span class="list-subtitle">Base: ₹35,000</span>
-                        <span class="list-subtitle" style="color: var(--text-muted);">No Deductions</span>
+                        <span class="list-subtitle" style="color: var(--danger);">- PF: ₹2500 | TDS: ₹1700</span>
+                    </div>
+                    <div class="list-row" style="margin-top: 5px;">
+                        <span class="list-subtitle" style="color: var(--text-muted);">No Advance Deductions</span>
                     </div>
                 </div>
 
-                <button class="btn" style="margin-top: 15px;" onclick="alert('Payslips Generated and Sent to Staff Apps!')">🏦 Disburse Payslips</button>
+                <button class="btn" style="margin-top: 15px;" onclick="disbursePayroll()">🏦 Disburse Payslips (Smart Calculate)</button>
             </div>
         </div>
 
-        <!-- 4. APP ATTENDANCE -->
+        <div id="helpdesk" class="workspace">
+            <div class="card">
+                <div class="card-header">🛠️ Internal Staff Helpdesk</div>
+                
+                <div class="list-card" id="ticket-1">
+                    <div class="list-row">
+                        <div class="list-title">Projector not working in 10-A</div>
+                        <div class="status-badge" style="background: var(--warning); color: #fff;">Pending</div>
+                    </div>
+                    <div class="list-subtitle" style="margin-top:5px; margin-bottom: 15px;">Reported by: Sharma Sir (Maths) - 2 Hours Ago</div>
+                    <button class="btn btn-success" style="padding: 10px; font-size: 13px;" onclick="resolveTicket('ticket-1')">Mark as Resolved ✅</button>
+                </div>
+
+                <div class="list-card" id="ticket-2">
+                    <div class="list-row">
+                        <div class="list-title">Require new whiteboard markers</div>
+                        <div class="status-badge" style="background: var(--warning); color: #fff;">Pending</div>
+                    </div>
+                    <div class="list-subtitle" style="margin-top:5px; margin-bottom: 15px;">Reported by: Neha Gupta (English) - Today</div>
+                    <button class="btn btn-success" style="padding: 10px; font-size: 13px;" onclick="resolveTicket('ticket-2')">Mark as Resolved ✅</button>
+                </div>
+            </div>
+        </div>
+
         <div id="attendance" class="workspace">
             <div class="card">
                 <div class="card-header">Geo-Location Tracker</div>
@@ -285,12 +332,10 @@
             </div>
         </div>
 
-        <!-- 5. LEAVE MANAGEMENT -->
         <div id="leave" class="workspace">
             <div class="card">
                 <div class="card-header">Leave Applications</div>
-                
-                <div class="list-card">
+                <div class="list-card" id="lv-1">
                     <div class="list-row" style="margin-bottom: 10px;">
                         <div class="list-title">Verma Sir (Science)</div>
                         <div class="list-subtitle">Applied: Today</div>
@@ -300,37 +345,35 @@
                         <span style="color: var(--text-muted); font-size: 13px;">Reason: Medical Checkup</span>
                     </div>
                     <div style="display: flex; gap: 10px;">
-                        <button class="btn btn-success" style="padding: 10px; font-size: 13px;" onclick="alert('Leave Approved!')">Approve</button>
-                        <button class="btn btn-danger" style="padding: 10px; font-size: 13px;" onclick="alert('Leave Rejected.')">Reject</button>
+                        <button class="btn btn-success" style="padding: 10px; font-size: 13px;" onclick="handleLeave('lv-1', 'Approved')">Approve</button>
+                        <button class="btn btn-danger" style="padding: 10px; font-size: 13px;" onclick="handleLeave('lv-1', 'Rejected')">Reject</button>
                     </div>
                 </div>
-
             </div>
         </div>
 
-        <!-- 6. RECRUITMENT PANEL -->
         <div id="recruitment" class="workspace">
             <div class="card">
                 <div class="card-header">🎯 Post a Vacancy</div>
                 <label>Job Title</label>
-                <input type="text" placeholder="e.g. PGT English">
+                <input type="text" id="job-title" placeholder="e.g. PGT English">
                 <label>Job Type</label>
                 <select>
                     <option>Full Time</option>
                     <option>Part Time</option>
                 </select>
-                <button class="btn" onclick="alert('Vacancy Published Live!')">Publish Job Opening</button>
+                <button class="btn" onclick="postJob()">Publish Job Opening</button>
             </div>
 
             <div class="card">
                 <div class="card-header">📄 Recent Applications</div>
                 <div class="list-card">
                     <div class="list-row">
-                        <div class="list-title">Neha Gupta</div>
+                        <div class="list-title">Priya Singh</div>
                         <div class="status-badge" style="background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border-color);">Exp: 3 Yrs</div>
                     </div>
                     <div class="list-subtitle" style="margin-top: 5px; margin-bottom: 10px;">Applied for: Primary Teacher</div>
-                    <button class="btn btn-outline" style="padding: 8px; font-size: 13px;">View Resume PDF</button>
+                    <button class="btn btn-outline" style="padding: 8px; font-size: 13px;" onclick="showToast('Resume Downloaded', 'PDF saved to your phone', '#3b82f6')">View Resume PDF</button>
                 </div>
             </div>
         </div>
@@ -348,27 +391,82 @@
             document.body.classList.toggle("dark-mode");
             const isDark = document.body.classList.contains("dark-mode");
             localStorage.setItem("darkMode", isDark);
-            
-            // Icon Change (🔱 Trishul for Cosmic, ☀️ Sun for Light)
             let themeBtn = document.querySelector(".theme-toggle");
             if(themeBtn) themeBtn.innerText = isDark ? "🔱" : "☀️";
         }
 
         function switchTab(tabId, element) {
-            // Remove active classes
             document.querySelectorAll('.nav-item').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.workspace').forEach(ws => ws.classList.remove('active'));
             
-            // Add active class
             element.classList.add('active');
             document.getElementById(tabId).classList.add('active');
             
-            // Update Titles
             let tabName = element.innerText.replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]|[\u2600-\u27FF]/g, '').trim(); 
             if(document.getElementById('mobile-title')) document.getElementById('mobile-title').innerText = tabName;
             
-            // Auto-close mobile menu
             if(window.innerWidth <= 768) { toggleAppMenu(); }
+        }
+
+        // 🚀 CUSTOM TOAST NOTIFICATION (Native App Feel)
+        function showToast(title, message, color) {
+            let container = document.getElementById("toast-container");
+            let toast = document.createElement("div");
+            toast.className = "toast";
+            toast.style.background = color;
+            toast.innerHTML = `<div style="font-size:15px; margin-bottom:4px;">${title}</div><div style="font-size:12px; font-weight:normal;">${message}</div>`;
+            container.appendChild(toast);
+            setTimeout(() => { toast.style.animation = "fadeOutToast 0.4s ease forwards"; setTimeout(() => toast.remove(), 400); }, 3000);
+        }
+
+        // 🚀 PRACTICAL HR FUNCTIONS
+
+        // 1. Auto Letter Generator
+        function generateLetter() {
+            const staff = document.getElementById('doc-staff').value;
+            const type = document.getElementById('doc-type').value;
+            showToast('Document Generated ✅', `${type} for ${staff} downloaded successfully.`, '#10b981');
+        }
+
+        // 2. Birthday Wishes Sender
+        function sendWishes() {
+            showToast('Wishes Sent! 🎉', 'App notification and WhatsApp message sent to Neha Gupta.', '#3b82f6');
+        }
+
+        // 3. Salary Advance Manager
+        function handleAdvance(id, status) {
+            document.getElementById(id).style.display = 'none';
+            let color = status === 'Approved' ? '#10b981' : '#ef4444';
+            showToast(`Advance ${status}`, `Salary advance request has been ${status.toLowerCase()}.`, color);
+        }
+
+        // 4. Staff Helpdesk Resolver
+        function resolveTicket(id) {
+            let card = document.getElementById(id);
+            let badge = card.querySelector('.status-badge');
+            badge.innerText = "Resolved";
+            badge.style.background = "var(--success)";
+            card.querySelector('.btn').style.display = "none";
+            showToast('Ticket Closed 🛠️', 'Staff has been notified that issue is resolved.', '#10b981');
+        }
+
+        // 5. Dynamic Payroll Disburse (Tax/PF Logic)
+        function disbursePayroll() {
+            showToast('Payroll Disbursed 🏦', 'Salaries, PF & TDS processed and sent to staff accounts.', '#10b981');
+        }
+
+        // Misc
+        function handleLeave(id, status) {
+            document.getElementById(id).style.display = 'none';
+            let color = status === 'Approved' ? '#10b981' : '#ef4444';
+            showToast(`Leave ${status}`, `Teacher leave has been ${status.toLowerCase()}.`, color);
+        }
+
+        function postJob() {
+            let job = document.getElementById('job-title').value;
+            if(!job) return showToast('Error', 'Please enter a job title.', '#ef4444');
+            showToast('Job Published 🎯', `${job} is now live on the school website.`, '#f59e0b');
+            document.getElementById('job-title').value = "";
         }
 
         // Initialize User Data & Theme on Load
@@ -377,8 +475,6 @@
             if(document.getElementById("mobile-avatar")) {
                 document.getElementById("mobile-avatar").innerText = user.charAt(0).toUpperCase();
             }
-
-            // By default Mahadev Cosmic Theme Active
             document.body.classList.add("dark-mode");
             localStorage.setItem("darkMode", "true");
             let themeBtn = document.querySelector(".theme-toggle");
