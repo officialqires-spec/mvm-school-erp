@@ -11,27 +11,27 @@
         :root {
             --bg-color: #f4f6f9; --card-bg: #ffffff; --text-main: #111827; --text-muted: #64748b;
             --border-color: #e2e8f0; --sidebar-bg: #ffffff; 
-            --accent-color: #e67e22; /* Transport Orange */
+            --accent-color: #e67e22; 
             --accent-hover: #d35400; --accent-text: #ffffff;
             --success: #10b981; --danger: #ef4444; --warning: #f59e0b; --info: #3b82f6;
             --shadow-sm: 0 2px 10px rgba(0,0,0,0.03); --shadow-md: 0 8px 20px rgba(0,0,0,0.06);
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* 🌌 MAHADEV COSMIC THEME (Dark Mode) */
+        /* 🌌 MAHADEV COSMIC THEME (Dark Mode - Fiery Orange) */
         body.dark-mode {
             --bg-color: #05030a; 
-            --card-bg: rgba(18, 12, 35, 0.65); 
-            --text-main: #f8fafc; --text-muted: #a78bfa; 
-            --border-color: rgba(139, 92, 246, 0.25); 
-            --sidebar-bg: rgba(10, 6, 20, 0.95);
-            /* Deep Orange / Rudraksha gradients for Transport */
-            --accent-color: linear-gradient(135deg, #c84b31 0%, #d35400 100%); 
-            --accent-hover: linear-gradient(135deg, #e67e22 0%, #f39c12 100%);
+            --card-bg: rgba(20, 12, 12, 0.65); 
+            --text-main: #f8fafc; --text-muted: #fca5a5; 
+            --border-color: rgba(234, 88, 12, 0.25); 
+            --sidebar-bg: rgba(15, 6, 6, 0.95);
+            /* Bhasma/Fiery Orange gradients for Transport */
+            --accent-color: linear-gradient(135deg, #c84b31 0%, #b87333 50%, #8c2016 100%); 
+            --accent-hover: linear-gradient(135deg, #d35400 0%, #e67e22 100%);
             --accent-text: #ffffff;
             --success: #34d399; --danger: #f87171; --warning: #fbbf24; --info: #60a5fa;
-            --shadow-sm: 0 4px 15px rgba(230, 126, 34, 0.15);
-            --shadow-md: 0 8px 25px rgba(230, 126, 34, 0.3);
+            --shadow-sm: 0 4px 15px rgba(234, 88, 12, 0.15);
+            --shadow-md: 0 8px 25px rgba(234, 88, 12, 0.3);
         }
 
         body { display: flex; flex-direction: column; height: 100vh; background-color: var(--bg-color); color: var(--text-main); transition: var(--transition); overflow-x: hidden; }
@@ -44,7 +44,7 @@
         .header-right { display: flex; align-items: center; gap: 15px; }
         .theme-toggle { font-size: 22px; background: none; border: none; cursor: pointer; color: var(--text-main); outline: none; transition: transform 0.3s ease; }
         .theme-toggle:active { transform: scale(0.8) rotate(45deg); }
-        .avatar { width: 36px; height: 36px; background: var(--accent-color); color: var(--accent-text); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+        .avatar { width: 36px; height: 36px; background: var(--accent-color); color: var(--accent-text); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); cursor: pointer; }
 
         /* 🍔 SLIDE-IN APP MENU */
         .sidebar { position: fixed; top: 0; left: -100%; width: 280px; height: 100%; background: var(--sidebar-bg); z-index: 9999; transition: var(--transition); box-shadow: 5px 0 25px rgba(0,0,0,0.5); display: flex; flex-direction: column; padding-bottom: 20px; }
@@ -61,6 +61,9 @@
         .nav-item { padding: 14px 18px; border-radius: 12px; cursor: pointer; font-size: 15px; font-weight: 600; color: var(--text-muted); display: flex; align-items: center; gap: 12px; transition: var(--transition); }
         .nav-item:hover { background-color: var(--hover-bg); color: var(--text-main); }
         .nav-item.active { background: var(--accent-color); color: var(--accent-text); box-shadow: var(--shadow-sm); transform: translateX(5px); }
+        
+        /* Role Hiding Classes */
+        .head-only, .staff-only { display: none; }
 
         /* 🏢 MAIN WORKSPACE */
         .main-content { flex-grow: 1; overflow-y: auto; overflow-x: hidden; position: relative; }
@@ -72,34 +75,39 @@
 
         /* 📱 UNIVERSAL APP UI COMPONENTS */
         .card { background: var(--card-bg); padding: 20px; border-radius: 20px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm); margin-bottom: 20px; transition: var(--transition); }
-        .dark-mode .card { box-shadow: inset 0 0 10px rgba(230, 126, 34, 0.05); }
+        .dark-mode .card { box-shadow: inset 0 0 10px rgba(234, 88, 12, 0.05); }
         .card-header { font-size: 18px; font-weight: 700; margin-bottom: 15px; padding-bottom: 12px; border-bottom: 1px solid var(--border-color); color: var(--text-main); display: flex; justify-content: space-between; align-items: center; }
 
         .grid-1 { display: grid; grid-template-columns: 1fr; gap: 15px; }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; }
 
         .stat-box { background: var(--card-bg); padding: 20px; border-radius: 16px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm); display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden; }
         .stat-box.primary { background: var(--accent-color); color: var(--accent-text); border: none; box-shadow: var(--shadow-md); }
         .stat-box h4 { font-size: 12px; opacity: 0.8; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; }
         .stat-box h2 { font-size: 28px; font-weight: 800; margin: 0; }
 
-        .list-card { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 14px; padding: 15px; margin-bottom: 12px; transition: var(--transition); }
-        .list-card:active { transform: scale(0.98); }
+        .list-card { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 14px; padding: 15px; margin-bottom: 12px; transition: var(--transition); position: relative; }
+        .list-card.inactive { opacity: 0.6; filter: grayscale(100%); }
         .list-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
         .list-row:last-child { margin-bottom: 0; }
         .list-title { font-size: 15px; font-weight: 700; color: var(--text-main); }
-        .list-subtitle { font-size: 12px; color: var(--text-muted); font-weight: 600; line-height: 1.4;}
+        .list-subtitle { font-size: 12px; color: var(--text-muted); font-weight: 600; line-height: 1.4; }
         .status-badge { padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 800; text-transform: uppercase; }
 
         input, select, textarea { width: 100%; background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border-color); padding: 14px 16px; border-radius: 12px; font-size: 14px; margin-bottom: 15px; outline: none; transition: var(--transition); font-weight: 500; }
-        input:focus, select:focus, textarea:focus { border-color: var(--info); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
+        input:focus, select:focus, textarea:focus { border-color: var(--accent-color); box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.1); }
         label { display: block; font-size: 12px; font-weight: 700; color: var(--text-muted); margin-bottom: 6px; margin-left: 4px; text-transform: uppercase; }
 
         .btn { width: 100%; padding: 16px; background: var(--accent-color); color: var(--accent-text); border: none; border-radius: 14px; font-size: 15px; font-weight: 800; cursor: pointer; transition: var(--transition); box-shadow: var(--shadow-sm); display: flex; justify-content: center; align-items: center; gap: 8px; }
         .btn:active { transform: scale(0.97); }
         .btn-success { background: var(--success); color: #fff; }
         .btn-danger { background: var(--danger); color: #fff; }
+        .btn-warning { background: var(--warning); color: #fff; }
         .btn-outline { background: transparent; border: 2px solid var(--border-color); color: var(--text-main); box-shadow: none; }
+        .btn-small { padding: 8px 12px; font-size: 12px; border-radius: 8px; width: auto; }
+
+        .section-divider { font-size: 14px; font-weight: 800; color: var(--accent-hover); margin: 25px 0 10px 0; border-bottom: 2px dashed var(--border-color); padding-bottom: 5px; text-transform: uppercase; }
 
         /* Toast Notification */
         #toast-container { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 10000; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 400px; pointer-events: none; }
@@ -107,8 +115,8 @@
         @keyframes slideUpToast { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeOutToast { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-20px); } }
 
-        /* Desktop Adjustments */
         @media (max-width: 768px) {
+            .grid-3 { grid-template-columns: 1fr; }
             .hide-on-mobile { display: none !important; }
         }
         @media (min-width: 769px) {
@@ -117,7 +125,7 @@
             .sidebar { position: relative; left: 0; box-shadow: none; border-right: 1px solid var(--border-color); }
             .close-sidebar { display: none !important; }
             .grid-1 { grid-template-columns: 2fr 1fr; } 
-            .grid-2 { grid-template-columns: 1fr 1fr; }
+            .grid-2 { grid-template-columns: 1fr 1fr 1fr; }
             .workspace { padding: 40px; }
         }
     </style>
@@ -134,7 +142,7 @@
         </div>
         <div class="header-right">
             <button class="theme-toggle" onclick="toggleDarkMode()" title="Cosmic Mode">🌙</button>
-            <div class="avatar" id="mobile-avatar">T</div>
+            <div class="avatar" id="mobile-avatar" onclick="toggleRoleSimulation()" title="Switch Role (Demo)">T</div>
         </div>
     </div>
 
@@ -147,165 +155,308 @@
             <button class="close-sidebar" onclick="toggleAppMenu()">×</button>
             <div class="school-brand">
                 <h2>MVM PUBLIC</h2>
-                <div class="role-badge">TRANSPORT PORTAL</div>
+                <div class="role-badge" id="role-display-badge">TRANSPORT HEAD</div>
             </div>
         </div>
         
         <div class="nav-menu">
-            <div class="nav-item active" onclick="switchTab('dashboard', this)">🚌 Fleet Overview</div>
-            <div class="nav-item" onclick="switchTab('live-map', this)">📍 Live Bus Tracking</div>
-            <div class="nav-item" onclick="switchTab('emergency', this)">🚨 Emergency Alerts</div>
-            <div class="nav-item" onclick="switchTab('routes', this)">🗺️ Route Allotment</div>
-            <div class="nav-item" onclick="switchTab('maintenance', this)">🔧 Maintenance & PUC</div>
-            <div class="nav-item" onclick="switchTab('staff', this)">👨‍✈️ Driver Profiles</div>
-            <div class="nav-item" onclick="switchTab('fee-sync', this)">🔄 Transport Fee Sync</div>
-            <div class="nav-item" style="color: var(--danger); margin-top: 20px;" onclick="logoutTransport()">🚪 Secure Logout</div>
+            <!-- 👨‍💼 TRANSPORT HEAD TABS -->
+            <div class="nav-item head-only active" onclick="switchTab('dash-head', this)">🚌 Master Fleet Overview</div>
+            <div class="nav-item head-only" onclick="switchTab('bus-dir', this)">🚍 Bus Directory & Docs</div>
+            <div class="nav-item head-only" onclick="switchTab('staff-dir', this)">👨‍✈️ Staff Directory</div>
+            <div class="nav-item head-only" onclick="switchTab('stu-dir', this)">👨‍🎓 Transport Students</div>
+            <div class="nav-item head-only" onclick="switchTab('routes-fees', this)">🗺️ Routes & Fee Matrix</div>
+            <div class="nav-item head-only" onclick="switchTab('fuel-log', this)">⛽ Master Fuel Log</div>
+            <div class="nav-item head-only" onclick="switchTab('live-map', this)">📍 Live Tracking</div>
+            
+            <!-- 👨‍✈️ TRANSPORT STAFF (DRIVER) TABS -->
+            <div class="nav-item staff-only" onclick="switchTab('dash-staff', this)">🚌 My Bus & Route</div>
+            <div class="nav-item staff-only" onclick="switchTab('stu-manifest', this)">📋 Student Manifest</div>
+            <div class="nav-item staff-only" onclick="switchTab('driver-fuel', this)">⛽ Log Fuel Entry</div>
+            
+            <!-- COMMON TABS -->
+            <div class="nav-item" style="color: var(--danger);" onclick="switchTab('emergency', this)">🚨 Emergency SOS</div>
+            
+            <div class="nav-item" style="background: rgba(59, 130, 246, 0.1); color: var(--info); margin-top: 10px;" onclick="toggleRoleSimulation()">🔄 Switch Role (Demo)</div>
+            <div class="nav-item" style="color: var(--danger); margin-top: 10px;" onclick="logoutTransport()">🚪 Secure Logout</div>
         </div>
     </div>
 
     <!-- 🏢 MAIN CONTENT AREA -->
     <div class="main-content">
         
-        <!-- 1. DASHBOARD OVERVIEW -->
-        <div id="dashboard" class="workspace active">
+        <!-- ==============================================
+             👨‍💼 TRANSPORT HEAD WORKSPACES 
+        ================================================= -->
+
+        <!-- 1. HEAD DASHBOARD -->
+        <div id="dash-head" class="workspace active head-only-ws">
             <div class="grid-2">
-                <div class="stat-box primary"><h4>Buses on Route</h4><h2>08 / 10</h2></div>
-                <div class="stat-box"><h4>Maintenance Alerts</h4><h2 style="color: var(--warning);">02</h2></div>
-                <div class="stat-box"><h4>Students Using Bus</h4><h2 style="color: var(--info);">345</h2></div>
+                <div class="stat-box primary"><h4>Active Buses</h4><h2 id="dash-buses">0</h2></div>
+                <div class="stat-box"><h4>Transport Students</h4><h2 id="dash-students" style="color: var(--info);">0</h2></div>
+                <div class="stat-box"><h4>Expected Route Fee</h4><h2 id="dash-fees" style="color: var(--success);">₹0</h2></div>
             </div>
 
             <div class="grid-1" style="margin-top: 25px;">
                 <div class="card">
-                    <div class="card-header">Current Fleet Status</div>
-                    
-                    <div class="list-card" style="border-left: 4px solid var(--success);">
-                        <div class="list-row">
-                            <div class="list-title">Bus 01 (UP63 T 1234)</div>
-                            <div class="status-badge" style="background: rgba(16, 185, 129, 0.1); color: var(--success);">On Route</div>
-                        </div>
-                        <div class="list-subtitle" style="margin-top: 5px;">Current Speed: 45 km/h</div>
+                    <div class="card-header">Fleet & Staff Alerts</div>
+                    <div id="dash-alerts">
+                        <!-- Loaded via JS -->
                     </div>
-
-                    <div class="list-card" style="border-left: 4px solid var(--success);">
-                        <div class="list-row">
-                            <div class="list-title">Bus 04 (UP63 T 5678)</div>
-                            <div class="status-badge" style="background: rgba(16, 185, 129, 0.1); color: var(--success);">Arrived</div>
-                        </div>
-                        <div class="list-subtitle" style="margin-top: 5px;">Location: School Gate</div>
-                    </div>
-
-                    <div class="list-card" style="border-left: 4px solid var(--danger);">
-                        <div class="list-row">
-                            <div class="list-title">Bus 07 (UP63 T 9012)</div>
-                            <div class="status-badge" style="background: rgba(239, 68, 68, 0.1); color: var(--danger);">Workshop</div>
-                        </div>
-                        <div class="list-subtitle" style="margin-top: 5px;">Issue: Brake Maintenance</div>
-                    </div>
-                </div>
-
-                <div class="card hide-on-mobile">
-                    <div class="card-header">Quick Actions</div>
-                    <button class="btn btn-danger" style="margin-bottom: 10px;" onclick="switchTab('emergency', document.querySelectorAll('.nav-item')[2])">Trigger Emergency Alert</button>
-                    <button class="btn btn-outline" onclick="switchTab('fee-sync', document.querySelectorAll('.nav-item')[6])">Sync Fees with Admin</button>
                 </div>
             </div>
         </div>
 
-        <!-- 2. LIVE GPS TRACKING -->
-        <div id="live-map" class="workspace">
+        <!-- 2. BUS DIRECTORY & MAINTENANCE -->
+        <div id="bus-dir" class="workspace head-only-ws">
+            <div class="card" style="border: 2px solid var(--accent-hover); background: rgba(230, 126, 34, 0.05);">
+                <div class="card-header" style="color: var(--accent-hover);" id="bus-form-title">🚌 Add/Edit Bus</div>
+                <input type="hidden" id="bus-id">
+                <div class="grid-2">
+                    <div><label>Bus Number Plate</label><input type="text" id="bus-plate" placeholder="e.g. UP63 T 1234"></div>
+                    <div><label>Seating Capacity</label><input type="number" id="bus-cap" placeholder="e.g. 50"></div>
+                </div>
+                <div class="grid-3">
+                    <div><label>Insurance Expiry</label><input type="date" id="bus-ins"></div>
+                    <div><label>PUC Expiry</label><input type="date" id="bus-puc"></div>
+                    <div><label>Next Service Date</label><input type="date" id="bus-srv"></div>
+                </div>
+                <button class="btn" id="bus-submit-btn" onclick="submitBus()">Save Bus Record</button>
+                <button class="btn btn-outline" id="bus-cancel-btn" style="display: none; margin-top: 10px;" onclick="resetBusForm()">Cancel Edit</button>
+            </div>
+
             <div class="card">
-                <div class="card-header" style="color: var(--success);">📍 Live GPS Tracking <span class="status-badge" style="background: var(--success); color:#fff; font-size: 10px;">Active</span></div>
-                
+                <div class="card-header">Master Bus Directory</div>
+                <div id="bus-list-container"></div>
+            </div>
+        </div>
+
+        <!-- 3. STAFF DIRECTORY -->
+        <div id="staff-dir" class="workspace head-only-ws">
+            <div class="card" style="border: 2px solid var(--info); background: rgba(59, 130, 246, 0.05);">
+                <div class="card-header" style="color: var(--info);" id="staff-form-title">👨‍✈️ Add/Edit Transport Staff</div>
+                <input type="hidden" id="staff-id">
+                <div class="grid-2">
+                    <div><label>Full Name</label><input type="text" id="staff-name" placeholder="e.g. Raju Kumar"></div>
+                    <div><label>Role</label><select id="staff-role"><option>Bus Driver</option><option>Conductor</option></select></div>
+                </div>
+                <div class="grid-2">
+                    <div><label>Phone Number</label><input type="number" id="staff-phone" placeholder="10-digit mobile"></div>
+                    <div><label>Driving License Expiry</label><input type="date" id="staff-dl"></div>
+                </div>
+                <label>Assign to Bus</label>
+                <select id="staff-bus-assign"><option value="">-- No Bus Assigned --</option></select>
+
+                <button class="btn" style="background: var(--info);" id="staff-submit-btn" onclick="submitStaff()">Save Profile & Send App Invite</button>
+                <button class="btn btn-outline" id="staff-cancel-btn" style="display: none; margin-top: 10px;" onclick="resetStaffForm()">Cancel Edit</button>
+            </div>
+
+            <div class="card">
+                <div class="card-header">Staff Directory</div>
+                <div id="staff-list-container"></div>
+            </div>
+        </div>
+
+        <!-- 4. STUDENT DIRECTORY (Transport specific) -->
+        <div id="stu-dir" class="workspace head-only-ws">
+            <div class="card" style="border: 2px solid var(--success); background: rgba(16, 185, 129, 0.05);">
+                <div class="card-header" style="color: var(--success);" id="stu-form-title">👨‍🎓 Enroll Student to Transport</div>
+                <input type="hidden" id="stu-id">
+                <div class="grid-2">
+                    <div><label>Student Name</label><input type="text" id="stu-name" placeholder="e.g. Adarsh Patel"></div>
+                    <div><label>Class & Section</label><input type="text" id="stu-class" placeholder="e.g. Class 10 - B"></div>
+                </div>
+                <div class="grid-2">
+                    <div>
+                        <label>Assign Route</label>
+                        <select id="stu-route" onchange="autoAssignBus()"><option value="">-- Select Route --</option></select>
+                    </div>
+                    <div>
+                        <label>Assigned Bus</label>
+                        <input type="text" id="stu-bus" placeholder="Auto-filled based on route" readonly style="background: var(--sidebar-bg); opacity:0.7;">
+                    </div>
+                </div>
+                <div class="grid-2">
+                    <div><label>Pickup / Drop Stop</label><input type="text" id="stu-stop" placeholder="e.g. Civil Lines Chauraha"></div>
+                    <div><label>Fee Status</label><select id="stu-fee"><option>Paid</option><option>Due</option></select></div>
+                </div>
+
+                <button class="btn btn-success" id="stu-submit-btn" onclick="submitStudent()">Save Transport Student</button>
+                <button class="btn btn-outline" id="stu-cancel-btn" style="display: none; margin-top: 10px;" onclick="resetStudentForm()">Cancel Edit</button>
+            </div>
+
+            <div class="card">
+                <div class="card-header">Transport Students Directory</div>
+                <input type="text" id="stu-search" placeholder="Search by name or route..." onkeyup="renderStudents()">
+                <div id="stu-list-container"></div>
+            </div>
+        </div>
+
+        <!-- 5. ROUTES & FEE MATRIX -->
+        <div id="routes-fees" class="workspace head-only-ws">
+            <div class="card">
+                <div class="card-header">🗺️ Route & Fee Definition</div>
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Fees assigned here sync to the Admin Fee portal automatically.</p>
+                <div class="grid-2">
+                    <div><label>Route Name / Area</label><input type="text" id="rt-name" placeholder="e.g. Civil Lines Route"></div>
+                    <div><label>Assign Bus to Route</label><select id="rt-bus"><option value="">Select Bus...</option></select></div>
+                </div>
+                <div class="grid-2">
+                    <div><label>Major Stops (Comma Separated)</label><input type="text" id="rt-stops" placeholder="Stop 1, Stop 2, Stop 3..."></div>
+                    <div><label>Monthly Transport Fee (₹)</label><input type="number" id="rt-fee" placeholder="e.g. 800"></div>
+                </div>
+                <button class="btn btn-success" onclick="submitRoute()">Save Route & Sync Fee</button>
+            </div>
+
+            <div class="card">
+                <div class="card-header">Active Routes</div>
+                <div id="route-list-container"></div>
+            </div>
+        </div>
+
+        <!-- 6. MASTER FUEL LOG -->
+        <div id="fuel-log" class="workspace head-only-ws">
+            <div class="card">
+                <div class="card-header">⛽ Master Fuel Log</div>
+                <div id="fuel-list-container"></div>
+            </div>
+        </div>
+
+        <!-- 7. LIVE MAP -->
+        <div id="live-map" class="workspace head-only-ws">
+            <div class="card">
+                <div class="card-header" style="color: var(--success);">📍 Live Fleet Tracking</div>
                 <div style="height: 350px; background: var(--bg-color); border-radius: 16px; display: flex; justify-content: center; align-items: center; flex-direction: column; border: 2px dashed var(--border-color); margin-bottom: 20px;">
                     <span style="font-size: 40px; margin-bottom: 10px;">🗺️</span>
                     <p style="color: var(--text-main); font-weight: bold;">Maps API Integration Pending</p>
-                    <p style="font-size: 13px; color: var(--text-muted);">(Live dots moving for active buses)</p>
-                </div>
-
-                <div class="grid-2">
-                    <div class="list-card" style="border-left: 4px solid var(--success);">
-                        <div class="list-title">Bus 1 (Route A)</div>
-                        <div class="list-subtitle" style="color: var(--success); font-weight: bold; margin-top:5px;">Running on time</div>
-                    </div>
-                    <div class="list-card" style="border-left: 4px solid var(--warning);">
-                        <div class="list-title">Bus 3 (Route C)</div>
-                        <div class="list-subtitle" style="color: var(--warning); font-weight: bold; margin-top:5px;">Delayed by 5 mins</div>
-                    </div>
+                    <p style="font-size: 13px; color: var(--text-muted);">(Live tracking of active buses)</p>
                 </div>
             </div>
         </div>
 
-        <!-- 3. EMERGENCY ALERTS -->
+
+        <!-- ==============================================
+             👨‍✈️ TRANSPORT STAFF (DRIVER) WORKSPACES 
+        ================================================= -->
+
+        <!-- 1. STAFF DASHBOARD -->
+        <div id="dash-staff" class="workspace staff-only-ws">
+            <div class="card" style="text-align: center; border: 2px solid var(--accent-color);">
+                <div class="avatar" style="width: 80px; height: 80px; font-size: 30px; margin: 0 auto 15px auto;" id="driver-avatar-lrg">D</div>
+                <h2 id="driver-name-lrg">Ramesh Driver</h2>
+                <p style="color: var(--text-muted); font-weight: 600; margin-bottom: 20px;">Assigned Bus: <strong style="color: var(--text-main);" id="driver-bus-plate">UP63 T 1234</strong></p>
+                
+                <div class="grid-2">
+                    <div class="stat-box primary" style="padding: 15px;"><h4>My Route</h4><h2 style="font-size: 20px;" id="driver-route-name">Route A</h2></div>
+                    <div class="stat-box" style="padding: 15px;"><h4>Students</h4><h2 style="font-size: 20px; color: var(--info);" id="driver-stu-count">0</h2></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">Quick Tools</div>
+                <button class="btn btn-outline" style="margin-bottom: 15px;" onclick="switchTab('stu-manifest', document.querySelectorAll('.nav-item')[8])">📋 Open Student Manifest</button>
+                <button class="btn btn-danger" onclick="switchTab('emergency', document.querySelectorAll('.nav-item')[10])">🚨 Send Emergency SOS</button>
+            </div>
+        </div>
+
+        <!-- 2. STUDENT MANIFEST (ATTENDANCE) -->
+        <div id="stu-manifest" class="workspace staff-only-ws">
+            <div class="card">
+                <div class="card-header" style="color: var(--info);">📋 Boarding Manifest</div>
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Mark students as they board or drop from the bus.</p>
+                
+                <div id="manifest-list-container">
+                    <!-- Dynamic from JS based on Driver's Bus -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. DRIVER FUEL LOG -->
+        <div id="driver-fuel" class="workspace staff-only-ws">
+            <div class="card" style="border-left: 4px solid var(--warning);">
+                <div class="card-header">⛽ Log Today's Fuel</div>
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Bus No: <strong id="fuel-bus-plate">UP63 T 1234</strong></p>
+                <div class="grid-2">
+                    <div><label>Diesel Filled (Liters)</label><input type="number" id="dr-fl-ltr" placeholder="e.g. 20"></div>
+                    <div><label>Total Amount Paid (₹)</label><input type="number" id="dr-fl-amt" placeholder="e.g. 1800"></div>
+                </div>
+                <button class="btn btn-warning" onclick="driverLogFuel()">Send Fuel Receipt to Head</button>
+            </div>
+        </div>
+
+
+        <!-- ==============================================
+             COMMON WORKSPACES 
+        ================================================= -->
+
+        <!-- EMERGENCY SOS -->
         <div id="emergency" class="workspace">
             <div class="card" style="border: 2px solid var(--danger); background: rgba(239, 68, 68, 0.05);">
-                <div class="card-header" style="color: var(--danger);">🚨 Emergency Broadcast</div>
-                <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 14px; line-height:1.5;">Instantly notify Principal and Parents of students on a specific route regarding delays or breakdowns.</p>
+                <div class="card-header" style="color: var(--danger);">🚨 Emergency Breakdown & SOS</div>
+                <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 14px; line-height:1.5;">Instantly notify Principal and Parents of students on this route.</p>
                 
                 <div class="grid-2">
                     <div>
-                        <label>Select Bus / Route</label>
-                        <select>
-                            <option>Bus 02 - Route B (Traffic)</option>
-                            <option>Bus 05 - Route E (Breakdown)</option>
-                        </select>
+                        <label>Select Bus</label>
+                        <select id="em-bus"><option value="">Select Bus...</option></select>
                     </div>
                     <div>
                         <label>Issue Type</label>
-                        <select>
+                        <select id="em-type" onchange="generateEmPreview()">
                             <option>Heavy Traffic Delay</option>
-                            <option>Bus Breakdown (Replacement sent)</option>
-                            <option>Accident / Emergency Alert</option>
+                            <option>Bus Breakdown (Send Mechanic)</option>
+                            <option>Accident / Medical Emergency</option>
                         </select>
                     </div>
                 </div>
                 
-                <label>Message Preview (Auto-generated)</label>
-                <textarea rows="3" style="background: rgba(239, 68, 68, 0.1); color: var(--danger); font-weight: bold; border-color: var(--danger);" readonly>URGENT: Bus 02 (Route B) is experiencing heavy traffic delays. Students are safe. Expected delay: 20 minutes.</textarea>
+                <label>Message to Parents (Auto-generated)</label>
+                <textarea id="em-preview" rows="3" style="background: rgba(239, 68, 68, 0.1); color: var(--danger); font-weight: bold; border-color: var(--danger);" readonly></textarea>
                 
-                <button class="btn btn-danger" style="margin-top: 10px;" onclick="showToast('Alert Sent 🚨', 'Push notifications & SMS sent to parents and Principal.', '#ef4444')">
-                    Send Push Notifications & SMS Now
+                <button class="btn btn-danger" style="margin-top: 10px;" onclick="sendEmergencyAlert()">
+                    🚨 Broadcast SOS Globally
                 </button>
             </div>
         </div>
 
-        <!-- 4. MAINTENANCE & PUC LOG -->
-        <div id="maintenance" class="workspace">
-            <div class="card">
-                <div class="card-header">🔧 Document & Maintenance Log <button class="btn btn-outline btn-small">+ Update</button></div>
-                
-                <div class="list-card">
-                    <div class="list-row">
-                        <div class="list-title">Bus 01 (UP63 T 1234)</div>
-                        <div class="list-subtitle" style="color: var(--success); font-weight: bold;">Service in 15 Days</div>
-                    </div>
-                    <div style="display: flex; gap: 15px; margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border-color);">
-                        <span style="font-size: 12px; color: var(--text-muted);">Insurance: <strong style="color:var(--success);">Valid</strong></span>
-                        <span style="font-size: 12px; color: var(--text-muted);">PUC: <strong style="color:var(--success);">Valid</strong></span>
-                    </div>
-                </div>
-
-                <div class="list-card" style="border: 1px solid var(--danger); background: rgba(239, 68, 68, 0.05);">
-                    <div class="list-row">
-                        <div class="list-title">Bus 03 (UP63 T 5566)</div>
-                        <div class="list-subtitle" style="color: var(--danger); font-weight: bold;">Service OVERDUE</div>
-                    </div>
-                    <div style="display: flex; gap: 15px; margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border-color);">
-                        <span style="font-size: 12px; color: var(--text-muted);">Insurance: <strong style="color:var(--danger);">Exp in 5 days</strong></span>
-                        <span style="font-size: 12px; color: var(--text-muted);">PUC: <strong style="color:var(--success);">Valid</strong></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 5. PLACEHOLDER TABS -->
-        <div id="routes" class="workspace"><div class="card"><div class="card-header">🗺️ Route Allotment</div><p style="font-size: 14px; color: var(--text-muted);">Map students to specific bus stops and generate route sheets.</p></div></div>
-        <div id="staff" class="workspace"><div class="card"><div class="card-header">👨‍✈️ Driver & Conductor Profiles</div><p style="font-size: 14px; color: var(--text-muted);">Manage driving licenses, contact info, and daily driver attendance.</p></div></div>
-        <div id="fee-sync" class="workspace"><div class="card"><div class="card-header">🔄 Transport Fee Sync</div><p style="font-size: 14px; color: var(--text-muted);">Directly link bus routes to the Admin fee panel for automatic transport fee calculation.</p></div></div>
-
     </div>
 
+    <!-- 🚀 MASTER TRANSPORT ENGINE (JS) -->
     <script>
-        // 🚀 THEME & UI LOGIC
+        // --- CORE DATABASE ---
+        let transBusesDB = JSON.parse(localStorage.getItem("transBusesDB")) || [
+            { id: "B-101", plate: "UP63 T 1234", cap: 50, ins: "2027-01-15", puc: "2026-12-01", srv: "2026-07-10", status: "Active" },
+            { id: "B-102", plate: "UP63 T 5678", cap: 40, ins: "2024-01-15", puc: "2026-12-01", srv: "2026-07-10", status: "Workshop" }
+        ];
+        
+        let transStaffDB = JSON.parse(localStorage.getItem("transStaffDB")) || [
+            { id: "D-101", name: "Raju Driver", role: "Bus Driver", phone: "9876543210", dl: "2028-05-20", bus: "UP63 T 1234", status: "Active" }
+        ];
+
+        let transRoutesDB = JSON.parse(localStorage.getItem("transRoutesDB")) || [
+            { id: "R-1", name: "Civil Lines Route", bus: "UP63 T 1234", stops: "Stop A, Stop B", fee: 800 }
+        ];
+
+        let transStudentsDB = JSON.parse(localStorage.getItem("transStudentsDB")) || [
+            { id: "TS-1", name: "Adarsh Patel", class: "Class 10-B", route: "R-1", bus: "UP63 T 1234", stop: "Stop A", fee: "Paid", present: false }
+        ];
+
+        let transFuelDB = JSON.parse(localStorage.getItem("transFuelDB")) || [];
+
+        // Role Management (For Demo: Default is Head)
+        let currentRole = "HEAD"; // Can be "HEAD" or "STAFF"
+        let currentDriverID = "D-101"; // Mock logged in driver
+
+        window.onload = function() {
+            document.body.classList.add("dark-mode");
+            localStorage.setItem("darkMode", "true");
+            let themeBtn = document.querySelector(".theme-toggle");
+            if(themeBtn) themeBtn.innerText = "🔱";
+
+            initUIBasedOnRole();
+        };
+
+        // --- THEME & NAVIGATION & ROLE MGMT ---
         function toggleAppMenu() {
             document.querySelector('.sidebar').classList.toggle('open');
             document.querySelector('.sidebar-overlay').classList.toggle('open');
@@ -315,65 +466,352 @@
             document.body.classList.toggle("dark-mode");
             const isDark = document.body.classList.contains("dark-mode");
             localStorage.setItem("darkMode", isDark);
-            
             let themeBtn = document.querySelector(".theme-toggle");
             if(themeBtn) themeBtn.innerText = isDark ? "🔱" : "☀️";
         }
 
         function switchTab(tabId, element) {
-            // Remove active classes
             document.querySelectorAll('.nav-item').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.workspace').forEach(ws => ws.classList.remove('active'));
-            
-            // Add active class
             element.classList.add('active');
             document.getElementById(tabId).classList.add('active');
             
-            // Update Titles
             let tabName = element.innerText.replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]|[\u2600-\u27FF]/g, '').trim(); 
             if(document.getElementById('mobile-title')) document.getElementById('mobile-title').innerText = tabName;
             
-            // Auto-close mobile menu
+            // Re-renders based on tab
+            if(tabId === 'staff-dir') populateBusDropdowns();
+            if(tabId === 'stu-dir') populateRouteDropdowns();
+            if(tabId === 'routes-fees') populateBusDropdowns();
+
             if(window.innerWidth <= 768) { toggleAppMenu(); }
         }
 
-        // 🚀 CUSTOM TOAST NOTIFICATION
+        function logoutTransport() {
+            if(confirm("Are you sure you want to securely logout?")) {
+                localStorage.removeItem("loggedInUser"); window.location.href = "index.html";
+            }
+        }
+
         function showToast(title, message, color) {
             let container = document.getElementById("toast-container");
-            if(!container) {
-                container = document.createElement("div");
-                container.id = "toast-container";
-                document.body.appendChild(container);
-            }
-            let toast = document.createElement("div");
-            toast.className = "toast";
-            toast.style.background = color;
+            if(!container) { container = document.createElement("div"); container.id = "toast-container"; document.body.appendChild(container); }
+            let toast = document.createElement("div"); toast.className = "toast"; toast.style.background = color;
             toast.innerHTML = `<div style="font-size:15px; margin-bottom:4px;">${title}</div><div style="font-size:12px; font-weight:normal;">${message}</div>`;
             container.appendChild(toast);
             setTimeout(() => { toast.style.animation = "fadeOutToast 0.4s ease forwards"; setTimeout(() => toast.remove(), 400); }, 3500);
         }
 
-        function logoutTransport() {
-            if(confirm("Are you sure you want to securely logout?")) {
-                localStorage.removeItem("loggedInUser");
-                localStorage.removeItem("userRole");
-                window.location.href = "index.html";
+        // --- 🔥 ROLE SWITCHING LOGIC ---
+        function toggleRoleSimulation() {
+            currentRole = currentRole === "HEAD" ? "STAFF" : "HEAD";
+            initUIBasedOnRole();
+            showToast('Role Switched 🔄', `Now viewing as ${currentRole === "HEAD" ? 'Transport Head' : 'Bus Driver'}`, '#3b82f6');
+        }
+
+        function initUIBasedOnRole() {
+            const headNavs = document.querySelectorAll('.head-only');
+            const staffNavs = document.querySelectorAll('.staff-only');
+            const headWorkspaces = document.querySelectorAll('.head-only-ws');
+            const staffWorkspaces = document.querySelectorAll('.staff-only-ws');
+
+            if(currentRole === "HEAD") {
+                document.getElementById('role-display-badge').innerText = "TRANSPORT HEAD";
+                if(document.getElementById('mobile-avatar')) document.getElementById('mobile-avatar').innerText = "T";
+                headNavs.forEach(el => el.style.display = 'flex');
+                staffNavs.forEach(el => el.style.display = 'none');
+                
+                // Switch to head dash
+                switchTab('dash-head', document.querySelectorAll('.nav-item')[0]);
+                
+                // Boot Head Functions
+                renderBuses(); renderStaff(); renderRoutes(); renderStudents(); renderFuelLog(); populateBusDropdowns(); updateDashStats();
+            } else {
+                document.getElementById('role-display-badge').innerText = "DRIVER PORTAL";
+                if(document.getElementById('mobile-avatar')) document.getElementById('mobile-avatar').innerText = "D";
+                headNavs.forEach(el => el.style.display = 'none');
+                staffNavs.forEach(el => el.style.display = 'flex');
+                
+                // Switch to staff dash
+                switchTab('dash-staff', document.querySelectorAll('.nav-item')[7]);
+                
+                // Boot Staff Functions
+                initDriverView();
+            }
+            populateEmergencyDropdown();
+        }
+
+        function checkDateStatus(dateStr) {
+            if(!dateStr) return { text: "No Data", color: "var(--text-muted)", overdue: false };
+            let diff = Math.ceil((new Date(dateStr) - new Date()) / (1000 * 60 * 60 * 24));
+            if(diff < 0) return { text: "OVERDUE", color: "var(--danger)", overdue: true };
+            if(diff <= 15) return { text: `Exp in ${diff}d`, color: "var(--warning)", overdue: false };
+            return { text: "Valid", color: "var(--success)", overdue: false };
+        }
+
+        // ==========================================
+        // 👨‍💼 TRANSPORT HEAD FUNCTIONS
+        // ==========================================
+
+        function updateDashStats() {
+            if(currentRole !== "HEAD") return;
+            document.getElementById('dash-buses').innerText = `${transBusesDB.filter(b=>b.status==="Active").length} / ${transBusesDB.length}`;
+            document.getElementById('dash-students').innerText = transStudentsDB.length;
+            
+            let totalFees = transRoutesDB.reduce((sum, r) => sum + (parseInt(r.fee)||0), 0) * transStudentsDB.length; // Mock calculation
+            document.getElementById('dash-fees').innerText = `₹${totalFees}`;
+
+            let alerts = document.getElementById('dash-alerts'); alerts.innerHTML = "";
+            let alertsFound = false;
+
+            transBusesDB.forEach(b => {
+                let ins = checkDateStatus(b.ins); let puc = checkDateStatus(b.puc); let srv = checkDateStatus(b.srv);
+                if(ins.overdue || puc.overdue || srv.overdue) {
+                    alerts.innerHTML += `<div class="list-card" style="border-left: 4px solid var(--danger);"><div class="list-title">${b.plate} (Maintenance Due)</div></div>`;
+                    alertsFound = true;
+                }
+            });
+            if(!alertsFound) alerts.innerHTML = `<p style="color:var(--text-muted); font-size:13px;">No critical alerts. Fleet is healthy.</p>`;
+        }
+
+        // -- BUSES --
+        function submitBus() {
+            let id = document.getElementById('bus-id').value;
+            let plate = document.getElementById('bus-plate').value.toUpperCase();
+            let cap = document.getElementById('bus-cap').value;
+            let ins = document.getElementById('bus-ins').value;
+            let puc = document.getElementById('bus-puc').value;
+            let srv = document.getElementById('bus-srv').value;
+
+            if(!plate || !cap) return showToast('Error', 'Bus Plate and Capacity are required.', '#ef4444');
+
+            if(id) {
+                let bus = transBusesDB.find(b => b.id === id);
+                if(bus) { bus.plate = plate; bus.cap = cap; bus.ins = ins; bus.puc = puc; bus.srv = srv; showToast('Updated 📝', `Bus updated.`, '#3b82f6'); }
+            } else {
+                let newId = `B-${Math.floor(100 + Math.random() * 900)}`;
+                transBusesDB.push({ id: newId, plate, cap, ins, puc, srv, status: "Active" });
+                showToast('Added 🚌', `Bus added to fleet.`, '#10b981');
+            }
+            localStorage.setItem("transBusesDB", JSON.stringify(transBusesDB));
+            resetBusForm(); renderBuses(); populateBusDropdowns(); updateDashStats();
+        }
+
+        function resetBusForm() {
+            document.querySelectorAll('#bus-dir input').forEach(el => el.value = '');
+            document.getElementById('bus-form-title').innerText = "🚌 Add/Edit Bus";
+            document.getElementById('bus-submit-btn').innerText = "Save Bus Record";
+            document.getElementById('bus-cancel-btn').style.display = "none";
+        }
+
+        function renderBuses() {
+            const list = document.getElementById('bus-list-container'); list.innerHTML = "";
+            transBusesDB.slice().reverse().forEach(b => {
+                let isInactive = b.status !== "Active";
+                let badge = isInactive ? `<div class="status-badge" style="background:rgba(239, 68, 68, 0.1); color:var(--danger);">Workshop</div>` : `<div class="status-badge" style="background: rgba(16, 185, 129, 0.1); color: var(--success);">Active</div>`;
+                let ins = checkDateStatus(b.ins); let puc = checkDateStatus(b.puc); let srv = checkDateStatus(b.srv);
+                list.innerHTML += `
+                    <div class="list-card ${isInactive ? 'inactive' : ''}">
+                        <div class="list-row"><div><div class="list-title">${b.plate}</div><div class="list-subtitle">Cap: ${b.cap}</div></div><div>${badge}</div></div>
+                        <div style="display:flex; justify-content:space-between; margin-top:10px; font-size:12px;">
+                            <span>Ins: <strong style="color:${ins.color}">${ins.text}</strong></span><span>PUC: <strong style="color:${puc.color}">${puc.text}</strong></span><span>Srv: <strong style="color:${srv.color}">${srv.text}</strong></span>
+                        </div>
+                        <div style="display:flex; gap:8px; margin-top:15px;">
+                            <button class="btn btn-outline btn-small" onclick="editBus('${b.id}')">✏️ Edit</button>
+                            <button class="btn ${isInactive?'btn-success':'btn-danger'} btn-small" onclick="toggleBus('${b.id}')">${isInactive?'Make Active':'To Workshop'}</button>
+                        </div>
+                    </div>`;
+            });
+        }
+
+        function editBus(id) {
+            let b = transBusesDB.find(x => x.id === id);
+            if(b) {
+                document.getElementById('bus-form-title').innerText = "✏️ Edit Bus"; document.getElementById('bus-id').value = b.id; document.getElementById('bus-plate').value = b.plate; document.getElementById('bus-cap').value = b.cap; document.getElementById('bus-ins').value = b.ins; document.getElementById('bus-puc').value = b.puc; document.getElementById('bus-srv').value = b.srv;
+                document.getElementById('bus-submit-btn').innerText = "Update Bus"; document.getElementById('bus-cancel-btn').style.display = "block"; window.scrollTo(0,0);
+            }
+        }
+        function toggleBus(id) {
+            let b = transBusesDB.find(x => x.id === id);
+            if(b) { b.status = b.status === "Active" ? "Workshop" : "Active"; localStorage.setItem("transBusesDB", JSON.stringify(transBusesDB)); renderBuses(); updateDashStats(); }
+        }
+
+        // -- STAFF --
+        function populateBusDropdowns() {
+            let opts = '<option value="">-- No Bus --</option>';
+            transBusesDB.forEach(b => opts += `<option value="${b.plate}">${b.plate}</option>`);
+            if(document.getElementById('staff-bus-assign')) document.getElementById('staff-bus-assign').innerHTML = opts;
+            if(document.getElementById('rt-bus')) document.getElementById('rt-bus').innerHTML = opts;
+        }
+
+        function submitStaff() {
+            let id = document.getElementById('staff-id').value; let name = document.getElementById('staff-name').value; let role = document.getElementById('staff-role').value; let phone = document.getElementById('staff-phone').value; let dl = document.getElementById('staff-dl').value; let bus = document.getElementById('staff-bus-assign').value;
+            if(!name || !phone) return showToast('Error', 'Name & Phone required.', '#ef4444');
+            if(id) { let st = transStaffDB.find(s => s.id === id); if(st) { st.name=name; st.role=role; st.phone=phone; st.dl=dl; st.bus=bus; showToast('Updated 📝', `Profile updated.`, '#3b82f6'); } } 
+            else { let newId = `D-${Math.floor(100 + Math.random() * 900)}`; transStaffDB.push({ id: newId, name, role, phone, dl, bus, status: "Active" }); showToast('Added 👨‍✈️', `Driver added.`, '#10b981'); }
+            localStorage.setItem("transStaffDB", JSON.stringify(transStaffDB)); resetStaffForm(); renderStaff();
+        }
+        function resetStaffForm() { document.querySelectorAll('#staff-dir input').forEach(el => el.value = ''); document.getElementById('staff-bus-assign').value = ""; document.getElementById('staff-form-title').innerText = "👨‍✈️ Add/Edit Staff"; document.getElementById('staff-submit-btn').innerText = "Save Profile"; document.getElementById('staff-cancel-btn').style.display = "none"; }
+        function renderStaff() {
+            const list = document.getElementById('staff-list-container'); list.innerHTML = "";
+            transStaffDB.slice().reverse().forEach(s => {
+                let badge = s.status === "Active" ? `<div class="status-badge" style="background: rgba(16, 185, 129, 0.1); color: var(--success);">Active</div>` : `<div class="status-badge" style="background:rgba(239, 68, 68, 0.1); color:var(--danger);">Inactive</div>`;
+                let dlSt = checkDateStatus(s.dl);
+                list.innerHTML += `<div class="list-card"><div class="list-row"><div><div class="list-title">${s.name}</div><div class="list-subtitle">${s.role} | Bus: <strong style="color:var(--text-main);">${s.bus||'None'}</strong></div></div><div>${badge}</div></div><div class="list-row" style="margin-top:10px; border-top:1px dashed var(--border-color); padding-top:10px;"><span class="list-subtitle">📞 ${s.phone}</span><span class="list-subtitle">DL: <strong style="color:${dlSt.color}">${dlSt.text}</strong></span></div><div style="display:flex; gap:8px; margin-top:15px;"><button class="btn btn-outline btn-small" onclick="editStaff('${s.id}')">✏️ Edit</button><button class="btn ${s.status==='Active'?'btn-danger':'btn-success'} btn-small" onclick="toggleStaff('${s.id}')">${s.status==='Active'?'Deactivate':'Activate'}</button></div></div>`;
+            });
+        }
+        function editStaff(id) { let st = transStaffDB.find(x => x.id === id); if(st) { document.getElementById('staff-form-title').innerText = "✏️ Edit Profile"; document.getElementById('staff-id').value = st.id; document.getElementById('staff-name').value = st.name; document.getElementById('staff-role').value = st.role; document.getElementById('staff-phone').value = st.phone; document.getElementById('staff-dl').value = st.dl; document.getElementById('staff-bus-assign').value = st.bus; document.getElementById('staff-submit-btn').innerText = "Update"; document.getElementById('staff-cancel-btn').style.display = "block"; window.scrollTo(0,0); } }
+        function toggleStaff(id) { let st = transStaffDB.find(x => x.id === id); if(st) { st.status = st.status === "Active" ? "Inactive" : "Active"; localStorage.setItem("transStaffDB", JSON.stringify(transStaffDB)); renderStaff(); } }
+
+        // -- ROUTES --
+        function submitRoute() {
+            let name = document.getElementById('rt-name').value; let bus = document.getElementById('rt-bus').value; let stops = document.getElementById('rt-stops').value; let fee = document.getElementById('rt-fee').value;
+            if(!name || !bus || !fee) return showToast('Error', 'Name, Bus & Fee required.', '#ef4444');
+            let newId = `R-${Math.floor(1 + Math.random() * 99)}`;
+            transRoutesDB.push({ id: newId, name, bus, stops, fee }); localStorage.setItem("transRoutesDB", JSON.stringify(transRoutesDB)); showToast('Route Saved 🗺️', 'Fee synced with Admin.', '#10b981');
+            document.querySelectorAll('#routes-fees input').forEach(el => el.value = ''); document.getElementById('rt-bus').value = ""; renderRoutes(); populateRouteDropdowns(); updateDashStats();
+        }
+        function renderRoutes() {
+            let list = document.getElementById('route-list-container'); list.innerHTML = "";
+            transRoutesDB.slice().reverse().forEach(r => {
+                let idx = transRoutesDB.indexOf(r);
+                list.innerHTML += `<div class="list-card"><div class="list-row"><div class="list-title">${r.name}</div><div class="list-title" style="color:var(--success);">₹${r.fee}/mo</div></div><div class="list-subtitle" style="margin-top:5px; margin-bottom:10px;">Bus: <strong style="color:var(--info);">${r.bus}</strong><br>Stops: ${r.stops}</div><button class="btn btn-outline btn-small" style="color:var(--danger); border-color:var(--danger);" onclick="deleteRoute(${idx})">Delete Route</button></div>`;
+            });
+        }
+        function deleteRoute(idx) { if(confirm("Delete this route?")) { transRoutesDB.splice(idx, 1); localStorage.setItem("transRoutesDB", JSON.stringify(transRoutesDB)); renderRoutes(); populateRouteDropdowns(); updateDashStats(); } }
+
+        // -- STUDENTS --
+        function populateRouteDropdowns() {
+            let opts = '<option value="">-- Select Route --</option>';
+            transRoutesDB.forEach(r => opts += `<option value="${r.id}">${r.name}</option>`);
+            if(document.getElementById('stu-route')) document.getElementById('stu-route').innerHTML = opts;
+        }
+        function autoAssignBus() {
+            let rId = document.getElementById('stu-route').value;
+            let rt = transRoutesDB.find(r => r.id === rId);
+            if(rt) document.getElementById('stu-bus').value = rt.bus; else document.getElementById('stu-bus').value = "";
+        }
+        function submitStudent() {
+            let id = document.getElementById('stu-id').value; let name = document.getElementById('stu-name').value; let cls = document.getElementById('stu-class').value; let route = document.getElementById('stu-route').value; let bus = document.getElementById('stu-bus').value; let stop = document.getElementById('stu-stop').value; let fee = document.getElementById('stu-fee').value;
+            if(!name || !route) return showToast('Error', 'Name and Route required.', '#ef4444');
+            
+            if(id) {
+                let st = transStudentsDB.find(s => s.id === id);
+                if(st) { st.name=name; st.class=cls; st.route=route; st.bus=bus; st.stop=stop; st.feeStatus=fee; showToast('Updated', `Student transport details updated.`, '#3b82f6'); }
+            } else {
+                let newId = `TS-${Math.floor(100 + Math.random() * 900)}`;
+                transStudentsDB.push({ id: newId, name, class: cls, route, bus, stop, feeStatus: fee, present: false });
+                showToast('Enrolled 👨‍🎓', `Student added to transport roster.`, '#10b981');
+            }
+            localStorage.setItem("transStudentsDB", JSON.stringify(transStudentsDB)); resetStudentForm(); renderStudents(); updateDashStats();
+        }
+        function resetStudentForm() { document.querySelectorAll('#stu-dir input').forEach(el => el.value = ''); document.getElementById('stu-route').value = ""; document.getElementById('stu-fee').value = "Paid"; document.getElementById('stu-form-title').innerText = "👨‍🎓 Enroll Student"; document.getElementById('stu-submit-btn').innerText = "Save Student"; document.getElementById('stu-cancel-btn').style.display = "none"; }
+        function renderStudents() {
+            const list = document.getElementById('stu-list-container'); list.innerHTML = "";
+            transStudentsDB.slice().reverse().forEach(s => {
+                let rt = transRoutesDB.find(r => r.id === s.route); let rtName = rt ? rt.name : "Unknown Route";
+                let feeBadge = s.feeStatus === "Paid" ? `<div class="status-badge" style="background: rgba(16, 185, 129, 0.1); color: var(--success);">Fee Paid</div>` : `<div class="status-badge" style="background: rgba(239, 68, 68, 0.1); color: var(--danger);">Fee Due</div>`;
+                list.innerHTML += `<div class="list-card"><div class="list-row"><div><div class="list-title">${s.name}</div><div class="list-subtitle">${s.class}</div></div><div>${feeBadge}</div></div><div class="list-row" style="margin-top:10px; border-top:1px dashed var(--border-color); padding-top:10px;"><span class="list-subtitle">Route: <strong>${rtName}</strong><br>Bus: ${s.bus} | Stop: ${s.stop}</span></div><div style="display:flex; gap:8px; margin-top:15px;"><button class="btn btn-outline btn-small" onclick="editStudent('${s.id}')">✏️ Edit</button><button class="btn btn-danger btn-small" onclick="removeStudent('${s.id}')">Remove</button></div></div>`;
+            });
+        }
+        function editStudent(id) { let st = transStudentsDB.find(x => x.id === id); if(st) { document.getElementById('stu-form-title').innerText = "✏️ Edit Enrollment"; document.getElementById('stu-id').value = st.id; document.getElementById('stu-name').value = st.name; document.getElementById('stu-class').value = st.class; document.getElementById('stu-route').value = st.route; document.getElementById('stu-bus').value = st.bus; document.getElementById('stu-stop').value = st.stop; document.getElementById('stu-fee').value = st.feeStatus; document.getElementById('stu-submit-btn').innerText = "Update Enrollment"; document.getElementById('stu-cancel-btn').style.display = "block"; window.scrollTo(0,0); } }
+        function removeStudent(id) { if(confirm("Remove student from transport list?")) { transStudentsDB = transStudentsDB.filter(s => s.id !== id); localStorage.setItem("transStudentsDB", JSON.stringify(transStudentsDB)); renderStudents(); updateDashStats(); } }
+
+        // -- FUEL LOG (HEAD) --
+        function renderFuelLog() {
+            let list = document.getElementById('fuel-list-container'); list.innerHTML = "";
+            transFuelDB.slice().reverse().forEach(f => {
+                list.innerHTML += `<div class="list-card" style="border-left: 4px solid var(--warning);"><div class="list-row"><div><div class="list-title">${f.bus}</div><div class="list-subtitle">${f.date} (By ${f.driver})</div></div><div style="text-align:right;"><div class="list-title" style="color:var(--danger);">₹${f.amt}</div><div class="list-subtitle">${f.ltr} Liters</div></div></div></div>`;
+            });
+        }
+
+        // ==========================================
+        // 👨‍✈️ TRANSPORT STAFF (DRIVER) FUNCTIONS
+        // ==========================================
+        function initDriverView() {
+            let driver = transStaffDB.find(d => d.id === currentDriverID);
+            if(driver) {
+                document.getElementById('driver-name-lrg').innerText = driver.name;
+                document.getElementById('driver-bus-plate').innerText = driver.bus || "No Bus Assigned";
+                document.getElementById('fuel-bus-plate').innerText = driver.bus || "None";
+                
+                let myRoute = transRoutesDB.find(r => r.bus === driver.bus);
+                document.getElementById('driver-route-name').innerText = myRoute ? myRoute.name : "N/A";
+                
+                let myStudents = transStudentsDB.filter(s => s.bus === driver.bus);
+                document.getElementById('driver-stu-count').innerText = myStudents.length;
+
+                renderManifest(myStudents);
             }
         }
 
-        // Initialize User Data & Theme on Load
-        window.onload = function() {
-            const user = localStorage.getItem("loggedInUser") || "Transport Head";
-            if(document.getElementById("mobile-avatar")) {
-                document.getElementById("mobile-avatar").innerText = user.charAt(0).toUpperCase();
-            }
+        function renderManifest(students) {
+            let list = document.getElementById('manifest-list-container'); list.innerHTML = "";
+            if(students.length === 0) return list.innerHTML = `<p style="text-align:center; color:var(--text-muted); padding: 20px;">No students assigned to your bus.</p>`;
 
-            // By default Mahadev Cosmic Theme Active
-            document.body.classList.add("dark-mode");
-            localStorage.setItem("darkMode", "true");
-            let themeBtn = document.querySelector(".theme-toggle");
-            if(themeBtn) themeBtn.innerText = "🔱";
-        };
+            students.forEach((s, i) => {
+                let btnColor = s.present ? "var(--success)" : "transparent";
+                let btnTextCol = s.present ? "#fff" : "var(--text-main)";
+                let btnText = s.present ? "✅ Checked In" : "Mark Boarded";
+                list.innerHTML += `
+                <div class="list-card" style="display:flex; justify-content:space-between; align-items:center;">
+                    <div><div class="list-title">${s.name}</div><div class="list-subtitle">Stop: ${s.stop}</div></div>
+                    <button class="btn btn-outline btn-small" style="background:${btnColor}; color:${btnTextCol}; border-color:${s.present?'var(--success)':'var(--border-color)'};" onclick="toggleAttendance('${s.id}')">${btnText}</button>
+                </div>`;
+            });
+        }
+
+        function toggleAttendance(stuId) {
+            let s = transStudentsDB.find(x => x.id === stuId);
+            if(s) {
+                s.present = !s.present;
+                localStorage.setItem("transStudentsDB", JSON.stringify(transStudentsDB));
+                initDriverView(); // re-render
+                if(s.present) showToast('Boarded 🚌', `${s.name} marked as boarded. Parent notified.`, '#10b981');
+            }
+        }
+
+        function driverLogFuel() {
+            let ltr = document.getElementById('dr-fl-ltr').value;
+            let amt = document.getElementById('dr-fl-amt').value;
+            let driver = transStaffDB.find(d => d.id === currentDriverID);
+            
+            if(!ltr || !amt || !driver.bus) return showToast('Error', 'Fill all fields / No bus assigned.', '#ef4444');
+
+            transFuelDB.push({ date: new Date().toLocaleDateString(), bus: driver.bus, driver: driver.name, ltr, amt });
+            localStorage.setItem("transFuelDB", JSON.stringify(transFuelDB));
+            showToast('Receipt Sent ⛽', 'Fuel log sent to Transport Head.', '#f59e0b');
+            
+            document.getElementById('dr-fl-ltr').value = ""; document.getElementById('dr-fl-amt').value = "";
+        }
+
+        // ==========================================
+        // COMMON (EMERGENCY)
+        // ==========================================
+        function populateEmergencyDropdown() {
+            let opts = '<option value="">Select Bus...</option>';
+            if(currentRole === "HEAD") {
+                transBusesDB.forEach(b => opts += `<option value="${b.plate}">${b.plate}</option>`);
+            } else {
+                let driver = transStaffDB.find(d => d.id === currentDriverID);
+                if(driver && driver.bus) opts += `<option value="${driver.bus}">${driver.bus} (My Bus)</option>`;
+            }
+            if(document.getElementById('em-bus')) document.getElementById('em-bus').innerHTML = opts;
+            generateEmPreview();
+        }
+
+        function generateEmPreview() {
+            let bus = document.getElementById('em-bus').value || "[Bus]";
+            let type = document.getElementById('em-type').value;
+            document.getElementById('em-preview').value = `URGENT: ${bus} reporting: ${type}. Students are safe. Update follows shortly.`;
+        }
+
+        function sendEmergencyAlert() {
+            let bus = document.getElementById('em-bus').value;
+            if(!bus) return showToast('Error', 'Select a bus first!', '#ef4444');
+            showToast('SOS Broadcasted 🚨', 'Principal and Parents notified instantly.', '#ef4444');
+        }
+
     </script>
 </body>
 </html>
