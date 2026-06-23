@@ -75,36 +75,41 @@
 
         .grid-1 { display: grid; grid-template-columns: 1fr; gap: 15px; }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; }
 
-        .stat-box { background: var(--card-bg); padding: 20px; border-radius: 16px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm); display: flex; flex-direction: column; justify-content: center; }
+        .stat-box { background: var(--card-bg); padding: 20px; border-radius: 16px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm); display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden; }
         .stat-box.primary { background: var(--accent-color); color: var(--accent-text); border: none; box-shadow: var(--shadow-md); }
         .stat-box h4 { font-size: 12px; opacity: 0.8; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; }
         .stat-box h2 { font-size: 28px; font-weight: 800; margin: 0; }
 
         .list-card { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 14px; padding: 15px; margin-bottom: 12px; transition: var(--transition); }
-        .list-card:active { transform: scale(0.98); }
+        .list-card.inactive { opacity: 0.6; filter: grayscale(100%); }
         .list-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
         .list-row:last-child { margin-bottom: 0; }
         .list-title { font-size: 15px; font-weight: 700; color: var(--text-main); }
         .list-subtitle { font-size: 12px; color: var(--text-muted); font-weight: 600; }
         .status-badge { padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 800; text-transform: uppercase; }
 
-        input, select, textarea { width: 100%; background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border-color); padding: 14px 16px; border-radius: 12px; font-size: 15px; margin-bottom: 15px; outline: none; transition: var(--transition); font-weight: 500; }
+        input, select, textarea { width: 100%; background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border-color); padding: 14px 16px; border-radius: 12px; font-size: 14px; margin-bottom: 15px; outline: none; transition: var(--transition); font-weight: 500; }
         input:focus, select:focus, textarea:focus { border-color: var(--info); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
-        label { display: block; font-size: 13px; font-weight: 700; color: var(--text-muted); margin-bottom: 6px; margin-left: 4px; }
+        label { display: block; font-size: 12px; font-weight: 700; color: var(--text-muted); margin-bottom: 6px; margin-left: 4px; text-transform: uppercase; }
 
         .btn { width: 100%; padding: 16px; background: var(--accent-color); color: var(--accent-text); border: none; border-radius: 14px; font-size: 15px; font-weight: 800; cursor: pointer; transition: var(--transition); box-shadow: var(--shadow-sm); display: flex; justify-content: center; align-items: center; gap: 8px; }
         .btn:active { transform: scale(0.97); }
         .btn-success { background: var(--success); color: #fff; }
         .btn-danger { background: var(--danger); color: #fff; }
         .btn-outline { background: transparent; border: 2px solid var(--border-color); color: var(--text-main); box-shadow: none; }
+        .btn-small { padding: 8px 12px; font-size: 12px; border-radius: 8px; width: auto; }
 
         /* Toast Notification */
         #toast-container { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 10000; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 400px; pointer-events: none; }
-        .toast { padding: 15px 20px; border-radius: 12px; color: white; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.3); font-size: 14px; animation: slideUpToast 0.4s ease forwards; text-align: center; }
+        .toast { padding: 15px 20px; border-radius: 12px; color: white; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.3); font-size: 14px; animation: slideUpToast 0.4s ease forwards; text-align: center; line-height: 1.4; }
         @keyframes slideUpToast { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeOutToast { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-20px); } }
 
+        @media (max-width: 768px) {
+            .grid-3 { grid-template-columns: 1fr; }
+        }
         @media (min-width: 769px) {
             body { flex-direction: row; }
             .mobile-header { display: none !important; }
@@ -144,12 +149,15 @@
         
         <div class="nav-menu">
             <div class="nav-item active" onclick="switchTab('dashboard', this)">📊 HR Overview</div>
-            <div class="nav-item" onclick="switchTab('profiling', this)">🗂️ Staff & Docs</div>
+            <div class="nav-item" onclick="switchTab('onboarding', this)">📝 Staff Entry (KYC)</div>
+            <div class="nav-item" onclick="switchTab('directory', this)">🗂️ Staff Directory</div>
+            <div class="nav-item" onclick="switchTab('designations', this)">⚙️ Designations</div>
             <div class="nav-item" onclick="switchTab('payroll', this)">💸 Payroll & Tax</div>
             <div class="nav-item" onclick="switchTab('helpdesk', this)">🛠️ Staff Helpdesk</div>
             <div class="nav-item" onclick="switchTab('attendance', this)">📍 App Attendance</div>
             <div class="nav-item" onclick="switchTab('leave', this)">📅 Approvals</div>
             <div class="nav-item" onclick="switchTab('recruitment', this)">🎯 Recruitment</div>
+            <div class="nav-item" style="color: var(--danger); margin-top: 20px;" onclick="logoutHR()">🚪 Secure Logout</div>
         </div>
     </div>
 
@@ -157,13 +165,12 @@
         
         <div id="dashboard" class="workspace active">
             <div class="grid-2">
-                <div class="stat-box primary"><h4>Active Staff</h4><h2>42</h2></div>
-                <div class="stat-box"><h4>On Leave Today</h4><h2 style="color: var(--danger);">03</h2></div>
-                <div class="stat-box"><h4>Open Vacancies</h4><h2 style="color: var(--info);">02</h2></div>
+                <div class="stat-box primary"><h4>Total Active Staff</h4><h2 id="dash-active-staff">0</h2></div>
+                <div class="stat-box"><h4>Inactive/Left</h4><h2 id="dash-inactive-staff" style="color: var(--danger);">0</h2></div>
+                <div class="stat-box"><h4>Pending KYC</h4><h2 style="color: var(--warning);">2</h2></div>
             </div>
 
             <div class="grid-1" style="margin-top: 25px;">
-                
                 <div class="card">
                     <div class="card-header">🎂 HR Culture & Events</div>
                     <div class="list-card" style="border-left: 4px solid var(--info);">
@@ -189,50 +196,128 @@
             </div>
         </div>
 
-        <div id="profiling" class="workspace">
-            
+        <div id="onboarding" class="workspace">
+            <div class="card">
+                <div class="card-header" style="color: var(--success);" id="kyc-title">📝 New Staff Entry & KYC</div>
+                <input type="hidden" id="kyc-id">
+                
+                <div class="grid-3">
+                    <div>
+                        <label>Full Name</label>
+                        <input type="text" id="kyc-name" placeholder="e.g. Rahul Sharma">
+                    </div>
+                    <div>
+                        <label>Select Department</label>
+                        <select id="kyc-dept" onchange="populateDesignations()">
+                            <option value="">-- Choose Dept --</option>
+                            <option value="Teacher">Academic (Teacher)</option>
+                            <option value="Transport">Transport (Driver/Cond)</option>
+                            <option value="Admin">Admin Staff</option>
+                            <option value="Support">Support/Peon</option>
+                            <option value="Principal">Principal/VP</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Designation (Role)</label>
+                        <select id="kyc-role">
+                            <option value="">-- Select Dept First --</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid-3">
+                    <div>
+                        <label>Phone Number</label>
+                        <input type="number" id="kyc-phone" placeholder="10-digit mobile">
+                    </div>
+                    <div>
+                        <label>Government ID (PAN / Aadhaar)</label>
+                        <input type="text" id="kyc-gov" placeholder="Enter Gov ID Number">
+                    </div>
+                    <div>
+                        <label>Basic Salary / CTC (₹)</label>
+                        <input type="number" id="kyc-salary" placeholder="e.g. 25000">
+                    </div>
+                </div>
+
+                <label>Parents / Spouse Name</label>
+                <input type="text" id="kyc-guardian" placeholder="Father or Husband Name">
+
+                <label>Full Residential Address</label>
+                <textarea id="kyc-address" rows="2" placeholder="House No, Street, City..."></textarea>
+
+                <label>Previous Experience / Work Details</label>
+                <textarea id="kyc-exp" rows="2" placeholder="e.g. 3 Years at DPS School..."></textarea>
+
+                <div style="background: rgba(16, 185, 129, 0.1); padding: 15px; border-radius: 12px; margin-bottom: 20px;">
+                    <p style="font-size: 13px; color: var(--success); font-weight: bold; margin-bottom: 5px;">🤖 Smart ID Generation</p>
+                    <p style="font-size: 11px; color: var(--text-main);">Final submit karte hi system automatically Login ID & Password generate karega aur App portal ka access de dega.</p>
+                </div>
+
+                <button class="btn btn-success" id="kyc-submit-btn" onclick="submitKYC()">Final Submit & Generate Login</button>
+                <button class="btn btn-outline" id="kyc-cancel-btn" style="display: none; margin-top: 10px;" onclick="resetKYCForm()">Cancel Edit</button>
+            </div>
+        </div>
+
+        <div id="directory" class="workspace">
             <div class="card" style="border: 2px solid var(--info); background: rgba(59, 130, 246, 0.05);">
-                <div class="card-header" style="color: var(--info);">🖨️ Auto Doc & Letter Generator</div>
-                <label>Select Staff Member</label>
-                <select id="doc-staff">
-                    <option>S.K. Mishra (T-104)</option>
-                    <option>Rahul Kumar (T-108)</option>
-                    <option>Neha Gupta (T-112)</option>
-                </select>
-                <label>Select Document Type</label>
-                <select id="doc-type">
-                    <option>Digital ID Card</option>
-                    <option>Official Offer Letter</option>
-                    <option>Experience Certificate</option>
-                    <option>Relieving Letter</option>
-                </select>
+                <div class="card-header" style="color: var(--info);">🖨️ Auto Doc Generator (ID Card/Letter)</div>
+                <div class="grid-2">
+                    <select id="doc-staff"><option>Select Staff...</option></select>
+                    <select id="doc-type">
+                        <option>Digital ID Card</option>
+                        <option>Official Offer Letter</option>
+                        <option>Experience Certificate</option>
+                        <option>Relieving Letter</option>
+                    </select>
+                </div>
                 <button class="btn" style="background: var(--info); color: #fff;" onclick="generateLetter()">Download PDF Template</button>
             </div>
 
             <div class="card">
-                <div class="card-header">Staff Database</div>
-                <input type="text" placeholder="Search staff by name or ID...">
+                <div class="card-header">🗂️ Master Staff Directory</div>
+                <div class="grid-2">
+                    <input type="text" id="dir-search" placeholder="Search by name..." onkeyup="renderDirectory()">
+                    <select id="dir-filter" onchange="renderDirectory()">
+                        <option value="All">All Departments</option>
+                        <option value="Teacher">Academic (Teacher)</option>
+                        <option value="Transport">Transport</option>
+                        <option value="Admin">Admin</option>
+                        <option value="Support">Support</option>
+                        <option value="Principal">Principal/VP</option>
+                    </select>
+                </div>
                 
-                <div class="list-card">
-                    <div class="list-row">
-                        <div>
-                            <div class="list-title">S.K. Mishra</div>
-                            <div class="list-subtitle">PGT Science | ID: T-104</div>
-                        </div>
-                        <div style="text-align: right;">
-                            <div class="status-badge" style="background: rgba(16, 185, 129, 0.1); color: var(--success);">Active</div>
-                        </div>
+                <div id="directory-list" style="margin-top: 15px;">
                     </div>
-                    <div class="list-row" style="margin-top: 15px; border-top: 1px dashed var(--border-color); padding-top: 10px;">
-                        <span class="list-subtitle">Joined: 12 Apr 2020</span>
-                        <button style="padding: 6px 12px; background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border-color); border-radius: 8px; font-size: 12px; font-weight: bold;">View Docs 🔒</button>
+            </div>
+        </div>
+
+        <div id="designations" class="workspace">
+            <div class="card">
+                <div class="card-header">⚙️ Manage Designations & Roles</div>
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Add or remove job titles for different departments. These will show up in the KYC form.</p>
+                
+                <div class="grid-2" style="margin-bottom: 20px;">
+                    <select id="desig-dept-select" onchange="renderDesignationList()">
+                        <option value="Teacher">Academic (Teacher)</option>
+                        <option value="Transport">Transport (Driver/Cond)</option>
+                        <option value="Admin">Admin Staff</option>
+                        <option value="Support">Support/Peon</option>
+                        <option value="Principal">Principal/VP</option>
+                    </select>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="text" id="new-desig-input" placeholder="e.g. Head of Dept" style="margin: 0;">
+                        <button class="btn btn-success btn-small" onclick="addDesignation()">+ Add</button>
                     </div>
                 </div>
+
+                <div id="designation-list-container">
+                    </div>
             </div>
         </div>
 
         <div id="payroll" class="workspace">
-            
             <div class="card" style="border-left: 4px solid var(--warning);">
                 <div class="card-header">💸 Salary Advance Requests</div>
                 <div class="list-card" id="advance-req-1">
@@ -242,43 +327,19 @@
                     </div>
                     <div class="list-subtitle" style="margin-top: 5px;">Reason: Medical Emergency (Deduct next month)</div>
                     <div style="display: flex; gap: 10px; margin-top: 15px;">
-                        <button class="btn btn-success" style="padding: 10px; font-size: 13px;" onclick="handleAdvance('advance-req-1', 'Approved')">Approve</button>
-                        <button class="btn btn-danger" style="padding: 10px; font-size: 13px;" onclick="handleAdvance('advance-req-1', 'Rejected')">Reject</button>
+                        <button class="btn btn-success btn-small" onclick="handleAdvance('advance-req-1', 'Approved')">Approve</button>
+                        <button class="btn btn-danger btn-small" onclick="handleAdvance('advance-req-1', 'Rejected')">Reject</button>
                     </div>
                 </div>
             </div>
 
             <div class="card">
                 <div class="card-header"><span>Dynamic Payroll</span> <span style="font-size: 12px; color: var(--text-muted);">June 2026</span></div>
-                
                 <div class="list-card">
-                    <div class="list-row">
-                        <div class="list-title">Ramesh (Librarian)</div>
-                        <div class="list-title" style="color: var(--success); font-size: 18px;">Net: ₹22,700</div>
-                    </div>
-                    <div class="list-row" style="margin-top: 5px;">
-                        <span class="list-subtitle">Base: ₹25,000</span>
-                        <span class="list-subtitle" style="color: var(--danger);">- PF: ₹1500 | TDS: ₹0</span>
-                    </div>
-                    <div class="list-row" style="margin-top: 5px;">
-                        <span class="list-subtitle" style="color: var(--warning);">- Advance Deduction: ₹800</span>
-                    </div>
+                    <div class="list-row"><div class="list-title">Ramesh (Librarian)</div><div class="list-title" style="color: var(--success); font-size: 18px;">Net: ₹22,700</div></div>
+                    <div class="list-row" style="margin-top: 5px;"><span class="list-subtitle">Base: ₹25,000</span><span class="list-subtitle" style="color: var(--danger);">- PF: ₹1500 | TDS: ₹0</span></div>
+                    <div class="list-row" style="margin-top: 5px;"><span class="list-subtitle" style="color: var(--warning);">- Advance Deduction: ₹800</span></div>
                 </div>
-
-                <div class="list-card">
-                    <div class="list-row">
-                        <div class="list-title">Gupta Sir (Hindi)</div>
-                        <div class="list-title" style="color: var(--success); font-size: 18px;">Net: ₹30,800</div>
-                    </div>
-                    <div class="list-row" style="margin-top: 5px;">
-                        <span class="list-subtitle">Base: ₹35,000</span>
-                        <span class="list-subtitle" style="color: var(--danger);">- PF: ₹2500 | TDS: ₹1700</span>
-                    </div>
-                    <div class="list-row" style="margin-top: 5px;">
-                        <span class="list-subtitle" style="color: var(--text-muted);">No Advance Deductions</span>
-                    </div>
-                </div>
-
                 <button class="btn" style="margin-top: 15px;" onclick="disbursePayroll()">🏦 Disburse Payslips (Smart Calculate)</button>
             </div>
         </div>
@@ -286,102 +347,50 @@
         <div id="helpdesk" class="workspace">
             <div class="card">
                 <div class="card-header">🛠️ Internal Staff Helpdesk</div>
-                
                 <div class="list-card" id="ticket-1">
-                    <div class="list-row">
-                        <div class="list-title">Projector not working in 10-A</div>
-                        <div class="status-badge" style="background: var(--warning); color: #fff;">Pending</div>
-                    </div>
+                    <div class="list-row"><div class="list-title">Projector not working in 10-A</div><div class="status-badge" style="background: var(--warning); color: #fff;">Pending</div></div>
                     <div class="list-subtitle" style="margin-top:5px; margin-bottom: 15px;">Reported by: Sharma Sir (Maths) - 2 Hours Ago</div>
-                    <button class="btn btn-success" style="padding: 10px; font-size: 13px;" onclick="resolveTicket('ticket-1')">Mark as Resolved ✅</button>
-                </div>
-
-                <div class="list-card" id="ticket-2">
-                    <div class="list-row">
-                        <div class="list-title">Require new whiteboard markers</div>
-                        <div class="status-badge" style="background: var(--warning); color: #fff;">Pending</div>
-                    </div>
-                    <div class="list-subtitle" style="margin-top:5px; margin-bottom: 15px;">Reported by: Neha Gupta (English) - Today</div>
-                    <button class="btn btn-success" style="padding: 10px; font-size: 13px;" onclick="resolveTicket('ticket-2')">Mark as Resolved ✅</button>
+                    <button class="btn btn-success btn-small" onclick="resolveTicket('ticket-1')">Mark as Resolved ✅</button>
                 </div>
             </div>
         </div>
 
-        <div id="attendance" class="workspace">
-            <div class="card">
-                <div class="card-header">Geo-Location Tracker</div>
-                <div style="background: rgba(16, 185, 129, 0.1); padding: 15px; border-radius: 12px; border: 1px solid var(--success); color: var(--success); font-weight: bold; margin-bottom: 20px; font-size: 14px; display: flex; align-items: center; gap: 10px;">
-                    <span style="font-size: 20px;">✅</span> School Wi-Fi & GPS Perimeter Active
-                </div>
-                
-                <div class="list-card" style="border-left: 4px solid var(--success);">
-                    <div class="list-row">
-                        <div class="list-title">Sharma Sir (Maths)</div>
-                        <div class="status-badge" style="background: var(--bg-color); color: var(--success);">07:45 AM</div>
-                    </div>
-                    <div class="list-subtitle" style="margin-top: 5px;">Status: Checked In via App (Location: Main Gate)</div>
-                </div>
-
-                <div class="list-card" style="border-left: 4px solid var(--danger);">
-                    <div class="list-row">
-                        <div class="list-title">Rahul (Transport)</div>
-                        <div class="status-badge" style="background: var(--bg-color); color: var(--danger);">08:30 AM</div>
-                    </div>
-                    <div class="list-subtitle" style="margin-top: 5px;">Status: Late Mark (Location: Parking)</div>
-                </div>
-            </div>
-        </div>
-
-        <div id="leave" class="workspace">
-            <div class="card">
-                <div class="card-header">Leave Applications</div>
-                <div class="list-card" id="lv-1">
-                    <div class="list-row" style="margin-bottom: 10px;">
-                        <div class="list-title">Verma Sir (Science)</div>
-                        <div class="list-subtitle">Applied: Today</div>
-                    </div>
-                    <div style="font-size: 14px; margin-bottom: 15px; color: var(--text-main);">
-                        <strong>2 Days:</strong> 21st - 22nd June<br>
-                        <span style="color: var(--text-muted); font-size: 13px;">Reason: Medical Checkup</span>
-                    </div>
-                    <div style="display: flex; gap: 10px;">
-                        <button class="btn btn-success" style="padding: 10px; font-size: 13px;" onclick="handleLeave('lv-1', 'Approved')">Approve</button>
-                        <button class="btn btn-danger" style="padding: 10px; font-size: 13px;" onclick="handleLeave('lv-1', 'Rejected')">Reject</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="recruitment" class="workspace">
-            <div class="card">
-                <div class="card-header">🎯 Post a Vacancy</div>
-                <label>Job Title</label>
-                <input type="text" id="job-title" placeholder="e.g. PGT English">
-                <label>Job Type</label>
-                <select>
-                    <option>Full Time</option>
-                    <option>Part Time</option>
-                </select>
-                <button class="btn" onclick="postJob()">Publish Job Opening</button>
-            </div>
-
-            <div class="card">
-                <div class="card-header">📄 Recent Applications</div>
-                <div class="list-card">
-                    <div class="list-row">
-                        <div class="list-title">Priya Singh</div>
-                        <div class="status-badge" style="background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border-color);">Exp: 3 Yrs</div>
-                    </div>
-                    <div class="list-subtitle" style="margin-top: 5px; margin-bottom: 10px;">Applied for: Primary Teacher</div>
-                    <button class="btn btn-outline" style="padding: 8px; font-size: 13px;" onclick="showToast('Resume Downloaded', 'PDF saved to your phone', '#3b82f6')">View Resume PDF</button>
-                </div>
-            </div>
-        </div>
-
+        <div id="attendance" class="workspace"><div class="card"><div class="card-header">Geo-Location Tracker</div><p style="font-size: 13px; color: var(--text-muted);">GPS Perimeter Active. All staff checking in securely.</p></div></div>
+        <div id="leave" class="workspace"><div class="card"><div class="card-header">Leave Approvals</div><p style="font-size: 13px; color: var(--text-muted);">No pending leaves right now.</p></div></div>
+        <div id="recruitment" class="workspace"><div class="card"><div class="card-header">Post Vacancy</div><p style="font-size: 13px; color: var(--text-muted);">Manage external hiring pipeline.</p></div></div>
     </div>
 
     <script>
-        // 🚀 THEME & UI LOGIC
+        // --- 1. CORE DATA & INITIALIZATION ---
+        let staffDB = JSON.parse(localStorage.getItem("hrStaffDB")) || [
+            { id: "T-101", name: "S.K. Mishra", dept: "Teacher", role: "PGT Science", phone: "9876543210", salary: "45000", status: "Active", login: {user: "T-101", pass: "pass@123"} },
+            { id: "D-102", name: "Raju Driver", dept: "Transport", role: "Bus Driver", phone: "8765432109", salary: "18000", status: "Active", login: {user: "D-102", pass: "pass@123"} }
+        ];
+
+        let rolesDB = JSON.parse(localStorage.getItem("hrRolesDB")) || {
+            "Teacher": ["PGT Science", "PGT Math", "TGT Hindi", "Primary Teacher"],
+            "Transport": ["Bus Driver", "Conductor", "Transport Manager"],
+            "Admin": ["Accountant", "Front Desk", "Librarian"],
+            "Support": ["Peon", "Security Guard", "Sweeper"],
+            "Principal": ["Principal", "Vice Principal"]
+        };
+
+        window.onload = function() {
+            const user = localStorage.getItem("loggedInUser") || "HR Manager";
+            if(document.getElementById("mobile-avatar")) document.getElementById("mobile-avatar").innerText = user.charAt(0).toUpperCase();
+            
+            document.body.classList.add("dark-mode");
+            localStorage.setItem("darkMode", "true");
+            let themeBtn = document.querySelector(".theme-toggle");
+            if(themeBtn) themeBtn.innerText = "🔱";
+
+            updateDashboardStats();
+            renderDirectory();
+            populateDocDropdown();
+            renderDesignationList();
+        };
+
+        // --- 2. THEME & NAVIGATION ---
         function toggleAppMenu() {
             document.querySelector('.sidebar').classList.toggle('open');
             document.querySelector('.sidebar-overlay').classList.toggle('open');
@@ -398,88 +407,258 @@
         function switchTab(tabId, element) {
             document.querySelectorAll('.nav-item').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.workspace').forEach(ws => ws.classList.remove('active'));
-            
             element.classList.add('active');
             document.getElementById(tabId).classList.add('active');
             
             let tabName = element.innerText.replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]|[\u2600-\u27FF]/g, '').trim(); 
             if(document.getElementById('mobile-title')) document.getElementById('mobile-title').innerText = tabName;
             
+            if(tabId === 'directory') renderDirectory();
+            if(tabId === 'designations') renderDesignationList();
             if(window.innerWidth <= 768) { toggleAppMenu(); }
         }
 
-        // 🚀 CUSTOM TOAST NOTIFICATION (Native App Feel)
+        function logoutHR() {
+            if(confirm("Are you sure you want to securely logout?")) {
+                localStorage.removeItem("loggedInUser");
+                localStorage.removeItem("userRole");
+                window.location.href = "index.html";
+            }
+        }
+
         function showToast(title, message, color) {
             let container = document.getElementById("toast-container");
             let toast = document.createElement("div");
-            toast.className = "toast";
-            toast.style.background = color;
+            toast.className = "toast"; toast.style.background = color;
             toast.innerHTML = `<div style="font-size:15px; margin-bottom:4px;">${title}</div><div style="font-size:12px; font-weight:normal;">${message}</div>`;
             container.appendChild(toast);
-            setTimeout(() => { toast.style.animation = "fadeOutToast 0.4s ease forwards"; setTimeout(() => toast.remove(), 400); }, 3000);
+            setTimeout(() => { toast.style.animation = "fadeOutToast 0.4s ease forwards"; setTimeout(() => toast.remove(), 400); }, 3500);
         }
 
-        // 🚀 PRACTICAL HR FUNCTIONS
+        // --- 3. SMART KYC & ONBOARDING ENGINE ---
+        function populateDesignations() {
+            const dept = document.getElementById('kyc-dept').value;
+            const roleSelect = document.getElementById('kyc-role');
+            roleSelect.innerHTML = '<option value="">-- Select Role --</option>';
+            if(dept && rolesDB[dept]) {
+                rolesDB[dept].forEach(role => {
+                    roleSelect.innerHTML += `<option value="${role}">${role}</option>`;
+                });
+            }
+        }
 
-        // 1. Auto Letter Generator
+        function submitKYC() {
+            let id = document.getElementById('kyc-id').value;
+            let name = document.getElementById('kyc-name').value;
+            let dept = document.getElementById('kyc-dept').value;
+            let role = document.getElementById('kyc-role').value;
+            let phone = document.getElementById('kyc-phone').value;
+            let salary = document.getElementById('kyc-salary').value;
+
+            if(!name || !dept || !role || !phone) return showToast('Validation Error', 'Name, Dept, Role, and Phone are mandatory!', '#ef4444');
+
+            if(id) {
+                // EDIT EXISTING
+                let staff = staffDB.find(s => s.id === id);
+                if(staff) {
+                    staff.name = name; staff.dept = dept; staff.role = role; staff.phone = phone; staff.salary = salary;
+                    showToast('KYC Updated 📝', `${name}'s profile has been updated.`, '#3b82f6');
+                }
+            } else {
+                // NEW ENTRY - Auto Generate ID/Pass
+                let prefix = dept.charAt(0).toUpperCase();
+                if(dept === "Transport") prefix = "D";
+                let newId = `${prefix}-${Math.floor(100 + Math.random() * 900)}`;
+                let loginObj = { user: newId, pass: "pass@123" };
+                
+                staffDB.push({
+                    id: newId, name: name, dept: dept, role: role, phone: phone, salary: salary, status: "Active", login: loginObj
+                });
+                
+                // Magic Toast with Login Details
+                showToast('Welcome Aboard! 🎉', `Staff saved. App Login -> ID: <b>${newId}</b> | Pass: <b>pass@123</b>`, '#10b981');
+            }
+
+            localStorage.setItem("hrStaffDB", JSON.stringify(staffDB));
+            resetKYCForm();
+            updateDashboardStats();
+            populateDocDropdown();
+        }
+
+        function resetKYCForm() {
+            document.getElementById('kyc-id').value = "";
+            document.getElementById('kyc-name').value = "";
+            document.getElementById('kyc-dept').value = "";
+            document.getElementById('kyc-role').innerHTML = '<option value="">-- Select Dept First --</option>';
+            document.getElementById('kyc-phone').value = "";
+            document.getElementById('kyc-gov').value = "";
+            document.getElementById('kyc-salary').value = "";
+            document.getElementById('kyc-guardian').value = "";
+            document.getElementById('kyc-address').value = "";
+            document.getElementById('kyc-exp').value = "";
+            
+            document.getElementById('kyc-title').innerText = "📝 New Staff Entry & KYC";
+            document.getElementById('kyc-submit-btn').innerText = "Final Submit & Generate Login";
+            document.getElementById('kyc-cancel-btn').style.display = "none";
+        }
+
+        // --- 4. STAFF DIRECTORY ENGINE ---
+        function renderDirectory() {
+            const list = document.getElementById('directory-list');
+            const search = document.getElementById('dir-search').value.toLowerCase();
+            const filter = document.getElementById('dir-filter').value;
+            
+            list.innerHTML = "";
+            
+            let filtered = staffDB.filter(s => {
+                let matchSearch = s.name.toLowerCase().includes(search) || s.id.toLowerCase().includes(search);
+                let matchFilter = filter === "All" ? true : s.dept === filter;
+                return matchSearch && matchFilter;
+            });
+
+            if(filtered.length === 0) return list.innerHTML = `<p style="text-align:center; color:var(--text-muted); padding: 20px;">No staff found.</p>`;
+
+            filtered.forEach(s => {
+                let isInactive = s.status !== "Active";
+                let badge = isInactive ? `<div class="status-badge" style="background:var(--danger); color:#fff;">Inactive</div>` : `<div class="status-badge" style="background: rgba(16, 185, 129, 0.1); color: var(--success);">Active</div>`;
+                let btnText = isInactive ? "Re-Activate" : "Deactivate";
+                let btnColor = isInactive ? "btn-success" : "btn-danger";
+
+                list.innerHTML += `
+                    <div class="list-card ${isInactive ? 'inactive' : ''}">
+                        <div class="list-row">
+                            <div>
+                                <div class="list-title">${s.name}</div>
+                                <div class="list-subtitle">${s.role} | ID: ${s.id} | Dept: ${s.dept}</div>
+                            </div>
+                            <div style="text-align: right;">${badge}</div>
+                        </div>
+                        <div class="list-row" style="margin-top: 15px; border-top: 1px dashed var(--border-color); padding-top: 10px;">
+                            <span class="list-subtitle">📞 ${s.phone}</span>
+                            <div style="display:flex; gap:8px;">
+                                <button class="btn btn-outline btn-small" onclick="editStaff('${s.id}')">✏️ Edit</button>
+                                <button class="btn ${btnColor} btn-small" onclick="toggleStatus('${s.id}')">${btnText}</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function editStaff(id) {
+            let staff = staffDB.find(s => s.id === id);
+            if(staff) {
+                switchTab('onboarding', document.querySelectorAll('.nav-item')[1]);
+                document.getElementById('kyc-title').innerText = "✏️ Edit Staff Profile";
+                document.getElementById('kyc-id').value = staff.id;
+                document.getElementById('kyc-name').value = staff.name;
+                document.getElementById('kyc-dept').value = staff.dept;
+                populateDesignations();
+                document.getElementById('kyc-role').value = staff.role;
+                document.getElementById('kyc-phone').value = staff.phone;
+                document.getElementById('kyc-salary').value = staff.salary || "";
+                
+                document.getElementById('kyc-submit-btn').innerText = "Update KYC Profile";
+                document.getElementById('kyc-cancel-btn').style.display = "block";
+            }
+        }
+
+        function toggleStatus(id) {
+            let staff = staffDB.find(s => s.id === id);
+            if(staff) {
+                if(staff.status === "Active") {
+                    if(confirm(`Are you sure you want to deactivate ${staff.name}? They won't be able to login.`)) {
+                        staff.status = "Inactive";
+                        showToast('Staff Deactivated 🛑', 'Account disabled and moved to inactive list.', '#ef4444');
+                    }
+                } else {
+                    staff.status = "Active";
+                    showToast('Staff Reactivated ✅', 'Account restored successfully.', '#10b981');
+                }
+                localStorage.setItem("hrStaffDB", JSON.stringify(staffDB));
+                renderDirectory();
+                updateDashboardStats();
+            }
+        }
+
+        function populateDocDropdown() {
+            let sel = document.getElementById('doc-staff');
+            if(!sel) return;
+            sel.innerHTML = '<option value="">Select Active Staff...</option>';
+            staffDB.filter(s => s.status === "Active").forEach(s => {
+                sel.innerHTML += `<option value="${s.id}">${s.name} (${s.id})</option>`;
+            });
+        }
+
         function generateLetter() {
             const staff = document.getElementById('doc-staff').value;
             const type = document.getElementById('doc-type').value;
-            showToast('Document Generated ✅', `${type} for ${staff} downloaded successfully.`, '#10b981');
+            if(!staff) return showToast('Error', 'Please select a staff member.', '#ef4444');
+            showToast('Document Generated 🖨️', `${type} generated for ID: ${staff}. PDF saved.`, '#3b82f6');
         }
 
-        // 2. Birthday Wishes Sender
-        function sendWishes() {
-            showToast('Wishes Sent! 🎉', 'App notification and WhatsApp message sent to Neha Gupta.', '#3b82f6');
+        function updateDashboardStats() {
+            let active = staffDB.filter(s => s.status === "Active").length;
+            let inactive = staffDB.filter(s => s.status === "Inactive").length;
+            document.getElementById('dash-active-staff').innerText = active;
+            document.getElementById('dash-inactive-staff').innerText = inactive;
         }
 
-        // 3. Salary Advance Manager
+        // --- 5. DESIGNATION MANAGER ---
+        function renderDesignationList() {
+            const dept = document.getElementById('desig-dept-select').value;
+            const list = document.getElementById('designation-list-container');
+            list.innerHTML = "";
+            
+            if(rolesDB[dept] && rolesDB[dept].length > 0) {
+                rolesDB[dept].forEach((role, i) => {
+                    list.innerHTML += `
+                    <div class="list-card" style="padding: 10px 15px; margin-bottom: 8px; display:flex; justify-content:space-between; align-items:center;">
+                        <span class="list-title">${role}</span>
+                        <button style="background:none; border:none; color:var(--danger); font-size:18px; cursor:pointer;" onclick="deleteDesignation('${dept}', ${i})">🗑️</button>
+                    </div>`;
+                });
+            } else {
+                list.innerHTML = `<p style="color:var(--text-muted); font-size:13px;">No designations found. Add one above.</p>`;
+            }
+        }
+
+        function addDesignation() {
+            const dept = document.getElementById('desig-dept-select').value;
+            const input = document.getElementById('new-desig-input');
+            const val = input.value.trim();
+            if(!val) return showToast('Error', 'Enter a designation name.', '#ef4444');
+            
+            if(!rolesDB[dept]) rolesDB[dept] = [];
+            rolesDB[dept].push(val);
+            localStorage.setItem("hrRolesDB", JSON.stringify(rolesDB));
+            input.value = "";
+            renderDesignationList();
+            showToast('Role Added ⚙️', `${val} added to ${dept} department.`, '#10b981');
+        }
+
+        function deleteDesignation(dept, index) {
+            if(confirm("Delete this designation? It will be removed from KYC dropdown.")) {
+                rolesDB[dept].splice(index, 1);
+                localStorage.setItem("hrRolesDB", JSON.stringify(rolesDB));
+                renderDesignationList();
+            }
+        }
+
+        // --- 6. PREVIOUS FEATURES (Working) ---
+        function sendWishes() { showToast('Wishes Sent! 🎉', 'App notification and WhatsApp message sent.', '#3b82f6'); }
         function handleAdvance(id, status) {
             document.getElementById(id).style.display = 'none';
             let color = status === 'Approved' ? '#10b981' : '#ef4444';
             showToast(`Advance ${status}`, `Salary advance request has been ${status.toLowerCase()}.`, color);
         }
-
-        // 4. Staff Helpdesk Resolver
         function resolveTicket(id) {
-            let card = document.getElementById(id);
-            let badge = card.querySelector('.status-badge');
-            badge.innerText = "Resolved";
-            badge.style.background = "var(--success)";
+            let card = document.getElementById(id); let badge = card.querySelector('.status-badge');
+            badge.innerText = "Resolved"; badge.style.background = "var(--success)";
             card.querySelector('.btn').style.display = "none";
-            showToast('Ticket Closed 🛠️', 'Staff has been notified that issue is resolved.', '#10b981');
+            showToast('Ticket Closed 🛠️', 'Staff has been notified.', '#10b981');
         }
-
-        // 5. Dynamic Payroll Disburse (Tax/PF Logic)
-        function disbursePayroll() {
-            showToast('Payroll Disbursed 🏦', 'Salaries, PF & TDS processed and sent to staff accounts.', '#10b981');
-        }
-
-        // Misc
-        function handleLeave(id, status) {
-            document.getElementById(id).style.display = 'none';
-            let color = status === 'Approved' ? '#10b981' : '#ef4444';
-            showToast(`Leave ${status}`, `Teacher leave has been ${status.toLowerCase()}.`, color);
-        }
-
-        function postJob() {
-            let job = document.getElementById('job-title').value;
-            if(!job) return showToast('Error', 'Please enter a job title.', '#ef4444');
-            showToast('Job Published 🎯', `${job} is now live on the school website.`, '#f59e0b');
-            document.getElementById('job-title').value = "";
-        }
-
-        // Initialize User Data & Theme on Load
-        window.onload = function() {
-            const user = localStorage.getItem("loggedInUser") || "HR Manager";
-            if(document.getElementById("mobile-avatar")) {
-                document.getElementById("mobile-avatar").innerText = user.charAt(0).toUpperCase();
-            }
-            document.body.classList.add("dark-mode");
-            localStorage.setItem("darkMode", "true");
-            let themeBtn = document.querySelector(".theme-toggle");
-            if(themeBtn) themeBtn.innerText = "🔱";
-        };
+        function disbursePayroll() { showToast('Payroll Disbursed 🏦', 'Salaries, PF & TDS processed automatically.', '#10b981'); }
     </script>
 </body>
 </html>
