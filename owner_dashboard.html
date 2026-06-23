@@ -58,6 +58,8 @@
         .role-badge { display: inline-block; background: var(--accent-color); color: var(--accent-text); padding: 6px 14px; font-size: 12px; border-radius: 20px; font-weight: 900; margin-top: 10px; letter-spacing: 2px; text-transform: uppercase; box-shadow: var(--shadow-sm); }
 
         .nav-menu { flex-grow: 1; overflow-y: auto; padding: 20px 15px; display: flex; flex-direction: column; gap: 6px; }
+        .nav-menu::-webkit-scrollbar { width: 4px; }
+        .nav-menu::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
         .nav-item { padding: 15px 18px; border-radius: 12px; cursor: pointer; font-size: 15px; font-weight: 800; color: var(--text-muted); display: flex; align-items: center; gap: 12px; transition: var(--transition); border: 1px solid transparent; }
         .nav-item:hover { background-color: rgba(212, 175, 55, 0.1); color: var(--text-main); }
         .nav-item.active { background: var(--accent-color); color: var(--accent-text); box-shadow: var(--shadow-md); transform: translateX(8px); border-color: rgba(255,255,255,0.3); }
@@ -108,7 +110,7 @@
         .btn-success { background: var(--success); color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2);}
         .btn-danger { background: var(--danger); color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2);}
         .btn-outline { background: transparent; border: 2px solid var(--accent-color); color: var(--accent-color); box-shadow: none; }
-        .btn-small { padding: 10px 16px; font-size: 12px; border-radius: 10px; width: auto; }
+        .btn-small { padding: 10px 16px; font-size: 12px; border-radius: 10px; width: auto; text-transform: none; letter-spacing: 0.5px;}
 
         /* Toast Notification */
         #toast-container { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 10000; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 400px; pointer-events: none; }
@@ -162,6 +164,7 @@
         
         <div class="nav-menu">
             <div class="nav-item active" onclick="switchTab('dashboard', this)">👑 Executive Core</div>
+            <div class="nav-item" onclick="switchTab('expense-ledger', this)">🧾 Profit & Expense Ledger</div>
             <div class="nav-item" onclick="switchTab('dir-students', this)">👨‍🎓 All Students</div>
             <div class="nav-item" onclick="switchTab('dir-staff', this)">👨‍🏫 All Staff & Teachers</div>
             <div class="nav-item" onclick="switchTab('dir-transport', this)">🚌 Master Transport</div>
@@ -194,7 +197,7 @@
                             <div class="status-badge" style="color: var(--warning); border-color: var(--warning);">HR Dept</div>
                         </div>
                         <div class="list-subtitle" style="margin-top: 8px;">₹12.4 Lakhs pending for final disbursement.</div>
-                        <button class="btn btn-outline btn-small" style="margin-top: 12px;" onclick="switchTab('approvals', document.querySelectorAll('.nav-item')[4])">Review & Approve</button>
+                        <button class="btn btn-outline btn-small" style="margin-top: 12px;" onclick="switchTab('approvals', document.querySelectorAll('.nav-item')[5])">Review & Approve</button>
                     </div>
 
                     <div class="list-card" style="border-left: 4px solid var(--info);">
@@ -203,7 +206,7 @@
                             <div class="status-badge" style="color: var(--info); border-color: var(--info);">VP Request</div>
                         </div>
                         <div class="list-subtitle" style="margin-top: 8px;">₹2.5 Lakhs for 10 new lab computers.</div>
-                        <button class="btn btn-outline btn-small" style="margin-top: 12px;" onclick="switchTab('approvals', document.querySelectorAll('.nav-item')[4])">Review & Approve</button>
+                        <button class="btn btn-outline btn-small" style="margin-top: 12px;" onclick="switchTab('approvals', document.querySelectorAll('.nav-item')[5])">Review & Approve</button>
                     </div>
                 </div>
 
@@ -214,7 +217,73 @@
             </div>
         </div>
 
-        <!-- 2. MASTER STUDENT DIRECTORY -->
+        <!-- 2. PROFIT & EXPENSE LEDGER -->
+        <div id="expense-ledger" class="workspace">
+            <div class="card">
+                <div class="card-header" style="color: var(--success); border-bottom-color: var(--success);">📊 Profit Margin & Expense Breakdown</div>
+                <div class="grid-3" style="margin-bottom: 20px;">
+                    <div class="stat-box"><h4>Total Income (YTD)</h4><h2 style="color: var(--success);">₹2.5 Cr</h2></div>
+                    <div class="stat-box"><h4>Total Expenses (YTD)</h4><h2 style="color: var(--danger);">₹1.1 Cr</h2></div>
+                    <div class="stat-box primary"><h4>Net Profit Margin</h4><h2>56%</h2></div>
+                </div>
+                
+                <!-- Mini Breakdown -->
+                <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; border: 1px solid var(--border-color);">
+                    <h4 style="color: var(--text-muted); margin-bottom: 15px; font-size: 13px; text-transform: uppercase;">Expense Categories</h4>
+                    
+                    <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 8px;"><span>Staff Payroll</span> <strong style="color: var(--danger);">60% (₹66 L)</strong></div>
+                    <div style="height: 8px; background: rgba(239, 68, 68, 0.2); border-radius: 4px; margin-bottom: 20px;"><div style="width: 60%; background: var(--danger); height: 100%; border-radius: 4px;"></div></div>
+                    
+                    <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 8px;"><span>Infra & Maintenance</span> <strong style="color: var(--warning);">25% (₹27.5 L)</strong></div>
+                    <div style="height: 8px; background: rgba(245, 158, 11, 0.2); border-radius: 4px; margin-bottom: 20px;"><div style="width: 25%; background: var(--warning); height: 100%; border-radius: 4px;"></div></div>
+
+                    <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 8px;"><span>Transport Fuel & Service</span> <strong style="color: var(--info);">15% (₹16.5 L)</strong></div>
+                    <div style="height: 8px; background: rgba(59, 130, 246, 0.2); border-radius: 4px;"><div style="width: 15%; background: var(--info); height: 100%; border-radius: 4px;"></div></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">🧾 Master Transaction Log</div>
+                <div class="grid-2" style="margin-bottom: 20px;">
+                    <input type="text" placeholder="Search transactions..." style="margin:0;">
+                    <select style="margin:0;"><option>All Departments</option><option>HR (Payroll)</option><option>Transport</option><option>Admin (Petty Cash)</option></select>
+                </div>
+                
+                <div class="list-card" style="border-left: 4px solid var(--danger);">
+                    <div class="list-row">
+                        <div><div class="list-title">Monthly Staff Salary</div><div class="list-subtitle">Dept: HR / Payroll</div></div>
+                        <div style="text-align: right;"><div class="list-title" style="color: var(--danger);">-₹12,40,000</div><div class="status-badge" style="background: rgba(16, 185, 129, 0.1); color: var(--success); border: none;">Cleared</div></div>
+                    </div>
+                    <div class="list-subtitle" style="margin-top: 10px; padding-top:10px; border-top: 1px dashed var(--border-color);">📅 01 June 2026 | Paid via Bank Transfer</div>
+                </div>
+
+                <div class="list-card" style="border-left: 4px solid var(--danger);">
+                    <div class="list-row">
+                        <div><div class="list-title">Bus 04 Complete Service</div><div class="list-subtitle">Dept: Transport</div></div>
+                        <div style="text-align: right;"><div class="list-title" style="color: var(--danger);">-₹25,000</div><div class="status-badge" style="background: rgba(16, 185, 129, 0.1); color: var(--success); border: none;">Cleared</div></div>
+                    </div>
+                    <div class="list-subtitle" style="margin-top: 10px; padding-top:10px; border-top: 1px dashed var(--border-color);">📅 28 May 2026 | Paid to: Tata Motors Workshop</div>
+                </div>
+
+                <div class="list-card" style="border-left: 4px solid var(--success);">
+                    <div class="list-row">
+                        <div><div class="list-title">Term 2 Fee Collection (Bulk)</div><div class="list-subtitle">Dept: Admin / Front Office</div></div>
+                        <div style="text-align: right;"><div class="list-title" style="color: var(--success);">+₹4,50,000</div><div class="status-badge" style="background: rgba(16, 185, 129, 0.1); color: var(--success); border: none;">Received</div></div>
+                    </div>
+                    <div class="list-subtitle" style="margin-top: 10px; padding-top:10px; border-top: 1px dashed var(--border-color);">📅 25 May 2026 | Mixed (UPI + Cash)</div>
+                </div>
+                
+                <div class="list-card" style="border-left: 4px solid var(--danger);">
+                    <div class="list-row">
+                        <div><div class="list-title">Petty Cash Top-up</div><div class="list-subtitle">Dept: Admin</div></div>
+                        <div style="text-align: right;"><div class="list-title" style="color: var(--danger);">-₹10,000</div><div class="status-badge" style="background: rgba(16, 185, 129, 0.1); color: var(--success); border: none;">Cleared</div></div>
+                    </div>
+                    <div class="list-subtitle" style="margin-top: 10px; padding-top:10px; border-top: 1px dashed var(--border-color);">📅 20 May 2026 | Handed to: Front Desk</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. MASTER STUDENT DIRECTORY -->
         <div id="dir-students" class="workspace">
             <div class="card">
                 <div class="card-header" style="color: var(--success); border-bottom-color: var(--success);">👨‍🎓 Global Student Database</div>
@@ -229,7 +298,7 @@
             </div>
         </div>
 
-        <!-- 3. MASTER STAFF & TEACHER DIRECTORY -->
+        <!-- 4. MASTER STAFF & TEACHER DIRECTORY -->
         <div id="dir-staff" class="workspace">
             <div class="card">
                 <div class="card-header" style="color: var(--info); border-bottom-color: var(--info);">👨‍🏫 Master Staff & HR Records</div>
@@ -244,7 +313,7 @@
             </div>
         </div>
 
-        <!-- 4. MASTER TRANSPORT DIRECTORY -->
+        <!-- 5. MASTER TRANSPORT DIRECTORY -->
         <div id="dir-transport" class="workspace">
             <div class="card">
                 <div class="card-header" style="color: #e67e22; border-bottom-color: #e67e22;">🚌 Transport & Fleet Command</div>
@@ -258,7 +327,7 @@
             </div>
         </div>
 
-        <!-- 5. ONE-CLICK MASTER APPROVALS -->
+        <!-- 6. ONE-CLICK MASTER APPROVALS -->
         <div id="approvals" class="workspace">
             <div class="card">
                 <div class="card-header" style="color: var(--success); border-bottom-color: var(--success);">✅ Pending Master Approvals</div>
@@ -290,7 +359,7 @@
             </div>
         </div>
 
-        <!-- 6. FINANCIAL FORECASTER -->
+        <!-- 7. FINANCIAL FORECASTER -->
         <div id="finance" class="workspace">
             <div class="card">
                 <div class="card-header">💹 AI Cashflow Forecaster</div>
@@ -303,7 +372,7 @@
             </div>
         </div>
 
-        <!-- 7. CHURN RISK RADAR -->
+        <!-- 8. CHURN RISK RADAR -->
         <div id="predictive" class="workspace">
             <div class="grid-2" style="margin-bottom: 25px;">
                 <div class="stat-box" style="border-left: 4px solid var(--danger);"><h4>High Risk Students</h4><h2 style="color: var(--danger);">12</h2></div>
@@ -333,7 +402,7 @@
             </div>
         </div>
 
-        <!-- 8. MULTI-BRANCH MATRIX -->
+        <!-- 9. MULTI-BRANCH MATRIX -->
         <div id="branches" class="workspace">
             <div class="card">
                 <div class="card-header">🏢 Multi-Branch Matrix</div>
@@ -355,17 +424,15 @@
             </div>
         </div>
 
-        <!-- 9. GOD MODE (SUPREME CONTROLS) -->
+        <!-- 10. GOD MODE (SUPREME CONTROLS) -->
         <div id="god-mode" class="workspace">
             
-            <!-- Global Overrides -->
             <div class="card" style="background: rgba(239, 68, 68, 0.05); border: 2px solid var(--danger);">
                 <div class="card-header" style="color: var(--danger); border-bottom-color: var(--danger);">🚨 Global Override & Lockdown</div>
                 <p style="font-size: 14px; color: var(--text-main); margin-bottom: 20px; font-weight: bold; line-height: 1.5;">Instantly freeze all 1500+ Student and Staff apps across the school.</p>
                 <button class="btn btn-danger" id="sos-btn" onclick="toggleSOS()">ACTIVATE EMERGENCY LOCKDOWN</button>
             </div>
 
-            <!-- Financial God Mode -->
             <div class="card" style="border: 2px solid var(--success); background: rgba(16, 185, 129, 0.05);">
                 <div class="card-header" style="color: var(--success); border-bottom-color: var(--success);">💸 Global Fee Waivers & Audits</div>
                 <p style="font-size: 14px; color: var(--text-main); margin-bottom: 20px; font-weight: bold;">Apply school-wide financial actions.</p>
@@ -375,7 +442,6 @@
                 </div>
             </div>
 
-            <!-- Impersonation Mode -->
             <div class="card" style="border: 2px solid var(--info); background: rgba(59, 130, 246, 0.05);">
                 <div class="card-header" style="color: var(--info); border-bottom-color: var(--info);">🎭 User Impersonation (View As)</div>
                 <p style="font-size: 14px; color: var(--text-main); margin-bottom: 20px; font-weight: bold;">Log in exactly as any staff or student sees their portal.</p>
