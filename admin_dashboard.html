@@ -84,11 +84,11 @@
         .stat-box h2 { font-size: 28px; font-weight: 800; margin: 0; }
 
         .list-card { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 14px; padding: 15px; margin-bottom: 12px; transition: var(--transition); }
-        .list-card:active { transform: scale(0.98); }
+        .list-card.inactive { opacity: 0.6; filter: grayscale(100%); }
         .list-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
         .list-row:last-child { margin-bottom: 0; }
         .list-title { font-size: 15px; font-weight: 700; color: var(--text-main); }
-        .list-subtitle { font-size: 12px; color: var(--text-muted); font-weight: 600; }
+        .list-subtitle { font-size: 12px; color: var(--text-muted); font-weight: 600; line-height: 1.4; }
         .status-badge { padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 800; text-transform: uppercase; }
 
         input, select, textarea { width: 100%; background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border-color); padding: 14px 16px; border-radius: 12px; font-size: 14px; margin-bottom: 15px; outline: none; transition: var(--transition); font-weight: 500; }
@@ -99,8 +99,12 @@
         .btn:active { transform: scale(0.97); }
         .btn-success { background: var(--success); color: #fff; }
         .btn-danger { background: var(--danger); color: #fff; }
+        .btn-warning { background: var(--warning); color: #fff; }
         .btn-outline { background: transparent; border: 2px solid var(--border-color); color: var(--text-main); box-shadow: none; }
         .btn-small { padding: 8px 12px; font-size: 12px; border-radius: 8px; width: auto; }
+
+        /* Section Headings within cards */
+        .section-divider { font-size: 14px; font-weight: 800; color: var(--info); margin: 25px 0 10px 0; border-bottom: 2px dashed var(--border-color); padding-bottom: 5px; text-transform: uppercase; }
 
         /* Toast Notification */
         #toast-container { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 10000; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 400px; pointer-events: none; }
@@ -108,19 +112,17 @@
         @keyframes slideUpToast { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeOutToast { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-20px); } }
 
-        /* Hide specific elements on mobile */
         @media (max-width: 768px) {
-            .hide-on-mobile { display: none !important; }
             .grid-3 { grid-template-columns: 1fr; }
+            .hide-on-mobile { display: none !important; }
         }
-
         @media (min-width: 769px) {
             body { flex-direction: row; }
             .mobile-header { display: none !important; }
             .sidebar { position: relative; left: 0; box-shadow: none; border-right: 1px solid var(--border-color); }
             .close-sidebar { display: none !important; }
             .grid-1 { grid-template-columns: 2fr 1fr; } 
-            .grid-2 { grid-template-columns: 1fr 1fr 1fr; }
+            .grid-2 { grid-template-columns: 1fr 1fr; }
             .workspace { padding: 40px; }
         }
     </style>
@@ -156,12 +158,14 @@
         <div class="nav-menu">
             <div class="nav-item active" onclick="switchTab('dashboard', this)">📊 Front Office Desk</div>
             <div class="nav-item" onclick="switchTab('admission', this)">🎓 Admission Form</div>
+            <div class="nav-item" onclick="switchTab('students', this)">👨‍🎓 Student Directory</div>
+            <div class="nav-item" onclick="switchTab('dues', this)">🚨 Fee Dues List</div>
             <div class="nav-item" onclick="switchTab('fees', this)">💰 Fee Collection</div>
-            <div class="nav-item" onclick="switchTab('whatsapp', this)">📱 WhatsApp Desk</div>
-            <div class="nav-item" onclick="switchTab('timetable', this)">⏳ Auto-Timetable</div>
-            <div class="nav-item" onclick="switchTab('inventory', this)">📦 Inventory</div>
-            <div class="nav-item" onclick="switchTab('library', this)">📚 Library Records</div>
-            <div class="nav-item" onclick="switchTab('visitors', this)">📝 Visitor Log</div>
+            <div class="nav-item" onclick="switchTab('pickup', this)">🏃‍♂️ Out-Pass / Pickup</div>
+            <div class="nav-item" onclick="switchTab('visitors', this)">📝 Visitor & CRM Log</div>
+            <div class="nav-item" onclick="switchTab('pettycash', this)">💸 Petty Cash Book</div>
+            <div class="nav-item" onclick="switchTab('lostfound', this)">🔍 Lost & Found</div>
+            <div class="nav-item" onclick="switchTab('whatsapp', this)">📱 WhatsApp API</div>
             <div class="nav-item" style="color: var(--danger); margin-top: 20px;" onclick="logoutAdmin()">🚪 Secure Logout</div>
         </div>
     </div>
@@ -173,8 +177,9 @@
         <div id="dashboard" class="workspace active">
             <div class="grid-2">
                 <div class="stat-box primary"><h4>Today's Collection</h4><h2>₹45,500</h2></div>
-                <div class="stat-box"><h4>New Admissions</h4><h2 style="color: var(--info);">08</h2></div>
-                <div class="stat-box"><h4>Visitors Today</h4><h2 style="color: var(--warning);">14</h2></div>
+                <div class="stat-box"><h4>Active Enquiries</h4><h2 style="color: var(--info);" id="dash-enq">5</h2></div>
+                <div class="stat-box"><h4>Visitors Today</h4><h2 style="color: var(--warning);" id="dash-vis">14</h2></div>
+                <div class="stat-box"><h4>Total Students</h4><h2 style="color: var(--success);" id="dash-stu">1420</h2></div>
             </div>
 
             <div class="grid-1" style="margin-top: 25px;">
@@ -187,211 +192,299 @@
                         </div>
                         <div class="list-subtitle" style="margin-top: 5px;">Adarsh Patel (Class 10) - UPI</div>
                     </div>
-                    <div class="list-card" style="border-left: 4px solid var(--info);">
+                    <div class="list-card" style="border-left: 4px solid var(--warning);">
                         <div class="list-row">
-                            <div class="list-title">New Visitor Entry</div>
-                            <div class="status-badge" style="background: rgba(59, 130, 246, 0.1); color: var(--info);">09:45 AM</div>
+                            <div class="list-title">Early Pickup</div>
+                            <div class="status-badge" style="background: rgba(245, 158, 11, 0.1); color: var(--warning);">11:30 AM</div>
                         </div>
-                        <div class="list-subtitle" style="margin-top: 5px;">Ramesh Kumar (Parent Enquiry)</div>
+                        <div class="list-subtitle" style="margin-top: 5px;">Rahul Kumar (Class 9) left with Father.</div>
                     </div>
                 </div>
 
                 <div class="card">
                     <div class="card-header">Quick Actions</div>
-                    <button class="btn btn-outline" style="margin-bottom: 10px;" onclick="switchTab('whatsapp', document.querySelectorAll('.nav-item')[3])">Send Fee Reminders</button>
-                    <button class="btn btn-outline" onclick="switchTab('visitors', document.querySelectorAll('.nav-item')[7])">Register New Visitor</button>
+                    <button class="btn btn-outline" style="margin-bottom: 10px;" onclick="switchTab('fees', document.querySelectorAll('.nav-item')[4])">Collect Fees</button>
+                    <button class="btn btn-outline" onclick="switchTab('visitors', document.querySelectorAll('.nav-item')[6])">Register New Visitor</button>
                 </div>
             </div>
         </div>
 
-        <!-- 2. NEW ADMISSION (API SYNC) -->
+        <!-- 2. HIGH DETAIL ADMISSION FORM -->
         <div id="admission" class="workspace">
             <div class="card">
-                <div class="card-header" style="color: var(--success);">🎓 New Student Admission</div>
+                <div class="card-header" style="color: var(--success);" id="adm-form-title">🎓 New Student Admission (Detailed)</div>
+                <input type="hidden" id="adm-id">
                 
-                <label>Student Full Name</label>
-                <input type="text" id="stu-name" placeholder="e.g., Paridhi">
-                
+                <div class="section-divider">Student Personal Details</div>
+                <div class="grid-3">
+                    <div><label>Full Name</label><input type="text" id="adm-name" placeholder="e.g. Paridhi Sharma"></div>
+                    <div><label>Date of Birth</label><input type="date" id="adm-dob"></div>
+                    <div><label>Gender</label><select id="adm-gender"><option>Male</option><option>Female</option><option>Other</option></select></div>
+                </div>
+                <div class="grid-3">
+                    <div><label>Blood Group</label><select id="adm-blood"><option>A+</option><option>O+</option><option>B+</option><option>AB+</option><option>Other</option></select></div>
+                    <div><label>Aadhaar Number</label><input type="number" id="adm-aadhaar" placeholder="12 Digit Aadhaar"></div>
+                    <div><label>Mother Tongue</label><input type="text" id="adm-tongue" placeholder="e.g. Hindi" value="Hindi"></div>
+                </div>
+
+                <div class="section-divider">Parents / Guardian Details</div>
                 <div class="grid-2">
+                    <div><label>Father's Name</label><input type="text" id="adm-father" placeholder="Father Name"></div>
+                    <div><label>Mother's Name</label><input type="text" id="adm-mother" placeholder="Mother Name"></div>
+                    <div><label>Father's Occupation</label><input type="text" id="adm-f-occ" placeholder="e.g. Business"></div>
+                    <div><label>Primary Phone No.</label><input type="number" id="adm-phone" placeholder="10-digit mobile"></div>
+                </div>
+                
+                <div class="section-divider">Contact & Address</div>
+                <label>Current Residential Address</label>
+                <textarea id="adm-address" rows="2" placeholder="House No, Street, Landmark, City, Pincode..."></textarea>
+
+                <div class="section-divider">Academic & Previous School</div>
+                <div class="grid-3">
                     <div>
-                        <label>Login ID / Email</label>
-                        <input type="email" id="stu-email" placeholder="e.g. stu2026@mvm.com">
+                        <label>Admitting to Class</label>
+                        <select id="adm-class">
+                            <option value="Class 8">Class 8</option>
+                            <option value="Class 9" selected>Class 9</option>
+                            <option value="Class 10">Class 10</option>
+                        </select>
                     </div>
                     <div>
-                        <label>Create Password</label>
-                        <input type="password" id="stu-password" placeholder="Set strong password">
+                        <label>Section (Assigned)</label>
+                        <select id="adm-section"><option value="A">Section A</option><option value="B">Section B</option></select>
                     </div>
+                    <div><label>Last School Attended</label><input type="text" id="adm-prev-school" placeholder="School Name"></div>
                 </div>
 
-                <label>Admitting to Class</label>
-                <select id="stu-class">
-                    <option>Class 8</option>
-                    <option selected>Class 9</option>
-                    <option>Class 10</option>
-                </select>
-
-                <div style="background: rgba(16, 185, 129, 0.1); padding: 15px; border-radius: 12px; margin-bottom: 20px;">
-                    <p style="font-size: 13px; color: var(--success); font-weight: bold; margin-bottom: 5px;">Physical Doc Verification</p>
-                    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
-                        <label style="display: flex; align-items: center; gap: 8px; font-weight: normal; color: var(--text-main); font-size: 14px;"><input type="checkbox" style="width: 18px; margin: 0;"> Aadhaar Submitted</label>
-                        <label style="display: flex; align-items: center; gap: 8px; font-weight: normal; color: var(--text-main); font-size: 14px;"><input type="checkbox" style="width: 18px; margin: 0;"> TC Verified</label>
+                <div class="section-divider">Portal Login Generation</div>
+                <div style="background: rgba(59, 130, 246, 0.1); padding: 15px; border-radius: 12px; margin-bottom: 20px;">
+                    <p style="font-size: 12px; color: var(--text-main); margin-bottom: 10px;">Setup Student App Credentials. Student can login <b>only after Principal's approval.</b></p>
+                    <div class="grid-2">
+                        <div><label>Login ID / Email</label><input type="text" id="adm-email" placeholder="e.g. stu2026@mvm.com" style="margin:0;"></div>
+                        <div><label>Set Password</label><input type="text" id="adm-pass" placeholder="Default: mvm@123" value="mvm@123" style="margin:0;"></div>
                     </div>
                 </div>
                 
-                <button onclick="admitStudent()" class="btn btn-success" id="admit-btn">Generate Login & Save Data</button>
+                <button class="btn btn-success" id="adm-submit-btn" onclick="submitAdmission()">Send for Principal's Approval 🚀</button>
+                <button class="btn btn-outline" id="adm-cancel-btn" style="display: none; margin-top: 10px;" onclick="resetAdmForm()">Cancel Edit</button>
             </div>
         </div>
 
-        <!-- 3. FEE COLLECTION -->
+        <!-- 3. STUDENT DIRECTORY (Edit/Deactivate/Fee History) -->
+        <div id="students" class="workspace">
+            <div class="card">
+                <div class="card-header">👨‍🎓 Master Student Directory</div>
+                <div class="grid-3">
+                    <input type="text" id="dir-stu-search" placeholder="Search Name/ID..." onkeyup="renderStudentDirectory()">
+                    <select id="dir-stu-class" onchange="renderStudentDirectory()">
+                        <option value="All">All Classes</option>
+                        <option value="Class 8">Class 8</option><option value="Class 9">Class 9</option><option value="Class 10">Class 10</option>
+                    </select>
+                    <select id="dir-stu-section" onchange="renderStudentDirectory()">
+                        <option value="All">All Sections</option><option value="A">Section A</option><option value="B">Section B</option>
+                    </select>
+                </div>
+                
+                <div id="student-directory-list" style="margin-top: 15px;">
+                    <!-- JS Dynamic -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. FEE DUES LIST -->
+        <div id="dues" class="workspace">
+            <div class="card" style="border: 2px solid var(--danger); background: rgba(239, 68, 68, 0.03);">
+                <div class="card-header" style="color: var(--danger);">🚨 Pending Fee Defaulters</div>
+                <div class="grid-2" style="margin-bottom: 15px;">
+                    <select id="due-class-filter" onchange="renderDuesList()"><option value="All">All Classes</option><option value="Class 9">Class 9</option><option value="Class 10">Class 10</option></select>
+                    <button class="btn btn-danger" onclick="alert('Bulk SMS Reminders Sent to all listed parents!')">📱 Send Bulk SMS</button>
+                </div>
+                <div id="dues-list-container">
+                    <!-- JS Dynamic -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. FEE COLLECTION -->
         <div id="fees" class="workspace">
             <div class="card">
-                <div class="card-header">💰 Fee Collection <span style="font-size: 12px; color: var(--text-muted);">#MVM-892</span></div>
+                <div class="card-header">💰 Fee Collection Desk <span style="font-size: 12px; color: var(--text-muted);">#MVM-892</span></div>
                 
                 <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-                    <input type="text" placeholder="Roll No or Name..." style="margin: 0;">
-                    <button class="btn btn-outline btn-small" style="width: 80px;" onclick="showToast('Searching', 'Fetching dues from database...', '#3b82f6')">🔍</button>
+                    <input type="text" id="fee-search-input" placeholder="Enter Student Name..." style="margin: 0;">
+                    <button class="btn btn-outline btn-small" style="width: 80px;" onclick="searchFeeStudent()">🔍</button>
                 </div>
 
-                <div class="list-card" style="border: 1px solid var(--info);">
-                    <div class="list-row"><div class="list-title">Rahul Kumar</div><div class="list-subtitle">Class 9</div></div>
-                    <div class="list-row" style="margin-top:10px;"><span class="list-subtitle">Tuition Fee</span><span>₹2,500</span></div>
-                    <div class="list-row"><span class="list-subtitle">Transport Fee</span><span>₹800</span></div>
-                    <div class="list-row"><span class="list-subtitle">Late Fine</span><span style="color: var(--danger);">₹50</span></div>
-                    <div class="list-row" style="margin-top:10px; border-top: 1px dashed var(--border-color); padding-top: 10px;">
-                        <span class="list-title">Total Payable</span><strong style="color: var(--success); font-size: 18px;">₹3,350</strong>
+                <div id="fee-detail-box" style="display: none;">
+                    <div class="list-card" style="border: 1px solid var(--info);">
+                        <div class="list-row"><div class="list-title" id="fd-name">Rahul Kumar</div><div class="list-subtitle" id="fd-class">Class 9</div></div>
+                        <div class="list-row" style="margin-top:10px;"><span class="list-subtitle">Pending Tuition Fee</span><span id="fd-due">₹2,500</span></div>
+                        <div class="list-row"><span class="list-subtitle">Late Fine</span><span style="color: var(--danger);">₹50</span></div>
+                        <div class="list-row" style="margin-top:10px; border-top: 1px dashed var(--border-color); padding-top: 10px;">
+                            <span class="list-title">Total Payable</span><strong style="color: var(--success); font-size: 18px;" id="fd-total">₹2,550</strong>
+                        </div>
                     </div>
-                </div>
 
-                <label>Payment Mode</label>
-                <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                    <button class="btn btn-outline btn-small" style="background: var(--info); color: #fff;">Cash</button>
-                    <button class="btn btn-outline btn-small">Cheque</button>
-                    <button class="btn btn-outline btn-small">UPI</button>
-                </div>
+                    <label>Payment Mode</label>
+                    <select id="fee-mode"><option>Cash</option><option>UPI</option><option>Card/Cheque</option></select>
+                    
+                    <label>Amount Receiving (₹)</label>
+                    <input type="number" id="fee-amount" placeholder="Enter amount">
 
-                <button class="btn btn-success" onclick="showToast('Payment Successful', 'Receipt #MVM-892 generated and sent via SMS.', '#10b981')">Collect & Print Receipt</button>
-            </div>
-        </div>
-
-        <!-- 4. WHATSAPP API -->
-        <div id="whatsapp" class="workspace">
-            <div class="card" style="border: 2px solid #25D366; background: rgba(37, 211, 102, 0.05);">
-                <div class="card-header" style="color: #25D366;">📱 WhatsApp Broadcast <span class="status-badge" style="background: #25D366; color: #fff;">Live</span></div>
-                
-                <label>Target Audience</label>
-                <select>
-                    <option>Fee Defaulters (Pending Dues)</option>
-                    <option>All Parents (Notice)</option>
-                    <option>Specific Class (e.g. Class 10)</option>
-                </select>
-
-                <label>Message Template</label>
-                <select>
-                    <option>🚨 Gentle Fee Reminder</option>
-                    <option>☔ Emergency Holiday</option>
-                </select>
-                
-                <textarea rows="3" placeholder="Custom note..."></textarea>
-
-                <div class="list-card" style="background: var(--card-bg);">
-                    <div class="list-subtitle" style="margin-bottom: 5px;">Preview:</div>
-                    <p style="font-size: 14px; line-height: 1.4; color: var(--text-main);">Dear Parent, This is a gentle reminder that tuition fee is pending. Kindly clear dues by 25th.<br><span style="color: #3b82f6; font-weight: bold;">🔗 Click here to pay</span></p>
-                </div>
-
-                <button class="btn" style="background: #25D366; color: #fff; margin-top: 15px;" onclick="showToast('Broadcast Sent', 'Message pushed to WhatsApp API successfully.', '#10b981')">Send Broadcast 🚀</button>
-            </div>
-        </div>
-
-        <!-- 5. TIMETABLE AI -->
-        <div id="timetable" class="workspace">
-            <div class="card">
-                <div class="card-header">⏳ AI Timetable Generator</div>
-                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Resolve teacher clashes instantly.</p>
-                
-                <label>Select Target Batch</label>
-                <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-                    <select style="margin: 0;"><option>Class 6 to 10</option></select>
-                    <button class="btn btn-outline btn-small" style="width: auto;" onclick="showToast('Generating...', 'AI is checking teacher availability.', '#f59e0b')">Generate</button>
-                </div>
-                
-                <div style="padding: 30px; text-align: center; border: 2px dashed var(--border-color); border-radius: 12px;">
-                    <div style="font-size: 30px; margin-bottom: 10px;">🗓️</div>
-                    <p style="font-size: 13px; color: var(--text-muted);">No Timetable Generated Yet</p>
+                    <button class="btn btn-success" onclick="collectFee()">Collect & Print Receipt</button>
                 </div>
             </div>
         </div>
 
-        <!-- 6. INVENTORY -->
-        <div id="inventory" class="workspace">
-            <div class="card">
-                <div class="card-header">📦 Logistics & Inventory <button class="btn btn-outline btn-small">+ Add</button></div>
+        <!-- 6. EARLY PICKUP / OUT-PASS -->
+        <div id="pickup" class="workspace">
+            <div class="card" style="border-left: 4px solid var(--warning);">
+                <div class="card-header">🏃‍♂️ Early Pickup & Gate Pass</div>
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Issues digital out-pass and alerts Class Teacher via App.</p>
                 
-                <div class="list-card">
-                    <div class="list-row">
-                        <div class="list-title">Whiteboard Markers</div>
-                        <div class="status-badge" style="background: rgba(16, 185, 129, 0.1); color: var(--success);">In Stock</div>
-                    </div>
-                    <div class="list-row" style="margin-top: 5px;">
-                        <span class="list-subtitle">Stationery</span>
-                        <strong style="color: var(--text-main);">120 Boxes</strong>
-                    </div>
+                <div class="grid-2">
+                    <div><label>Student Name</label><input type="text" id="pu-name" placeholder="Search Student"></div>
+                    <div><label>Picked up by</label><input type="text" id="pu-person" placeholder="e.g. Father (Ramesh)"></div>
                 </div>
+                <label>Reason for Early Leave</label>
+                <input type="text" id="pu-reason" placeholder="e.g. Medical Appointment">
+                
+                <button class="btn btn-warning" onclick="generatePickupPass()">Generate Pass & Alert Teacher</button>
 
-                <div class="list-card">
-                    <div class="list-row">
-                        <div class="list-title">Lab Microscopes</div>
-                        <div class="status-badge" style="background: rgba(239, 68, 68, 0.1); color: var(--danger);">Low Stock</div>
-                    </div>
-                    <div class="list-row" style="margin-top: 5px;">
-                        <span class="list-subtitle">Equipment</span>
-                        <strong style="color: var(--text-main);">02 Units</strong>
-                    </div>
-                </div>
+                <h4 style="margin-top: 30px; margin-bottom: 15px; font-size: 14px;">Today's Out-Pass Log</h4>
+                <div id="pickup-log"></div>
             </div>
         </div>
 
-        <!-- 7. LIBRARY -->
-        <div id="library" class="workspace">
-            <div class="card">
-                <div class="card-header">📚 Issue Book</div>
-                <input type="text" placeholder="Scan Book ISBN / Name">
-                <input type="text" placeholder="Student Roll No">
-                <button class="btn" onclick="showToast('Book Issued', 'Updated in student record.', '#10b981')">Issue Now</button>
-            </div>
-            
-            <div class="card" style="border-left: 4px solid var(--danger);">
-                <div class="card-header">⚠️ Pending Returns</div>
-                <div class="list-card" style="border: none; padding: 0;">
-                    <div class="list-row">
-                        <div class="list-title">Science NCERT</div>
-                        <div class="list-subtitle" style="color: var(--danger); font-weight: bold;">Overdue: 3 days</div>
-                    </div>
-                    <div class="list-subtitle" style="margin-top: 5px;">Issued to: Adarsh (Class 10)</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 8. VISITOR LOG -->
+        <!-- 7. VISITOR & ENQUIRY CRM -->
         <div id="visitors" class="workspace">
             <div class="card">
-                <div class="card-header">📝 New Visitor Entry</div>
-                <div class="grid-2">
-                    <div><label>Visitor Name</label><input type="text" placeholder="e.g. Ramesh Kumar"></div>
-                    <div><label>Phone Number</label><input type="number" placeholder="10-digit mobile"></div>
+                <div class="card-header">📝 Reception Desk (CRM & Visitors)</div>
+                <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                    <button class="btn btn-small" id="tab-vis" onclick="switchDesk('vis')" style="background: var(--accent-color); color:#fff;">Visitor Kiosk</button>
+                    <button class="btn btn-outline btn-small" id="tab-enq" onclick="switchDesk('enq')">Admission Enquiry</button>
                 </div>
-                <label>Purpose</label>
-                <select><option>Admission Enquiry</option><option>Meeting Principal</option><option>Delivery</option></select>
-                <label>Whom to meet?</label>
-                <input type="text" placeholder="Staff or Student name">
+
+                <!-- Visitor Form -->
+                <div id="desk-visitor">
+                    <div class="grid-2">
+                        <div><label>Visitor Name</label><input type="text" id="v-name" placeholder="e.g., Ramesh Kumar"></div>
+                        <div><label>Phone Number</label><input type="number" id="v-phone" placeholder="10-digit mobile"></div>
+                    </div>
+                    <label>Purpose / Whom to meet?</label>
+                    <input type="text" id="v-purpose" placeholder="e.g. Meeting Principal">
+                    <button class="btn btn-outline" style="border-color: var(--info); color: var(--info);" onclick="logVisitor()">Log Entry & Print Pass</button>
+                    
+                    <div class="section-divider">Today's Visitors</div>
+                    <div id="visitor-list"></div>
+                </div>
+
+                <!-- Enquiry CRM Form -->
+                <div id="desk-enquiry" style="display: none;">
+                    <div class="grid-2">
+                        <div><label>Parent Name</label><input type="text" id="e-name" placeholder="Name"></div>
+                        <div><label>Phone Number</label><input type="number" id="e-phone" placeholder="Mobile"></div>
+                    </div>
+                    <div class="grid-2">
+                        <div><label>Child Class Seeking</label><input type="text" id="e-class" placeholder="e.g. Class 1"></div>
+                        <div><label>Follow-up Date</label><input type="date" id="e-date"></div>
+                    </div>
+                    <button class="btn btn-success" onclick="addEnquiry()">Save Lead (CRM)</button>
+
+                    <div class="section-divider">Active Leads</div>
+                    <div id="enquiry-list"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 8. PETTY CASH BOOK -->
+        <div id="pettycash" class="workspace">
+            <div class="card">
+                <div class="card-header">💸 Petty Cash Book</div>
+                <div class="grid-2">
+                    <div class="stat-box" style="padding: 15px;"><h4>Cash in Hand</h4><h2 style="color:var(--success);">₹2,500</h2></div>
+                    <div class="stat-box" style="padding: 15px;"><h4>Spent Today</h4><h2 style="color:var(--danger);" id="pc-spent">₹0</h2></div>
+                </div>
                 
-                <button class="btn btn-outline" style="border-color: var(--info); color: var(--info);" onclick="showToast('Gate Pass Printed', 'Visitor entry logged successfully.', '#3b82f6')">🖨️ Print Gate Pass</button>
+                <div class="section-divider">Add Expense</div>
+                <div class="grid-3">
+                    <div><label>Particulars</label><input type="text" id="pc-desc" placeholder="e.g. Tea/Coffee"></div>
+                    <div><label>Amount (₹)</label><input type="number" id="pc-amt" placeholder="e.g. 150"></div>
+                    <div><label>Given To</label><input type="text" id="pc-to" placeholder="Name"></div>
+                </div>
+                <button class="btn btn-outline" onclick="addPettyCash()">Log Expense</button>
+
+                <div class="section-divider">Recent Expenses</div>
+                <div id="pc-list"></div>
+            </div>
+        </div>
+
+        <!-- 9. LOST & FOUND -->
+        <div id="lostfound" class="workspace">
+            <div class="card">
+                <div class="card-header">🔍 Lost & Found Desk</div>
+                <div class="grid-2">
+                    <div><label>Item Description</label><input type="text" id="lf-item" placeholder="e.g. Blue Milton Bottle"></div>
+                    <div><label>Found Location</label><input type="text" id="lf-loc" placeholder="e.g. Playground"></div>
+                </div>
+                <button class="btn btn-primary" onclick="addLostFound()">Add Item (Notify School)</button>
+
+                <div class="section-divider">Unclaimed Items</div>
+                <div id="lf-list"></div>
+            </div>
+        </div>
+
+        <!-- 10. WHATSAPP API -->
+        <div id="whatsapp" class="workspace">
+            <div class="card" style="border: 2px solid #25D366; background: rgba(37, 211, 102, 0.05);">
+                <div class="card-header" style="color: #25D366;">📱 WhatsApp Broadcast <span class="status-badge" style="background: #25D366; color: #fff;">Live API</span></div>
+                <label>Target Audience</label>
+                <select><option>Fee Defaulters</option><option>All Parents</option></select>
+                <label>Message Template</label>
+                <select><option>🚨 Fee Reminder</option><option>☔ Holiday Notice</option></select>
+                <textarea rows="3" placeholder="Custom note..."></textarea>
+                <button class="btn" style="background: #25D366; color: #fff; margin-top: 10px;" onclick="showToast('Broadcast Sent', 'Message pushed to API successfully.', '#10b981')">Send Broadcast 🚀</button>
             </div>
         </div>
 
     </div>
 
+    <!-- 🚀 MASTER ADMIN ENGINE (JS) -->
     <script>
-        // 🚀 THEME & UI LOGIC
+        // --- CORE DATABASE ---
+        let adminStudentsDB = JSON.parse(localStorage.getItem("adminStudentsDB")) || [
+            { id: "S-101", name: "Adarsh Patel", email: "adarsh@mvm.in", class: "Class 10", section: "B", phone: "9876543210", father: "Ramesh Patel", status: "Active", 
+              feeHistory: [{month: "April", paid: 2500, due: 0}, {month: "May", paid: 0, due: 2500}] },
+            { id: "S-102", name: "Rahul Kumar", email: "rahul@mvm.in", class: "Class 9", section: "A", phone: "8765432109", father: "Suresh Kumar", status: "Active", 
+              feeHistory: [{month: "April", paid: 2500, due: 0}, {month: "May", paid: 2500, due: 0}] }
+        ];
+        
+        let adminEnquiryDB = JSON.parse(localStorage.getItem("adminEnquiryDB")) || [];
+        let adminVisitorDB = JSON.parse(localStorage.getItem("adminVisitorDB")) || [];
+        let adminPettyCashDB = JSON.parse(localStorage.getItem("adminPettyCashDB")) || [];
+        let adminLostFoundDB = JSON.parse(localStorage.getItem("adminLostFoundDB")) || [];
+        let adminPickupDB = JSON.parse(localStorage.getItem("adminPickupDB")) || [];
+
+        window.onload = function() {
+            const user = localStorage.getItem("loggedInUser") || "Admin Desk";
+            if(document.getElementById("mobile-avatar")) document.getElementById("mobile-avatar").innerText = user.charAt(0).toUpperCase();
+            
+            document.body.classList.add("dark-mode");
+            localStorage.setItem("darkMode", "true");
+            let themeBtn = document.querySelector(".theme-toggle");
+            if(themeBtn) themeBtn.innerText = "🔱";
+
+            updateDashboardStats();
+            renderStudentDirectory();
+            renderDuesList();
+            renderEnquiryList();
+            renderVisitorList();
+            renderPettyCash();
+            renderLostFound();
+            renderPickupLog();
+        };
+
+        // --- THEME & NAVIGATION ---
         function toggleAppMenu() {
             document.querySelector('.sidebar').classList.toggle('open');
             document.querySelector('.sidebar-overlay').classList.toggle('open');
@@ -401,7 +494,6 @@
             document.body.classList.toggle("dark-mode");
             const isDark = document.body.classList.contains("dark-mode");
             localStorage.setItem("darkMode", isDark);
-            
             let themeBtn = document.querySelector(".theme-toggle");
             if(themeBtn) themeBtn.innerText = isDark ? "🔱" : "☀️";
         }
@@ -409,76 +501,17 @@
         function switchTab(tabId, element) {
             document.querySelectorAll('.nav-item').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.workspace').forEach(ws => ws.classList.remove('active'));
-            
             element.classList.add('active');
             document.getElementById(tabId).classList.add('active');
             
             let tabName = element.innerText.replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]|[\u2600-\u27FF]/g, '').trim(); 
             if(document.getElementById('mobile-title')) document.getElementById('mobile-title').innerText = tabName;
             
+            if(tabId === 'students') renderStudentDirectory();
+            if(tabId === 'dues') renderDuesList();
+            if(tabId === 'admission' && document.getElementById('adm-id').value !== "") resetAdmForm();
+
             if(window.innerWidth <= 768) { toggleAppMenu(); }
-        }
-
-        // 🚀 CUSTOM TOAST NOTIFICATION
-        function showToast(title, message, color) {
-            let container = document.getElementById("toast-container");
-            if(!container) {
-                container = document.createElement("div");
-                container.id = "toast-container";
-                document.body.appendChild(container);
-            }
-            let toast = document.createElement("div");
-            toast.className = "toast";
-            toast.style.background = color;
-            toast.innerHTML = `<div style="font-size:15px; margin-bottom:4px;">${title}</div><div style="font-size:12px; font-weight:normal;">${message}</div>`;
-            container.appendChild(toast);
-            setTimeout(() => { toast.style.animation = "fadeOutToast 0.4s ease forwards"; setTimeout(() => toast.remove(), 400); }, 3500);
-        }
-
-        // 🔥 ADMIN API ENGINE
-        async function admitStudent() {
-            const name = document.getElementById("stu-name").value;
-            const email = document.getElementById("stu-email").value.toLowerCase().trim();
-            const password = document.getElementById("stu-password").value;
-            const btn = document.getElementById("admit-btn");
-            const role = "student"; 
-
-            if (!name || !email || !password) {
-                return showToast('Missing Details', 'Please fill name, email and password!', '#ef4444');
-            }
-
-            btn.innerText = "Processing...";
-            btn.style.opacity = "0.7";
-
-            try {
-                const response = await fetch("https://mvm-backend-file-1.onrender.com/create-user/", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        "name": name,
-                        "email": email,
-                        "password": password,
-                        "role": role
-                    })
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    showToast('Admission Confirmed 🎉', `ID Generated: ${data.message}`, '#10b981');
-                    document.getElementById("stu-name").value = "";
-                    document.getElementById("stu-email").value = "";
-                    document.getElementById("stu-password").value = "";
-                } else {
-                    showToast('API Error', data.detail, '#f59e0b');
-                }
-            } catch (error) {
-                console.error("Error:", error);
-                showToast('Server Offline', 'Backend server is not responding.', '#ef4444');
-            } finally {
-                btn.innerText = "Generate Login & Save Data";
-                btn.style.opacity = "1";
-            }
         }
 
         function logoutAdmin() {
@@ -489,16 +522,301 @@
             }
         }
 
-        // Initialize User Data & Theme on Load
-        window.onload = function() {
-            const user = localStorage.getItem("loggedInUser") || "Admin Desk";
-            if(document.getElementById("mobile-avatar")) document.getElementById("mobile-avatar").innerText = user.charAt(0).toUpperCase();
+        function showToast(title, message, color) {
+            let container = document.getElementById("toast-container");
+            let toast = document.createElement("div");
+            toast.className = "toast"; toast.style.background = color;
+            toast.innerHTML = `<div style="font-size:15px; margin-bottom:4px;">${title}</div><div style="font-size:12px; font-weight:normal;">${message}</div>`;
+            container.appendChild(toast);
+            setTimeout(() => { toast.style.animation = "fadeOutToast 0.4s ease forwards"; setTimeout(() => toast.remove(), 400); }, 3500);
+        }
+
+        function updateDashboardStats() {
+            document.getElementById('dash-stu').innerText = adminStudentsDB.filter(s=>s.status==="Active").length;
+            document.getElementById('dash-enq').innerText = adminEnquiryDB.length;
+            document.getElementById('dash-vis').innerText = adminVisitorDB.length;
+        }
+
+        // --- 1. ADMISSION ENGINE (Detailed) ---
+        function submitAdmission() {
+            let id = document.getElementById('adm-id').value;
+            let name = document.getElementById('adm-name').value;
+            let cls = document.getElementById('adm-class').value;
+            let sec = document.getElementById('adm-section').value;
+            let phone = document.getElementById('adm-phone').value;
+            let father = document.getElementById('adm-father').value;
+            let email = document.getElementById('adm-email').value;
+            let pass = document.getElementById('adm-pass').value;
+
+            if(!name || !cls || !phone) return showToast('Error', 'Name, Class, and Phone are mandatory!', '#ef4444');
+
+            if(id) {
+                // Edit
+                let stu = adminStudentsDB.find(s => s.id === id);
+                if(stu) {
+                    stu.name = name; stu.class = cls; stu.section = sec; stu.phone = phone; stu.father = father;
+                    showToast('Updated 📝', `Profile of ${name} updated.`, '#3b82f6');
+                }
+            } else {
+                // New
+                let newId = `S-${Math.floor(1000 + Math.random() * 9000)}`;
+                adminStudentsDB.push({
+                    id: newId, name: name, email: email, password: pass, class: cls, section: sec, phone: phone, father: father, 
+                    status: "Pending Approval", feeHistory: []
+                });
+                showToast('Sent to Principal 🚀', `${name}'s file sent for approval. ID: ${newId}`, '#f59e0b');
+            }
+
+            localStorage.setItem("adminStudentsDB", JSON.stringify(adminStudentsDB));
+            resetAdmForm(); updateDashboardStats(); renderStudentDirectory();
+        }
+
+        function resetAdmForm() {
+            document.querySelectorAll('#admission input, #admission textarea').forEach(el => el.value = '');
+            document.getElementById('adm-pass').value = "mvm@123"; // default
+            document.getElementById('adm-form-title').innerText = "🎓 New Student Admission (Detailed)";
+            document.getElementById('adm-submit-btn').innerText = "Send for Principal's Approval 🚀";
+            document.getElementById('adm-cancel-btn').style.display = "none";
+        }
+
+        // --- 2. STUDENT DIRECTORY (View/Edit/Deactivate/History) ---
+        function renderStudentDirectory() {
+            const list = document.getElementById('student-directory-list');
+            const search = document.getElementById('dir-stu-search').value.toLowerCase();
+            const cls = document.getElementById('dir-stu-class').value;
+            const sec = document.getElementById('dir-stu-section').value;
             
-            document.body.classList.add("dark-mode");
-            localStorage.setItem("darkMode", "true");
-            let themeBtn = document.querySelector(".theme-toggle");
-            if(themeBtn) themeBtn.innerText = "🔱";
-        };
+            list.innerHTML = "";
+            
+            let filtered = adminStudentsDB.filter(s => {
+                let mSearch = s.name.toLowerCase().includes(search) || s.id.toLowerCase().includes(search);
+                let mCls = cls === "All" ? true : s.class === cls;
+                let mSec = sec === "All" ? true : s.section === sec;
+                return mSearch && mCls && mSec;
+            });
+
+            if(filtered.length === 0) return list.innerHTML = `<p style="text-align:center; color:var(--text-muted); padding: 20px;">No students found.</p>`;
+
+            filtered.forEach(s => {
+                let badgeColor = s.status === "Active" ? "var(--success)" : (s.status==="Pending Approval" ? "var(--warning)" : "var(--danger)");
+                let bgBadge = s.status === "Active" ? "rgba(16, 185, 129, 0.1)" : (s.status==="Pending Approval" ? "rgba(245, 158, 11, 0.1)" : "rgba(239, 68, 68, 0.1)");
+                
+                // Construct Fee History HTML
+                let feeHtml = s.feeHistory.map(f => `<div style="font-size:12px; display:flex; justify-content:space-between; margin-bottom:4px; padding-bottom:4px; border-bottom:1px dashed var(--border-color);"><span>${f.month}</span> <span>Paid: ₹${f.paid} | <span style="color:${f.due>0?'var(--danger)':'var(--success)'}">Due: ₹${f.due}</span></span></div>`).join('');
+                if(!feeHtml) feeHtml = "<span style='font-size:12px; color:var(--text-muted);'>No fee records.</span>";
+
+                list.innerHTML += `
+                    <div class="list-card" style="${s.status!=='Active'?'opacity:0.7':''}">
+                        <div class="list-row">
+                            <div><div class="list-title">${s.name}</div><div class="list-subtitle">${s.class} - ${s.section} | ID: ${s.id}</div></div>
+                            <div class="status-badge" style="background: ${bgBadge}; color: ${badgeColor};">${s.status}</div>
+                        </div>
+                        <div style="margin-top:10px; font-size:13px; color:var(--text-main);">Father: ${s.father} | 📞 ${s.phone}</div>
+                        
+                        <!-- Collapsible Fee History -->
+                        <details style="margin-top: 10px; border: 1px solid var(--border-color); border-radius: 8px; padding: 8px; background: var(--bg-color);">
+                            <summary style="font-size:12px; font-weight:bold; cursor:pointer; outline:none; color:var(--info);">📜 View Fee History</summary>
+                            <div style="margin-top: 10px;">${feeHtml}</div>
+                        </details>
+
+                        <div style="display:flex; gap:8px; margin-top:15px;">
+                            <button class="btn btn-outline btn-small" onclick="editStudent('${s.id}')">✏️ Edit</button>
+                            <button class="btn btn-danger btn-small" style="background: ${s.status==='Active'?'var(--danger)':'var(--success)'}" onclick="toggleStudentStatus('${s.id}')">${s.status==='Active'?'Deactivate':'Activate'}</button>
+                        </div>
+                    </div>`;
+            });
+        }
+
+        function editStudent(id) {
+            let stu = adminStudentsDB.find(s => s.id === id);
+            if(stu) {
+                switchTab('admission', document.querySelectorAll('.nav-item')[1]);
+                document.getElementById('adm-form-title').innerText = "✏️ Edit Student Profile";
+                document.getElementById('adm-id').value = stu.id;
+                document.getElementById('adm-name').value = stu.name;
+                document.getElementById('adm-class').value = stu.class;
+                document.getElementById('adm-section').value = stu.section;
+                document.getElementById('adm-phone').value = stu.phone;
+                document.getElementById('adm-father').value = stu.father;
+                
+                document.getElementById('adm-submit-btn').innerText = "Update Profile";
+                document.getElementById('adm-cancel-btn').style.display = "block";
+            }
+        }
+
+        function toggleStudentStatus(id) {
+            let stu = adminStudentsDB.find(s => s.id === id);
+            if(stu) {
+                if(stu.status === "Active") {
+                    if(confirm(`Deactivate ${stu.name}? They won't be able to login.`)) stu.status = "Inactive";
+                } else {
+                    stu.status = "Active";
+                }
+                localStorage.setItem("adminStudentsDB", JSON.stringify(adminStudentsDB));
+                renderStudentDirectory(); updateDashboardStats();
+            }
+        }
+
+        // --- 3. FEE DUES LIST ---
+        function renderDuesList() {
+            let clsFilter = document.getElementById('due-class-filter').value;
+            let list = document.getElementById('dues-list-container');
+            list.innerHTML = "";
+
+            let defaulters = adminStudentsDB.filter(s => {
+                if(clsFilter !== "All" && s.class !== clsFilter) return false;
+                // Check if any month has due > 0
+                return s.feeHistory.some(f => f.due > 0);
+            });
+
+            if(defaulters.length === 0) return list.innerHTML = `<p style="text-align:center; color:var(--text-muted);">No defaulters found.</p>`;
+
+            defaulters.forEach(s => {
+                let totalDue = s.feeHistory.reduce((sum, f) => sum + f.due, 0);
+                list.innerHTML += `
+                <div class="list-card" style="border-left: 4px solid var(--danger);">
+                    <div class="list-row">
+                        <div><div class="list-title">${s.name}</div><div class="list-subtitle">${s.class}-${s.section} | ID: ${s.id}</div></div>
+                        <div class="list-title" style="color:var(--danger);">Due: ₹${totalDue}</div>
+                    </div>
+                    <button class="btn btn-outline btn-small" style="margin-top:10px;" onclick="showToast('Reminder Sent', 'SMS sent to ${s.father}.', '#10b981')">Send SMS Reminder</button>
+                </div>`;
+            });
+        }
+
+        // --- 4. OFFLINE FEE COLLECTION ---
+        function searchFeeStudent() {
+            let q = document.getElementById('fee-search-input').value.toLowerCase();
+            let stu = adminStudentsDB.find(s => s.name.toLowerCase().includes(q) || s.id.toLowerCase() === q);
+            if(stu) {
+                document.getElementById('fee-detail-box').style.display = "block";
+                document.getElementById('fd-name').innerText = stu.name;
+                document.getElementById('fd-class').innerText = `${stu.class}-${stu.section}`;
+                let totalDue = stu.feeHistory.reduce((sum, f) => sum + f.due, 0);
+                // Mock adding a current month due
+                totalDue += 2500; 
+                document.getElementById('fd-due').innerText = `₹${totalDue}`;
+                document.getElementById('fd-total').innerText = `₹${totalDue + 50}`; // + late fine
+                document.getElementById('fee-amount').value = totalDue + 50;
+            } else {
+                showToast('Not Found', 'Student not found in database.', '#ef4444');
+                document.getElementById('fee-detail-box').style.display = "none";
+            }
+        }
+        function collectFee() {
+            showToast('Payment Collected ✅', 'Receipt generated successfully. Ledger updated.', '#10b981');
+            document.getElementById('fee-detail-box').style.display = "none";
+            document.getElementById('fee-search-input').value = "";
+        }
+
+        // --- 5. EARLY PICKUP (GATE PASS) ---
+        function generatePickupPass() {
+            let name = document.getElementById('pu-name').value;
+            let person = document.getElementById('pu-person').value;
+            if(!name || !person) return showToast('Error', 'Enter student and pickup person details.', '#ef4444');
+            
+            adminPickupDB.push({ name, person, time: new Date().toLocaleTimeString() });
+            localStorage.setItem("adminPickupDB", JSON.stringify(adminPickupDB));
+            
+            showToast('Pass Generated 🏃‍♂️', 'Class Teacher alerted on App. Gate pass sent to security.', '#f59e0b');
+            document.getElementById('pu-name').value = ""; document.getElementById('pu-person').value = ""; document.getElementById('pu-reason').value = "";
+            renderPickupLog();
+        }
+        function renderPickupLog() {
+            let log = document.getElementById('pickup-log'); log.innerHTML = "";
+            adminPickupDB.slice().reverse().forEach(p => {
+                log.innerHTML += `<div class="list-card"><div class="list-row"><div class="list-title">${p.name}</div><div class="status-badge" style="background:var(--warning); color:#fff;">Left: ${p.time}</div></div><div class="list-subtitle">With: ${p.person}</div></div>`;
+            });
+        }
+
+        // --- 6. VISITOR & ENQUIRY CRM ---
+        function switchDesk(type) {
+            document.getElementById('desk-visitor').style.display = type === 'vis' ? 'block' : 'none';
+            document.getElementById('desk-enquiry').style.display = type === 'enq' ? 'block' : 'none';
+            document.getElementById('tab-vis').style.background = type === 'vis' ? 'var(--accent-color)' : 'transparent';
+            document.getElementById('tab-vis').style.color = type === 'vis' ? '#fff' : 'var(--text-main)';
+            document.getElementById('tab-enq').style.background = type === 'enq' ? 'var(--accent-color)' : 'transparent';
+            document.getElementById('tab-enq').style.color = type === 'enq' ? '#fff' : 'var(--text-main)';
+        }
+        function logVisitor() {
+            let name = document.getElementById('v-name').value;
+            let purp = document.getElementById('v-purpose').value;
+            if(!name) return showToast('Error', 'Visitor name required.', '#ef4444');
+            adminVisitorDB.push({ name, purp, time: new Date().toLocaleTimeString() });
+            localStorage.setItem("adminVisitorDB", JSON.stringify(adminVisitorDB));
+            showToast('Logged ✅', 'Visitor pass generated. Host notified.', '#10b981');
+            document.getElementById('v-name').value = ""; document.getElementById('v-purpose').value = ""; document.getElementById('v-phone').value = "";
+            renderVisitorList(); updateDashboardStats();
+        }
+        function renderVisitorList() {
+            let list = document.getElementById('visitor-list'); list.innerHTML = "";
+            adminVisitorDB.slice().reverse().forEach(v => {
+                list.innerHTML += `<div class="list-card"><div class="list-row"><div class="list-title">${v.name}</div><div class="list-subtitle">${v.time}</div></div><div class="list-subtitle">Purpose: ${v.purp}</div></div>`;
+            });
+        }
+        function addEnquiry() {
+            let name = document.getElementById('e-name').value;
+            let cls = document.getElementById('e-class').value;
+            if(!name) return;
+            adminEnquiryDB.push({ name, cls, date: new Date().toLocaleDateString() });
+            localStorage.setItem("adminEnquiryDB", JSON.stringify(adminEnquiryDB));
+            showToast('Lead Saved 📈', 'Added to CRM for follow-up.', '#3b82f6');
+            document.getElementById('e-name').value = ""; document.getElementById('e-class').value = ""; document.getElementById('e-phone').value = "";
+            renderEnquiryList(); updateDashboardStats();
+        }
+        function renderEnquiryList() {
+            let list = document.getElementById('enquiry-list'); list.innerHTML = "";
+            adminEnquiryDB.slice().reverse().forEach((e, i) => {
+                list.innerHTML += `<div class="list-card" style="border-left: 4px solid var(--info);"><div class="list-row"><div class="list-title">${e.name}</div><div class="list-subtitle">${e.date}</div></div><div class="list-subtitle">Seeking: ${e.cls}</div><button class="btn btn-outline btn-small" style="margin-top:10px;" onclick="showToast('WhatsApp Sent','Follow up message sent.','#10b981')">Send Follow-up WhatsApp</button></div>`;
+            });
+        }
+
+        // --- 7. PETTY CASH ---
+        function addPettyCash() {
+            let desc = document.getElementById('pc-desc').value;
+            let amt = parseInt(document.getElementById('pc-amt').value);
+            if(!desc || !amt) return;
+            adminPettyCashDB.push({ desc, amt, time: new Date().toLocaleTimeString() });
+            localStorage.setItem("adminPettyCashDB", JSON.stringify(adminPettyCashDB));
+            document.getElementById('pc-desc').value = ""; document.getElementById('pc-amt').value = ""; document.getElementById('pc-to').value = "";
+            renderPettyCash();
+        }
+        function renderPettyCash() {
+            let list = document.getElementById('pc-list'); list.innerHTML = "";
+            let spent = 0;
+            adminPettyCashDB.slice().reverse().forEach(p => {
+                spent += p.amt;
+                list.innerHTML += `<div class="list-row" style="padding:10px 0; border-bottom:1px dashed var(--border-color);"><div class="list-title" style="font-weight:normal;">${p.desc} <span style="font-size:11px; color:var(--text-muted); display:block;">${p.time}</span></div><div class="list-title" style="color:var(--danger);">-₹${p.amt}</div></div>`;
+            });
+            document.getElementById('pc-spent').innerText = `₹${spent}`;
+        }
+
+        // --- 8. LOST & FOUND ---
+        function addLostFound() {
+            let item = document.getElementById('lf-item').value;
+            let loc = document.getElementById('lf-loc').value;
+            if(!item) return;
+            adminLostFoundDB.push({ item, loc, status: "Unclaimed", id: Date.now() });
+            localStorage.setItem("adminLostFoundDB", JSON.stringify(adminLostFoundDB));
+            showToast('Item Logged 🔍', 'Notification sent to Student & Teacher Apps.', '#f59e0b');
+            document.getElementById('lf-item').value = ""; document.getElementById('lf-loc').value = "";
+            renderLostFound();
+        }
+        function renderLostFound() {
+            let list = document.getElementById('lf-list'); list.innerHTML = "";
+            adminLostFoundDB.slice().reverse().forEach((l, i) => {
+                if(l.status === "Unclaimed") {
+                    let realIdx = adminLostFoundDB.indexOf(l);
+                    list.innerHTML += `<div class="list-card"><div class="list-row"><div class="list-title">${l.item}</div><button class="btn btn-success btn-small" onclick="claimItem(${realIdx})">Mark Claimed</button></div><div class="list-subtitle">Found: ${l.loc}</div></div>`;
+                }
+            });
+        }
+        function claimItem(idx) {
+            adminLostFoundDB[idx].status = "Claimed";
+            localStorage.setItem("adminLostFoundDB", JSON.stringify(adminLostFoundDB));
+            showToast('Item Claimed ✅', 'Removed from active list.', '#10b981');
+            renderLostFound();
+        }
     </script>
 </body>
 </html>
