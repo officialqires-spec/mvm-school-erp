@@ -2,143 +2,173 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MVM Public School - Vice Principal Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MVM Public School - Vice Principal App</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; transition: background-color 0.3s ease; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; -webkit-tap-highlight-color: transparent; }
         
+        /* ☀️ LIGHT MODE (Clean Executive Style) */
         :root {
-            --bg-color: #fcfcfc; --card-bg: #fff; --text-color: #111; --text-muted: #666;
-            --border-color: #eaeaea; --sidebar-bg: #fff; --hover-bg: #f5f5f5; --btn-fire: #00796b;
+            --bg-color: #f4f6f9; --card-bg: #ffffff; --text-main: #111827; --text-muted: #64748b;
+            --border-color: #e2e8f0; --sidebar-bg: #ffffff; 
+            --accent-color: #673ab7; --accent-hover: #512da8; --accent-text: #ffffff;
+            --success: #10b981; --danger: #ef4444; --warning: #f59e0b; --info: #3b82f6;
+            --shadow-sm: 0 4px 15px rgba(0,0,0,0.03); --shadow-md: 0 8px 25px rgba(0,0,0,0.06);
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* 🌌 MAHADEV GALAXY/ANANT THEME (Deep Violet & Indigo - Less Red) */
-        .dark-mode {
-            /* Pitch Black Void with a hint of deep space blue */
-            --bg-color: #020108; 
-            /* Deep Violet Glass Cards */
-            --card-bg: rgba(15, 8, 30, 0.65); 
-            --text-color: #f0f4f8; 
-            /* Glowing Lilac/Silver accents for text */
-            --text-muted: rgba(179, 136, 255, 0.8);
-            --border-color: rgba(126, 87, 194, 0.3); 
-            --sidebar-bg: rgba(8, 4, 18, 0.85); 
-            --hover-bg: rgba(103, 58, 183, 0.2); 
-            /* Cosmic Indigo/Purple Gradient for Buttons */
-            --btn-fire: linear-gradient(135deg, #311b92 0%, #512da8 50%, #4527a0 100%);
+        /* 🌌 MAHADEV ANANT / GALAXY THEME (Deep Violet & Indigo) */
+        body.dark-mode {
+            --bg-color: #030108; /* Deep Void */
+            --card-bg: rgba(15, 8, 30, 0.75); /* Cosmic Violet */
+            --text-main: #f8fafc; --text-muted: #b388ff; 
+            --border-color: rgba(126, 87, 194, 0.3); /* Glowing Lilac Borders */
+            --sidebar-bg: rgba(8, 4, 18, 0.95);
+            /* Indigo & Purple Supreme Gradient */
+            --accent-color: linear-gradient(135deg, #4527a0 0%, #673ab7 50%, #9c27b0 100%); 
+            --accent-hover: linear-gradient(135deg, #311b92 0%, #512da8 100%);
+            --accent-text: #ffffff;
+            --success: #34d399; --danger: #f87171; --warning: #fbbf24; --info: #60a5fa;
+            --shadow-sm: 0 4px 15px rgba(103, 58, 183, 0.15);
+            --shadow-md: 0 8px 30px rgba(103, 58, 183, 0.3);
         }
 
-        body { display: flex; height: 100vh; background-color: var(--bg-color); color: var(--text-color); overflow: hidden; }
+        body { display: flex; flex-direction: column; height: 100vh; background-color: var(--bg-color); color: var(--text-main); transition: background-color 0.4s ease; overflow-x: hidden; }
 
-        /* Sidebar */
-        .sidebar { width: 280px; background-color: var(--sidebar-bg); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; padding: 20px 0; z-index: 10; }
-        .dark-mode .sidebar { backdrop-filter: blur(20px); }
-        .school-brand { padding: 0 20px 20px 20px; border-bottom: 1px solid var(--border-color); margin-bottom: 10px; }
-        .school-brand h2 { font-size: 22px; font-weight: 800; color: var(--text-color); letter-spacing: 1px; }
-        .role-badge { display: inline-block; background: var(--btn-fire); color: #fff; padding: 4px 10px; font-size: 11px; border-radius: 12px; font-weight: bold; margin-top: 5px; letter-spacing: 1px; }
+        /* 📱 MOBILE APP HEADER */
+        .mobile-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: var(--sidebar-bg); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow-sm); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); transition: var(--transition); }
+        .header-left { display: flex; align-items: center; gap: 15px; }
+        .menu-btn { font-size: 26px; cursor: pointer; background: none; border: none; color: var(--text-main); outline: none; }
+        .app-title { font-size: 18px; font-weight: 900; letter-spacing: 0.5px; color: var(--text-main); }
+        .header-right { display: flex; align-items: center; gap: 12px; }
+        .theme-toggle { font-size: 22px; background: none; border: none; cursor: pointer; color: var(--text-main); outline: none; transition: transform 0.3s ease; }
+        .theme-toggle:active { transform: scale(0.8) rotate(45deg); }
+        .avatar { width: 38px; height: 38px; background: var(--accent-color); color: var(--accent-text); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: 900; font-size: 16px; box-shadow: var(--shadow-sm); border: 2px solid var(--border-color); }
 
-        .nav-menu { flex-grow: 1; overflow-y: auto; padding: 0 15px; margin-top: 10px; }
-        .nav-item { padding: 12px 15px; margin: 4px 0; border-radius: 12px; cursor: pointer; font-size: 14px; font-weight: 600; color: var(--text-muted); transition: all 0.2s ease; display: flex; align-items: center; gap: 10px; }
-        .nav-item:hover { background-color: var(--hover-bg); color: var(--text-color); }
-        .nav-item.active { background: var(--btn-fire); color: #fff; box-shadow: 0 6px 15px rgba(216, 27, 96, 0.3); transform: translateX(5px); font-weight: 800; text-shadow: 0 1px 2px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); }
+        /* 🍔 SLIDE-IN APP MENU */
+        .sidebar { position: fixed; top: 0; left: -100%; width: 290px; height: 100%; background: var(--sidebar-bg); z-index: 9999; transition: var(--transition); box-shadow: 10px 0 40px rgba(0,0,0,0.8); display: flex; flex-direction: column; padding-bottom: 20px; border-right: 1px solid var(--border-color); }
+        .sidebar.open { left: 0; }
+        .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9998; backdrop-filter: blur(4px); }
+        .sidebar-overlay.open { display: block; animation: fadeIn 0.3s; }
+        
+        .sidebar-header { padding: 25px 20px; border-bottom: 1px dashed var(--border-color); position: relative; text-align: center; }
+        .close-sidebar { position: absolute; top: 20px; right: 20px; font-size: 30px; cursor: pointer; color: var(--text-main); background: none; border: none; }
+        .school-brand h2 { font-size: 22px; font-weight: 900; color: var(--text-main); letter-spacing: 1.5px; }
+        .role-badge { display: inline-block; background: var(--accent-color); color: var(--accent-text); padding: 5px 14px; font-size: 11px; border-radius: 20px; font-weight: 900; margin-top: 10px; letter-spacing: 1px; text-transform: uppercase; box-shadow: var(--shadow-sm); }
+
+        .nav-menu { flex-grow: 1; overflow-y: auto; padding: 20px 15px; display: flex; flex-direction: column; gap: 6px; }
+        .nav-menu::-webkit-scrollbar { width: 4px; } .nav-menu::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
+        .nav-item { padding: 14px 18px; border-radius: 12px; cursor: pointer; font-size: 15px; font-weight: 700; color: var(--text-muted); display: flex; align-items: center; gap: 12px; transition: var(--transition); border: 1px solid transparent; }
+        .nav-item:hover { background-color: rgba(103, 58, 183, 0.1); color: var(--text-main); }
+        .nav-item.active { background: var(--accent-color); color: var(--accent-text); box-shadow: var(--shadow-md); transform: translateX(8px); border-color: rgba(255,255,255,0.2); }
 
         /* SOS Button Animation */
-        @keyframes pulseAlert { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(211, 47, 47, 0.7); } 70% { transform: scale(1.02); box-shadow: 0 0 0 15px rgba(211, 47, 47, 0); } 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(211, 47, 47, 0); } }
-        .sos-active { background: #d32f2f !important; color: white !important; animation: pulseAlert 1.5s infinite !important; border: 2px solid #b71c1c; }
+        @keyframes pulseAlert { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { transform: scale(1.02); box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); } 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
+        .sos-active { background: var(--danger) !important; color: white !important; animation: pulseAlert 1.5s infinite !important; border: 2px solid #b71c1c !important; }
 
-        /* Main Workspace */
-        .main-content { flex-grow: 1; display: flex; flex-direction: column; background-color: #fcfcfc; overflow-y: auto; }
-        .top-header { height: 75px; background-color: #fff; border-bottom: 1px solid #eaeaea; display: flex; justify-content: space-between; align-items: center; padding: 0 40px; position: sticky; top: 0; z-index: 5; }
-        .top-header h1 { font-size: 24px; font-weight: 800; }
-        
-        .header-info { display: flex; align-items: center; gap: 20px; }
-        .user-profile { display: flex; align-items: center; gap: 12px; border-left: 1px solid #eee; padding-left: 20px; }
-        .avatar { width: 42px; height: 42px; background: #00796b; color: #fff; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 18px; }
-        
-        .workspace { display: none; padding: 40px; animation: fadeIn 0.4s ease; }
+        /* 🏢 MAIN WORKSPACE */
+        .main-content { flex-grow: 1; overflow-y: auto; overflow-x: hidden; position: relative; }
+        .workspace { display: none; padding: 20px 15px 80px 15px; animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); max-width: 1200px; margin: 0 auto; width: 100%; }
         .workspace.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* 🚨 GLOBAL NINJA OVERRIDES FOR VP DASHBOARD */
-        .dark-mode .main-content { background-color: var(--bg-color); }
-        .dark-mode .top-header { background-color: var(--card-bg); border-bottom: 1px solid var(--border-color); backdrop-filter: blur(20px); }
-        .dark-mode .top-header h1 { color: var(--text-color); text-shadow: 0 0 10px rgba(126, 87, 194, 0.4); }
-        .dark-mode .user-profile { border-left: 1px solid var(--border-color); }
-        .dark-mode .avatar { background: var(--btn-fire); }
-        
-        /* HTML me jo hardcoded colors hain unko auto-replace karega */
-        .dark-mode button:not(.theme-toggle):not(.sos-active) { background: var(--btn-fire) !important; color: #fff !important; border: 1px solid rgba(255,255,255,0.2) !important; box-shadow: 0 5px 15px rgba(81, 45, 168, 0.4) !important; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
-        .dark-mode button:not(.theme-toggle):not(.sos-active):hover { filter: brightness(1.2); transform: translateY(-2px); }
-        .dark-mode input, .dark-mode select, .dark-mode textarea { background: rgba(0,0,0,0.4) !important; color: var(--text-color) !important; border: 1px solid var(--border-color) !important; }
-        .dark-mode [style*="color: #666"], .dark-mode [style*="color: #555"], .dark-mode [style*="color: #888"] { color: var(--text-muted) !important; }
-        .dark-mode [style*="background: #fff"], .dark-mode [style*="background: #e0f2f1"], .dark-mode [style*="background: #f9f9f9"] { background: transparent !important; }
-        .dark-mode [style*="border: 1px solid #eee"], .dark-mode [style*="border-bottom: 1px solid #eee"] { border-color: var(--border-color) !important; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* Grid & Cards */
-        .grid-dashboard { display: grid; grid-template-columns: 2fr 1fr; gap: 30px; }
-        .card { background: var(--card-bg); padding: 25px; border-radius: 20px; border: 1px solid var(--border-color); box-shadow: 0 10px 30px rgba(0,0,0,0.2); margin-bottom: 30px; color: var(--text-color); }
-        .dark-mode .card { backdrop-filter: blur(20px); }
-        .card h3 { font-size: 18px; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--border-color); color: var(--text-color) !important; }
-        
-        .stats-row { display: flex; gap: 20px; margin-bottom: 30px; }
-        .stat-box { flex: 1; background: var(--btn-fire); color: #fff; padding: 20px; border-radius: 16px; position: relative; border: 1px solid rgba(255,255,255,0.2); }
-        .stat-box.light { background: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); }
-        .stat-box h4 { font-size: 13px; opacity: 0.8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
-        .stat-box h2 { font-size: 32px; font-weight: 800; color: var(--text-color) !important; }
+        /* 📱 UNIVERSAL APP UI COMPONENTS */
+        .card { background: var(--card-bg); padding: 22px; border-radius: 20px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm); margin-bottom: 25px; transition: var(--transition); position: relative; overflow: hidden; }
+        .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+        .card-header { font-size: 19px; font-weight: 800; margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px dashed var(--border-color); color: var(--text-main); display: flex; justify-content: space-between; align-items: center; }
 
-        /* Mobile Responsive */
-        /* 🔥 TRUE MOBILE APP UI (Slide-in Menu & Minimal UI) */
+        .grid-1 { display: grid; grid-template-columns: 1fr; gap: 15px; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; }
+
+        .stat-box { background: var(--card-bg); padding: 20px; border-radius: 16px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm); display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden; }
+        .stat-box.primary { background: var(--accent-color); color: var(--accent-text); border: none; box-shadow: var(--shadow-md); }
+        .stat-box h4 { font-size: 13px; opacity: 0.9; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 800; }
+        .stat-box h2 { font-size: 28px; font-weight: 900; margin: 0; }
+
+        /* Modern Lists */
+        .list-card { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 14px; padding: 15px; margin-bottom: 12px; transition: var(--transition); }
+        .list-card:active { transform: scale(0.98); }
+        .list-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+        .list-row:last-child { margin-bottom: 0; }
+        .list-title { font-size: 15px; font-weight: 800; color: var(--text-main); }
+        .list-subtitle { font-size: 13px; color: var(--text-muted); font-weight: 600; line-height: 1.4; }
+        .status-badge { padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 900; text-transform: uppercase; border: 1px solid currentColor; }
+
+        /* Form Elements */
+        input[type="text"], input[type="number"], input[type="date"], select, textarea { width: 100%; background: rgba(0,0,0,0.03); color: var(--text-main); border: 1px solid var(--border-color); padding: 14px 16px; border-radius: 12px; font-size: 15px; margin-bottom: 15px; outline: none; transition: var(--transition); font-weight: 600; }
+        .dark-mode input, .dark-mode select, .dark-mode textarea { background: rgba(255,255,255,0.03); }
+        input:focus, select:focus, textarea:focus { border-color: #673ab7; box-shadow: 0 0 0 3px rgba(103, 58, 183, 0.2); }
+        label { display: block; font-size: 12px; font-weight: 800; color: var(--text-muted); margin-bottom: 6px; margin-left: 4px; text-transform: uppercase; }
+
+        .btn { width: 100%; padding: 14px; background: var(--accent-color); color: var(--accent-text); border: none; border-radius: 12px; font-size: 14px; font-weight: 900; cursor: pointer; transition: var(--transition); box-shadow: var(--shadow-sm); display: flex; justify-content: center; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 1px; }
+        .btn:active { transform: scale(0.96); }
+        .btn-success { background: var(--success); color: #fff; border: 1px solid rgba(255,255,255,0.2);}
+        .btn-danger { background: var(--danger); color: #fff; border: 1px solid rgba(255,255,255,0.2);}
+        .btn-warning { background: var(--warning); color: #fff; border: 1px solid rgba(255,255,255,0.2);}
+        .btn-outline { background: transparent; border: 2px solid var(--accent-color); color: var(--text-main); box-shadow: none; }
+        .btn-small { padding: 8px 12px; font-size: 12px; border-radius: 8px; width: auto; text-transform: none; }
+
+        /* Data Tables (Desktop) -> Cards (Mobile) */
+        .data-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; color: var(--text-main); }
+        .data-table th, .data-table td { padding: 14px; text-align: left; border-bottom: 1px dashed var(--border-color); }
+        .data-table th { background: var(--bg-color); font-weight: 800; color: var(--text-muted); font-size: 13px; text-transform: uppercase; }
+
+        /* Toast Notification */
+        #toast-container { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 100000; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 350px; pointer-events: none; }
+        .toast { padding: 16px 20px; border-radius: 14px; color: #fff; font-weight: 800; box-shadow: 0 10px 30px rgba(0,0,0,0.5); font-size: 14px; animation: slideUpToast 0.4s ease forwards; text-align: center; border: 1px solid rgba(255,255,255,0.2); line-height: 1.4; }
+        @keyframes slideUpToast { from { opacity: 0; transform: translateY(30px) scale(0.9); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        @keyframes fadeOutToast { from { opacity: 1; transform: translateY(0) scale(1); } to { opacity: 0; transform: translateY(-20px) scale(0.9); } }
+
+        /* Mobile Fixes for Tables & Layouts */
         @media (max-width: 768px) {
-            body { flex-direction: column; overflow-x: hidden; background-color: #f4f4f6; }
-            
-            /* App ka Top Bar (Header) */
-            .mobile-header { display: flex !important; justify-content: space-between; align-items: center; padding: 15px 20px; background: #fff; border-bottom: 1px solid #eaeaea; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-            .menu-btn { font-size: 26px; cursor: pointer; background: none; border: none; color: #000; padding: 0 10px 0 0; }
-            
-            /* Desktop Header Hide kar do (Annoying lagta hai) */
-            .top-header { display: none; }
-            
-            /* 📱 Slide-in Hamburger Menu (App Drawer) */
-            .sidebar { position: fixed; top: 0; left: -100%; width: 270px; height: 100%; background: #fff; z-index: 999; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 5px 0 20px rgba(0,0,0,0.2); padding-top: 10px; overflow-y: auto; }
-            .sidebar.open { left: 0; }
-            .close-sidebar { display: block !important; position: absolute; top: 15px; right: 20px; font-size: 30px; cursor: pointer; color: #000; background: none; border: none; }
-            
-            /* Nav Menu ko clean list me badal diya */
-            .nav-menu { flex-direction: column; display: block; padding-top: 20px; overflow-y: visible; }
-            .nav-item { padding: 16px 20px; font-size: 15px; border-radius: 0; border-bottom: 1px solid #f5f5f5; margin: 0; }
-            
-            /* 🧹 MINIMAL DASHBOARD FIX */
-            .workspace { padding: 15px; padding-bottom: 80px; } 
-            .stats-row { flex-direction: column; gap: 10px; }
-            .stat-box { padding: 15px; border-radius: 12px; }
-            .grid-dashboard, div[style*="display: grid"] { grid-template-columns: 1fr !important; gap: 15px !important; }
-            
-            /* Ye class jis element pe lagaoge, wo mobile par hide ho jayega */
+            .grid-3 { grid-template-columns: 1fr; }
+            .data-table thead { display: none; }
+            .data-table tbody tr { display: block; background: var(--bg-color); margin-bottom: 15px; border-radius: 14px; border: 1px solid var(--border-color); padding: 15px; box-shadow: var(--shadow-sm); }
+            .data-table tbody td { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px dashed var(--border-color); font-size: 14px; font-weight: 700; flex-wrap: wrap; gap: 10px;}
+            .data-table tbody td:last-child { border-bottom: none; }
+            .data-table tbody td::before { content: attr(data-label); font-weight: 800; color: var(--text-muted); font-size: 12px; text-transform: uppercase; width: 100%; display: block; margin-bottom: 5px; }
             .hide-on-mobile { display: none !important; }
-            
-            .card { padding: 15px; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
-            input, select, textarea, button { width: 100% !important; margin-bottom: 10px; padding: 14px; border-radius: 10px; }
-            
-            /* Andhera overlay jab menu khulega */
-            .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 998; backdrop-filter: blur(2px); }
-            .sidebar-overlay.open { display: block; }
+        }
+        @media (min-width: 769px) {
+            body { flex-direction: row; }
+            .mobile-header { display: none !important; }
+            .sidebar { position: relative; left: 0; box-shadow: none; border-right: 1px solid var(--border-color); }
+            .close-sidebar { display: none !important; }
+            .grid-1 { grid-template-columns: 2fr 1fr; } 
+            .workspace { padding: 40px; }
         }
     </style>
 </head>
 <body>
-    <div class="mobile-header" style="display: none;">
-        <button class="menu-btn" onclick="toggleAppMenu()">☰</button>
-        <h2 style="font-size: 18px; font-weight: 800; margin: 0; letter-spacing: 1px;" id="mobile-title">MVM PUBLIC</h2>
-        <div class="avatar" style="width: 35px; height: 35px; background: #000; color: #fff; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 14px; font-weight: bold;" id="mobile-avatar">A</div>
+
+    <div id="toast-container"></div>
+
+    <!-- 📱 MOBILE STICKY HEADER -->
+    <div class="mobile-header">
+        <div class="header-left">
+            <button class="menu-btn" onclick="toggleAppMenu()">☰</button>
+            <div class="app-title" id="mobile-title">Daily Operations</div>
+        </div>
+        <div class="header-right">
+            <button class="theme-toggle" onclick="toggleDarkMode()" title="Cosmic Mode">🔱</button>
+            <div class="avatar" id="mobile-avatar">V</div>
+        </div>
     </div>
+
     <div class="sidebar-overlay" onclick="toggleAppMenu()"></div>
 
+    <!-- 🍔 APP SIDEBAR -->
     <div class="sidebar">
-        <button class="close-sidebar" onclick="toggleAppMenu()" style="display: none;">×</button>
-        <div class="school-brand">
-            <h2>MVM PUBLIC</h2>
-            <div class="role-badge">VICE PRINCIPAL</div>
+        <div class="sidebar-header">
+            <button class="close-sidebar" onclick="toggleAppMenu()">×</button>
+            <div class="school-brand">
+                <h2>MVM PUBLIC</h2>
+                <div class="role-badge">VICE PRINCIPAL</div>
+            </div>
         </div>
         
         <div class="nav-menu">
@@ -147,264 +177,321 @@
             <div class="nav-item" onclick="switchTab('proxy', this)">🔄 Smart Proxy</div>
             <div class="nav-item" onclick="switchTab('syllabus', this)">📚 Syllabus Tracker</div>
             <div class="nav-item" onclick="switchTab('discipline', this)">⚖️ Discipline Log</div>
-            <div class="nav-item" onclick="switchTab('leave', this)">✅ Basic Approvals</div>
-            <div class="nav-item" onclick="switchTab('vp-ai-general', this)">🤖 AI Assistant</div>
+            <div class="nav-item" onclick="switchTab('leave', this)">✅ Master Approvals</div>
+            <div class="nav-item" onclick="switchTab('vp-ai-general', this)">🤖 VP AI Assistant</div>
             <div class="nav-item" onclick="switchTab('grievance', this)">🕵️‍♂️ Secret Grievance</div>
             <div class="nav-item" onclick="switchTab('cctv', this)">📹 Live CCTV Hub</div>
             <div class="nav-item" onclick="switchTab('leaderboard', this)">🏆 Global Leaderboard</div>
-<div class="nav-item" onclick="switchTab('inventory', this)">📦 Logistics & Hardware</div>
-<div class="nav-item" onclick="switchTab('audit', this)">🧑‍🏫 Teacher Audit</div>
+            <div class="nav-item" onclick="switchTab('inventory', this)">📦 Logistics & HW</div>
+            <div class="nav-item" onclick="switchTab('audit', this)">🧑‍🏫 Teacher Audit</div>
             
-            <div class="nav-item sos-active" id="sos-btn" onclick="toggleSOS()" style="margin-top: 20px; justify-content: center; font-weight: 800;">🚨 ACTIVATE SOS OVERRIDE</div>
+            <div class="nav-item" id="sos-btn" onclick="toggleSOS()" style="margin-top: 15px; justify-content: center; font-weight: 900; color: var(--danger); border: 1px solid var(--danger);">🚨 ACTIVATE SOS OVERRIDE</div>
         </div>
     </div>
 
+    <!-- 🏢 MAIN CONTENT AREA -->
     <div class="main-content">
-        <div class="top-header">
-            <h1 id="page-title">Daily Operations</h1>
-            <div class="header-info">
-                <button class="theme-toggle" onclick="toggleDarkMode()" title="Cosmic Mode Toggle" style="background: none; border: none; font-size: 22px; cursor: pointer; padding: 5px; margin-right: 10px; transition: 0.3s;">🔱</button>
-                
-                <span style="font-size: 13px; font-weight: bold; color: var(--text-color); background: rgba(126, 87, 194, 0.2); border: 1px solid rgba(126, 87, 194, 0.4); padding: 6px 12px; border-radius: 20px;">Live Server Connected</span>
-                
-                <div class="user-profile">
-                    <div style="text-align: right;">
-                        <strong style="font-size: 15px; display: block;" id="vp-name">User</strong>
-                        <span style="font-size: 12px; color: var(--text-muted); font-weight: 600;">Vice Principal</span>
-                    </div>
-                    <div class="avatar" id="vp-avatar">V</div>
-                </div>
-            </div>
-        </div>
-
+        
+        <!-- 1. DASHBOARD OVERVIEW -->
         <div id="dashboard" class="workspace active">
-            <div class="stats-row">
-                <div class="stat-box"><h4>Teachers Absent Today</h4><h2>03</h2></div>
-                <div class="stat-box light"><h4>Proxies Assigned</h4><h2 style="color: #00796b;" id="proxy-count-dash">0 / 3</h2></div>
-                <div class="stat-box light"><h4>Pending Grievances</h4><h2 style="color: #d32f2f;" id="grev-count">2</h2></div>
+            <div class="grid-3">
+                <div class="stat-box primary"><h4>Teachers Absent</h4><h2>03</h2></div>
+                <div class="stat-box" style="border-left: 4px solid var(--info);"><h4>Proxies Assigned</h4><h2 style="color: var(--info);" id="proxy-count-dash">0 / 3</h2></div>
+                <div class="stat-box" style="border-left: 4px solid var(--danger);"><h4>Pending Grievances</h4><h2 style="color: var(--danger);" id="grev-count">2</h2></div>
             </div>
-            <div class="grid-dashboard">
-                <div class="card hide-on-mobile"></div>
-                    <h3>Academic Alerts</h3>
-                    <p style="color: #666; font-size: 14px; margin-bottom: 15px;">🔴 <strong>Unassigned Proxy:</strong> Class 9 Science (Period 3) needs a teacher.</p>
-                    <p style="color: #666; font-size: 14px; margin-bottom: 15px;">🟠 <strong>Syllabus Lag:</strong> Class 8 English is running behind schedule.</p>
-                    <p style="color: #666; font-size: 14px;">🟢 <strong>Event:</strong> Science Exhibition preparation at 2:00 PM.</p>
+
+            <div class="grid-1" style="margin-top: 25px;">
+                <div class="card hide-on-mobile">
+                    <div class="card-header">Academic Alerts</div>
+                    <div class="list-card" style="border-left: 4px solid var(--danger);">
+                        <div class="list-title">Unassigned Proxy</div>
+                        <div class="list-subtitle" style="margin-top:5px;">Class 9 Science (Period 3) needs a teacher immediately.</div>
+                    </div>
+                    <div class="list-card" style="border-left: 4px solid var(--warning);">
+                        <div class="list-title">Syllabus Lag</div>
+                        <div class="list-subtitle" style="margin-top:5px;">Class 8 English is running behind schedule.</div>
+                    </div>
+                    <div class="list-card" style="border-left: 4px solid var(--success);">
+                        <div class="list-title">Upcoming Event</div>
+                        <div class="list-subtitle" style="margin-top:5px;">Science Exhibition preparation at 2:00 PM today.</div>
+                    </div>
                 </div>
                 
-                <div class="card" style="border: 2px solid #00796b;">
-                    <h3 style="color: #00796b;">🤖 VP AI Notice Drafter</h3>
-                    <textarea id="vp-ai-input" rows="3" placeholder="E.g., Draft a strict notice for late-coming students..." style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #ccc; outline: none; margin-bottom: 10px; resize:none;"></textarea>
-                    <button onclick="askVPAI()" style="width: 100%; padding: 12px; background: #00796b; color: #fff; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Draft Official Letter ✨</button>
-                    <div id="vp-ai-output" style="margin-top: 15px; padding: 15px; background: #e0f2f1; border-radius: 8px; display: none; font-size: 14px; color: #004d40;"></div>
+                <div class="card" style="border: 2px solid var(--accent-color); background: rgba(103, 58, 183, 0.05);">
+                    <div class="card-header" style="color: var(--accent-color); border-bottom-color: var(--accent-color);">🤖 VP AI Notice Drafter</div>
+                    <textarea id="vp-ai-input" rows="3" placeholder="E.g., Draft a strict notice for late-coming students..."></textarea>
+                    <button onclick="askVPAI()" class="btn">Draft Official Letter ✨</button>
+                    
+                    <div id="vp-ai-output" style="margin-top: 15px; padding: 15px; background: var(--bg-color); border-radius: 12px; display: none; font-size: 14px; font-weight:600; line-height: 1.5; border: 1px solid var(--accent-color);"></div>
+                    
                     <div id="social-share-btn" style="display: none; margin-top: 15px;">
-    <button onclick="alert('🚀 Notice successfully pushed to Official Social Media accounts via API!')" style="width: 100%; padding: 12px; background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">📱 Push to Official Social Media</button>
-</div>
+                        <button onclick="showToast('Social Sync', 'Notice pushed to Official Social Media API!', 'linear-gradient(45deg, #f09433, #dc2743, #bc1888)')" class="btn" style="background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); border:none;">📱 Push to Official Social Media</button>
+                    </div>
                 </div>
             </div>
         </div>
 
+        <!-- 2. ANALYTICS -->
         <div id="analytics" class="workspace">
-            <div class="grid-dashboard">
-                <div class="card">
-                    <h3 style="font-size: 18px; margin-bottom: 20px;">📊 School Attendance Trends</h3>
-                    <div style="position: relative; height: 250px; width: 100%;"><canvas id="vpAttChart"></canvas></div>
+            <div class="grid-1">
+                <div class="grid-2">
+                    <div class="card">
+                        <div class="card-header">📊 School Attendance Trends</div>
+                        <div style="position: relative; height: 250px; width: 100%;"><canvas id="vpAttChart"></canvas></div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">📈 Class 9 vs 10 Avg Marks</div>
+                        <div style="position: relative; height: 250px; width: 100%;"><canvas id="vpPerfChart"></canvas></div>
+                    </div>
                 </div>
-                <div class="card">
-                    <h3 style="font-size: 18px; margin-bottom: 20px;">📈 Class 9 vs 10 Average Marks</h3>
-                    <div style="position: relative; height: 250px; width: 100%;"><canvas id="vpPerfChart"></canvas></div>
-                </div>
-                <div class="card" style="grid-column: 1 / -1;">
-                    <h3 style="font-size: 18px; margin-bottom: 20px; color: #d32f2f;">🔥 Discipline Incident Heatmap (Secondary Sections)</h3>
+                <div class="card" style="border: 2px solid var(--danger);">
+                    <div class="card-header" style="color: var(--danger); border-bottom-color: var(--danger);">🔥 Discipline Incident Heatmap</div>
                     <div style="position: relative; height: 300px; width: 100%;"><canvas id="disciplineHeatmap"></canvas></div>
                 </div>
             </div>
         </div>
 
+        <!-- 3. SMART PROXY -->
         <div id="proxy" class="workspace">
             <div class="card">
-                <h3 style="font-size: 22px; margin-bottom: 20px;">🔄 AI Teacher Substitution</h3>
-                <div style="display: grid; grid-template-columns: 1fr 1fr auto 1fr; gap: 15px; align-items: end; margin-bottom: 25px;">
-                    <div>
-                        <label style="font-size: 13px; font-weight: bold; color: #555;">Absent Class</label>
-                        <select id="proxy-absent" style="width: 100%; padding: 12px; margin-top: 8px; border-radius: 8px; border: 1px solid #ccc; outline: none;">
-                            <option>Class 9 - Science (Period 3)</option>
-                            <option>Class 7 - Math (Period 1)</option>
-                            <option>Class 10 - English (Period 4)</option>
-                        </select>
+                <div class="card-header">🔄 AI Teacher Substitution</div>
+                <div class="grid-3" style="align-items: end;">
+                    <div><label>Absent Class</label><select id="proxy-absent"><option>Class 9 - Science (Period 3)</option><option>Class 7 - Math (Period 1)</option></select></div>
+                    <div><label>Free Teacher</label><select id="proxy-free"><option value="Gupta Sir (Hindi)">Gupta Sir (Hindi) - Free</option><option value="Anjali Mam (Computer)">Anjali Mam (Computer) - Free</option><option value="S.K. Mishra (Science)">S.K. Mishra (Science) - Free</option></select></div>
+                    <div style="display:flex; gap:10px;">
+                        <button onclick="aiSmartSuggest()" class="btn btn-warning">🤖 Match</button>
+                        <button onclick="assignProxy()" class="btn">Assign</button>
                     </div>
-                    <div>
-                        <label style="font-size: 13px; font-weight: bold; color: #555;">Select Free Teacher</label>
-                        <select id="proxy-free" style="width: 100%; padding: 12px; margin-top: 8px; border-radius: 8px; border: 1px solid #ccc; outline: none;">
-                            <option value="Gupta Sir (Hindi)">Gupta Sir (Hindi) - Free</option>
-                            <option value="Anjali Mam (Computer)">Anjali Mam (Computer) - Free</option>
-                            <option value="S.K. Mishra (Science)">S.K. Mishra (Science) - Free</option>
-                            <option value="Rahul Sir (Math)">Rahul Sir (Math) - Free</option>
-                        </select>
-                    </div>
-                    <button onclick="aiSmartSuggest()" style="padding: 12px; background: #FF9800; color: #fff; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">🤖 Auto Match</button>
-                    <button onclick="assignProxy()" style="padding: 12px; background: #00796b; color: #fff; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Assign Duty</button>
                 </div>
                 
-                <h4 style="margin-top: 30px; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px;">Today's Assigned Proxies</h4>
+                <h4 style="margin-top: 30px; margin-bottom: 15px; color: var(--text-muted); text-transform:uppercase;">Today's Assigned Proxies</h4>
                 <div id="proxy-list-container"></div>
             </div>
         </div>
 
+        <!-- 4. SYLLABUS TRACKER -->
         <div id="syllabus" class="workspace">
             <div class="card">
-                <h3 style="font-size: 22px; margin-bottom: 20px;">📚 Syllabus Completion Tracker</h3>
+                <div class="card-header">📚 Syllabus Completion Tracker</div>
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 25px; font-weight:600;">Live sync with Teacher Dashboards.</p>
+                
                 <div style="margin-bottom: 25px;">
-                    <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 8px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 10px;">
                         <span><strong>Class 10 - Mathematics</strong> (Target: 50% by July)</span>
-                        <span id="vp-syl-math-txt" style="color: #00796b; font-weight: bold;">45% Completed</span>
+                        <span id="vp-syl-math-txt" style="color: var(--info); font-weight: 900;">45% Completed</span>
                     </div>
-                    <div style="height: 10px; background: #eee; border-radius: 5px; overflow: hidden;"><div id="vp-syl-math-bar" style="width: 45%; background: #00796b; height: 100%; transition: width 0.5s;"></div></div>
+                    <div style="height: 12px; background: rgba(0,0,0,0.1); border-radius: 6px; overflow: hidden;"><div id="vp-syl-math-bar" style="width: 45%; background: var(--info); height: 100%; transition: width 0.5s;"></div></div>
                 </div>
+                
                 <div style="margin-bottom: 25px;">
-                    <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 8px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 10px;">
                         <span><strong>Class 9 - Science</strong> (Target: 50% by July)</span>
-                        <span id="vp-syl-sci-txt" style="color: #d32f2f; font-weight: bold;">30% Completed (Lagging)</span>
+                        <span id="vp-syl-sci-txt" style="color: var(--danger); font-weight: 900;">30% Completed (Lagging)</span>
                     </div>
-                    <div style="height: 10px; background: #eee; border-radius: 5px; overflow: hidden;"><div id="vp-syl-sci-bar" style="width: 30%; background: #d32f2f; height: 100%; transition: width 0.5s;"></div></div>
+                    <div style="height: 12px; background: rgba(0,0,0,0.1); border-radius: 6px; overflow: hidden;"><div id="vp-syl-sci-bar" style="width: 30%; background: var(--danger); height: 100%; transition: width 0.5s;"></div></div>
                 </div>
             </div>
         </div>
 
+        <!-- 5. DISCIPLINE LOG -->
         <div id="discipline" class="workspace">
             <div class="card">
-                <h3 style="font-size: 22px; margin-bottom: 20px;">⚖️ Minor Disciplinary & Conduct Log</h3>
-                <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 15px; align-items: end; margin-bottom: 25px;">
+                <div class="card-header">⚖️ Disciplinary & Conduct Log</div>
+                <div class="grid-3" style="align-items: end; margin-bottom: 25px;">
                     <div>
-                        <select id="disc-name" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #ccc; outline: none;">
+                        <label>Select Student</label>
+                        <select id="disc-name">
                             <option value="">-- Select Student --</option>
-                            <option value="Adarsh">Adarsh Patel (Roll: 24, Class 10)</option>
-                            <option value="Rahul Kumar">Rahul Kumar (Roll: 25, Class 10)</option>
+                            <option value="Adarsh Patel">Adarsh Patel (Class 10)</option>
+                            <option value="Rahul Kumar">Rahul Kumar (Class 10)</option>
                         </select>
                     </div>
                     <div>
-                        <select id="disc-reason" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #ccc;">
-                            <option>Late Comer</option><option>Improper Uniform</option><option>Class Disturbance</option><option>Abusive Language</option>
-                        </select>
+                        <label>Select Reason</label>
+                        <select id="disc-reason"><option>Late Comer</option><option>Improper Uniform</option><option>Class Disturbance</option><option>Abusive Language</option></select>
                     </div>
-                    <button onclick="addDiscipline()" style="padding: 12px; background: #f57c00; color: #fff; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Add Remark</button>
+                    <button onclick="addDiscipline()" class="btn btn-warning" style="color:#000;">Add Remark</button>
                 </div>
-                <div id="discipline-list-container" style="border: 1px solid #eee; border-radius: 12px; padding: 20px;"></div>
+                <div id="discipline-list-container"></div>
             </div>
         </div>
 
+        <!-- 6. LEAVE APPROVALS -->
         <div id="leave" class="workspace">
             <div class="card">
-                <h3 style="font-size: 22px; margin-bottom: 20px;">✅ Student & Staff Approvals</h3>
+                <div class="card-header">✅ Long Leave Approvals (3+ Days)</div>
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px; font-weight:600;">Short leaves are handled by Class Teachers.</p>
                 <div id="vp-leave-list"></div>
             </div>
         </div>
 
+        <!-- 7. SECRET GRIEVANCE -->
         <div id="grievance" class="workspace">
-            <div class="card">
-                <h3 style="font-size: 22px; margin-bottom: 20px; color: #d32f2f;">🕵️‍♂️ Anonymous Grievance & Anti-Bullying Box</h3>
-                <p style="color: #666; font-size: 14px; margin-bottom: 20px;">Reports directly filed by students. Complete anonymity maintained.</p>
+            <div class="card" style="border: 2px solid var(--danger); background: rgba(239, 68, 68, 0.05);">
+                <div class="card-header" style="color: var(--danger); border-bottom-color: var(--danger);">🕵️‍♂️ Anonymous Grievance Box</div>
+                <p style="color: var(--text-main); font-size: 14px; margin-bottom: 20px; font-weight:600;">Reports directly filed by students. Anonymity maintained.</p>
                 <div id="grievance-list"></div>
             </div>
         </div>
 
+        <!-- 8. CCTV HUB -->
         <div id="cctv" class="workspace">
             <div class="card">
-                <h3 style="font-size: 22px; margin-bottom: 20px;">📹 Live Campus Surveillance</h3>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                    <div style="background:#000; height:220px; position:relative; border-radius: 10px; overflow:hidden;">
-                        <span style="position:absolute; top:10px; left:10px; color:white; background:red; padding:3px 8px; font-size:11px; font-weight:bold; border-radius:4px; z-index:2;">🔴 REC - Gate 1</span>
-                        <img src="https://media1.giphy.com/media/l41YqKTI3pFKuI5y0/giphy.webp" style="width:100%; height:100%; object-fit:cover; opacity:0.6; filter: grayscale(100%) contrast(1.2);">
+                <div class="card-header">📹 Live Campus Surveillance</div>
+                <div class="grid-2">
+                    <div style="background:#000; height:220px; position:relative; border-radius: 12px; overflow:hidden; border: 2px solid #333;">
+                        <span style="position:absolute; top:10px; left:10px; color:white; background:var(--danger); padding:4px 10px; font-size:11px; font-weight:bold; border-radius:6px; z-index:2; letter-spacing:1px;">🔴 REC - Gate 1</span>
+                        <img src="https://media1.giphy.com/media/l41YqKTI3pFKuI5y0/giphy.webp" style="width:100%; height:100%; object-fit:cover; opacity:0.7; filter: grayscale(80%) contrast(1.2);">
                     </div>
-                    <div style="background:#000; height:220px; position:relative; border-radius: 10px; overflow:hidden;">
-                        <span style="position:absolute; top:10px; left:10px; color:white; background:red; padding:3px 8px; font-size:11px; font-weight:bold; border-radius:4px; z-index:2;">🔴 REC - Corridors</span>
-                        <img src="https://media2.giphy.com/media/3o7Tksd6OIQcwBNgpa/giphy.webp" style="width:100%; height:100%; object-fit:cover; opacity:0.6; filter: grayscale(100%) contrast(1.2);">
+                    <div style="background:#000; height:220px; position:relative; border-radius: 12px; overflow:hidden; border: 2px solid #333;">
+                        <span style="position:absolute; top:10px; left:10px; color:white; background:var(--danger); padding:4px 10px; font-size:11px; font-weight:bold; border-radius:6px; z-index:2; letter-spacing:1px;">🔴 REC - Corridors</span>
+                        <img src="https://media2.giphy.com/media/3o7Tksd6OIQcwBNgpa/giphy.webp" style="width:100%; height:100%; object-fit:cover; opacity:0.7; filter: grayscale(80%) contrast(1.2);">
                     </div>
-                    <div style="background:#000; height:220px; position:relative; border-radius: 10px; overflow:hidden;">
-                        <span style="position:absolute; top:10px; left:10px; color:white; background:red; padding:3px 8px; font-size:11px; font-weight:bold; border-radius:4px; z-index:2;">🔴 REC - Library</span>
-                        <img src="https://media3.giphy.com/media/3oKIPm3B1ZaqEVrW9i/giphy.webp" style="width:100%; height:100%; object-fit:cover; opacity:0.6; filter: grayscale(100%) contrast(1.2);">
+                    <div style="background:#000; height:220px; position:relative; border-radius: 12px; overflow:hidden; border: 2px solid #333;">
+                        <span style="position:absolute; top:10px; left:10px; color:white; background:var(--danger); padding:4px 10px; font-size:11px; font-weight:bold; border-radius:6px; z-index:2; letter-spacing:1px;">🔴 REC - Library</span>
+                        <img src="https://media3.giphy.com/media/3oKIPm3B1ZaqEVrW9i/giphy.webp" style="width:100%; height:100%; object-fit:cover; opacity:0.7; filter: grayscale(80%) contrast(1.2);">
                     </div>
-                    <div style="background:#000; height:220px; position:relative; border-radius: 10px; overflow:hidden;">
-                        <span style="position:absolute; top:10px; left:10px; color:white; background:red; padding:3px 8px; font-size:11px; font-weight:bold; border-radius:4px; z-index:2;">🔴 REC - Ground</span>
-                        <img src="https://media0.giphy.com/media/l0HlNbZbC5KkGXYqI/giphy.webp" style="width:100%; height:100%; object-fit:cover; opacity:0.6; filter: grayscale(100%) contrast(1.2);">
+                    <div style="background:#000; height:220px; position:relative; border-radius: 12px; overflow:hidden; border: 2px solid #333;">
+                        <span style="position:absolute; top:10px; left:10px; color:white; background:var(--danger); padding:4px 10px; font-size:11px; font-weight:bold; border-radius:6px; z-index:2; letter-spacing:1px;">🔴 REC - Ground</span>
+                        <img src="https://media0.giphy.com/media/l0HlNbZbC5KkGXYqI/giphy.webp" style="width:100%; height:100%; object-fit:cover; opacity:0.7; filter: grayscale(80%) contrast(1.2);">
                     </div>
                 </div>
             </div>
         </div>
-        <!-- FEATURE: GLOBAL LEADERBOARD -->
+
+        <!-- 9. GLOBAL LEADERBOARD -->
         <div id="leaderboard" class="workspace">
             <div class="card">
-                <h3 style="font-size: 22px; margin-bottom: 20px;">🏆 School Global Leaderboard</h3>
-                <div class="grid-dashboard">
-                    <div style="background: linear-gradient(135deg, #FFD700, #F5A623); padding: 25px; border-radius: 12px; color: #000; box-shadow: 0 4px 15px rgba(245, 166, 35, 0.3);">
-                        <h4 style="margin-bottom: 10px; font-size: 14px;">👑 Student of the Month</h4>
-                        <h2 style="font-size: 26px; font-weight: 900;">Adarsh Patel (Class 10)</h2>
-                        <p style="font-size: 14px; margin-top: 10px; font-weight: bold;">Highest XP, Flawless Homework Record & 100% Attendance</p>
+                <div class="card-header">🏆 School Global Leaderboard</div>
+                <div class="grid-2">
+                    <div style="background: linear-gradient(135deg, #FFD700, #F5A623); padding: 30px; border-radius: 16px; color: #000; box-shadow: 0 10px 25px rgba(245, 166, 35, 0.4);">
+                        <h4 style="margin-bottom: 10px; font-size: 15px; font-weight:900; text-transform:uppercase;">👑 Student of the Month</h4>
+                        <h2 style="font-size: 28px; font-weight: 900; margin-bottom:10px;">Adarsh Patel (Class 10)</h2>
+                        <p style="font-size: 14px; font-weight: 700;">Highest XP, Flawless Homework Record & 100% Attendance</p>
                     </div>
-                    <div style="background: #e0f2f1; padding: 25px; border-radius: 12px; color: #004d40; border: 1px solid #00796b;">
-                        <h4 style="margin-bottom: 10px; font-size: 14px;">🌟 Best Performing Class</h4>
-                        <h2 style="font-size: 26px; font-weight: 900;">Class 9 - Science</h2>
-                        <p style="font-size: 14px; margin-top: 10px; font-weight: bold;">92% Average Batch Score</p>
+                    <div style="background: var(--card-bg); padding: 30px; border-radius: 16px; border: 2px solid var(--info);">
+                        <h4 style="margin-bottom: 10px; font-size: 15px; font-weight:900; color:var(--info); text-transform:uppercase;">🌟 Best Performing Class</h4>
+                        <h2 style="font-size: 28px; font-weight: 900; margin-bottom:10px; color:var(--text-main);">Class 9 - Science</h2>
+                        <p style="font-size: 14px; font-weight: 700; color:var(--text-muted);">92% Average Batch Score</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- FEATURE: LOGISTICS & HARDWARE -->
+        <!-- 10. INVENTORY -->
         <div id="inventory" class="workspace">
             <div class="card">
-                <h3 style="font-size: 22px; margin-bottom: 20px;">📦 Logistics & Hardware Inventory</h3>
-                <table style="width: 100%; border-collapse: collapse; text-align: left;">
-                    <thead><tr style="background: #f9f9f9;"><th style="padding:15px; border-bottom:2px solid #eee;">Equipment / Asset</th><th style="padding:15px; border-bottom:2px solid #eee;">Quantity</th><th style="padding:15px; border-bottom:2px solid #eee;">Status</th><th style="padding:15px; border-bottom:2px solid #eee;">Action</th></tr></thead>
+                <div class="card-header">📦 Logistics & Hardware Inventory</div>
+                <table class="data-table">
+                    <thead><tr><th>Equipment / Asset</th><th>Quantity</th><th>Status</th><th>Action</th></tr></thead>
                     <tbody>
-                        <tr><td style="padding:15px; border-bottom:1px solid #eee;"><strong>High-Performance Lab Computers</strong></td><td style="padding:15px; border-bottom:1px solid #eee;">45 Units</td><td style="padding:15px; border-bottom:1px solid #eee;"><span style="color: #4CAF50; font-weight: bold;">Optimal</span></td><td style="padding:15px; border-bottom:1px solid #eee;"><button style="padding: 6px 12px; background: #eee; border:none; border-radius:4px; cursor:pointer;">Order Parts</button></td></tr>
-                        <tr><td style="padding:15px; border-bottom:1px solid #eee;"><strong>Science Lab Microscopes</strong></td><td style="padding:15px; border-bottom:1px solid #eee;">12 Units</td><td style="padding:15px; border-bottom:1px solid #eee;"><span style="color: #FF9800; font-weight: bold;">Needs Maintenance</span></td><td style="padding:15px; border-bottom:1px solid #eee;"><button style="padding: 6px 12px; background: #FF9800; color:#fff; border:none; border-radius:4px; cursor:pointer; font-weight:bold;">Schedule Repair</button></td></tr>
-                        <tr><td style="padding:15px; border-bottom:1px solid #eee;"><strong>Sports Gear (Basketballs)</strong></td><td style="padding:15px; border-bottom:1px solid #eee;">03 Units</td><td style="padding:15px; border-bottom:1px solid #eee;"><span style="color: #F44336; font-weight: bold;">Critically Low</span></td><td style="padding:15px; border-bottom:1px solid #eee;"><button style="padding: 6px 12px; background: #d32f2f; color:#fff; border:none; border-radius:4px; cursor:pointer; font-weight:bold;">Urgent Restock</button></td></tr>
+                        <tr>
+                            <td data-label="Asset"><strong>Lab Computers</strong></td>
+                            <td data-label="Quantity">45 Units</td>
+                            <td data-label="Status"><span class="status-badge" style="color: var(--success); border-color:var(--success);">Optimal</span></td>
+                            <td data-label="Action"><button class="btn btn-outline btn-small">Order Parts</button></td>
+                        </tr>
+                        <tr>
+                            <td data-label="Asset"><strong>Lab Microscopes</strong></td>
+                            <td data-label="Quantity">12 Units</td>
+                            <td data-label="Status"><span class="status-badge" style="color: var(--warning); border-color:var(--warning);">Needs Maintenance</span></td>
+                            <td data-label="Action"><button class="btn btn-warning btn-small" style="color:#000;">Schedule Repair</button></td>
+                        </tr>
+                        <tr>
+                            <td data-label="Asset"><strong>Sports Gear</strong></td>
+                            <td data-label="Quantity">03 Units</td>
+                            <td data-label="Status"><span class="status-badge" style="color: var(--danger); border-color:var(--danger);">Critically Low</span></td>
+                            <td data-label="Action"><button class="btn btn-danger btn-small">Urgent Restock</button></td>
+                        </tr>
                     </tbody>
                 </table>
-                <h4 style="margin-top: 30px; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px;">🛎️ Pending Requests from Teachers</h4>
+
+                <h4 style="margin-top: 30px; margin-bottom: 15px; color: var(--text-main);">🛎️ Pending Requests from Teachers</h4>
                 <div id="vp-inv-requests">
-                    <p style="color: #888; font-size: 14px;">No pending requests.</p>
+                    <p style="color: var(--text-muted); font-size: 14px;">No pending requests.</p>
                 </div>
             </div>
         </div>
 
-        <!-- FEATURE: TEACHER AUDIT RADAR -->
+        <!-- 11. TEACHER AUDIT -->
         <div id="audit" class="workspace">
             <div class="card">
-                <h3 style="font-size: 22px; margin-bottom: 20px;">🧑‍🏫 Teacher Performance Audit</h3>
-                <div style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 15px; margin-bottom: 20px;">
-                    <select id="audit-teacher" style="padding: 12px; border-radius: 8px; border: 1px solid #ccc; outline:none;"><option>S.K. Mishra (Science)</option><option>Rahul Sir (Math)</option><option>Anjali Mam (Computer)</option></select>
-                    <select id="audit-rating" style="padding: 12px; border-radius: 8px; border: 1px solid #ccc; outline:none;"><option>5 - Exceptional Class Control</option><option>4 - Good Engagement</option><option>3 - Average Syllabus Pacing</option><option>2 - Needs Improvement</option></select>
-                    <button onclick="submitAudit()" style="padding: 12px 25px; background: #00796b; color: #fff; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Save Live Audit</button>
+                <div class="card-header">🧑‍🏫 Teacher Performance Audit</div>
+                <div class="grid-3" style="align-items: end; margin-bottom: 25px;">
+                    <div><label>Select Teacher</label><select id="audit-teacher"><option>S.K. Mishra (Science)</option><option>Rahul Sir (Math)</option><option>Anjali Mam (Computer)</option></select></div>
+                    <div><label>Select Rating</label><select id="audit-rating"><option>5 - Exceptional Class Control</option><option>4 - Good Engagement</option><option>3 - Average Syllabus Pacing</option><option>2 - Needs Improvement</option></select></div>
+                    <button onclick="submitAudit()" class="btn">Save Live Audit</button>
                 </div>
-                <div id="audit-log" style="padding: 15px; background: #f9f9f9; border-radius: 8px; border: 1px solid #eee; min-height: 100px;">
-                    <p style="color:#888; font-size:14px;">Recent audits will appear here...</p>
+                <div id="audit-log">
+                    <p style="color:var(--text-muted); font-size:14px; font-weight:600;">Recent audits will appear here...</p>
                 </div>
             </div>
         </div>
 
+        <!-- 12. VP AI ASSISTANT -->
         <div id="vp-ai-general" class="workspace">
             <div class="card">
-                <h3 style="font-size: 22px; margin-bottom: 10px;">🤖 Vice Principal's AI Assistant</h3>
-                <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 14px;">Upload circulars, analyze timetables, or ask for management and administrative advice.</p>
+                <div class="card-header">🤖 VP AI Assistant</div>
+                <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 14px; font-weight:600;">Upload circulars, analyze timetables, or ask for management and administrative advice.</p>
                 
-                <label style="font-size: 13px; font-weight: bold; color: var(--text-muted); display:block; margin-bottom:5px;">Attach Document/Image (Optional)</label>
-                <input type="file" id="vp-general-image" accept="image/*" style="margin-bottom: 15px; padding: 10px; width: 100%; border-radius: 8px; border: 1px solid var(--border-color);">
+                <label>Attach Document/Image (Optional)</label>
+                <input type="file" id="vp-general-image" accept="image/*">
                 
-                <textarea id="vp-general-input" rows="4" placeholder="E.g., Analyze this timetable image or suggest ways to improve student attendance..." style="width: 100%; padding: 14px; border-radius: 10px; outline: none; resize: none; font-size: 14px; margin-bottom: 15px; border: 1px solid var(--border-color);"></textarea>
+                <label>Your Prompt</label>
+                <textarea id="vp-general-input" rows="4" placeholder="E.g., Analyze this timetable image or suggest ways to improve student attendance..."></textarea>
                 
-                <button onclick="askGeneralVPAI()" class="btn-primary">Analyze with AI ✨</button>
-                
-                <div id="vp-general-response" style="margin-top: 20px; padding: 15px; background: var(--notice-bg); border-radius: 10px; display: none; border: 1px solid var(--border-color);"></div>
+                <button onclick="askGeneralVPAI()" class="btn">Analyze with AI ✨</button>
+                <div id="vp-general-response" style="margin-top: 20px; padding: 20px; background: rgba(14, 165, 233, 0.1); color: #38bdf8; border-radius: 12px; display: none; border: 1px solid rgba(14, 165, 233, 0.3); font-weight: 600; line-height: 1.6;"></div>
             </div>
         </div>
 
     </div>
 
+    <!-- 🚀 MASTER VP LOGIC -->
     <script>
+        // --- CUSTOM TOAST NOTIFICATION ---
+        function showUniversalToast(title, message, color) {
+            let container = document.getElementById("universal-toast-container");
+            if (!container) {
+                container = document.createElement("div"); container.id = "universal-toast-container";
+                container.style.cssText = "position: fixed; bottom: 30px; right: 30px; z-index: 999999; display: flex; flex-direction: column; gap: 10px;";
+                document.body.appendChild(container);
+            }
+            let toast = document.createElement("div");
+            toast.style.cssText = `background: var(--card-bg); color: var(--text-main); padding: 15px 20px; border-radius: 12px; box-shadow: var(--shadow-md); border-left: 6px solid ${color}; font-family: sans-serif; min-width: 300px; transform: translateX(120%); transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); border-top: 1px solid var(--border-color); border-right: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);`;
+            toast.innerHTML = `<h4 style="margin: 0 0 5px 0; font-size: 15px; display: flex; align-items: center; gap: 8px; font-weight:900;">${title}</h4><p style="margin: 0; font-size: 13px; color: var(--text-muted); font-weight:600;">${message}</p>`;
+            container.appendChild(toast);
+            setTimeout(() => toast.style.transform = "translateX(0)", 100);
+            setTimeout(() => { toast.style.transform = "translateX(120%)"; setTimeout(() => toast.remove(), 500); }, 5000);
+        }
+
         const loggedInUser = localStorage.getItem("loggedInUser") || "Vice Principal";
         document.getElementById("vp-name").innerText = loggedInUser;
-        document.getElementById("vp-avatar").innerText = loggedInUser.charAt(0);
+        document.getElementById("mobile-avatar").innerText = "V";
+
+        window.onload = function() {
+            document.body.classList.add("dark-mode");
+            localStorage.setItem("darkMode", "true");
+            let themeBtn = document.querySelector(".theme-toggle");
+            if(themeBtn) themeBtn.innerText = "🔱";
+
+            loadProxies(); loadDiscipline(); loadVPLeaves(); loadGrievances(); loadVPInventoryRequests(); checkSOSState();
+            setInterval(loadVPLeaves, 3000);
+            setInterval(loadVPInventoryRequests, 3000);
+            setInterval(liveSyncSyllabus, 2000); 
+        };
+
+        function toggleDarkMode() {
+            document.body.classList.toggle("dark-mode");
+            localStorage.setItem("darkMode", document.body.classList.contains("dark-mode"));
+            let themeBtn = document.querySelector(".theme-toggle");
+            if(themeBtn) themeBtn.innerText = document.body.classList.contains("dark-mode") ? "🔱" : "☀️";
+        }
+
+        function toggleAppMenu() {
+            document.querySelector('.sidebar').classList.toggle('open');
+            document.querySelector('.sidebar-overlay').classList.toggle('open');
+        }
 
         function switchTab(tabId, element) {
             document.querySelectorAll('.nav-item').forEach(tab => tab.classList.remove('active'));
@@ -413,107 +500,62 @@
             document.getElementById(tabId).classList.add('active');
             
             let cleanTitle = element.innerText.replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]|\u200D|\uFE0F|[\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|\uD83E[\uDD10-\uDDFF]/g, '').trim();
-            
             if(document.getElementById('page-title')) document.getElementById('page-title').innerText = cleanTitle;
             if(document.getElementById('mobile-title')) document.getElementById('mobile-title').innerText = cleanTitle;
 
-            // 📱 Mobile me tab click karte hi menu band ho jayega
             if(window.innerWidth <= 768) { toggleAppMenu(); }
-            
-            // 🚨 VP CHARTS SYNC
             if(tabId === 'analytics') renderVPCharts();
         }
 
-        function toggleDarkMode() {
-            const body = document.body;
-            body.classList.toggle("dark-mode");
-            const isDark = body.classList.contains("dark-mode");
-            localStorage.setItem("darkMode", isDark);
-            
-            let themeBtn = document.querySelector(".theme-toggle");
-            // 🔱 Trishul for Cosmic Dark Mode, 🪔 Diya for Light Mode
-            if(themeBtn) themeBtn.innerText = isDark ? "🔱" : "🪔";
-        }
-
-        window.onload = function() {
-            // 🌌 Force Anant/Galaxy Theme Default
-            document.body.classList.add("dark-mode");
-            localStorage.setItem("darkMode", "true");
-            let themeBtn = document.querySelector(".theme-toggle");
-            if(themeBtn) themeBtn.innerText = "🔱";
-
-            loadProxies();
-            loadDiscipline();
-            loadVPLeaves();
-            loadGrievances();
-            checkSOSState();
-            setInterval(loadVPLeaves, 3000);
-
-        };
-
-        // --- FEATURE 1: GLOBAL SOS OVERRIDE LOGIC ---
+        // --- GLOBAL SOS OVERRIDE LOGIC ---
         function checkSOSState() {
             let isSOS = localStorage.getItem("emergencySOS") === "true";
             let btn = document.getElementById("sos-btn");
             if(isSOS) {
-                btn.innerText = "🛑 DEACTIVATE EMERGENCY LOCKDOWN";
-                btn.classList.add("sos-active");
+                btn.innerText = "🛑 DEACTIVATE EMERGENCY LOCKDOWN"; btn.classList.add("sos-active");
             } else {
-                btn.innerText = "🚨 ACTIVATE SOS OVERRIDE";
-                btn.classList.remove("sos-active");
-                btn.style.background = ""; btn.style.color = "";
+                btn.innerText = "🚨 ACTIVATE SOS OVERRIDE"; btn.classList.remove("sos-active");
             }
         }
-
         function toggleSOS() {
             let isSOS = localStorage.getItem("emergencySOS") === "true";
             if(isSOS) {
                 localStorage.setItem("emergencySOS", "false");
-                alert("✅ Emergency Lockdown Lifted. Portals unlocked.");
+                showUniversalToast("✅ Lockdown Lifted", "School portals unlocked.", "var(--success)");
             } else {
                 if(confirm("CRITICAL WARNING: This will immediately freeze all Student and Teacher portals across the school. Are you sure?")) {
                     localStorage.setItem("emergencySOS", "true");
-                    alert("🚨 EMERGENCY OVERRIDE ACTIVATED!");
+                    showUniversalToast("🚨 EMERGENCY OVERRIDE", "All portals frozen.", "var(--danger)");
                 }
             }
             checkSOSState();
         }
 
-        // --- FEATURE 2: SMART AI PROXY LOGIC ---
+        // --- SMART AI PROXY LOGIC ---
         function aiSmartSuggest() {
             let absentClass = document.getElementById("proxy-absent").value;
             let freeTeacherSelect = document.getElementById("proxy-free");
-            
-            // Simple logic: match keyword of class to teacher
             if(absentClass.includes("Science")) freeTeacherSelect.value = "S.K. Mishra (Science)";
             else if(absentClass.includes("Math")) freeTeacherSelect.value = "Rahul Sir (Math)";
-            else if(absentClass.includes("English")) freeTeacherSelect.value = "Gupta Sir (Hindi)"; // Fallback
-            
-            alert("🤖 AI Analysed timetables & workload. Best matching teacher selected!");
+            else if(absentClass.includes("English")) freeTeacherSelect.value = "Gupta Sir (Hindi)"; 
+            showUniversalToast("🤖 AI Match", "Best available teacher selected.", "var(--warning)");
         }
 
         function assignProxy() {
-            let absentClass = document.getElementById("proxy-absent").value;
-            let freeTeacher = document.getElementById("proxy-free").value;
+            let absentClass = document.getElementById("proxy-absent").value; let freeTeacher = document.getElementById("proxy-free").value;
             let proxyLog = JSON.parse(localStorage.getItem("proxyLog")) || [];
             proxyLog.push({ absentClass, freeTeacher, status: "Assigned", time: new Date().toLocaleTimeString() });
             localStorage.setItem("proxyLog", JSON.stringify(proxyLog));
-            alert(`✅ ${freeTeacher} has been assigned to ${absentClass}.`);
-            loadProxies();
+            showUniversalToast("✅ Duty Assigned", `${freeTeacher} sent to ${absentClass}.`, "var(--success)"); loadProxies();
         }
 
         function loadProxies() {
             let proxyLog = JSON.parse(localStorage.getItem("proxyLog")) || [];
-            let container = document.getElementById("proxy-list-container");
-            container.innerHTML = "";
-            if(proxyLog.length === 0) {
-                container.innerHTML = "<p style='color:#888;'>No proxies assigned today.</p>";
-            } else {
+            let container = document.getElementById("proxy-list-container"); container.innerHTML = "";
+            if(proxyLog.length === 0) { container.innerHTML = "<p style='color:var(--text-muted);'>No proxies assigned today.</p>"; } 
+            else {
                 proxyLog.slice().reverse().forEach(p => {
-                    container.innerHTML += `
-                    <div style="padding: 15px; border: 1px solid #eee; border-radius: 8px; background: #e0f2f1; color: #004d40; display: flex; flex-wrap: wrap; justify-content: space-between; margin-bottom: 10px; gap: 10px;">
-                        <span><strong>${p.absentClass}</strong> - Proxy: ${p.freeTeacher}</span><span>✅ ${p.status}</span>
-                    </div>`;
+                    container.innerHTML += `<div class="list-card" style="border-left: 4px solid var(--info);"><div class="list-row"><div class="list-title">${p.absentClass}</div><div class="status-badge" style="color:var(--success); border-color:var(--success);">${p.status}</div></div><div class="list-subtitle" style="margin-top:5px;">Proxy: <strong style="color:var(--text-main);">${p.freeTeacher}</strong> | Time: ${p.time}</div></div>`;
                 });
             }
             document.getElementById("proxy-count-dash").innerText = proxyLog.length + " / 3";
@@ -521,57 +563,44 @@
 
         // --- DISCIPLINE LOG LOGIC ---
         function addDiscipline() {
-            let name = document.getElementById("disc-name").value;
-            let reason = document.getElementById("disc-reason").value;
-            // Dhyan de: Agar kisi ne select nahi kiya to alert dega
-            if(!name || name === "") return alert("Please select a student from the list!");
-            
+            let name = document.getElementById("disc-name").value; let reason = document.getElementById("disc-reason").value;
+            if(!name) return showUniversalToast("Error", "Select a student.", "var(--danger)");
             let discLog = JSON.parse(localStorage.getItem("disciplineLog")) || [];
             discLog.push({ name, reason, date: new Date().toLocaleDateString() });
             localStorage.setItem("disciplineLog", JSON.stringify(discLog));
             document.getElementById("disc-name").value = "";
-            alert(`⚠️ Remark added for ${name}!`);
-            loadDiscipline();
+            showUniversalToast("⚠️ Remark Added", `Discipline log updated for ${name}.`, "var(--warning)"); loadDiscipline();
         }
 
         function loadDiscipline() {
             let discLog = JSON.parse(localStorage.getItem("disciplineLog")) || [];
-            let container = document.getElementById("discipline-list-container");
-            container.innerHTML = "";
-            if(discLog.length === 0) {
-                container.innerHTML = "<p style='color:#888;'>All good! No discipline logs yet.</p>";
-            } else {
+            let container = document.getElementById("discipline-list-container"); container.innerHTML = "";
+            if(discLog.length === 0) { container.innerHTML = "<p style='color:var(--text-muted); font-weight:700;'>All good! No discipline logs yet.</p>"; } 
+            else {
                 discLog.slice().reverse().forEach(d => {
-                    container.innerHTML += `<p style="font-size: 14px; color: #555; padding: 10px 0; border-bottom: 1px solid #eee;">🟠 <strong>${d.name} (${d.date}):</strong> ${d.reason}</p>`;
+                    container.innerHTML += `<div class="list-card" style="margin-bottom:10px;"><div class="list-row"><div class="list-title">${d.name}</div><div class="list-subtitle">${d.date}</div></div><div class="list-subtitle" style="color:var(--danger); font-weight:800; margin-top:5px;">⚠️ ${d.reason}</div></div>`;
                 });
             }
         }
 
         // --- LEAVE APPROVALS ---
-        // --- LEAVE APPROVALS (Only > 2 Days for VP) ---
         function loadVPLeaves() {
             let leaves = JSON.parse(localStorage.getItem("leaveRequests")) || [];
-            // 🚨 HIERARCHY RULE: VP sirf badi chhutti (3+ days) dekhega
             let pendingLeaves = leaves.filter(lv => lv.status === "Pending" && (lv.days || 1) > 2);
-            let container = document.getElementById("vp-leave-list");
+            let container = document.getElementById("vp-leave-list"); container.innerHTML = "";
             
             if(pendingLeaves.length === 0) {
-                container.innerHTML = `<div style="padding: 20px; border: 1px solid #eee; border-radius: 12px; text-align: center; color: #888;">No pending long leave requests (3+ Days).</div>`;
+                container.innerHTML = `<div style="padding: 20px; border: 1px dashed var(--border-color); border-radius: 12px; text-align: center; color: var(--text-muted); font-weight:700;">No pending long leave requests (3+ Days).</div>`;
             } else {
-                container.innerHTML = "";
                 pendingLeaves.forEach((lv) => {
-                    let realIndex = leaves.indexOf(lv);
-                    let stName = lv.student || "Unknown Student";
+                    let realIndex = leaves.indexOf(lv); let stName = lv.student || "Unknown Student";
                     container.innerHTML += `
-                    <div style="padding: 20px; border: 1px solid #eee; border-left: 5px solid #d32f2f; border-radius: 12px; margin-bottom: 15px; background: #fff;">
-                        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; margin-bottom: 10px; gap: 10px;">
-                            <strong style="font-size: 16px; color:#d32f2f;">LONG LEAVE: ${stName} (${lv.class || ''})</strong>
-                            <span style="font-size: 13px; color: #d32f2f; font-weight:bold;">${lv.days} Days (${lv.dates})</span>
-                        </div>
-                        <p style="font-size: 14px; color: #555; margin-bottom: 15px;">Reason: ${lv.reason}</p>
-                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                            <button onclick="actionVPLeave(${realIndex}, 'Approved by VP')" style="flex:1; padding: 8px 20px; background: #00796b; color: #fff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">Approve</button>
-                            <button onclick="actionVPLeave(${realIndex}, 'Rejected by VP')" style="flex:1; padding: 8px 20px; background: #fff; color: #d32f2f; border: 1px solid #d32f2f; border-radius: 6px; font-weight: bold; cursor: pointer;">Reject</button>
+                    <div class="list-card" style="border-left: 5px solid var(--danger);">
+                        <div class="list-row"><div class="list-title" style="color:var(--danger);">LONG LEAVE: ${stName} <span style="font-size:12px; color:var(--text-muted);">(${lv.class || ''})</span></div><div class="list-subtitle" style="color:var(--danger); font-weight:900;">${lv.days} Days (${lv.dates})</div></div>
+                        <p style="font-size: 14px; color: var(--text-main); margin-top: 10px; margin-bottom: 15px; font-weight:600;">Reason: ${lv.reason}</p>
+                        <div class="grid-2">
+                            <button onclick="actionVPLeave(${realIndex}, 'Approved by VP')" class="btn btn-success btn-small">Approve</button>
+                            <button onclick="actionVPLeave(${realIndex}, 'Rejected by VP')" class="btn btn-danger btn-small">Reject</button>
                         </div>
                     </div>`;
                 });
@@ -579,33 +608,25 @@
         }
 
         function actionVPLeave(realIndex, action) {
-            let leaves = JSON.parse(localStorage.getItem("leaveRequests")) || [];
-            leaves[realIndex].status = action;
+            let leaves = JSON.parse(localStorage.getItem("leaveRequests")) || []; leaves[realIndex].status = action;
             localStorage.setItem("leaveRequests", JSON.stringify(leaves)); 
-            
-            alert(`✅ Long Leave Application ${action}!`);
-            loadVPLeaves();
+            showUniversalToast("Leave Updated", `Application ${action}!`, action.includes("Approved") ? "var(--success)" : "var(--danger)"); loadVPLeaves();
         }
 
-        // --- FEATURE 4: GRIEVANCE CELL ---
+        // --- GRIEVANCE CELL ---
         function loadGrievances() {
-            // Hum isme thoda mock data daal rahe hain VP ko dikhane ke liye
             let grev = JSON.parse(localStorage.getItem("grievanceLog"));
             if(!grev) {
-                grev = [
-                    { id: 1, text: "Some senior students are fighting near the basketball court daily.", status: "Pending" },
-                    { id: 2, text: "Tap in 2nd floor boy's washroom is broken.", status: "Pending" }
-                ];
+                grev = [ { id: 1, text: "Some senior students are fighting near the basketball court daily.", status: "Pending" }, { id: 2, text: "Tap in 2nd floor boy's washroom is broken.", status: "Pending" } ];
                 localStorage.setItem("grievanceLog", JSON.stringify(grev));
             }
-            let container = document.getElementById("grievance-list");
-            container.innerHTML = "";
+            let container = document.getElementById("grievance-list"); container.innerHTML = "";
             grev.forEach((g, idx) => {
                 if(g.status === "Pending") {
                     container.innerHTML += `
-                    <div style="padding: 15px; border-left: 4px solid #d32f2f; background: #fff5f5; margin-bottom: 15px; border-radius: 0 8px 8px 0;">
-                        <p style="font-size:14px; font-weight:bold; margin-bottom:10px;">"${g.text}"</p>
-                        <button onclick="solveGrievance(${idx})" style="padding: 6px 15px; background: #d32f2f; color: #fff; border: none; border-radius: 4px; font-size: 12px; cursor: pointer;">Mark as Solved / Taken Action</button>
+                    <div class="list-card" style="border-left: 4px solid var(--danger);">
+                        <p style="font-size:15px; font-weight:800; margin-bottom:15px; color:var(--text-main);">"${g.text}"</p>
+                        <button onclick="solveGrievance(${idx})" class="btn btn-danger btn-small" style="width:100%;">Mark as Solved / Taken Action</button>
                     </div>`;
                 }
             });
@@ -613,319 +634,135 @@
         }
 
         function solveGrievance(idx) {
-            let grev = JSON.parse(localStorage.getItem("grievanceLog")) || [];
-            grev[idx].status = "Solved";
-            localStorage.setItem("grievanceLog", JSON.stringify(grev));
-            loadGrievances();
+            let grev = JSON.parse(localStorage.getItem("grievanceLog")) || []; grev[idx].status = "Solved";
+            localStorage.setItem("grievanceLog", JSON.stringify(grev)); showUniversalToast("✅ Action Taken", "Grievance marked as solved.", "var(--success)"); loadGrievances();
         }
 
+        // --- VP AI & DRAFTER ---
         async function askVPAI() {
             const text = document.getElementById('vp-ai-input').value;
-            if(!text) return alert("Please type a topic to draft!");
+            if(!text) return showUniversalToast("Error", "Type a topic to draft!", "var(--danger)");
             const responseBox = document.getElementById('vp-ai-output');
-            responseBox.style.display = "block";
-            responseBox.innerHTML = "⏳ AI is drafting the official letter securely...";
-            document.getElementById('social-share-btn').style.display = 'block';
+            responseBox.style.display = "block"; responseBox.innerHTML = "⏳ AI is drafting securely..."; document.getElementById('social-share-btn').style.display = 'block';
             
             try {
-                // 🚨 NAYA CODE: Backend ko call lag rahi hai
-                const response = await fetch('/api/gemini', {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ 
-                        message: `Act as the Vice Principal of MVM Public School. Write a short, highly professional, strict but polite official circular regarding: ${text}. Format it beautifully with HTML tags like <br> and <strong>.` 
-                    })
-                });
-                
+                const response = await fetch('/api/gemini', { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ message: `Act as the Vice Principal. Write a short, highly professional, strict but polite official circular regarding: ${text}. Format it with HTML tags like <br> and <strong>.` }) });
                 if (!response.ok) throw new Error("API Failed");
                 const data = await response.json();
-                
-                if(data.candidates && data.candidates[0]) {
-                    responseBox.innerHTML = data.candidates[0].content.parts[0].text.replace(/\n/g, '<br>');
-                }
-            } catch (error) {
-                responseBox.innerHTML = `❌ Connection Error. Please try again.`;
-            }
+                if(data.candidates && data.candidates[0]) { responseBox.innerHTML = data.candidates[0].content.parts[0].text.replace(/\n/g, '<br>'); }
+            } catch (error) { responseBox.innerHTML = `❌ Connection Error. Offline mode active.`; }
         }
 
-        // --- FEATURE 3: VP CHART.JS ANALYTICS ---
-        let chartsRendered = false;
-        function renderVPCharts() {
-            if(chartsRendered) return;
-            setTimeout(() => {
-                // 🚨 BUG FIX: Calculate today's real attendance percentage for VP line chart
-                let attendanceDB = JSON.parse(localStorage.getItem("attendanceDB")) || [];
-                let todayStr = new Date().toISOString().split('T')[0];
-                let todayRecords = attendanceDB.filter(r => r.date === todayStr);
-                let todayPct = 88; // Smart baseline fallback if no record entered yet
-                
-                if (todayRecords.length > 0) {
-                    let activeCount = todayRecords.filter(r => r.status === "present" || r.status === "halfday").length;
-                    todayPct = Math.round((activeCount / todayRecords.length) * 100);
-                }
-
-                const attCtx = document.getElementById('vpAttChart').getContext('2d');
-                new Chart(attCtx, {
-                    type: 'line',
-                    data: {
-                        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-                        // Graph ka aakhiri point live data se calculate ho raha hai
-                        datasets: [{ label: 'School Attendance %', data: [95, 92, 94, 88, 85, todayPct], borderColor: '#00796b', backgroundColor: 'rgba(0, 121, 107, 0.2)', fill: true, tension: 0.4 }]
-                    },
-                    options: { responsive: true, maintainAspectRatio: false, scales: { y: { min: 60, max: 100 } } }
-                });
-
-                const perfCtx = document.getElementById('vpPerfChart').getContext('2d');
-                new Chart(perfCtx, {
-                    type: 'bar',
-                    data: {
-                        labels: ['Science', 'Math', 'English'],
-                        datasets: [
-                            { label: 'Class 9 Avg', data: [75, 68, 82], backgroundColor: '#FF9800' },
-                            { label: 'Class 10 Avg', data: [85, 80, 78], backgroundColor: '#d32f2f' }
-                        ]
-                    },
-                    options: { responsive: true, maintainAspectRatio: false }
-                });
-                // --- DISCIPLINE HEATMAP CHART LOGIC ---
-        // Ise renderVPCharts() function ke aakhiri me (chartsRendered = true ke pehle) paste karo:
-        const heatCtx = document.getElementById('disciplineHeatmap').getContext('2d');
-        new Chart(heatCtx, {
-            type: 'radar',
-            data: {
-                labels: ['Late Coming', 'Uniform Violation', 'Class Disturbance', 'Proxy Avoidance', 'Phone Usage'],
-                datasets: [
-                    {
-                        label: 'Class 10 Issues',
-                        data: [15, 5, 8, 2, 10],
-                        backgroundColor: 'rgba(211, 47, 47, 0.2)',
-                        borderColor: '#d32f2f',
-                        pointBackgroundColor: '#d32f2f',
-                        fill: true
-                    },
-                    {
-                        label: 'Class 11 Issues',
-                        data: [5, 12, 18, 5, 20],
-                        backgroundColor: 'rgba(255, 152, 0, 0.2)',
-                        borderColor: '#FF9800',
-                        pointBackgroundColor: '#FF9800',
-                        fill: true
-                    }
-                ]
-            },
-            options: { responsive: true, maintainAspectRatio: false, elements: { line: { borderWidth: 3 } } }
-        });
-                chartsRendered = true;
-            }, 500);
+        async function askGeneralVPAI() {
+            const text = document.getElementById('vp-general-input').value; const fileInput = document.getElementById('vp-general-image');
+            if(!text && (!fileInput || fileInput.files.length === 0)) return showUniversalToast("Error", "Type prompt or upload image.", "var(--danger)");
+            const responseBox = document.getElementById('vp-general-response');
+            responseBox.style.display = "block"; responseBox.innerHTML = "⏳ AI is analyzing...";
+            
+            try {
+                let base64Data = null; let mimeType = null;
+                if (fileInput && fileInput.files.length > 0) { const file = fileInput.files[0]; mimeType = file.type; base64Data = await new Promise((resolve) => { const reader = new FileReader(); reader.onloadend = () => resolve(reader.result.split(',')[1]); reader.readAsDataURL(file); }); }
+                const response = await fetch('/api/gemini', { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ message: text || 'Analyze this document for a Vice Principal.', imageBase64: base64Data, mimeType: mimeType }) });
+                if (!response.ok) throw new Error("API Request Failed");
+                const data = await response.json();
+                if(data.candidates && data.candidates[0]) { responseBox.innerHTML = "💡 <strong>AI Analysis:</strong><br><br>" + data.candidates[0].content.parts[0].text.replace(/\n/g, '<br>'); document.getElementById('vp-general-input').value = ""; if(fileInput) fileInput.value = ""; }
+            } catch (error) { responseBox.innerHTML = `❌ Connection Error. Offline mode active.`; }
         }
-        // --- TEACHER AUDIT LOGIC (Syncs to Principal & Alerts Teacher) ---
-        function submitAudit() {
-            let teacher = document.getElementById("audit-teacher").value;
-            let rating = document.getElementById("audit-rating").value;
-            let logDiv = document.getElementById("audit-log");
-            
-            if (logDiv.innerText.includes("Recent audits")) logDiv.innerHTML = "";
-            
-            let color = rating.startsWith("5") || rating.startsWith("4") ? "#00796b" : "#d32f2f";
-            let timeStr = new Date().toLocaleTimeString();
-            
-            logDiv.innerHTML = `
-            <div style="padding: 10px; border-left: 4px solid ${color}; background: #fff; margin-bottom: 10px; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
-                <strong>${teacher}</strong> <br>
-                <span style="font-size: 13px; color: #555;">Rating: <b>${rating}</b></span> <span style="font-size: 11px; color: #999; float: right;">${timeStr}</span>
-            </div>` + logDiv.innerHTML;
-            
-            // Sync to Principal's Dashboard
-            let auditDB = JSON.parse(localStorage.getItem("teacherAuditDB")) || [];
-            auditDB.push({ teacher: teacher, rating: rating, time: timeStr, color: color });
-            localStorage.setItem("teacherAuditDB", JSON.stringify(auditDB));
 
-            // 🚨 PUSH LIVE ALERT TO TEACHER
-            let teacherNotifs = JSON.parse(localStorage.getItem("teacherNotifs")) || [];
-            teacherNotifs.push({ title: "VP Audit Completed", message: `The Vice Principal evaluated your class. Rating: ${rating}`, read: false });
-            localStorage.setItem("teacherNotifs", JSON.stringify(teacherNotifs));
-
-            alert(`✅ Live Audit Saved! Principal and Teacher have been notified.`);
-        }
-        // --- LIVE SYLLABUS SYNC LOGIC ---
+        // --- SYLLABUS SYNC ---
         function liveSyncSyllabus() {
-            let mathVal = localStorage.getItem("syllabus_Math10") || 45;
-            let sciVal = localStorage.getItem("syllabus_Sci9") || 30;
+            let mathVal = localStorage.getItem("syllabus_Math10") || 45; let sciVal = localStorage.getItem("syllabus_Sci9") || 30;
+            let mathTxt = document.getElementById("vp-syl-math-txt"); let mathBar = document.getElementById("vp-syl-math-bar");
+            let sciTxt = document.getElementById("vp-syl-sci-txt"); let sciBar = document.getElementById("vp-syl-sci-bar");
 
-            let mathTxt = document.getElementById("vp-syl-math-txt");
-            let mathBar = document.getElementById("vp-syl-math-bar");
-            let sciTxt = document.getElementById("vp-syl-sci-txt");
-            let sciBar = document.getElementById("vp-syl-sci-bar");
-
-            if(mathTxt) {
-                mathTxt.innerText = mathVal + "% Completed";
-                mathBar.style.width = mathVal + "%";
-            }
+            if(mathTxt) { mathTxt.innerText = mathVal + "% Completed"; mathBar.style.width = mathVal + "%"; }
             if(sciTxt) {
                 let statusText = sciVal < 50 ? " (Lagging)" : " (On Track)";
                 sciTxt.innerText = sciVal + "% Completed" + statusText;
-                
-                // Color dynamically change hoga: Green if good, Red if lagging
-                let color = sciVal < 50 ? "#d32f2f" : "#00796b";
-                sciTxt.style.color = color;
-                sciBar.style.background = color;
-                sciBar.style.width = sciVal + "%";
+                let color = sciVal < 50 ? "var(--danger)" : "var(--info)";
+                sciTxt.style.color = color; sciBar.style.background = color; sciBar.style.width = sciVal + "%";
             }
         }
-        
-        // Window load par start karne ke liye
-        setTimeout(() => {
-            liveSyncSyllabus();
-            setInterval(liveSyncSyllabus, 2000); 
-        }, 1000);
-        // --- INVENTORY APPROVAL LOGIC ---
+
+        // --- INVENTORY APPROVALS ---
         function loadVPInventoryRequests() {
-            let invLog = JSON.parse(localStorage.getItem("inventoryRequests")) || [];
-            let container = document.getElementById("vp-inv-requests");
-            if(!container) return;
-            
+            let invLog = JSON.parse(localStorage.getItem("inventoryRequests")) || []; let container = document.getElementById("vp-inv-requests"); if(!container) return;
             let pending = invLog.filter(i => i.status === "Pending");
-            
-            if(pending.length === 0) {
-                container.innerHTML = "<p style='color: #888; font-size: 14px;'>No pending requests.</p>";
-                return;
-            }
+            if(pending.length === 0) { container.innerHTML = "<p style='color: var(--text-muted); font-size: 14px; font-weight:700;'>No pending requests.</p>"; return; }
             
             container.innerHTML = "";
             pending.forEach(req => {
-                // Get absolute index
                 let realIndex = invLog.indexOf(req);
                 container.innerHTML += `
-                <div style="padding: 15px; border: 1px solid #FF9800; background: rgba(255,152,0,0.05); border-radius: 8px; margin-bottom: 10px;">
-                    <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-                        <strong>Requested by: ${req.teacher}</strong>
-                        <span style="color:#FF9800; font-weight:bold;">${req.date}</span>
+                <div class="list-card" style="border-left: 4px solid var(--warning);">
+                    <div class="list-row"><div class="list-title">Teacher: ${req.teacher}</div><div class="list-subtitle" style="color:var(--warning); font-weight:800;">${req.date}</div></div>
+                    <p style="font-size: 14px; margin-top: 10px; margin-bottom: 15px; font-weight:600; color:var(--text-main);"><strong>Item:</strong> ${req.item} <br><strong>Reason:</strong> ${req.reason}</p>
+                    <div class="grid-2">
+                        <button onclick="actionInventory(${realIndex}, 'Approved')" class="btn btn-success btn-small">Approve</button>
+                        <button onclick="actionInventory(${realIndex}, 'Rejected')" class="btn btn-danger btn-small">Reject</button>
                     </div>
-                    <p style="font-size: 14px; margin-bottom: 10px;"><strong>Item:</strong> ${req.item} <br><strong>Reason:</strong> ${req.reason}</p>
-                    <button onclick="actionInventory(${realIndex}, 'Approved')" style="padding: 6px 15px; background: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">Approve Request</button>
-                    <button onclick="actionInventory(${realIndex}, 'Rejected')" style="padding: 6px 15px; background: #F44336; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; margin-left: 10px;">Reject</button>
-                </div>
-                `;
+                </div>`;
             });
         }
-        
         function actionInventory(index, action) {
-            let invLog = JSON.parse(localStorage.getItem("inventoryRequests")) || [];
-            invLog[index].status = action;
-            localStorage.setItem("inventoryRequests", JSON.stringify(invLog));
-            alert(`✅ Request has been ${action}! Teacher will be notified.`);
-            loadVPInventoryRequests();
+            let invLog = JSON.parse(localStorage.getItem("inventoryRequests")) || []; invLog[index].status = action;
+            localStorage.setItem("inventoryRequests", JSON.stringify(invLog)); showUniversalToast("Inventory Updated", `Request has been ${action}.`, action==="Approved"?"var(--success)":"var(--danger)"); loadVPInventoryRequests();
         }
 
-        window.addEventListener('load', () => {
-            loadVPInventoryRequests();
-            setInterval(loadVPInventoryRequests, 3000); 
-        });
-        // --- 🤖 GENERAL VP AI LOGIC (WITH IMAGE SUPPORT) ---
-        async function askGeneralVPAI() {
-            const text = document.getElementById('vp-general-input').value;
-            const fileInput = document.getElementById('vp-general-image');
-
-            if(!text && (!fileInput || fileInput.files.length === 0)) {
-                return alert("Please type a prompt or upload an image!");
-            }
+        // --- TEACHER AUDIT ---
+        function submitAudit() {
+            let teacher = document.getElementById("audit-teacher").value; let rating = document.getElementById("audit-rating").value; let logDiv = document.getElementById("audit-log");
+            if (logDiv.innerText.includes("Recent audits")) logDiv.innerHTML = "";
+            let color = rating.startsWith("5") || rating.startsWith("4") ? "var(--success)" : "var(--danger)"; let timeStr = new Date().toLocaleTimeString();
             
-            const responseBox = document.getElementById('vp-general-response');
-            responseBox.style.display = "block";
-            responseBox.innerHTML = "⏳ AI is analyzing your request...";
+            logDiv.innerHTML = `
+            <div class="list-card" style="border-left: 4px solid ${color}; margin-bottom:10px;">
+                <div class="list-row"><div class="list-title">${teacher}</div><div class="list-subtitle">${timeStr}</div></div>
+                <div class="list-subtitle" style="color:var(--text-main); font-weight:800; margin-top:5px;">Rating: <span style="color:${color};">${rating}</span></div>
+            </div>` + logDiv.innerHTML;
             
-            try {
-                let base64Data = null;
-                let mimeType = null;
-                if (fileInput && fileInput.files.length > 0) {
-                    const file = fileInput.files[0];
-                    mimeType = file.type;
-                    base64Data = await new Promise((resolve) => {
-                        const reader = new FileReader();
-                        reader.onloadend = () => resolve(reader.result.split(',')[1]);
-                        reader.readAsDataURL(file);
-                    });
-                }
-
-                // 🚨 NAYA CODE: Direct Vercel Backend ko call
-                const response = await fetch('/api/gemini', {
-                    method: "POST", headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ 
-                        message: text || 'Please analyze this attached document for a school Vice Principal.',
-                        imageBase64: base64Data,
-                        mimeType: mimeType
-                    })
-                });
-
-                if (!response.ok) throw new Error("API Request Failed");
-                const data = await response.json();
-                
-                if(data.candidates && data.candidates[0]) {
-                    responseBox.innerHTML = "💡 <strong>AI Analysis:</strong><br><br>" + data.candidates[0].content.parts[0].text.replace(/\n/g, '<br>');
-                    document.getElementById('vp-general-input').value = "";
-                    if(fileInput) fileInput.value = "";
-                }
-            } catch (error) {
-                responseBox.innerHTML = `❌ Connection Error. Offline mode active.`;
-            }
+            let auditDB = JSON.parse(localStorage.getItem("teacherAuditDB")) || []; auditDB.push({ teacher: teacher, rating: rating, time: timeStr, color: color }); localStorage.setItem("teacherAuditDB", JSON.stringify(auditDB));
+            let teacherNotifs = JSON.parse(localStorage.getItem("teacherNotifs")) || []; teacherNotifs.push({ title: "VP Audit Completed", message: `The Vice Principal evaluated your class. Rating: ${rating}`, read: false }); localStorage.setItem("teacherNotifs", JSON.stringify(teacherNotifs));
+            showUniversalToast("✅ Audit Saved", "Principal and Teacher notified.", "var(--success)");
         }
-    </script>
-    <script>
-        function showUniversalToast(title, message, color) {
-            // Check agar container already hai, nahi toh automatically bana dega
-            let container = document.getElementById("universal-toast-container");
-            if (!container) {
-                container = document.createElement("div");
-                container.id = "universal-toast-container";
-                container.style.cssText = "position: fixed; bottom: 30px; right: 30px; z-index: 999999; display: flex; flex-direction: column; gap: 10px;";
-                document.body.appendChild(container);
-            }
-            
-            // Pop-up Notification Design (Premium Glassmorphism)
-            let toast = document.createElement("div");
-            toast.style.cssText = `background: rgba(10, 15, 25, 0.95); backdrop-filter: blur(10px); color: #fff; padding: 15px 20px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border-left: 6px solid ${color}; font-family: sans-serif; min-width: 320px; transform: translateX(120%); transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);`;
-            toast.innerHTML = `<h4 style="margin: 0 0 5px 0; font-size: 15px; display: flex; align-items: center; gap: 8px;">${title}</h4><p style="margin: 0; font-size: 13px; color: #ddd;">${message}</p>`;
-            
-            container.appendChild(toast);
-            
-            // Slide-in animation
-            setTimeout(() => toast.style.transform = "translateX(0)", 100);
-            
-            // Auto hide after 6 seconds
+
+        // --- CHART.JS ANALYTICS ---
+        let chartsRendered = false;
+        function renderVPCharts() {
+            if(chartsRendered) return;
+            Chart.defaults.color = '#94a3b8';
+            Chart.defaults.font.family = "'Segoe UI', sans-serif";
+
             setTimeout(() => {
-                toast.style.transform = "translateX(120%)";
-                setTimeout(() => toast.remove(), 500);
-            }, 6000);
+                let attendanceDB = JSON.parse(localStorage.getItem("attendanceDB")) || []; let todayStr = new Date().toISOString().split('T')[0]; let todayRecords = attendanceDB.filter(r => r.date === todayStr); let todayPct = 88; 
+                if (todayRecords.length > 0) { let activeCount = todayRecords.filter(r => r.status === "present" || r.status === "halfday").length; todayPct = Math.round((activeCount / todayRecords.length) * 100); }
+
+                new Chart(document.getElementById('vpAttChart').getContext('2d'), { type: 'line', data: { labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], datasets: [{ label: 'School Attendance %', data: [95, 92, 94, 88, 85, todayPct], borderColor: '#38bdf8', backgroundColor: 'rgba(56, 189, 248, 0.1)', fill: true, tension: 0.4 }] }, options: { responsive: true, maintainAspectRatio: false, scales: { y: { min: 60, max: 100, grid:{color:'rgba(255,255,255,0.05)'} }, x:{grid:{display:false}} } } });
+                new Chart(document.getElementById('vpPerfChart').getContext('2d'), { type: 'bar', data: { labels: ['Science', 'Math', 'English'], datasets: [ { label: 'Class 9 Avg', data: [75, 68, 82], backgroundColor: '#fbbf24', borderRadius:4 }, { label: 'Class 10 Avg', data: [85, 80, 78], backgroundColor: '#ef4444', borderRadius:4 } ] }, options: { responsive: true, maintainAspectRatio: false, scales: {y: {grid:{color:'rgba(255,255,255,0.05)'}}, x:{grid:{display:false}}} } });
+                new Chart(document.getElementById('disciplineHeatmap').getContext('2d'), { type: 'radar', data: { labels: ['Late', 'Uniform', 'Disturbance', 'Proxy', 'Phone'], datasets: [ { label: 'Class 10', data: [15, 5, 8, 2, 10], backgroundColor: 'rgba(239, 68, 68, 0.2)', borderColor: '#ef4444', pointBackgroundColor: '#ef4444', fill: true }, { label: 'Class 11', data: [5, 12, 18, 5, 20], backgroundColor: 'rgba(245, 158, 11, 0.2)', borderColor: '#fbbf24', pointBackgroundColor: '#fbbf24', fill: true } ] }, options: { responsive: true, maintainAspectRatio: false, elements: { line: { borderWidth: 3 } }, scales: {r:{grid:{color:'rgba(255,255,255,0.1)'}, angleLines:{color:'rgba(255,255,255,0.1)'}}} } });
+                chartsRendered = true;
+            }, 500);
         }
 
-        // 🧠 THE MASTER LISTENER: Doosre tabs mein ho rahi halchal (Database changes) ko pakadta hai!
+        // --- LIVE DATABASE LISTENER ---
         window.addEventListener('storage', function(e) {
             if (!e.newValue) return; 
             try {
-                let oldLen = e.oldValue ? JSON.parse(e.oldValue).length : 0;
-                let newLen = JSON.parse(e.newValue).length;
-                
-                // Sirf tab trigger hoga jab koi naya data Add hoga
+                let oldLen = e.oldValue ? JSON.parse(e.oldValue).length : 0; let newLen = JSON.parse(e.newValue).length;
                 if (newLen > oldLen) {
-                    let title = "System Update", msg = "Database modified.", icon = "🔔", color = "#00c853";
-                    
-                    if (e.key === 'disciplineLog') { title = "Discipline Action"; msg = "VP has logged a new disciplinary remark."; icon = "⚖️"; color = "#ff3b30"; }
-                    else if (e.key === 'leaveRequests') { title = "Leave Request"; msg = "A new leave application was submitted."; icon = "📝"; color = "#ff9800"; }
-                    else if (e.key === 'teacherAuditDB') { title = "Teacher Audit"; msg = "VP submitted a new teacher evaluation."; icon = "🧑‍🏫"; color = "#38bdf8"; }
-                    else if (e.key === 'grievanceLog') { title = "Grievance Desk"; msg = "A new grievance was reported."; icon = "📬"; color = "#ff9800"; }
-                    else if (e.key === 'attendanceDB') { title = "Attendance Synced"; msg = "Teacher synced today's attendance roster."; icon = "📊"; color = "#4CAF50"; }
-                    else if (e.key === 'defaulterList') { title = "Security Alert"; msg = "Principal modified the restricted student list."; icon = "🚨"; color = "#d32f2f"; }
-                    else if (e.key === 'proxyLog') { title = "Smart Proxy"; msg = "VP assigned a new teacher substitution."; icon = "🔄"; color = "#FFD700"; }
+                    let title = "System Update", msg = "Database modified.", icon = "🔔", color = "#10b981";
+                    if (e.key === 'disciplineLog') { title = "Discipline Action"; msg = "Teacher logged a disciplinary remark."; icon = "⚖️"; color = "var(--danger)"; }
+                    else if (e.key === 'leaveRequests') { title = "Leave Request"; msg = "A new leave application was submitted."; icon = "📝"; color = "var(--warning)"; }
+                    else if (e.key === 'inventoryRequests') { title = "Inventory Alert"; msg = "Teacher requested lab equipment."; icon = "📦"; color = "var(--warning)"; }
+                    else if (e.key === 'grievanceLog') { title = "Grievance Desk"; msg = "A new secret grievance was reported."; icon = "🕵️‍♂️"; color = "var(--danger)"; }
                     else return; 
                     
-                    // Trigger Live Notification Box!
                     showUniversalToast(`${icon} ${title}`, msg, color);
                     
-                    // Agar usi page par table hai, toh use live refresh kar dega bina page load kiye
                     if(typeof loadDiscipline === 'function') loadDiscipline();
                     if(typeof loadVPLeaves === 'function') loadVPLeaves();
-                    if(typeof loadPrinGrievances === 'function') loadPrinGrievances();
-                    if(typeof loadTeacherAudits === 'function') loadTeacherAudits();
+                    if(typeof loadGrievances === 'function') loadGrievances();
+                    if(typeof loadVPInventoryRequests === 'function') loadVPInventoryRequests();
                 }
             } catch(err) { }
         });
