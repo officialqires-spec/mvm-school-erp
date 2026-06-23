@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MVM Public School - Central Login Portal</title>
+    <title>MVM Public School - Central ERP Login</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; -webkit-tap-highlight-color: transparent; }
         
@@ -15,10 +15,9 @@
             align-items: center; 
             overflow: hidden; 
             background-color: #000; 
-            color: #fff;
         }
         
-        /* 🔱 MAHADEV VIDEO BACKGROUND (Optimized for Mobile) */
+        /* 🔱 MAHADEV VIDEO BACKGROUND */
         #bg-video {
             position: absolute;
             top: 50%;
@@ -28,21 +27,19 @@
             width: auto;
             height: auto;
             z-index: -3;
-            transform: translate(-50%, -50%);
+            transform: translateX(-50%) translateY(-50%);
             object-fit: cover;
-            will-change: transform; /* Hardware acceleration for smooth mobile playback */
         }
         
-        /* 🎨 THEME BLENDING: Cosmic Tint Overlay */
+        /* 🎨 THEME BLENDING: Overlay with cosmic tint */
         .video-overlay {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, rgba(3, 7, 18, 0.8) 0%, rgba(30, 10, 60, 0.6) 50%, rgba(2, 6, 23, 0.9) 100%);
+            background: linear-gradient(135deg, rgba(3, 7, 18, 0.7) 0%, rgba(30, 10, 60, 0.5) 50%, rgba(2, 6, 23, 0.8) 100%);
             z-index: -2;
-            backdrop-filter: blur(3px);
         }
 
         /* 🟢 LIVE SYNC INDICATOR */
@@ -50,76 +47,67 @@
             position: absolute;
             top: 20px;
             right: 20px;
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             padding: 8px 16px;
             border-radius: 20px;
             font-size: 12px;
-            font-weight: 800;
-            letter-spacing: 1px;
+            font-weight: bold;
+            color: #fff;
             display: flex;
             align-items: center;
             gap: 8px;
             z-index: 100;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            backdrop-filter: blur(5px);
             text-transform: uppercase;
         }
         .sync-dot {
-            width: 8px;
-            height: 8px;
-            background: #10b981; /* Green */
-            border-radius: 50%;
-            box-shadow: 0 0 10px #10b981;
-            animation: blinkDot 1.5s infinite;
+            width: 8px; height: 8px; background: #10b981; border-radius: 50%; box-shadow: 0 0 8px #10b981; animation: blinkDot 1s infinite;
         }
-        @keyframes blinkDot { 0% { opacity: 1; box-shadow: 0 0 10px #10b981; } 50% { opacity: 0.4; box-shadow: 0 0 2px #10b981; } 100% { opacity: 1; box-shadow: 0 0 10px #10b981; } }
+        @keyframes blinkDot { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
 
-        /* 📦 LOGIN CARD (Glassmorphism) */
+        /* 📦 LOGIN CARD */
         .login-wrapper {
             position: relative;
             width: 90%;
-            max-width: 420px;
+            max-width: 400px;
             z-index: 10;
         }
 
         .login-card {
-            background: rgba(15, 23, 42, 0.65);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 24px;
+            background: rgba(10, 10, 20, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
             padding: 40px 30px;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5), inset 0 0 20px rgba(255,255,255,0.05);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
             text-align: center;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .school-logo {
-            font-size: 28px;
+            font-size: 26px;
             font-weight: 900;
             margin-bottom: 5px;
-            letter-spacing: 2px;
             color: #fff;
-            text-shadow: 0 2px 10px rgba(255,255,255,0.3);
+            letter-spacing: 2px;
         }
         .school-sub {
             font-size: 13px;
-            color: #94a3b8;
+            color: #a78bfa;
             margin-bottom: 30px;
-            font-weight: 600;
-            letter-spacing: 1px;
+            font-weight: bold;
             text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         /* 🎛️ TAB SWITCHER */
         .tab-container {
             display: flex;
-            background: rgba(0,0,0,0.4);
-            border-radius: 14px;
+            background: rgba(0,0,0,0.5);
+            border-radius: 12px;
             padding: 5px;
-            margin-bottom: 30px;
-            position: relative;
+            margin-bottom: 25px;
             border: 1px solid rgba(255,255,255,0.1);
         }
         .tab-btn {
@@ -129,81 +117,67 @@
             background: transparent;
             color: #94a3b8;
             font-size: 14px;
-            font-weight: 800;
-            border-radius: 10px;
+            font-weight: bold;
+            border-radius: 8px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            z-index: 2;
+            transition: 0.3s;
             text-transform: uppercase;
-            letter-spacing: 1px;
         }
         .tab-btn.active {
             color: #fff;
-            background: linear-gradient(135deg, #0ea5e9 0%, #3b82f6 100%);
-            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.4);
+            background: rgba(255,255,255,0.1);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
 
         /* 📝 FORMS */
-        .login-form {
-            display: none;
-            animation: fadeInForm 0.4s ease forwards;
-        }
-        .login-form.active { display: block; }
-
-        @keyframes fadeInForm { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .login-form { display: none; }
+        .login-form.active { display: block; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         .input-group { margin-bottom: 20px; text-align: left; }
         .input-group label {
-            display: block;
-            font-size: 12px;
-            color: #cbd5e1;
-            margin-bottom: 8px;
-            font-weight: 800;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
+            display: block; font-size: 12px; color: #e2e8f0; margin-bottom: 8px; font-weight: bold; text-transform: uppercase;
         }
         .input-group input {
             width: 100%;
-            background: rgba(0,0,0,0.3);
-            border: 1px solid rgba(255,255,255,0.15);
-            padding: 15px 18px;
-            border-radius: 12px;
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 14px;
+            border-radius: 10px;
             color: #fff;
             font-size: 15px;
-            font-weight: 600;
             outline: none;
-            transition: all 0.3s ease;
+            transition: 0.3s;
         }
         .input-group input:focus {
-            border-color: #38bdf8;
-            background: rgba(0,0,0,0.5);
-            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+            border-color: #8b5cf6;
+            background: rgba(0,0,0,0.6);
         }
 
         /* 🚀 BUTTON WITH ANIMATION */
         .submit-btn {
             width: 100%;
-            padding: 16px;
+            padding: 15px;
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             font-size: 15px;
-            font-weight: 900;
+            font-weight: bold;
             cursor: pointer;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
-            transition: all 0.3s ease;
+            letter-spacing: 1px;
+            transition: 0.3s;
             display: flex;
             justify-content: center;
             align-items: center;
             gap: 10px;
         }
-        .submit-btn:active { transform: scale(0.96); }
-        .submit-btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+        .submit-btn:active { transform: scale(0.97); }
+        .submit-btn:disabled { opacity: 0.7; cursor: not-allowed; }
         
-        .btn-student { background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%); color: #fff; box-shadow: 0 5px 20px rgba(99, 102, 241, 0.4); }
-        .btn-staff { background: linear-gradient(135deg, #d4af37 0%, #f5a623 100%); color: #000; box-shadow: 0 5px 20px rgba(245, 166, 35, 0.4); }
+        .btn-student { background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%); color: #fff; }
+        .btn-staff { background: linear-gradient(135deg, #d4af37 0%, #f5a623 100%); color: #000; }
 
-        /* Spinner for Fetching Data */
+        /* Spinner */
         .spinner {
             width: 18px; height: 18px;
             border: 3px solid rgba(255,255,255,0.3);
@@ -212,16 +186,16 @@
             animation: spin 1s linear infinite;
             display: none;
         }
-        .btn-staff .spinner { border: 3px solid rgba(0,0,0,0.2); border-top: 3px solid #000; }
+        .btn-staff .spinner { border-color: rgba(0,0,0,0.2); border-top-color: #000; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
         .submit-btn.loading .spinner { display: block; }
         .submit-btn.loading .btn-text { display: none; }
-        .submit-btn.loading::after { content: 'Fetching Data...'; }
+        .submit-btn.loading::after { content: 'Fetching...'; }
 
-        /* Toast Notification */
-        #toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 100000; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 350px; pointer-events: none; }
-        .toast { padding: 15px 20px; border-radius: 14px; color: #fff; font-weight: 800; box-shadow: 0 10px 30px rgba(0,0,0,0.7); font-size: 14px; animation: slideDownToast 0.4s ease forwards; text-align: center; border: 1px solid rgba(255,255,255,0.2); line-height: 1.4; backdrop-filter: blur(10px); }
+        /* Toast */
+        #toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 99999; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 350px; pointer-events: none; }
+        .toast { padding: 15px; border-radius: 12px; color: #fff; font-weight: bold; box-shadow: 0 10px 30px rgba(0,0,0,0.8); font-size: 14px; animation: slideDownToast 0.4s ease forwards; text-align: center; border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(10px); }
         @keyframes slideDownToast { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeOutToast { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-20px); } }
 
@@ -233,28 +207,27 @@
         <div class="sync-dot"></div> Live Server Synced
     </div>
 
-    <video id="bg-video" autoplay loop muted playsinline disablePictureInPicture preload="metadata">
-        <source src="YOUR_GITHUB_RAW_VIDEO_LINK.mp4" type="video/mp4">
+    <video id="bg-video" autoplay loop muted playsinline>
+        <source src="YouCut_20260623_145148990.mp4" type="video/mp4">
     </video>
     
     <div class="video-overlay"></div>
-
     <div id="toast-container"></div>
 
     <div class="login-wrapper">
         <div class="login-card">
             <div class="school-logo">MVM PUBLIC</div>
-            <div class="school-sub">Central ERP Login</div>
+            <div class="school-sub">Central Portal</div>
 
             <div class="tab-container">
                 <button class="tab-btn active" id="tab-student" onclick="switchPortal('student')">👨‍🎓 Student</button>
-                <button class="tab-btn" id="tab-staff" onclick="switchPortal('staff')">🏛️ Staff & Admin</button>
+                <button class="tab-btn" id="tab-staff" onclick="switchPortal('staff')">🏛️ Staff / Admin</button>
             </div>
 
             <form id="student-form" class="login-form active" onsubmit="processLogin(event, 'student')">
                 <div class="input-group">
-                    <label>Student Email / ID</label>
-                    <input type="email" id="student-email" placeholder="e.g. adarsh@mvm.com" required>
+                    <label>Student ID / Username</label>
+                    <input type="text" id="student-id" placeholder="e.g. S-101 or adarsh" required>
                 </div>
                 <div class="input-group">
                     <label>Password</label>
@@ -267,11 +240,11 @@
 
             <form id="staff-form" class="login-form" onsubmit="processLogin(event, 'staff')">
                 <div class="input-group">
-                    <label>Staff Official Email</label>
-                    <input type="email" id="staff-email" placeholder="e.g. principal@mvm.com" required>
+                    <label>Staff ID / Official Email</label>
+                    <input type="text" id="staff-id" placeholder="e.g. T-104 or principal" required>
                 </div>
                 <div class="input-group">
-                    <label>Security Key (Password)</label>
+                    <label>Security Key</label>
                     <input type="password" id="staff-pass" placeholder="Enter password" required>
                 </div>
                 <button type="submit" class="submit-btn btn-staff" id="btn-staff">
@@ -283,52 +256,47 @@
     </div>
 
     <script>
-        // --- TOAST NOTIFICATION SYSTEM ---
         function showToast(title, message, color) {
             let container = document.getElementById("toast-container");
             let toast = document.createElement("div");
             toast.className = "toast"; 
             toast.style.background = color || "rgba(15, 23, 42, 0.9)";
-            toast.innerHTML = `<div style="font-size:16px; margin-bottom:5px; text-transform:uppercase;">${title}</div><div style="font-size:13px; font-weight:normal; color:rgba(255,255,255,0.8);">${message}</div>`;
+            toast.innerHTML = `<div style="font-size:15px; margin-bottom:5px; text-transform:uppercase;">${title}</div><div style="font-size:13px; font-weight:normal; color:rgba(255,255,255,0.8);">${message}</div>`;
             container.appendChild(toast);
-            setTimeout(() => { toast.style.animation = "fadeOutToast 0.4s ease forwards"; setTimeout(() => toast.remove(), 400); }, 4000);
+            setTimeout(() => { toast.style.animation = "fadeOutToast 0.4s ease forwards"; setTimeout(() => toast.remove(), 400); }, 3500);
         }
 
-        // --- TAB SWITCHER LOGIC ---
         function switchPortal(type) {
-            // Update Buttons
             document.getElementById('tab-student').classList.remove('active');
             document.getElementById('tab-staff').classList.remove('active');
             document.getElementById('tab-' + type).classList.add('active');
 
-            // Switch Forms
             document.getElementById('student-form').classList.remove('active');
             document.getElementById('staff-form').classList.remove('active');
             document.getElementById(type + '-form').classList.add('active');
             
-            // Clear fields on switch
-            document.getElementById('student-email').value = ""; document.getElementById('student-pass').value = "";
-            document.getElementById('staff-email').value = ""; document.getElementById('staff-pass').value = "";
+            document.getElementById('student-id').value = ""; document.getElementById('student-pass').value = "";
+            document.getElementById('staff-id').value = ""; document.getElementById('staff-pass').value = "";
         }
 
-        // --- FETCH & SMART LOGIN LOGIC ---
         async function processLogin(event, portalType) {
-            event.preventDefault(); // Prevent page reload
+            event.preventDefault(); 
 
-            const email = document.getElementById(portalType + '-email').value.trim();
+            // Yahan ID pass ho rahi hai, chahe email ho ya normal text
+            const usernameOrEmail = document.getElementById(portalType + '-id').value.trim();
             const password = document.getElementById(portalType + '-pass').value;
             const btn = document.getElementById('btn-' + portalType);
 
-            // Trigger "Fetching Data..." Animation
+            // Fetching animation start
             btn.classList.add('loading');
             btn.disabled = true;
 
             try {
-                // Backend API Hit
+                // API Backend Hit (email key me text/username hi jayega backend handle kar lega)
                 const response = await fetch("https://mvm-backend-file-1.onrender.com/login/", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ "email": email, "password": password })
+                    body: JSON.stringify({ "email": usernameOrEmail, "password": password })
                 });
 
                 const data = await response.json();
@@ -336,29 +304,29 @@
                 if (response.ok) {
                     const role = data.role.toLowerCase();
 
-                    // 🔥 STRICT ROLE CHECKING (No Crossing Portals) 🔥
+                    // 🛑 STRICT ROLE CHECKING (Security Override) 🛑
                     
-                    // 1. Agar tab 'Student' hai aur database me role student nahi hai
+                    // Agar koi staff galti se Student portal se login kare
                     if (portalType === 'student' && role !== 'student') {
                         showToast("🛑 Access Denied", "Authorities & Staff cannot log in via the Student portal.", "#ef4444");
                         btn.classList.remove('loading'); btn.disabled = false;
-                        return; // Rok do yahi
+                        return; 
                     }
                     
-                    // 2. Agar tab 'Staff' hai aur database me role student hai
+                    // Agar koi student galti se Staff portal se login kare
                     if (portalType === 'staff' && role === 'student') {
-                        showToast("🛑 Access Denied", "Students are strictly prohibited from entering the Staff/Admin portal.", "#ef4444");
+                        showToast("🛑 Access Denied", "Students are strictly prohibited from entering the Staff portal.", "#ef4444");
                         btn.classList.remove('loading'); btn.disabled = false;
-                        return; // Rok do yahi
+                        return; 
                     }
 
-                    // Agar checking pass ho gayi toh andar aane do
+                    // Login granted
                     localStorage.setItem("loggedInUser", data.user_name);
                     localStorage.setItem("userRole", role);
 
-                    showToast("✅ Login Successful", "Redirecting to your dashboard...", "#10b981");
+                    showToast("✅ Login Successful", "Loading your dashboard...", "#10b981");
 
-                    // Redirect Based on Verified Role
+                    // Role based Redirects
                     setTimeout(() => {
                         if (role === "student") window.location.href = "student_dashboard.html";
                         else if (role === "teacher") window.location.href = "teacher_dashboard.html";
@@ -368,18 +336,16 @@
                         else if (role === "transport") window.location.href = "transport_dashboard.html";
                         else if (role === "admin") window.location.href = "admin_dashboard.html";
                         else if (role === "owner") window.location.href = "owner_dashboard.html";
-                        else window.location.href = "index.html"; // fallback
-                    }, 1000);
+                        else window.location.href = "index.html"; 
+                    }, 1500);
 
                 } else {
-                    // API returned error (Wrong Pass/Email)
                     showToast("❌ Login Failed", data.detail || "Invalid credentials. Try again.", "#f59e0b");
                     btn.classList.remove('loading'); btn.disabled = false;
                 }
             } catch (error) {
-                // Server down or internet issue
                 console.error("Error:", error);
-                showToast("⚠️ Server Offline", "Could not connect to the live server. Check your internet or API.", "#ef4444");
+                showToast("⚠️ Server Offline", "Could not connect to the live server. Check your internet.", "#ef4444");
                 btn.classList.remove('loading'); btn.disabled = false;
             }
         }
