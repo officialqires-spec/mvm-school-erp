@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MVM Public School - Director App</title>
+    <title>MVM Public School - Supreme Director App</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; -webkit-tap-highlight-color: transparent; }
         
-        /* ☀️ LIGHT MODE (Clean Executive Style) */
+        /* ☀️ LIGHT MODE (Executive White) */
         :root {
             --bg-color: #f4f6f9; --card-bg: #ffffff; --text-main: #111827; --text-muted: #64748b;
             --border-color: #e2e8f0; --sidebar-bg: #ffffff; 
@@ -18,102 +18,102 @@
             --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* 🌌 SUPREME COSMIC GOLD THEME (Dark Mode - God Mode Vibe) */
+        /* 🌌 SUPREME COSMIC GOLD THEME (God Mode Vibe) */
         body.dark-mode {
-            --bg-color: #030305; /* Pitch Black Void */
-            --card-bg: rgba(15, 12, 20, 0.7); /* Deep cosmic tint */
-            --text-main: #f8fafc; --text-muted: #d4af37; /* Muted Gold */
-            --border-color: rgba(212, 175, 55, 0.25); /* Glowing Gold Borders */
-            --sidebar-bg: rgba(5, 5, 8, 0.95);
-            /* Bhasma & Supreme Gold Gradient */
+            --bg-color: #020203; /* Absolute Space Black */
+            --card-bg: rgba(15, 12, 18, 0.85); /* Deep cosmic tint */
+            --text-main: #f8fafc; --text-muted: #d4af37; /* Glowing Bhasma Gold */
+            --border-color: rgba(212, 175, 55, 0.3); /* Supreme Gold Borders */
+            --sidebar-bg: rgba(5, 5, 8, 0.98);
+            /* Supreme Energy Gradients */
             --accent-color: linear-gradient(135deg, #d4af37 0%, #f5a623 50%, #e65100 100%); 
-            --accent-hover: linear-gradient(135deg, #f5a623 0%, #e65100 100%);
+            --accent-hover: linear-gradient(135deg, #f5a623 0%, #ff6f00 100%);
             --accent-text: #000000;
             --success: #34d399; --danger: #f87171; --warning: #fbbf24; --info: #60a5fa;
-            --shadow-sm: 0 4px 15px rgba(212, 175, 55, 0.1);
-            --shadow-md: 0 8px 30px rgba(212, 175, 55, 0.25);
+            --shadow-sm: 0 4px 15px rgba(212, 175, 55, 0.15);
+            --shadow-md: 0 8px 35px rgba(212, 175, 55, 0.3);
         }
 
         body { display: flex; flex-direction: column; height: 100vh; background-color: var(--bg-color); color: var(--text-main); transition: var(--transition); overflow-x: hidden; }
 
         /* 📱 MOBILE APP HEADER */
-        .mobile-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: var(--sidebar-bg); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow-sm); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); transition: var(--transition); }
+        .mobile-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: var(--sidebar-bg); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow-sm); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); transition: var(--transition); }
         .header-left { display: flex; align-items: center; gap: 15px; }
         .menu-btn { font-size: 26px; cursor: pointer; background: none; border: none; color: var(--accent-color); outline: none; }
-        .app-title { font-size: 18px; font-weight: 800; letter-spacing: 0.5px; color: var(--text-main); }
+        .app-title { font-size: 18px; font-weight: 900; letter-spacing: 0.5px; color: var(--text-main); text-transform: uppercase; }
         .header-right { display: flex; align-items: center; gap: 15px; }
         .theme-toggle { font-size: 22px; background: none; border: none; cursor: pointer; color: var(--accent-color); outline: none; transition: transform 0.3s ease; }
         .theme-toggle:active { transform: scale(0.8) rotate(45deg); }
-        .avatar { width: 38px; height: 38px; background: var(--accent-color); color: var(--accent-text); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 16px; box-shadow: 0 0 10px rgba(212, 175, 55, 0.5); }
+        .avatar { width: 38px; height: 38px; background: var(--accent-color); color: var(--accent-text); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: 900; font-size: 16px; box-shadow: 0 0 15px rgba(212, 175, 55, 0.6); }
 
         /* 🍔 SLIDE-IN APP MENU */
-        .sidebar { position: fixed; top: 0; left: -100%; width: 280px; height: 100%; background: var(--sidebar-bg); z-index: 9999; transition: var(--transition); box-shadow: 5px 0 30px rgba(0,0,0,0.8); display: flex; flex-direction: column; padding-bottom: 20px; border-right: 1px solid var(--border-color); }
+        .sidebar { position: fixed; top: 0; left: -100%; width: 290px; height: 100%; background: var(--sidebar-bg); z-index: 9999; transition: var(--transition); box-shadow: 10px 0 40px rgba(0,0,0,0.9); display: flex; flex-direction: column; padding-bottom: 20px; border-right: 1px solid var(--border-color); }
         .sidebar.open { left: 0; }
-        .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9998; backdrop-filter: blur(4px); }
+        .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 9998; backdrop-filter: blur(5px); }
         .sidebar-overlay.open { display: block; animation: fadeIn 0.3s; }
         
-        .sidebar-header { padding: 25px 20px; border-bottom: 1px solid var(--border-color); position: relative; text-align: center; }
-        .close-sidebar { position: absolute; top: 20px; right: 20px; font-size: 30px; cursor: pointer; color: var(--text-main); background: none; border: none; }
-        .school-brand h2 { font-size: 22px; font-weight: 800; color: var(--text-main); letter-spacing: 2px; }
-        .role-badge { display: inline-block; background: var(--accent-color); color: var(--accent-text); padding: 6px 14px; font-size: 11px; border-radius: 20px; font-weight: 900; margin-top: 8px; letter-spacing: 1.5px; text-transform: uppercase; box-shadow: var(--shadow-sm); }
+        .sidebar-header { padding: 25px 20px; border-bottom: 1px dashed var(--border-color); position: relative; text-align: center; }
+        .close-sidebar { position: absolute; top: 20px; right: 20px; font-size: 32px; cursor: pointer; color: var(--text-main); background: none; border: none; }
+        .school-brand h2 { font-size: 24px; font-weight: 900; color: var(--text-main); letter-spacing: 2px; }
+        .role-badge { display: inline-block; background: var(--accent-color); color: var(--accent-text); padding: 6px 14px; font-size: 12px; border-radius: 20px; font-weight: 900; margin-top: 10px; letter-spacing: 2px; text-transform: uppercase; box-shadow: var(--shadow-sm); }
 
-        .nav-menu { flex-grow: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 5px; }
-        .nav-item { padding: 14px 18px; border-radius: 12px; cursor: pointer; font-size: 15px; font-weight: 700; color: var(--text-muted); display: flex; align-items: center; gap: 12px; transition: var(--transition); border: 1px solid transparent; }
-        .nav-item:hover { background-color: var(--hover-bg); color: var(--text-main); }
-        .nav-item.active { background: var(--accent-color); color: var(--accent-text); box-shadow: var(--shadow-md); transform: translateX(8px); border-color: rgba(255,255,255,0.2); }
+        .nav-menu { flex-grow: 1; overflow-y: auto; padding: 20px 15px; display: flex; flex-direction: column; gap: 6px; }
+        .nav-item { padding: 15px 18px; border-radius: 12px; cursor: pointer; font-size: 15px; font-weight: 800; color: var(--text-muted); display: flex; align-items: center; gap: 12px; transition: var(--transition); border: 1px solid transparent; }
+        .nav-item:hover { background-color: rgba(212, 175, 55, 0.1); color: var(--text-main); }
+        .nav-item.active { background: var(--accent-color); color: var(--accent-text); box-shadow: var(--shadow-md); transform: translateX(8px); border-color: rgba(255,255,255,0.3); }
 
         /* 👑 GOD MODE BUTTON */
-        .god-mode-btn { background: rgba(239, 68, 68, 0.1); color: var(--danger); border: 1px solid var(--danger); animation: glowPulse 2s infinite; }
-        @keyframes glowPulse { 0% { box-shadow: 0 0 5px rgba(239, 68, 68, 0.2); } 50% { box-shadow: 0 0 15px rgba(239, 68, 68, 0.6); } 100% { box-shadow: 0 0 5px rgba(239, 68, 68, 0.2); } }
+        .god-mode-btn { background: rgba(239, 68, 68, 0.1); color: var(--danger); border: 1px solid var(--danger); animation: glowPulse 2s infinite; font-weight: 900; }
+        @keyframes glowPulse { 0% { box-shadow: 0 0 5px rgba(239, 68, 68, 0.2); } 50% { box-shadow: 0 0 20px rgba(239, 68, 68, 0.7); } 100% { box-shadow: 0 0 5px rgba(239, 68, 68, 0.2); } }
 
         /* 🏢 MAIN WORKSPACE */
         .main-content { flex-grow: 1; overflow-y: auto; overflow-x: hidden; position: relative; }
-        .workspace { display: none; padding: 20px 15px 80px 15px; animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); max-width: 1200px; margin: 0 auto; width: 100%; }
+        .workspace { display: none; padding: 20px 15px 80px 15px; animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); max-width: 1300px; margin: 0 auto; width: 100%; }
         .workspace.active { display: block; }
 
-        @keyframes slideUp { from { opacity: 0; transform: translateY(30px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(40px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         /* 📱 UNIVERSAL APP UI COMPONENTS */
-        .card { background: var(--card-bg); padding: 22px; border-radius: 20px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm); margin-bottom: 20px; transition: var(--transition); position: relative; overflow: hidden; }
-        .card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--accent-color); opacity: 0.5; }
-        .dark-mode .card { box-shadow: inset 0 0 15px rgba(212, 175, 55, 0.03); }
-        .card-header { font-size: 19px; font-weight: 800; margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px dashed var(--border-color); color: var(--text-main); display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.5px; }
+        .card { background: var(--card-bg); padding: 22px; border-radius: 20px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm); margin-bottom: 25px; transition: var(--transition); position: relative; overflow: hidden; }
+        .card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--accent-color); opacity: 0.7; }
+        .dark-mode .card { box-shadow: inset 0 0 20px rgba(212, 175, 55, 0.05); }
+        .card-header { font-size: 20px; font-weight: 900; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px dashed var(--border-color); color: var(--text-main); display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.5px; }
 
         .grid-1 { display: grid; grid-template-columns: 1fr; gap: 15px; }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
 
-        .stat-box { background: var(--card-bg); padding: 20px; border-radius: 16px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm); display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden; transition: transform 0.3s; }
-        .stat-box:hover { transform: translateY(-5px); }
+        .stat-box { background: var(--card-bg); padding: 25px 20px; border-radius: 16px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm); display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden; transition: transform 0.3s; }
+        .stat-box:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); }
         .stat-box.primary { background: var(--accent-color); color: var(--accent-text); border: none; box-shadow: var(--shadow-md); }
-        .stat-box h4 { font-size: 12px; opacity: 0.9; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; font-weight: 800; }
-        .stat-box h2 { font-size: 30px; font-weight: 900; margin: 0; }
+        .stat-box h4 { font-size: 13px; opacity: 0.9; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; font-weight: 800; }
+        .stat-box h2 { font-size: 32px; font-weight: 900; margin: 0; }
 
-        .list-card { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 14px; padding: 15px; margin-bottom: 12px; transition: var(--transition); }
+        .list-card { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 14px; padding: 18px; margin-bottom: 15px; transition: var(--transition); }
         .list-card:active { transform: scale(0.98); }
         .list-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
         .list-row:last-child { margin-bottom: 0; }
-        .list-title { font-size: 16px; font-weight: 800; color: var(--text-main); }
-        .list-subtitle { font-size: 13px; color: var(--text-muted); font-weight: 600; line-height: 1.4; }
-        .status-badge { padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 800; text-transform: uppercase; border: 1px solid currentColor; }
+        .list-title { font-size: 16px; font-weight: 900; color: var(--text-main); }
+        .list-subtitle { font-size: 13px; color: var(--text-muted); font-weight: 600; line-height: 1.5; }
+        .status-badge { padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 900; text-transform: uppercase; border: 1px solid currentColor; letter-spacing: 0.5px;}
 
-        input, select, textarea { width: 100%; background: rgba(0,0,0,0.2); color: var(--text-main); border: 1px solid var(--border-color); padding: 14px 16px; border-radius: 12px; font-size: 15px; margin-bottom: 15px; outline: none; transition: var(--transition); font-weight: 600; }
-        .dark-mode input, .dark-mode select, .dark-mode textarea { background: rgba(255,255,255,0.02); }
-        input:focus, select:focus, textarea:focus { border-color: var(--accent-color); box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1); }
-        label { display: block; font-size: 12px; font-weight: 800; color: var(--text-muted); margin-bottom: 6px; margin-left: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+        input, select, textarea { width: 100%; background: rgba(0,0,0,0.2); color: var(--text-main); border: 1px solid var(--border-color); padding: 15px 18px; border-radius: 12px; font-size: 15px; margin-bottom: 18px; outline: none; transition: var(--transition); font-weight: 700; }
+        .dark-mode input, .dark-mode select, .dark-mode textarea { background: rgba(255,255,255,0.03); }
+        input:focus, select:focus, textarea:focus { border-color: var(--accent-color); box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15); }
+        label { display: block; font-size: 12px; font-weight: 800; color: var(--text-muted); margin-bottom: 8px; margin-left: 4px; text-transform: uppercase; letter-spacing: 1px; }
 
-        .btn { width: 100%; padding: 16px; background: var(--accent-color); color: var(--accent-text); border: none; border-radius: 14px; font-size: 15px; font-weight: 900; cursor: pointer; transition: var(--transition); box-shadow: var(--shadow-sm); display: flex; justify-content: center; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 1px; }
+        .btn { width: 100%; padding: 16px; background: var(--accent-color); color: var(--accent-text); border: none; border-radius: 14px; font-size: 15px; font-weight: 900; cursor: pointer; transition: var(--transition); box-shadow: var(--shadow-sm); display: flex; justify-content: center; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 1.5px; }
         .btn:active { transform: scale(0.97); }
-        .btn-success { background: var(--success); color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
-        .btn-danger { background: var(--danger); color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
+        .btn-success { background: var(--success); color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2);}
+        .btn-danger { background: var(--danger); color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2);}
         .btn-outline { background: transparent; border: 2px solid var(--accent-color); color: var(--accent-color); box-shadow: none; }
-        .btn-small { padding: 8px 14px; font-size: 12px; border-radius: 8px; width: auto; }
+        .btn-small { padding: 10px 16px; font-size: 12px; border-radius: 10px; width: auto; }
 
         /* Toast Notification */
         #toast-container { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 10000; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 400px; pointer-events: none; }
-        .toast { padding: 16px 20px; border-radius: 14px; color: #000; background: var(--accent-color); font-weight: 800; box-shadow: 0 10px 30px rgba(0,0,0,0.5); font-size: 14px; animation: slideUpToast 0.4s ease forwards; text-align: center; border: 1px solid rgba(255,255,255,0.4); }
-        @keyframes slideUpToast { from { opacity: 0; transform: translateY(30px) scale(0.9); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        .toast { padding: 18px 22px; border-radius: 16px; color: #000; background: var(--accent-color); font-weight: 900; box-shadow: 0 15px 40px rgba(0,0,0,0.6); font-size: 15px; animation: slideUpToast 0.4s ease forwards; text-align: center; border: 2px solid rgba(255,255,255,0.5); }
+        @keyframes slideUpToast { from { opacity: 0; transform: translateY(40px) scale(0.9); } to { opacity: 1; transform: translateY(0) scale(1); } }
         @keyframes fadeOutToast { from { opacity: 1; transform: translateY(0) scale(1); } to { opacity: 0; transform: translateY(-20px) scale(0.9); } }
 
         @media (max-width: 768px) {
@@ -123,7 +123,7 @@
         @media (min-width: 769px) {
             body { flex-direction: row; }
             .mobile-header { display: none !important; }
-            .sidebar { position: relative; left: 0; box-shadow: none; border-right: 1px solid var(--border-color); }
+            .sidebar { position: relative; left: 0; box-shadow: none; border-right: 1px solid var(--border-color); width: 300px;}
             .close-sidebar { display: none !important; }
             .grid-1 { grid-template-columns: 2fr 1fr; } 
             .grid-2 { grid-template-columns: 1fr 1fr; }
@@ -140,7 +140,7 @@
     <div class="mobile-header">
         <div class="header-left">
             <button class="menu-btn" onclick="toggleAppMenu()">☰</button>
-            <div class="app-title" id="mobile-title">Executive Overview</div>
+            <div class="app-title" id="mobile-title">Executive Core</div>
         </div>
         <div class="header-right">
             <button class="theme-toggle" onclick="toggleDarkMode()" title="Cosmic Mode">🔱</button>
@@ -161,12 +161,15 @@
         </div>
         
         <div class="nav-menu">
-            <div class="nav-item active" onclick="switchTab('dashboard', this)">👑 Executive Overview</div>
+            <div class="nav-item active" onclick="switchTab('dashboard', this)">👑 Executive Core</div>
+            <div class="nav-item" onclick="switchTab('dir-students', this)">👨‍🎓 All Students</div>
+            <div class="nav-item" onclick="switchTab('dir-staff', this)">👨‍🏫 All Staff & Teachers</div>
+            <div class="nav-item" onclick="switchTab('dir-transport', this)">🚌 Master Transport</div>
             <div class="nav-item" onclick="switchTab('approvals', this)">✅ Master Approvals</div>
             <div class="nav-item" onclick="switchTab('finance', this)">💹 Financial Forecaster</div>
             <div class="nav-item" onclick="switchTab('predictive', this)">🧠 AI Churn Radar</div>
             <div class="nav-item" onclick="switchTab('branches', this)">🏢 Branch Matrix</div>
-            <div class="nav-item god-mode-btn" style="margin-top: 15px;" onclick="switchTab('god-mode', this)">⚡ GOD MODE</div>
+            <div class="nav-item god-mode-btn" style="margin-top: 15px;" onclick="switchTab('god-mode', this)">⚡ SUPREME CONTROLS</div>
             <div class="nav-item" style="color: var(--text-muted); margin-top: 15px;" onclick="logoutOwner()">🚪 Secure Logout</div>
         </div>
     </div>
@@ -177,76 +180,108 @@
         <!-- 1. DASHBOARD OVERVIEW -->
         <div id="dashboard" class="workspace active">
             <div class="grid-3">
-                <div class="stat-box primary"><h4>Monthly Revenue</h4><h2>₹42.5 L</h2></div>
-                <div class="stat-box" style="border-left: 4px solid var(--danger);"><h4>Monthly Expenses</h4><h2 style="color: var(--danger);">₹18.2 L</h2></div>
+                <div class="stat-box primary"><h4>Monthly Revenue</h4><h2 id="dash-rev">₹42.5 L</h2></div>
+                <div class="stat-box" style="border-left: 4px solid var(--danger);"><h4>Monthly Expenses</h4><h2 style="color: var(--danger);" id="dash-exp">₹18.2 L</h2></div>
                 <div class="stat-box" style="border-left: 4px solid var(--success);"><h4>Profit Margin</h4><h2 style="color: var(--success);">57.1% ⬆️</h2></div>
             </div>
 
-            <div class="grid-1" style="margin-top: 25px;">
+            <div class="grid-1" style="margin-top: 30px;">
                 <div class="card">
                     <div class="card-header">Director's Action Items</div>
                     <div class="list-card" style="border-left: 4px solid var(--warning);">
                         <div class="list-row">
                             <div class="list-title">Pending Payroll</div>
-                            <div class="status-badge" style="color: var(--warning);">HR Dept</div>
+                            <div class="status-badge" style="color: var(--warning); border-color: var(--warning);">HR Dept</div>
                         </div>
-                        <div class="list-subtitle" style="margin-top: 5px;">₹12.4 Lakhs pending for final disbursement.</div>
-                        <button class="btn btn-outline btn-small" style="margin-top: 10px;" onclick="switchTab('approvals', document.querySelectorAll('.nav-item')[1])">Review & Approve</button>
+                        <div class="list-subtitle" style="margin-top: 8px;">₹12.4 Lakhs pending for final disbursement.</div>
+                        <button class="btn btn-outline btn-small" style="margin-top: 12px;" onclick="switchTab('approvals', document.querySelectorAll('.nav-item')[4])">Review & Approve</button>
                     </div>
 
                     <div class="list-card" style="border-left: 4px solid var(--info);">
                         <div class="list-row">
                             <div class="list-title">Capital Expenditure</div>
-                            <div class="status-badge" style="color: var(--info);">VP Request</div>
+                            <div class="status-badge" style="color: var(--info); border-color: var(--info);">VP Request</div>
                         </div>
-                        <div class="list-subtitle" style="margin-top: 5px;">₹2.5 Lakhs for 10 new lab computers.</div>
-                        <button class="btn btn-outline btn-small" style="margin-top: 10px;" onclick="switchTab('approvals', document.querySelectorAll('.nav-item')[1])">Review & Approve</button>
+                        <div class="list-subtitle" style="margin-top: 8px;">₹2.5 Lakhs for 10 new lab computers.</div>
+                        <button class="btn btn-outline btn-small" style="margin-top: 12px;" onclick="switchTab('approvals', document.querySelectorAll('.nav-item')[4])">Review & Approve</button>
                     </div>
                 </div>
 
                 <div class="card hide-on-mobile">
                     <div class="card-header">Revenue vs Expense (YTD)</div>
-                    <div style="height: 250px; width: 100%;"><canvas id="ytdChart"></canvas></div>
+                    <div style="height: 300px; width: 100%;"><canvas id="ytdChart"></canvas></div>
                 </div>
             </div>
         </div>
 
-        <!-- 2. ONE-CLICK MASTER APPROVALS -->
+        <!-- 2. MASTER STUDENT DIRECTORY -->
+        <div id="dir-students" class="workspace">
+            <div class="card">
+                <div class="card-header" style="color: var(--success); border-bottom-color: var(--success);">👨‍🎓 Global Student Database</div>
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">Complete overview of every student enrolled across the school.</p>
+                <div class="grid-2">
+                    <input type="text" id="search-student-master" placeholder="Search by name or ID..." onkeyup="renderMasterStudents()">
+                    <select id="filter-student-master" onchange="renderMasterStudents()">
+                        <option value="All">All Classes</option><option value="Class 9">Class 9</option><option value="Class 10">Class 10</option>
+                    </select>
+                </div>
+                <div id="master-student-list" style="margin-top: 15px;"></div>
+            </div>
+        </div>
+
+        <!-- 3. MASTER STAFF & TEACHER DIRECTORY -->
+        <div id="dir-staff" class="workspace">
+            <div class="card">
+                <div class="card-header" style="color: var(--info); border-bottom-color: var(--info);">👨‍🏫 Master Staff & HR Records</div>
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">View details, salary, and status of all academic and administrative staff.</p>
+                <div class="grid-2">
+                    <input type="text" id="search-staff-master" placeholder="Search staff name..." onkeyup="renderMasterStaff()">
+                    <select id="filter-staff-master" onchange="renderMasterStaff()">
+                        <option value="All">All Departments</option><option value="Teacher">Academic (Teacher)</option><option value="Admin">Admin / HR</option>
+                    </select>
+                </div>
+                <div id="master-staff-list" style="margin-top: 15px;"></div>
+            </div>
+        </div>
+
+        <!-- 4. MASTER TRANSPORT DIRECTORY -->
+        <div id="dir-transport" class="workspace">
+            <div class="card">
+                <div class="card-header" style="color: #e67e22; border-bottom-color: #e67e22;">🚌 Transport & Fleet Command</div>
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">Overview of school buses, routes, and transport personnel.</p>
+                
+                <h4 style="margin-bottom: 15px; color: var(--text-main);">Bus Fleet List</h4>
+                <div id="master-bus-list" style="margin-bottom: 30px;"></div>
+
+                <h4 style="margin-bottom: 15px; color: var(--text-main);">Transport Staff</h4>
+                <div id="master-driver-list"></div>
+            </div>
+        </div>
+
+        <!-- 5. ONE-CLICK MASTER APPROVALS -->
         <div id="approvals" class="workspace">
             <div class="card">
-                <div class="card-header" style="color: var(--success);">✅ Pending Master Approvals</div>
+                <div class="card-header" style="color: var(--success); border-bottom-color: var(--success);">✅ Pending Master Approvals</div>
                 <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">Review and authorize high-level school operations.</p>
                 
                 <div id="approval-list">
-                    <!-- Item 1 -->
                     <div class="list-card" id="appr-1" style="border: 1px solid var(--warning);">
                         <div class="list-row">
-                            <div>
-                                <div class="list-title">Monthly Staff Payroll</div>
-                                <div class="list-subtitle">Requested by: HR Manager</div>
-                            </div>
-                            <div style="text-align: right;">
-                                <div class="list-title" style="color: var(--danger);">₹12,40,000</div>
-                            </div>
+                            <div><div class="list-title">Monthly Staff Payroll</div><div class="list-subtitle" style="margin-top:5px;">Requested by: HR Manager</div></div>
+                            <div style="text-align: right;"><div class="list-title" style="color: var(--danger); font-size: 20px;">₹12,40,000</div></div>
                         </div>
-                        <div style="display:flex; gap:10px; margin-top:15px;">
+                        <div style="display:flex; gap:10px; margin-top:20px;">
                             <button class="btn btn-success" onclick="processApproval('appr-1')">Authorize Funds</button>
                             <button class="btn btn-danger" onclick="rejectApproval('appr-1')">Hold</button>
                         </div>
                     </div>
 
-                    <!-- Item 2 -->
                     <div class="list-card" id="appr-2" style="border: 1px solid var(--info);">
                         <div class="list-row">
-                            <div>
-                                <div class="list-title">New Lab Computers (10x)</div>
-                                <div class="list-subtitle">Requested by: Vice Principal</div>
-                            </div>
-                            <div style="text-align: right;">
-                                <div class="list-title" style="color: var(--danger);">₹2,50,000</div>
-                            </div>
+                            <div><div class="list-title">New Lab Computers (10x)</div><div class="list-subtitle" style="margin-top:5px;">Requested by: Vice Principal</div></div>
+                            <div style="text-align: right;"><div class="list-title" style="color: var(--danger); font-size: 20px;">₹2,50,000</div></div>
                         </div>
-                        <div style="display:flex; gap:10px; margin-top:15px;">
+                        <div style="display:flex; gap:10px; margin-top:20px;">
                             <button class="btn btn-success" onclick="processApproval('appr-2')">Approve Purchase</button>
                             <button class="btn btn-danger" onclick="rejectApproval('appr-2')">Reject</button>
                         </div>
@@ -255,84 +290,105 @@
             </div>
         </div>
 
-        <!-- 3. FINANCIAL FORECASTER -->
+        <!-- 6. FINANCIAL FORECASTER -->
         <div id="finance" class="workspace">
             <div class="card">
                 <div class="card-header">💹 AI Cashflow Forecaster</div>
-                <div style="height: 250px; width: 100%; margin-bottom: 20px;"><canvas id="forecastChart"></canvas></div>
+                <div style="height: 300px; width: 100%; margin-bottom: 25px;"><canvas id="forecastChart"></canvas></div>
                 
-                <div style="background: rgba(16, 185, 129, 0.1); padding: 15px; border-radius: 12px; border: 1px solid var(--success);">
-                    <h4 style="color: var(--success); margin-bottom: 5px; font-size: 14px;">🤖 AI Financial Insight</h4>
-                    <p style="font-size: 13px; color: var(--text-main); line-height: 1.5;">Based on historical fee collection patterns, expect a <strong>15% surge</strong> in revenue next month due to Term 2 fee deadlines. Transport maintenance expenses are trending 5% higher than budget.</p>
+                <div style="background: rgba(16, 185, 129, 0.1); padding: 20px; border-radius: 12px; border: 1px solid var(--success);">
+                    <h4 style="color: var(--success); margin-bottom: 10px; font-size: 15px;">🤖 AI Financial Insight</h4>
+                    <p style="font-size: 14px; color: var(--text-main); line-height: 1.6;">Based on historical fee collection patterns, expect a <strong>15% surge</strong> in revenue next month due to Term 2 fee deadlines. Transport maintenance expenses are trending 5% higher than budget.</p>
                 </div>
             </div>
         </div>
 
-        <!-- 4. CHURN RISK RADAR -->
+        <!-- 7. CHURN RISK RADAR -->
         <div id="predictive" class="workspace">
-            <div class="grid-2" style="margin-bottom: 20px;">
+            <div class="grid-2" style="margin-bottom: 25px;">
                 <div class="stat-box" style="border-left: 4px solid var(--danger);"><h4>High Risk Students</h4><h2 style="color: var(--danger);">12</h2></div>
                 <div class="stat-box" style="border-left: 4px solid var(--warning);"><h4>At-Risk Staff</h4><h2 style="color: var(--warning);">02</h2></div>
             </div>
 
             <div class="card">
-                <div class="card-header" style="color: var(--danger);">🧠 AI Dropout / Churn Radar</div>
+                <div class="card-header" style="color: var(--danger); border-bottom-color: var(--danger);">🧠 AI Dropout / Churn Radar</div>
                 
                 <div class="list-card">
                     <div class="list-row">
-                        <div>
-                            <div class="list-title">Ravi Sharma</div>
-                            <div class="list-subtitle">Class 8 Student</div>
-                        </div>
+                        <div><div class="list-title">Ravi Sharma</div><div class="list-subtitle">Class 8 Student</div></div>
                         <div class="status-badge" style="background: rgba(239, 68, 68, 0.2); color: var(--danger); border: none;">HIGH RISK</div>
                     </div>
-                    <p style="font-size: 12px; color: var(--text-muted); margin-top: 8px;"><strong>AI Flag:</strong> Attendance dropped below 60% + Fees pending for 3 months.</p>
-                    <button class="btn btn-outline btn-small" style="margin-top: 10px; width: 100%;" onclick="showToast('Alert Sent', 'Principal has been tasked to contact parents.', '#f59e0b')">Alert Principal</button>
+                    <p style="font-size: 13px; color: var(--text-muted); margin-top: 12px;"><strong>AI Flag:</strong> Attendance dropped below 60% + Fees pending for 3 months.</p>
+                    <button class="btn btn-outline btn-small" style="margin-top: 15px; width: 100%; border-color: var(--warning); color: var(--warning);" onclick="showToast('Alert Sent', 'Principal has been tasked to contact parents.')">Alert Principal</button>
                 </div>
 
                 <div class="list-card">
                     <div class="list-row">
-                        <div>
-                            <div class="list-title">Ananya Singh</div>
-                            <div class="list-subtitle">Class 10 Student</div>
-                        </div>
+                        <div><div class="list-title">Ananya Singh</div><div class="list-subtitle">Class 10 Student</div></div>
                         <div class="status-badge" style="background: rgba(245, 158, 11, 0.2); color: var(--warning); border: none;">MED RISK</div>
                     </div>
-                    <p style="font-size: 12px; color: var(--text-muted); margin-top: 8px;"><strong>AI Flag:</strong> Academic grades dropped by 40% + Secret grievance log found.</p>
-                    <button class="btn btn-outline btn-small" style="margin-top: 10px; width: 100%;" onclick="showToast('Alert Sent', 'Principal has been tasked to arrange counseling.', '#f59e0b')">Alert Principal</button>
+                    <p style="font-size: 13px; color: var(--text-muted); margin-top: 12px;"><strong>AI Flag:</strong> Academic grades dropped by 40% + Secret grievance log found.</p>
+                    <button class="btn btn-outline btn-small" style="margin-top: 15px; width: 100%; border-color: var(--warning); color: var(--warning);" onclick="showToast('Alert Sent', 'Principal has been tasked to arrange counseling.')">Alert Principal</button>
                 </div>
             </div>
         </div>
 
-        <!-- 5. MULTI-BRANCH MATRIX -->
+        <!-- 8. MULTI-BRANCH MATRIX -->
         <div id="branches" class="workspace">
             <div class="card">
                 <div class="card-header">🏢 Multi-Branch Matrix</div>
                 <div class="grid-2">
                     <div class="list-card" style="border: 2px solid var(--accent-color);">
-                        <div class="list-title" style="font-size: 18px; margin-bottom: 10px;">📍 Main Campus (Mirzapur)</div>
+                        <div class="list-title" style="font-size: 18px; margin-bottom: 15px;">📍 Main Campus (Mirzapur)</div>
                         <div class="list-row"><span class="list-subtitle">Students</span><span class="list-title">1,500</span></div>
                         <div class="list-row"><span class="list-subtitle">Revenue (YTD)</span><span class="list-title" style="color: var(--success);">₹2.5 Cr</span></div>
-                        <div class="list-row"><span class="list-subtitle">Rating</span><span class="status-badge" style="color: var(--success);">Excellent</span></div>
+                        <div class="list-row"><span class="list-subtitle">Rating</span><span class="status-badge" style="color: var(--success); border-color: var(--success);">Excellent</span></div>
                     </div>
 
                     <div class="list-card" style="border: 1px solid var(--border-color);">
-                        <div class="list-title" style="font-size: 18px; margin-bottom: 10px;">📍 City Branch (Vindhyachal)</div>
+                        <div class="list-title" style="font-size: 18px; margin-bottom: 15px;">📍 City Branch (Vindhyachal)</div>
                         <div class="list-row"><span class="list-subtitle">Students</span><span class="list-title">850</span></div>
                         <div class="list-row"><span class="list-subtitle">Revenue (YTD)</span><span class="list-title" style="color: var(--info);">₹1.2 Cr</span></div>
-                        <div class="list-row"><span class="list-subtitle">Rating</span><span class="status-badge" style="color: var(--warning);">Needs Mktg</span></div>
+                        <div class="list-row"><span class="list-subtitle">Rating</span><span class="status-badge" style="color: var(--warning); border-color: var(--warning);">Needs Mktg</span></div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- 6. GOD MODE (CONTROLS) -->
+        <!-- 9. GOD MODE (SUPREME CONTROLS) -->
         <div id="god-mode" class="workspace">
             
+            <!-- Global Overrides -->
             <div class="card" style="background: rgba(239, 68, 68, 0.05); border: 2px solid var(--danger);">
                 <div class="card-header" style="color: var(--danger); border-bottom-color: var(--danger);">🚨 Global Override & Lockdown</div>
-                <p style="font-size: 13px; color: var(--text-main); margin-bottom: 15px; font-weight: bold;">Instantly freeze all 1500+ Student and Staff apps across the school.</p>
+                <p style="font-size: 14px; color: var(--text-main); margin-bottom: 20px; font-weight: bold; line-height: 1.5;">Instantly freeze all 1500+ Student and Staff apps across the school.</p>
                 <button class="btn btn-danger" id="sos-btn" onclick="toggleSOS()">ACTIVATE EMERGENCY LOCKDOWN</button>
+            </div>
+
+            <!-- Financial God Mode -->
+            <div class="card" style="border: 2px solid var(--success); background: rgba(16, 185, 129, 0.05);">
+                <div class="card-header" style="color: var(--success); border-bottom-color: var(--success);">💸 Global Fee Waivers & Audits</div>
+                <p style="font-size: 14px; color: var(--text-main); margin-bottom: 20px; font-weight: bold;">Apply school-wide financial actions.</p>
+                <div class="grid-2">
+                    <button class="btn" style="background: var(--success); color: #000;" onclick="waiveGlobalLateFees()">Waive All Late Fines</button>
+                    <button class="btn btn-outline" style="border-color: var(--success); color: var(--success);" onclick="triggerGlobalAudit()">Initiate Surprise Audit</button>
+                </div>
+            </div>
+
+            <!-- Impersonation Mode -->
+            <div class="card" style="border: 2px solid var(--info); background: rgba(59, 130, 246, 0.05);">
+                <div class="card-header" style="color: var(--info); border-bottom-color: var(--info);">🎭 User Impersonation (View As)</div>
+                <p style="font-size: 14px; color: var(--text-main); margin-bottom: 20px; font-weight: bold;">Log in exactly as any staff or student sees their portal.</p>
+                <div class="grid-2">
+                    <select id="impersonate-user">
+                        <option value="">-- Select Target User --</option>
+                        <option value="student_dashboard.html">Adarsh Patel (Student)</option>
+                        <option value="teacher_dashboard.html">S.K. Mishra (Teacher)</option>
+                        <option value="vp_dashboard.html">Vice Principal Portal</option>
+                        <option value="hr_dashboard.html">HR Portal</option>
+                    </select>
+                    <button class="btn" style="background: var(--info); color: #fff;" onclick="impersonateUser()">Enter Portal 👁️</button>
+                </div>
             </div>
 
             <div class="card" style="border: 2px solid var(--accent-color);">
@@ -343,7 +399,7 @@
 
             <div class="card">
                 <div class="card-header">👑 Deploy New Principal / VP</div>
-                <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 15px;">Only the Director can assign top-level executive access.</p>
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Only the Director can assign top-level executive access.</p>
                 <div class="grid-2">
                     <div><label>Full Name</label><input type="text" id="prin-name" placeholder="e.g. Dr. AK Singh"></div>
                     <div><label>Role</label><select id="prin-role"><option value="principal">Principal</option><option value="vp">Vice Principal</option></select></div>
@@ -352,7 +408,7 @@
                     <div><label>Login Email</label><input type="email" id="prin-email" placeholder="principal@mvm.com"></div>
                     <div><label>Set Password</label><input type="password" id="prin-password" placeholder="Strong Password"></div>
                 </div>
-                <button class="btn btn-outline" style="margin-top: 10px;" onclick="createPrincipalAccount()">Create Executive Account</button>
+                <button class="btn btn-outline" style="margin-top: 15px;" onclick="createPrincipalAccount()">Create Executive Account</button>
             </div>
         </div>
 
@@ -360,18 +416,113 @@
 
     <!-- 🚀 MASTER DIRECTOR ENGINE (JS) -->
     <script>
-        // --- THEME & NAVIGATION ---
+        // --- SECURE MOCK DATA LOADERS FOR DIRECTORIES ---
+        let adminStudentsDB = JSON.parse(localStorage.getItem("adminStudentsDB")) || [
+            { id: "S-101", name: "Adarsh Patel", class: "Class 10", section: "B", phone: "9876543210", status: "Active", feeHistory: [{due: 0}] },
+            { id: "S-102", name: "Rahul Kumar", class: "Class 9", section: "A", phone: "8765432109", status: "Pending Approval", feeHistory: [{due: 2500}] }
+        ];
+
+        let hrStaffDB = JSON.parse(localStorage.getItem("hrStaffDB")) || [
+            { id: "T-101", name: "S.K. Mishra", dept: "Teacher", role: "PGT Science", salary: "45000", status: "Active" },
+            { id: "A-102", name: "HR Manager", dept: "Admin", role: "HR", salary: "35000", status: "Active" }
+        ];
+
+        let transStaffDB = JSON.parse(localStorage.getItem("transStaffDB")) || [
+            { id: "D-101", name: "Raju Driver", role: "Bus Driver", status: "Active", bus: "UP63 T 1234" }
+        ];
+
+        let transBusesDB = JSON.parse(localStorage.getItem("transBusesDB")) || [
+            { id: "B-101", plate: "UP63 T 1234", cap: 50, status: "Active" }
+        ];
+
         window.onload = function() {
-            const user = localStorage.getItem("loggedInUser") || "School Director";
+            const user = localStorage.getItem("loggedInUser") || "Director";
             if(document.getElementById("mobile-avatar")) document.getElementById("mobile-avatar").innerText = "O";
             
             document.body.classList.add("dark-mode");
             localStorage.setItem("darkMode", "true");
             
             checkSOSState();
-            setTimeout(renderCharts, 500); // Render charts after UI loads
+            setTimeout(renderCharts, 500); 
+            
+            // Render Directories
+            renderMasterStudents();
+            renderMasterStaff();
+            renderMasterTransport();
         };
 
+        // --- DIRECTORY RENDER FUNCTIONS (God Mode Viewing) ---
+        function renderMasterStudents() {
+            const list = document.getElementById('master-student-list');
+            const search = document.getElementById('search-student-master') ? document.getElementById('search-student-master').value.toLowerCase() : "";
+            const cls = document.getElementById('filter-student-master') ? document.getElementById('filter-student-master').value : "All";
+            
+            if(!list) return; list.innerHTML = "";
+            let filtered = adminStudentsDB.filter(s => {
+                return (s.name.toLowerCase().includes(search) || s.id.toLowerCase().includes(search)) && (cls === "All" ? true : s.class === cls);
+            });
+
+            if(filtered.length === 0) return list.innerHTML = `<p style="color:var(--text-muted);">No students found.</p>`;
+
+            filtered.forEach(s => {
+                let badgeCol = s.status === "Active" ? "var(--success)" : "var(--danger)";
+                let totalDue = s.feeHistory ? s.feeHistory.reduce((sum, f) => sum + (f.due || 0), 0) : 0;
+                list.innerHTML += `
+                <div class="list-card">
+                    <div class="list-row"><div><div class="list-title">${s.name}</div><div class="list-subtitle">${s.class}-${s.section} | ID: ${s.id}</div></div><div class="status-badge" style="color:${badgeCol}; border-color:${badgeCol};">${s.status}</div></div>
+                    <div class="list-row" style="margin-top:10px; padding-top:10px; border-top:1px dashed var(--border-color);">
+                        <span class="list-subtitle">📞 ${s.phone}</span>
+                        <span class="list-subtitle">Due: <strong style="color:${totalDue > 0 ? 'var(--danger)' : 'var(--success)'};">₹${totalDue}</strong></span>
+                    </div>
+                </div>`;
+            });
+        }
+
+        function renderMasterStaff() {
+            const list = document.getElementById('master-staff-list');
+            const search = document.getElementById('search-staff-master') ? document.getElementById('search-staff-master').value.toLowerCase() : "";
+            const dept = document.getElementById('filter-staff-master') ? document.getElementById('filter-staff-master').value : "All";
+            
+            if(!list) return; list.innerHTML = "";
+            let filtered = hrStaffDB.filter(s => {
+                return (s.name.toLowerCase().includes(search) || s.id.toLowerCase().includes(search)) && (dept === "All" ? true : s.dept === dept);
+            });
+
+            if(filtered.length === 0) return list.innerHTML = `<p style="color:var(--text-muted);">No staff found.</p>`;
+
+            filtered.forEach(s => {
+                let badgeCol = s.status === "Active" ? "var(--success)" : "var(--danger)";
+                list.innerHTML += `
+                <div class="list-card">
+                    <div class="list-row"><div><div class="list-title">${s.name}</div><div class="list-subtitle">${s.role} | ID: ${s.id}</div></div><div class="status-badge" style="color:${badgeCol}; border-color:${badgeCol};">${s.status}</div></div>
+                    <div class="list-row" style="margin-top:10px; padding-top:10px; border-top:1px dashed var(--border-color);">
+                        <span class="list-subtitle">Dept: ${s.dept}</span>
+                        <span class="list-subtitle">Salary: <strong style="color:var(--text-main);">₹${s.salary}</strong></span>
+                    </div>
+                </div>`;
+            });
+        }
+
+        function renderMasterTransport() {
+            const busList = document.getElementById('master-bus-list');
+            const drvList = document.getElementById('master-driver-list');
+            if(!busList || !drvList) return;
+            
+            busList.innerHTML = ""; drvList.innerHTML = "";
+
+            transBusesDB.forEach(b => {
+                let badgeCol = b.status === "Active" ? "var(--success)" : "var(--danger)";
+                busList.innerHTML += `<div class="list-card"><div class="list-row"><div><div class="list-title">${b.plate}</div><div class="list-subtitle">Cap: ${b.cap}</div></div><div class="status-badge" style="color:${badgeCol}; border-color:${badgeCol};">${b.status}</div></div></div>`;
+            });
+
+            transStaffDB.forEach(s => {
+                let badgeCol = s.status === "Active" ? "var(--success)" : "var(--danger)";
+                drvList.innerHTML += `<div class="list-card"><div class="list-row"><div><div class="list-title">${s.name}</div><div class="list-subtitle">${s.role} | Bus: ${s.bus || 'None'}</div></div><div class="status-badge" style="color:${badgeCol}; border-color:${badgeCol};">${s.status}</div></div></div>`;
+            });
+        }
+
+
+        // --- THEME & NAVIGATION ---
         function toggleAppMenu() {
             document.querySelector('.sidebar').classList.toggle('open');
             document.querySelector('.sidebar-overlay').classList.toggle('open');
@@ -391,6 +542,11 @@
             let tabName = element.innerText.replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]|[\u2600-\u27FF]/g, '').trim(); 
             if(document.getElementById('mobile-title')) document.getElementById('mobile-title').innerText = tabName;
             
+            // Refresh Directories if tabs clicked
+            if(tabId === 'dir-students') renderMasterStudents();
+            if(tabId === 'dir-staff') renderMasterStaff();
+            if(tabId === 'dir-transport') renderMasterTransport();
+
             if(window.innerWidth <= 768) { toggleAppMenu(); }
         }
 
@@ -452,6 +608,23 @@
             localStorage.setItem("schoolBroadcast", "👑 DIRECTOR'S DESK: " + msg);
             showToast("🚀 Broadcast Sent", "Pushed globally to all apps.");
             document.getElementById("god-msg").value = "";
+        }
+
+        function waiveGlobalLateFees() {
+            if(confirm("This will permanently waive all pending late fines for the current month. Proceed?")) {
+                showToast("✅ Fees Waived", "All late fines have been zeroed out across the database.");
+            }
+        }
+
+        function triggerGlobalAudit() {
+            showToast("🔍 Audit Initiated", "Notifications sent to HR, Admin, and VP for immediate financial audit.");
+        }
+
+        function impersonateUser() {
+            let target = document.getElementById("impersonate-user").value;
+            if(!target) return alert("Select a user to impersonate.");
+            showToast("🎭 Initiating Override", "Logging you in as the selected user...");
+            setTimeout(() => { window.location.href = target; }, 2000);
         }
 
         // API User Creation
