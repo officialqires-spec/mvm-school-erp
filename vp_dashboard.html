@@ -31,7 +31,7 @@
             --info: #3b82f6;
             --shadow-sm: 0 4px 15px rgba(0,0,0,0.03); 
             --shadow-md: 0 8px 25px rgba(0,0,0,0.06);
-            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            --transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
         /* 🌌 MAHADEV ANANT / GALAXY THEME (Deep Violet & Indigo) */
@@ -49,9 +49,11 @@
             --success: #34d399; 
             --danger: #f87171; 
             --warning: #fbbf24; 
-            --info: #60a5fa;
+            --info: #8b5cf6;
             --shadow-sm: 0 4px 15px rgba(103, 58, 183, 0.15);
             --shadow-md: 0 8px 30px rgba(103, 58, 183, 0.3);
+            --ai-bubble: rgba(103, 58, 183, 0.15); 
+            --ai-text: #e9d5ff;
         }
 
         body { 
@@ -83,7 +85,7 @@
 
         .header-left { display: flex; align-items: center; gap: 15px; }
         .menu-btn { font-size: 26px; cursor: pointer; background: none; border: none; color: var(--text-main); outline: none; }
-        .app-title { font-size: 18px; font-weight: 900; letter-spacing: 0.5px; color: var(--text-main); }
+        .app-title { font-size: 18px; font-weight: 900; letter-spacing: 0.5px; color: var(--text-main); text-transform: uppercase;}
         .header-right { display: flex; align-items: center; gap: 12px; }
         
         .theme-toggle { 
@@ -97,6 +99,7 @@
         }
         .theme-toggle:active { transform: scale(0.8) rotate(45deg); }
         
+        /* Clickable Avatar */
         .avatar { 
             width: 38px; 
             height: 38px; 
@@ -110,25 +113,29 @@
             font-size: 16px; 
             box-shadow: var(--shadow-sm); 
             border: 2px solid var(--border-color); 
+            cursor: pointer;
+            transition: transform 0.2s;
         }
+        .avatar:hover { transform: scale(1.1); }
 
-        /* 🍔 SLIDE-IN APP MENU */
+        /* 🍔 SLIDE-IN APP MENU (Smooth Formal Animation) */
         .sidebar { 
             position: fixed; 
             top: 0; 
-            left: -100%; 
+            left: 0; 
+            transform: translateX(-100%); 
             width: 290px; 
             height: 100%; 
             background: var(--sidebar-bg); 
             z-index: 9999; 
-            transition: var(--transition); 
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1); 
             box-shadow: 10px 0 40px rgba(0,0,0,0.8); 
             display: flex; 
             flex-direction: column; 
             padding-bottom: 20px; 
             border-right: 1px solid var(--border-color); 
         }
-        .sidebar.open { left: 0; }
+        .sidebar.open { transform: translateX(0); }
         
         .sidebar-overlay { 
             display: none; 
@@ -140,8 +147,10 @@
             background: rgba(0,0,0,0.8); 
             z-index: 9998; 
             backdrop-filter: blur(4px); 
+            opacity: 0;
+            transition: opacity 0.4s ease;
         }
-        .sidebar-overlay.open { display: block; animation: fadeIn 0.3s; }
+        .sidebar-overlay.open { display: block; opacity: 1; }
         
         .sidebar-header { 
             padding: 25px 20px; 
@@ -189,7 +198,7 @@
             padding: 14px 18px; 
             border-radius: 12px; 
             cursor: pointer; 
-            font-size: 15px; 
+            font-size: 14px; 
             font-weight: 700; 
             color: var(--text-muted); 
             display: flex; 
@@ -221,6 +230,23 @@
             animation: pulseAlert 1.5s infinite !important; 
             border: 2px solid #b71c1c !important; 
         }
+
+        /* 🧑‍💼 PROFILE MODAL (Glassmorphism) */
+        .profile-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 100000; backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s ease; }
+        .profile-modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .profile-modal { background: var(--card-bg); width: 90%; max-width: 400px; border-radius: 20px; border: 1px solid var(--border-color); box-shadow: 0 20px 50px rgba(0,0,0,0.5); transform: translateY(30px) scale(0.95); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); overflow: hidden; }
+        .profile-modal-overlay.active .profile-modal { transform: translateY(0) scale(1); }
+        .modal-header-bg { background: var(--accent-color); padding: 30px 20px 50px 20px; text-align: center; position: relative; }
+        .modal-close { position: absolute; top: 15px; right: 20px; font-size: 24px; color: #fff; cursor: pointer; border: none; background: none; }
+        .modal-avatar { width: 80px; height: 80px; background: #fff; color: #000; border-radius: 50%; font-size: 32px; font-weight: 900; display: flex; justify-content: center; align-items: center; margin: 0 auto; border: 4px solid var(--card-bg); transform: translateY(40px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .modal-body { padding: 50px 20px 30px 20px; text-align: center; }
+        .modal-name { font-size: 22px; font-weight: 900; color: var(--text-main); margin-bottom: 5px; }
+        .modal-id { font-size: 13px; color: var(--info); font-weight: 800; margin-bottom: 20px; }
+        .modal-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; text-align: left; }
+        .modal-info-box { background: rgba(0,0,0,0.03); padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); }
+        .dark-mode .modal-info-box { background: rgba(255,255,255,0.02); }
+        .modal-info-box label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 800; margin-bottom: 4px; display: block; }
+        .modal-info-box span { font-size: 13px; font-weight: 700; color: var(--text-main); }
 
         /* 🏢 MAIN WORKSPACE */
         .main-content { flex-grow: 1; overflow-y: auto; overflow-x: hidden; position: relative; }
@@ -260,7 +286,7 @@
         .card-header { 
             font-size: 19px; 
             font-weight: 800; 
-            margin-bottom: 20px; 
+            margin-bottom: 18px; 
             padding-bottom: 12px; 
             border-bottom: 1px dashed var(--border-color); 
             color: var(--text-main); 
@@ -269,13 +295,13 @@
             align-items: center; 
         }
 
-        .grid-1 { display: grid; grid-template-columns: 1fr; gap: 15px; }
+        .grid-1 { display: grid; grid-template-columns: 1fr; gap: 20px; }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
 
         .stat-box { 
             background: var(--card-bg); 
-            padding: 20px; 
+            padding: 22px; 
             border-radius: 16px; 
             border: 1px solid var(--border-color); 
             box-shadow: var(--shadow-sm); 
@@ -310,8 +336,8 @@
             background: var(--bg-color); 
             border: 1px solid var(--border-color); 
             border-radius: 14px; 
-            padding: 15px; 
-            margin-bottom: 12px; 
+            padding: 18px; 
+            margin-bottom: 15px; 
             transition: var(--transition); 
         }
         .list-card:active { transform: scale(0.98); }
@@ -325,7 +351,7 @@
         .list-title { font-size: 15px; font-weight: 800; color: var(--text-main); }
         .list-subtitle { font-size: 13px; color: var(--text-muted); font-weight: 600; line-height: 1.4; }
         .status-badge { 
-            padding: 4px 10px; 
+            padding: 5px 12px; 
             border-radius: 8px; 
             font-size: 11px; 
             font-weight: 900; 
@@ -351,8 +377,8 @@
             background: rgba(255,255,255,0.03); 
         }
         input:focus, select:focus, textarea:focus { 
-            border-color: #673ab7; 
-            box-shadow: 0 0 0 3px rgba(103, 58, 183, 0.2); 
+            border-color: var(--info); 
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2); 
         }
         label { 
             display: block; 
@@ -366,7 +392,7 @@
 
         .btn { 
             width: 100%; 
-            padding: 14px; 
+            padding: 16px; 
             background: var(--accent-color); 
             color: var(--accent-text); 
             border: none; 
@@ -390,10 +416,24 @@
         .btn-outline { background: transparent; border: 2px solid var(--accent-color); color: var(--text-main); box-shadow: none; }
         .btn-small { padding: 8px 12px; font-size: 12px; border-radius: 8px; width: auto; text-transform: none; }
 
-        /* Data Tables (Desktop) -> Cards (Mobile) */
-        .data-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; color: var(--text-main); }
-        .data-table th, .data-table td { padding: 14px; text-align: left; border-bottom: 1px dashed var(--border-color); }
-        .data-table th { background: var(--bg-color); font-weight: 800; color: var(--text-muted); font-size: 13px; text-transform: uppercase; }
+        /* CCTV Grid */
+        .cctv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .camera-feed { background: #000; height: 220px; border-radius: 14px; position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center; border: 2px solid var(--border-color); }
+        .camera-feed img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; transition: 0.3s; }
+        .camera-feed:hover img { opacity: 1; transform: scale(1.05); }
+        .camera-feed span.label { position: absolute; bottom: 10px; left: 15px; color: #fff; font-size: 12px; font-weight: 900; background: rgba(0,0,0,0.6); padding: 5px 10px; border-radius: 6px; letter-spacing: 1px; }
+        .camera-feed span.live { position: absolute; top: 10px; right: 15px; color: #ff3b30; font-size: 12px; font-weight: 900; display: flex; align-items: center; gap: 5px; background: rgba(0,0,0,0.6); padding: 4px 8px; border-radius: 6px; }
+        .dot { width: 8px; height: 8px; background: #ff3b30; border-radius: 50%; animation: blink 1s infinite; }
+        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0; } 100% { opacity: 1; } }
+
+        /* 🤖 SUPER ADVANCED AI BOT STYLING */
+        .ai-core-container { display: flex; justify-content: center; align-items: center; padding: 30px 0; }
+        .ai-core { width: 80px; height: 80px; border-radius: 50%; background: radial-gradient(circle, var(--info) 0%, transparent 70%); box-shadow: 0 0 20px var(--info), inset 0 0 20px #fff; border: 2px solid rgba(139, 92, 246, 0.5); display: flex; justify-content: center; align-items: center; font-size: 30px; transition: 0.3s; }
+        .ai-core.thinking { animation: pulseAI 1.5s infinite; }
+        @keyframes pulseAI { 0% { transform: scale(0.95); box-shadow: 0 0 10px var(--info); } 50% { transform: scale(1.1); box-shadow: 0 0 40px var(--info), inset 0 0 30px #fff; } 100% { transform: scale(0.95); box-shadow: 0 0 10px var(--info); } }
+        
+        .ai-terminal { background: rgba(0,0,0,0.3); border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 16px; padding: 20px; font-family: 'Courier New', Courier, monospace; min-height: 150px; color: var(--info); font-weight: bold; font-size: 14px; line-height: 1.6; display: flex; flex-direction: column; justify-content: center; }
+        .ai-terminal.active { color: var(--text-main); background: var(--ai-bubble); border-color: var(--info); font-family: 'Segoe UI', sans-serif;}
 
         /* Toast Notification */
         #toast-container { 
@@ -406,7 +446,7 @@
             flex-direction: column; 
             gap: 10px; 
             width: 90%; 
-            max-width: 350px; 
+            max-width: 380px; 
             pointer-events: none; 
         }
         .toast { 
@@ -414,7 +454,7 @@
             border-radius: 14px; 
             color: #fff; 
             font-weight: 800; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6); 
             font-size: 14px; 
             animation: slideUpToast 0.4s ease forwards; 
             text-align: center; 
@@ -433,6 +473,8 @@
         /* Mobile Fixes for Tables & Layouts */
         @media (max-width: 768px) {
             .grid-3 { grid-template-columns: 1fr; }
+            .grid-2 { grid-template-columns: 1fr; }
+            .cctv-grid { grid-template-columns: 1fr; }
             .data-table thead { display: none; }
             .data-table tbody tr { 
                 display: block; 
@@ -470,9 +512,8 @@
         @media (min-width: 769px) {
             body { flex-direction: row; }
             .mobile-header { display: none !important; }
-            .sidebar { position: relative; left: 0; box-shadow: none; border-right: 1px solid var(--border-color); }
+            .sidebar { transform: translateX(0); position: relative; box-shadow: none; border-right: 1px solid var(--border-color); width: 300px;}
             .close-sidebar { display: none !important; }
-            .grid-1 { grid-template-columns: 2fr 1fr; } 
             .workspace { padding: 40px; }
         }
     </style>
@@ -480,6 +521,28 @@
 <body>
 
     <div id="toast-container"></div>
+
+    <!-- 🧑‍💼 TOP PROFILE MODAL -->
+    <div class="profile-modal-overlay" id="profile-modal-overlay" onclick="closeProfileModal(event)">
+        <div class="profile-modal">
+            <div class="modal-header-bg">
+                <button class="modal-close" onclick="closeProfileModal(event)">×</button>
+                <div class="modal-avatar" id="modal-avatar">V</div>
+            </div>
+            <div class="modal-body">
+                <div class="modal-name" id="modal-name">Vice Principal</div>
+                <div class="modal-id">ID: MVM-VP-001 | Executive Head</div>
+                <div class="modal-info-grid">
+                    <div class="modal-info-box"><label>Department</label><span>Administration</span></div>
+                    <div class="modal-info-box"><label>Joined</label><span style="color: var(--success);">05 Jun 2017</span></div>
+                    <div class="modal-info-box"><label>Phone</label><span>+91 9876500000</span></div>
+                    <div class="modal-info-box"><label>Access Level</label><span style="color: var(--warning);">Executive Tier</span></div>
+                    <div class="modal-info-box" style="grid-column: 1 / -1;"><label>Office Location</label><span>VP's Cabin, Block A</span></div>
+                </div>
+                <button class="btn btn-danger" style="margin-top: 25px;" onclick="logoutVP()">🚪 Secure Logout</button>
+            </div>
+        </div>
+    </div>
 
     <!-- 📱 MOBILE STICKY HEADER -->
     <div class="mobile-header">
@@ -489,7 +552,7 @@
         </div>
         <div class="header-right">
             <button class="theme-toggle" onclick="toggleDarkMode()" title="Cosmic Mode">🔱</button>
-            <div class="avatar" id="mobile-avatar">V</div>
+            <div class="avatar" id="mobile-avatar" onclick="openProfileModal()">V</div>
         </div>
     </div>
 
@@ -503,25 +566,27 @@
                 <h2>MVM PUBLIC</h2>
                 <div class="role-badge">VICE PRINCIPAL</div>
             </div>
+            <!-- Desktop Profile Trigger -->
+            <div class="avatar hide-on-mobile" id="desktop-avatar" style="margin: 15px auto 0 auto; width: 60px; height: 60px; font-size: 24px;" onclick="openProfileModal()">V</div>
+            <div class="hide-on-mobile" style="margin-top: 10px; font-size: 14px; font-weight: bold; color: var(--text-main);">My Profile</div>
         </div>
         
         <div class="nav-menu">
             <div class="nav-item active" onclick="switchTab('dashboard', this)">📊 Daily Operations</div>
+            <div class="nav-item" onclick="switchTab('vp-ai-general', this)">🤖 Supreme AI Assistant</div>
             <div class="nav-item" onclick="switchTab('analytics', this)">📈 School Analytics</div>
+            <div class="nav-item" onclick="switchTab('leaderboard', this)">🏆 Global Leaderboard</div>
             <div class="nav-item" onclick="switchTab('proxy', this)">🔄 Smart Proxy</div>
             <div class="nav-item" onclick="switchTab('syllabus', this)">📚 Syllabus Tracker</div>
             <div class="nav-item" onclick="switchTab('discipline', this)">⚖️ Discipline Log</div>
             <div class="nav-item" onclick="switchTab('leave', this)">✅ Master Approvals</div>
-            <div class="nav-item" onclick="switchTab('vp-ai-general', this)">🤖 VP AI Assistant</div>
             <div class="nav-item" onclick="switchTab('grievance', this)">🕵️‍♂️ Secret Grievance</div>
             <div class="nav-item" onclick="switchTab('cctv', this)">📹 Live CCTV Hub</div>
-            <div class="nav-item" onclick="switchTab('leaderboard', this)">🏆 Global Leaderboard</div>
             <div class="nav-item" onclick="switchTab('inventory', this)">📦 Logistics & HW</div>
             <div class="nav-item" onclick="switchTab('audit', this)">🧑‍🏫 Teacher Audit</div>
             
             <div class="nav-item" id="sos-btn" onclick="toggleSOS()" style="margin-top: 15px; justify-content: center; font-weight: 900; color: var(--danger); border: 1px solid var(--danger);">🚨 ACTIVATE SOS OVERRIDE</div>
             
-            <!-- SECURE LOGOUT BUTTON ADDED HERE -->
             <div class="nav-item logout-btn" onclick="logoutVP()" style="margin-top: 10px; justify-content: center;">🚪 SECURE LOGOUT</div>
         </div>
     </div>
@@ -568,18 +633,42 @@
             </div>
         </div>
 
-        <!-- 2. ANALYTICS -->
+        <!-- 2. SUPREME AI ASSISTANT -->
+        <div id="vp-ai-general" class="workspace">
+            <div class="card" style="border: 2px solid var(--info); background: rgba(139, 92, 246, 0.05);">
+                <div class="card-header" style="color: var(--info); border-bottom-color: var(--info);">🤖 Supreme AI Assistant</div>
+                
+                <div class="ai-core-container">
+                    <div class="ai-core" id="ai-core-orb">🧠</div>
+                </div>
+                <p style="text-align: center; color: var(--text-muted); font-size: 12px; margin-bottom: 20px; font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase;">VP SYSTEM STANDBY. READY FOR INPUT.</p>
+                
+                <div class="grid-1" style="margin-bottom: 15px;">
+                    <div>
+                        <label>Attach Document/Image (Optional)</label>
+                        <input type="file" id="vp-general-image" accept=".pdf, image/*" style="margin: 0;">
+                    </div>
+                </div>
+
+                <label style="margin-top: 15px;">Your Command Prompt</label>
+                <textarea id="vp-general-input" rows="3" placeholder="E.g., Analyze this timetable image or suggest ways to improve student attendance..." style="font-family: 'Courier New', Courier, monospace; border-color: var(--info);"></textarea>
+                
+                <button onclick="askGeneralVPAI()" class="btn" style="background: var(--info); box-shadow: 0 0 15px rgba(139, 92, 246, 0.5);">Initialize Processing ✨</button>
+                
+                <div id="vp-general-response" class="ai-terminal" style="margin-top: 25px; display: none;"></div>
+            </div>
+        </div>
+
+        <!-- 3. ANALYTICS (Stacked Vertically) -->
         <div id="analytics" class="workspace">
             <div class="grid-1">
-                <div class="grid-2">
-                    <div class="card">
-                        <div class="card-header">📊 School Attendance Trends</div>
-                        <div style="position: relative; height: 250px; width: 100%;"><canvas id="vpAttChart"></canvas></div>
-                    </div>
-                    <div class="card">
-                        <div class="card-header">📈 Class 9 vs 10 Avg Marks</div>
-                        <div style="position: relative; height: 250px; width: 100%;"><canvas id="vpPerfChart"></canvas></div>
-                    </div>
+                <div class="card">
+                    <div class="card-header">📊 School Attendance Trends</div>
+                    <div style="position: relative; height: 300px; width: 100%;"><canvas id="vpAttChart"></canvas></div>
+                </div>
+                <div class="card">
+                    <div class="card-header">📈 Class 9 vs 10 Avg Marks</div>
+                    <div style="position: relative; height: 300px; width: 100%;"><canvas id="vpPerfChart"></canvas></div>
                 </div>
                 <div class="card" style="border: 2px solid var(--danger);">
                     <div class="card-header" style="color: var(--danger); border-bottom-color: var(--danger);">🔥 Discipline Incident Heatmap</div>
@@ -588,7 +677,39 @@
             </div>
         </div>
 
-        <!-- 3. SMART PROXY -->
+        <!-- 4. GLOBAL LEADERBOARD (Premium Flex Design) -->
+        <div id="leaderboard" class="workspace">
+            <div class="card">
+                <div class="card-header">🏆 School Global Leaderboard</div>
+                <div class="grid-1">
+                    <div style="display: flex; align-items: center; justify-content: space-between; background: linear-gradient(135deg, #FFD700, #F5A623); padding: 25px; border-radius: 16px; color: #000; box-shadow: 0 10px 25px rgba(245, 166, 35, 0.4); flex-wrap: wrap; gap: 15px;">
+                        <div>
+                            <h4 style="margin-bottom: 8px; font-size: 14px; font-weight:900; text-transform:uppercase; letter-spacing:1px; opacity:0.8;">👑 Student of the Month</h4>
+                            <h2 style="font-size: 26px; font-weight: 900; margin-bottom:5px;">Adarsh Patel</h2>
+                            <p style="font-size: 14px; font-weight: 700;">Class 10 - B</p>
+                        </div>
+                        <div style="text-align: right;">
+                            <h2 style="font-size: 36px; font-weight: 900;">99.5%</h2>
+                            <p style="font-size: 12px; font-weight: 800; text-transform:uppercase;">Highest XP & Flawless HW</p>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; align-items: center; justify-content: space-between; background: var(--card-bg); padding: 25px; border-radius: 16px; border: 2px solid var(--info); margin-top: 15px; flex-wrap: wrap; gap: 15px;">
+                        <div>
+                            <h4 style="margin-bottom: 8px; font-size: 14px; font-weight:900; color:var(--info); text-transform:uppercase; letter-spacing:1px;">🌟 Best Performing Class</h4>
+                            <h2 style="font-size: 26px; font-weight: 900; margin-bottom:5px; color:var(--text-main);">Class 9 - Science</h2>
+                            <p style="font-size: 14px; font-weight: 700; color:var(--text-muted);">Mr. S.K. Mishra</p>
+                        </div>
+                        <div style="text-align: right;">
+                            <h2 style="font-size: 36px; font-weight: 900; color:var(--success);">92%</h2>
+                            <p style="font-size: 12px; font-weight: 800; color:var(--text-muted); text-transform:uppercase;">Average Batch Score</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. SMART PROXY -->
         <div id="proxy" class="workspace">
             <div class="card">
                 <div class="card-header">🔄 AI Teacher Substitution</div>
@@ -619,7 +740,7 @@
             </div>
         </div>
 
-        <!-- 4. SYLLABUS TRACKER -->
+        <!-- 6. SYLLABUS TRACKER -->
         <div id="syllabus" class="workspace">
             <div class="card">
                 <div class="card-header">📚 Syllabus Completion Tracker</div>
@@ -643,7 +764,7 @@
             </div>
         </div>
 
-        <!-- 5. DISCIPLINE LOG -->
+        <!-- 7. DISCIPLINE LOG -->
         <div id="discipline" class="workspace">
             <div class="card">
                 <div class="card-header">⚖️ Disciplinary & Conduct Log</div>
@@ -671,7 +792,7 @@
             </div>
         </div>
 
-        <!-- 6. LEAVE APPROVALS -->
+        <!-- 8. LEAVE APPROVALS -->
         <div id="leave" class="workspace">
             <div class="card">
                 <div class="card-header">✅ Long Leave Approvals (3+ Days)</div>
@@ -680,7 +801,7 @@
             </div>
         </div>
 
-        <!-- 7. SECRET GRIEVANCE -->
+        <!-- 9. SECRET GRIEVANCE -->
         <div id="grievance" class="workspace">
             <div class="card" style="border: 2px solid var(--danger); background: rgba(239, 68, 68, 0.05);">
                 <div class="card-header" style="color: var(--danger); border-bottom-color: var(--danger);">🕵️‍♂️ Anonymous Grievance Box</div>
@@ -689,7 +810,7 @@
             </div>
         </div>
 
-        <!-- 8. CCTV HUB -->
+        <!-- 10. CCTV HUB -->
         <div id="cctv" class="workspace">
             <div class="card">
                 <div class="card-header">📹 Live Campus Surveillance</div>
@@ -714,26 +835,7 @@
             </div>
         </div>
 
-        <!-- 9. GLOBAL LEADERBOARD -->
-        <div id="leaderboard" class="workspace">
-            <div class="card">
-                <div class="card-header">🏆 School Global Leaderboard</div>
-                <div class="grid-2">
-                    <div style="background: linear-gradient(135deg, #FFD700, #F5A623); padding: 30px; border-radius: 16px; color: #000; box-shadow: 0 10px 25px rgba(245, 166, 35, 0.4);">
-                        <h4 style="margin-bottom: 10px; font-size: 15px; font-weight:900; text-transform:uppercase;">👑 Student of the Month</h4>
-                        <h2 style="font-size: 28px; font-weight: 900; margin-bottom:10px;">Adarsh Patel (Class 10)</h2>
-                        <p style="font-size: 14px; font-weight: 700;">Highest XP, Flawless Homework Record & 100% Attendance</p>
-                    </div>
-                    <div style="background: var(--card-bg); padding: 30px; border-radius: 16px; border: 2px solid var(--info);">
-                        <h4 style="margin-bottom: 10px; font-size: 15px; font-weight:900; color:var(--info); text-transform:uppercase;">🌟 Best Performing Class</h4>
-                        <h2 style="font-size: 28px; font-weight: 900; margin-bottom:10px; color:var(--text-main);">Class 9 - Science</h2>
-                        <p style="font-size: 14px; font-weight: 700; color:var(--text-muted);">92% Average Batch Score</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 10. INVENTORY -->
+        <!-- 11. INVENTORY -->
         <div id="inventory" class="workspace">
             <div class="card">
                 <div class="card-header">📦 Logistics & Hardware Inventory</div>
@@ -768,7 +870,7 @@
             </div>
         </div>
 
-        <!-- 11. TEACHER AUDIT -->
+        <!-- 12. TEACHER AUDIT -->
         <div id="audit" class="workspace">
             <div class="card">
                 <div class="card-header">🧑‍🏫 Teacher Performance Audit</div>
@@ -795,23 +897,6 @@
                 <div id="audit-log">
                     <p style="color:var(--text-muted); font-size:14px; font-weight:600;">Recent audits will appear here...</p>
                 </div>
-            </div>
-        </div>
-
-        <!-- 12. VP AI ASSISTANT -->
-        <div id="vp-ai-general" class="workspace">
-            <div class="card">
-                <div class="card-header">🤖 VP AI Assistant</div>
-                <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 14px; font-weight:600;">Upload circulars, analyze timetables, or ask for management and administrative advice.</p>
-                
-                <label>Attach Document/Image (Optional)</label>
-                <input type="file" id="vp-general-image" accept="image/*">
-                
-                <label>Your Prompt</label>
-                <textarea id="vp-general-input" rows="4" placeholder="E.g., Analyze this timetable image or suggest ways to improve student attendance..."></textarea>
-                
-                <button onclick="askGeneralVPAI()" class="btn">Analyze with AI ✨</button>
-                <div id="vp-general-response" style="margin-top: 20px; padding: 20px; background: rgba(14, 165, 233, 0.1); color: #38bdf8; border-radius: 12px; display: none; border: 1px solid rgba(14, 165, 233, 0.3); font-weight: 600; line-height: 1.6;"></div>
             </div>
         </div>
 
@@ -844,8 +929,20 @@
         }
 
         const loggedInUser = localStorage.getItem("loggedInUser") || "Vice Principal";
-        document.getElementById("vp-name").innerText = loggedInUser;
-        document.getElementById("mobile-avatar").innerText = "V";
+        document.getElementById("modal-name").innerText = loggedInUser;
+        if(document.getElementById("mobile-avatar")) document.getElementById("mobile-avatar").innerText = "V";
+        if(document.getElementById("desktop-avatar")) document.getElementById("desktop-avatar").innerText = "V";
+        if(document.getElementById("modal-avatar")) document.getElementById("modal-avatar").innerText = "V";
+
+        // --- PROFILE MODAL LOGIC ---
+        function openProfileModal() {
+            document.getElementById("profile-modal-overlay").classList.add("active");
+        }
+        function closeProfileModal(event) {
+            if(event.target.id === 'profile-modal-overlay' || event.target.className === 'modal-close') {
+                document.getElementById("profile-modal-overlay").classList.remove("active");
+            }
+        }
 
         window.onload = function() {
             document.body.classList.add("dark-mode");
@@ -1118,8 +1215,12 @@
             if(!text && (!fileInput || fileInput.files.length === 0)) return showUniversalToast("Error", "Type prompt or upload image.", "var(--danger)");
             
             const responseBox = document.getElementById('vp-general-response');
-            responseBox.style.display = "block"; 
-            responseBox.innerHTML = "⏳ AI is analyzing...";
+            const aiOrb = document.getElementById('ai-core-orb');
+            
+            responseBox.style.display = "flex"; 
+            responseBox.innerHTML = "> Establishing connection to VP AI Core...\n> Processing parameters...";
+            responseBox.classList.remove('active'); 
+            aiOrb.classList.add('thinking'); 
             
             try {
                 let base64Data = null; 
@@ -1135,6 +1236,8 @@
                     }); 
                 }
                 
+                setTimeout(() => { responseBox.innerHTML += "\n> Analyzing infrastructure intent..."; }, 800);
+
                 const response = await fetch('/api/gemini', { 
                     method: "POST", 
                     headers: { "Content-Type": "application/json" }, 
@@ -1145,12 +1248,16 @@
                 const data = await response.json();
                 
                 if(data.candidates && data.candidates[0]) { 
-                    responseBox.innerHTML = "💡 <strong>AI Analysis:</strong><br><br>" + data.candidates[0].content.parts[0].text.replace(/\n/g, '<br>'); 
+                    aiOrb.classList.remove('thinking');
+                    responseBox.classList.add('active'); 
+                    responseBox.innerHTML = "💡 <strong>AI Analysis Complete:</strong><br><br>" + data.candidates[0].content.parts[0].text.replace(/\n/g, '<br>'); 
                     document.getElementById('vp-general-input').value = ""; 
                     if(fileInput) fileInput.value = ""; 
                 }
             } catch (error) { 
-                responseBox.innerHTML = `❌ Connection Error. Offline mode active.`; 
+                aiOrb.classList.remove('thinking');
+                responseBox.style.color = "var(--danger)"; 
+                responseBox.innerHTML = `> [ERR_CONNECTION_REFUSED] AI Core offline.`; 
             }
         }
 
