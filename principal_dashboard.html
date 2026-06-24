@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MVM Public School - Principal Portal</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * { 
             box-sizing: border-box; 
@@ -31,22 +32,18 @@
             --info: #3b82f6;
             --shadow-sm: 0 4px 15px rgba(0,0,0,0.03); 
             --shadow-md: 0 8px 25px rgba(0,0,0,0.06);
-            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            --transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
         /* 🕉️ KAILASH / SHANT SHIVA THEME (Supreme Authority & Calm) */
         body.dark-mode {
-            /* Midnight Space / Kailash Night */
             --bg-color: #030712; 
-            /* Slate/Icy Glass Cards */
             --card-bg: rgba(15, 23, 42, 0.75); 
             --text-main: #f8fafc; 
-            /* Moon Silver / Ganga Cyan accents */
             --text-muted: rgba(148, 163, 184, 0.9);
             --border-color: rgba(56, 189, 248, 0.25); 
             --sidebar-bg: rgba(2, 6, 23, 0.95); 
             --hover-bg: rgba(56, 189, 248, 0.15); 
-            /* Divine Icy Blue & Deep Ocean Gradient for Buttons */
             --accent-color: linear-gradient(135deg, #0284c7 0%, #0369a1 50%, #1e3a8a 100%);
             --accent-hover: linear-gradient(135deg, #0369a1 0%, #1e3a8a 100%);
             --accent-text: #ffffff;
@@ -56,6 +53,8 @@
             --info: #38bdf8;
             --shadow-sm: 0 4px 15px rgba(2, 132, 199, 0.15);
             --shadow-md: 0 8px 30px rgba(2, 132, 199, 0.3);
+            --ai-bubble: rgba(56, 189, 248, 0.1); 
+            --ai-text: #bae6fd;
         }
 
         body { 
@@ -101,6 +100,7 @@
         }
         .theme-toggle:active { transform: scale(0.8) rotate(45deg); }
         
+        /* Clickable Avatar */
         .avatar { 
             width: 38px; 
             height: 38px; 
@@ -114,25 +114,29 @@
             font-size: 16px; 
             box-shadow: var(--shadow-sm); 
             border: 2px solid var(--border-color); 
+            cursor: pointer;
+            transition: transform 0.2s;
         }
+        .avatar:hover { transform: scale(1.1); }
 
-        /* 🍔 SLIDE-IN APP MENU */
+        /* 🍔 SLIDE-IN APP MENU (Smooth Formal Animation) */
         .sidebar { 
             position: fixed; 
             top: 0; 
-            left: -100%; 
+            left: 0; 
+            transform: translateX(-100%); 
             width: 290px; 
             height: 100%; 
             background: var(--sidebar-bg); 
             z-index: 9999; 
-            transition: var(--transition); 
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1); 
             box-shadow: 10px 0 40px rgba(0,0,0,0.8); 
             display: flex; 
             flex-direction: column; 
             padding-bottom: 20px; 
             border-right: 1px solid var(--border-color); 
         }
-        .sidebar.open { left: 0; }
+        .sidebar.open { transform: translateX(0); }
         
         .sidebar-overlay { 
             display: none; 
@@ -144,8 +148,10 @@
             background: rgba(0,0,0,0.8); 
             z-index: 9998; 
             backdrop-filter: blur(4px); 
+            opacity: 0;
+            transition: opacity 0.4s ease;
         }
-        .sidebar-overlay.open { display: block; animation: fadeIn 0.3s; }
+        .sidebar-overlay.open { display: block; opacity: 1; }
         
         .sidebar-header { 
             padding: 25px 20px; 
@@ -189,8 +195,20 @@
         .nav-menu::-webkit-scrollbar { width: 4px; } 
         .nav-menu::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
         
+        .section-title { 
+            font-size: 13px; 
+            font-weight: 800; 
+            color: var(--text-muted); 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+            margin-bottom: 10px; 
+            margin-top: 15px; 
+            border-bottom: 1px dashed var(--border-color); 
+            padding-bottom: 5px; 
+        }
+
         .nav-item { 
-            padding: 14px 18px; 
+            padding: 12px 18px; 
             border-radius: 12px; 
             cursor: pointer; 
             font-size: 14px; 
@@ -202,7 +220,7 @@
             transition: var(--transition); 
             border: 1px solid transparent; 
         }
-        .nav-item:hover { background-color: var(--hover-bg); color: var(--text-main); }
+        .nav-item:hover { background-color: rgba(56, 189, 248, 0.15); color: var(--text-main); }
         .nav-item.active { 
             background: var(--accent-color); 
             color: var(--accent-text); 
@@ -210,8 +228,23 @@
             transform: translateX(8px); 
             border-color: rgba(255,255,255,0.2); 
         }
-        .logout-btn { color: var(--danger); font-weight: 900; }
-        .logout-btn:hover { background-color: rgba(239, 68, 68, 0.1); border-color: var(--danger); }
+
+        /* 🧑‍💼 PROFILE MODAL (Glassmorphism) */
+        .profile-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 100000; backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s ease; }
+        .profile-modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .profile-modal { background: var(--card-bg); width: 90%; max-width: 400px; border-radius: 20px; border: 1px solid var(--border-color); box-shadow: 0 20px 50px rgba(0,0,0,0.5); transform: translateY(30px) scale(0.95); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); overflow: hidden; }
+        .profile-modal-overlay.active .profile-modal { transform: translateY(0) scale(1); }
+        .modal-header-bg { background: var(--accent-color); padding: 30px 20px 50px 20px; text-align: center; position: relative; }
+        .modal-close { position: absolute; top: 15px; right: 20px; font-size: 24px; color: #fff; cursor: pointer; border: none; background: none; }
+        .modal-avatar { width: 80px; height: 80px; background: #fff; color: #000; border-radius: 50%; font-size: 32px; font-weight: 900; display: flex; justify-content: center; align-items: center; margin: 0 auto; border: 4px solid var(--card-bg); transform: translateY(40px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .modal-body { padding: 50px 20px 30px 20px; text-align: center; }
+        .modal-name { font-size: 22px; font-weight: 900; color: var(--text-main); margin-bottom: 5px; }
+        .modal-id { font-size: 13px; color: var(--info); font-weight: 800; margin-bottom: 20px; }
+        .modal-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; text-align: left; }
+        .modal-info-box { background: rgba(0,0,0,0.03); padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); }
+        .dark-mode .modal-info-box { background: rgba(255,255,255,0.02); }
+        .modal-info-box label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 800; margin-bottom: 4px; display: block; }
+        .modal-info-box span { font-size: 13px; font-weight: 700; color: var(--text-main); }
 
         /* 🏢 MAIN WORKSPACE */
         .main-content { flex-grow: 1; overflow-y: auto; overflow-x: hidden; position: relative; }
@@ -342,8 +375,8 @@
             background: rgba(255,255,255,0.03); 
         }
         input:focus, select:focus, textarea:focus { 
-            border-color: #0ea5e9; 
-            box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.2); 
+            border-color: var(--info); 
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2); 
         }
         label { 
             display: block; 
@@ -363,7 +396,7 @@
             color: var(--accent-text); 
             border: none; 
             border-radius: 12px; 
-            font-size: 15px; 
+            font-size: 14px; 
             font-weight: 900; 
             cursor: pointer; 
             transition: var(--transition); 
@@ -391,6 +424,15 @@
         .camera-feed span.live { position: absolute; top: 10px; right: 15px; color: #ff3b30; font-size: 12px; font-weight: 900; display: flex; align-items: center; gap: 5px; background: rgba(0,0,0,0.6); padding: 4px 8px; border-radius: 6px; }
         .dot { width: 8px; height: 8px; background: #ff3b30; border-radius: 50%; animation: blink 1s infinite; }
         @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0; } 100% { opacity: 1; } }
+
+        /* 🤖 SUPREME ADVANCED AI BOT STYLING */
+        .ai-core-container { display: flex; justify-content: center; align-items: center; padding: 30px 0; }
+        .ai-core { width: 80px; height: 80px; border-radius: 50%; background: radial-gradient(circle, var(--info) 0%, transparent 70%); box-shadow: 0 0 20px var(--info), inset 0 0 20px #fff; border: 2px solid rgba(56, 189, 248, 0.5); display: flex; justify-content: center; align-items: center; font-size: 30px; transition: 0.3s; }
+        .ai-core.thinking { animation: pulseAI 1.5s infinite; }
+        @keyframes pulseAI { 0% { transform: scale(0.95); box-shadow: 0 0 10px var(--info); } 50% { transform: scale(1.1); box-shadow: 0 0 40px var(--info), inset 0 0 30px #fff; } 100% { transform: scale(0.95); box-shadow: 0 0 10px var(--info); } }
+        
+        .ai-terminal { background: rgba(0,0,0,0.3); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 16px; padding: 20px; font-family: 'Courier New', Courier, monospace; min-height: 150px; color: var(--info); font-weight: bold; font-size: 14px; line-height: 1.6; display: flex; flex-direction: column; justify-content: center; }
+        .ai-terminal.active { color: var(--text-main); background: rgba(56, 189, 248, 0.1); border-color: var(--info); font-family: 'Segoe UI', sans-serif;}
 
         /* Toast Notification */
         #toast-container { 
@@ -427,7 +469,7 @@
             to { opacity: 0; transform: translateY(-20px) scale(0.9); } 
         }
 
-        /* Mobile Fixes */
+        /* Mobile Fixes for Tables & Layouts */
         @media (max-width: 768px) {
             .grid-3 { grid-template-columns: 1fr; }
             .grid-2 { grid-template-columns: 1fr; }
@@ -437,7 +479,7 @@
         @media (min-width: 769px) {
             body { flex-direction: row; }
             .mobile-header { display: none !important; }
-            .sidebar { position: relative; left: 0; box-shadow: none; border-right: 1px solid var(--border-color); width: 300px; }
+            .sidebar { transform: translateX(0); position: relative; box-shadow: none; border-right: 1px solid var(--border-color); width: 300px; }
             .close-sidebar { display: none !important; }
             .workspace { padding: 40px; }
         }
@@ -447,6 +489,29 @@
 
     <div id="toast-container"></div>
 
+    <!-- 🧑‍💼 TOP PROFILE MODAL -->
+    <div class="profile-modal-overlay" id="profile-modal-overlay" onclick="closeProfileModal(event)">
+        <div class="profile-modal">
+            <div class="modal-header-bg">
+                <button class="modal-close" onclick="closeProfileModal(event)">×</button>
+                <div class="modal-avatar" id="modal-avatar">P</div>
+            </div>
+            <div class="modal-body">
+                <div class="modal-name" id="modal-name">Principal Name</div>
+                <div class="modal-id">ID: MVM-PRIN-001 | Head of Institution</div>
+                <div class="modal-info-grid">
+                    <div class="modal-info-box"><label>Department</label><span>Administration</span></div>
+                    <div class="modal-info-box"><label>Joined</label><span style="color: var(--success);">01 Apr 2015</span></div>
+                    <div class="modal-info-box"><label>Phone</label><span>+91 9876500000</span></div>
+                    <div class="modal-info-box"><label>Access Level</label><span style="color: var(--info);">Supreme Tier</span></div>
+                    <div class="modal-info-box" style="grid-column: 1 / -1;"><label>Office Location</label><span>Principal's Desk, Main Block</span></div>
+                </div>
+                <button class="btn btn-danger" style="margin-top: 25px;" onclick="logoutPrincipal()">🚪 Secure Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 📱 MOBILE STICKY HEADER -->
     <div class="mobile-header">
         <div class="header-left">
             <button class="menu-btn" onclick="toggleAppMenu()">☰</button>
@@ -454,12 +519,13 @@
         </div>
         <div class="header-right">
             <button class="theme-toggle" onclick="toggleDarkMode()" title="Kailash Mode">🕉️</button>
-            <div class="avatar" id="mobile-avatar">P</div>
+            <div class="avatar" id="mobile-avatar" onclick="openProfileModal()">P</div>
         </div>
     </div>
 
     <div class="sidebar-overlay" onclick="toggleAppMenu()"></div>
 
+    <!-- 🍔 APP SIDEBAR (Organized & Formal) -->
     <div class="sidebar">
         <div class="sidebar-header">
             <button class="close-sidebar" onclick="toggleAppMenu()">×</button>
@@ -467,43 +533,48 @@
                 <h2>MVM PUBLIC</h2>
                 <div class="role-badge">PRINCIPAL PORTAL</div>
             </div>
+            <!-- Desktop Profile Trigger -->
+            <div class="avatar hide-on-mobile" id="desktop-avatar" style="margin: 15px auto 0 auto; width: 60px; height: 60px; font-size: 24px;" onclick="openProfileModal()">P</div>
+            <div class="hide-on-mobile" style="margin-top: 10px; font-size: 14px; font-weight: bold; color: var(--text-main);">My Profile</div>
         </div>
         
         <div class="nav-menu">
+            <div class="section-title">Core Operations</div>
             <div class="nav-item active" onclick="switchTab('dashboard', this)">📈 Live Dashboard</div>
-            <div class="nav-item" onclick="switchTab('finance', this)">💰 Financial Tracker</div>
-            <div class="nav-item" onclick="switchTab('audit', this)">🧑‍🏫 Teacher Audit</div>
-            <div class="nav-item" onclick="switchTab('approvals', this)">📝 Staff Approvals</div>
+            <div class="nav-item" onclick="switchTab('prin-ai', this)">🤖 Supreme AI Assistant</div>
+            <div class="nav-item" onclick="switchTab('meetings', this)">📅 Principal's Calendar</div>
+
+            <div class="section-title">Academics & Audits</div>
             <div class="nav-item" onclick="switchTab('performance', this)">🏆 Performance Monitor</div>
-            <div class="nav-item" onclick="switchTab('certificates', this)">📜 Certificate Generator</div>
+            <div class="nav-item" onclick="switchTab('audit', this)">🧑‍🏫 Teacher Audit</div>
+            
+            <div class="section-title">Finance & Approvals</div>
+            <div class="nav-item" onclick="switchTab('finance', this)">💰 Financial Tracker</div>
+            <div class="nav-item" onclick="switchTab('approvals', this)">📝 Staff Approvals</div>
             <div class="nav-item" onclick="switchTab('defaulters', this)">🔒 Defaulter Control</div>
+
+            <div class="section-title">Campus & Admin</div>
             <div class="nav-item" onclick="switchTab('broadcast', this)">📢 Broadcast Notices</div>
             <div class="nav-item" onclick="switchTab('cctv', this)">📷 Live CCTV Access</div>
             <div class="nav-item" onclick="switchTab('grievance', this)">📬 Grievance Desk</div>
             <div class="nav-item" onclick="switchTab('discipline', this)">⚖️ Disciplinary Actions</div>
-            <div class="nav-item" onclick="switchTab('meetings', this)">📅 Principal's Calendar</div>
-            <div class="nav-item" onclick="switchTab('prin-ai', this)">🤖 Supreme AI Assistant</div>
+            <div class="nav-item" onclick="switchTab('certificates', this)">📜 Certificates</div>
             
-            <div class="nav-item logout-btn" style="margin-top: 15px; justify-content: center;" onclick="logoutPrincipal()">🚪 Secure Logout</div>
+            <div class="nav-item logout-btn" style="margin-top: 15px; border: 1px solid var(--danger); justify-content: center;" onclick="logoutPrincipal()">🚪 Secure Logout</div>
         </div>
     </div>
 
+    <!-- 🏢 MAIN CONTENT AREA -->
     <div class="main-content">
         <div class="top-header hide-on-mobile">
             <h1 id="page-title">Live School Dashboard</h1>
             <div class="header-info">
                 <button class="theme-toggle" onclick="toggleDarkMode()" title="Kailash Mode Toggle">🕉️</button>
                 <span style="font-size: 13px; font-weight: 800; color: var(--info); background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.4); padding: 6px 14px; border-radius: 20px; letter-spacing: 0.5px;">Live Server Connected</span>
-                <div class="user-profile">
-                    <div style="text-align: right;">
-                        <strong style="font-size: 15px; display: block;" id="prin-name">User</strong>
-                        <span style="font-size: 12px; color: var(--text-muted); font-weight: 600;">Principal</span>
-                    </div>
-                    <div class="avatar" id="prin-avatar">P</div>
-                </div>
             </div>
         </div>
 
+        <!-- 1. DASHBOARD -->
         <div id="dashboard" class="workspace active">
             <div class="grid-3" style="margin-bottom: 25px;">
                 <div class="stat-box primary">
@@ -578,6 +649,33 @@
             </div>
         </div>
 
+        <!-- 2. SUPREME AI ASSISTANT (ADVANCED) -->
+        <div id="prin-ai" class="workspace">
+            <div class="card" style="border: 2px solid var(--info); background: rgba(56, 189, 248, 0.05);">
+                <div class="card-header" style="color: var(--info); border-bottom-color: var(--info);">🤖 Supreme AI Assistant</div>
+                
+                <div class="ai-core-container">
+                    <div class="ai-core" id="ai-core-orb">🧠</div>
+                </div>
+                <p style="text-align: center; color: var(--text-muted); font-size: 12px; margin-bottom: 20px; font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase;">KAILASH SYSTEM STANDBY. READY FOR INPUT.</p>
+                
+                <div class="grid-1" style="margin-bottom: 15px;">
+                    <div>
+                        <label>Attach Document/Image (Optional)</label>
+                        <input type="file" id="prin-ai-image" accept=".pdf, image/*" style="margin: 0;">
+                    </div>
+                </div>
+
+                <label style="margin-top: 15px;">Your Command Prompt</label>
+                <textarea id="prin-ai-input" rows="3" placeholder="E.g., Summarize this CBSE circular or suggest a strategy to improve school average..." style="font-family: 'Courier New', Courier, monospace; border-color: var(--info);"></textarea>
+                
+                <button onclick="askPrincipalAI()" class="btn" style="background: var(--info); box-shadow: 0 0 15px rgba(56, 189, 248, 0.5);">Initialize Processing ✨</button>
+                
+                <div id="prin-ai-response" class="ai-terminal" style="margin-top: 25px; display: none;"></div>
+            </div>
+        </div>
+
+        <!-- 3. STAFF APPROVALS -->
         <div id="approvals" class="workspace">
             <div class="card">
                 <div class="card-header">📝 Leave Approval System</div>
@@ -599,6 +697,7 @@
             </div>
         </div>
 
+        <!-- 4. LIVE CCTV HUB -->
         <div id="cctv" class="workspace">
             <div class="card">
                 <div class="card-header">
@@ -614,6 +713,7 @@
             </div>
         </div>
 
+        <!-- 5. BROADCAST NOTICES -->
         <div id="broadcast" class="workspace">
             <div class="card">
                 <div class="card-header">📢 Send Supreme Broadcast</div>
@@ -640,6 +740,7 @@
             </div>
         </div>
 
+        <!-- 6. PERFORMANCE MONITOR -->
         <div id="performance" class="workspace">
             <div class="card">
                 <div class="card-header">🏆 Global Performance Monitor</div>
@@ -660,6 +761,7 @@
             </div>
         </div>
 
+        <!-- 7. GRIEVANCE DESK -->
         <div id="grievance" class="workspace">
             <div class="card">
                 <div class="card-header">📬 Master Grievance Desk</div>
@@ -670,6 +772,7 @@
             </div>
         </div>
 
+        <!-- 8. DISCIPLINARY ACTIONS -->
         <div id="discipline" class="workspace">
             <div class="card">
                 <div class="card-header">⚖️ Disciplinary Action Log</div>
@@ -690,6 +793,7 @@
             </div>
         </div>
 
+        <!-- 9. CALENDAR MEETINGS -->
         <div id="meetings" class="workspace">
             <div class="grid-2">
                 <div class="card">
@@ -718,6 +822,7 @@
             </div>
         </div>
 
+        <!-- 10. FINANCE TRACKER -->
         <div id="finance" class="workspace">
             <div class="card">
                 <div class="card-header">💰 Master Financial Tracker</div>
@@ -737,6 +842,7 @@
             </div>
         </div>
 
+        <!-- 11. TEACHER AUDIT -->
         <div id="audit" class="workspace">
             <div class="card">
                 <div class="card-header">🧑‍🏫 Teacher Performance Audit</div>
@@ -747,6 +853,7 @@
             </div>
         </div>
 
+        <!-- 12. CERTIFICATE GENERATOR -->
         <div id="certificates" class="workspace">
             <div class="card">
                 <div class="card-header">📜 Digital Certificate Generator</div>
@@ -786,6 +893,7 @@
             </div>
         </div>
 
+        <!-- 13. DEFAULTER CONTROL -->
         <div id="defaulters" class="workspace">
             <div class="card" style="border: 2px solid var(--danger); background: rgba(239, 68, 68, 0.05);">
                 <div class="card-header" style="color: var(--danger); border-bottom-color: var(--danger);">🔒 Premium Feature Control (Defaulters)</div>
@@ -804,29 +912,17 @@
             </div>
         </div>
 
-        <div id="prin-ai" class="workspace">
-            <div class="card">
-                <div class="card-header">🤖 Supreme AI Assistant</div>
-                <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 14px;">Upload financial reports, CBSE circulars, or ask for strategic school management advice.</p>
-                
-                <label>Attach Document/Image (Optional)</label>
-                <input type="file" id="prin-ai-image" accept="image/*">
-                
-                <label>Your Prompt</label>
-                <textarea id="prin-ai-input" rows="4" placeholder="E.g., Summarize this CBSE circular or suggest a strategy to improve school average..."></textarea>
-                
-                <button onclick="askPrincipalAI()" class="btn">Analyze with AI ✨</button>
-                
-                <div id="prin-ai-response" style="margin-top: 25px; padding: 20px; background: rgba(56, 189, 248, 0.1); border-radius: 12px; display: none; border: 1px solid var(--border-color); font-weight: 600; line-height: 1.6; color: var(--info);"></div>
-            </div>
-        </div>
-
     </div>
 
+    <!-- 🚀 MASTER PRINCIPAL ENGINE (JS) -->
     <script>
         const loggedInUser = localStorage.getItem("loggedInUser") || "Principal";
-        document.getElementById("prin-name").innerText = loggedInUser;
-        document.getElementById("prin-avatar").innerText = loggedInUser.charAt(0);
+        
+        document.getElementById("prin-name") ? document.getElementById("prin-name").innerText = loggedInUser : null;
+        document.getElementById("modal-name").innerText = loggedInUser;
+        if(document.getElementById("mobile-avatar")) document.getElementById("mobile-avatar").innerText = loggedInUser.charAt(0).toUpperCase();
+        if(document.getElementById("desktop-avatar")) document.getElementById("desktop-avatar").innerText = loggedInUser.charAt(0).toUpperCase();
+        if(document.getElementById("modal-avatar")) document.getElementById("modal-avatar").innerText = loggedInUser.charAt(0).toUpperCase();
 
         // --- 1. KAILASH THEME TOGGLE (DARK MODE) ---
         function toggleDarkMode() {
@@ -837,20 +933,28 @@
             if(themeBtn) themeBtn.innerText = body.classList.contains("dark-mode") ? "🕉️" : "🪔";
         }
 
-        // --- 2. INITIALIZATION & LIVE SYNC ---
+        // --- 2. PROFILE MODAL LOGIC ---
+        function openProfileModal() {
+            document.getElementById("profile-modal-overlay").classList.add("active");
+        }
+        function closeProfileModal(event) {
+            if(event.target.id === 'profile-modal-overlay' || event.target.className === 'modal-close') {
+                document.getElementById("profile-modal-overlay").classList.remove("active");
+            }
+        }
+
+        // --- 3. INITIALIZATION & LIVE SYNC ---
         window.onload = function() {
             document.body.classList.add("dark-mode");
             localStorage.setItem("darkMode", "true");
             let themeBtn = document.querySelector(".theme-toggle");
             if(themeBtn) themeBtn.innerText = "🕉️";
 
-            // Ek baar turant load karne ke liye
             loadPrinGrievances();
             loadPerformance();
             loadFinanceData();  
             loadTeacherAudits(); 
             
-            // Live background refresh
             setInterval(() => {
                 loadPrinGrievances();
                 loadPerformance();
@@ -859,7 +963,7 @@
             }, 3000);
         };
 
-        // --- 3. UI TAB LOGIC (With Instant Sync) ---
+        // --- 4. UI TAB LOGIC (With Instant Sync) ---
         function toggleAppMenu() {
             document.querySelector('.sidebar').classList.toggle('open');
             document.querySelector('.sidebar-overlay').classList.toggle('open');
@@ -878,7 +982,6 @@
 
             if(window.innerWidth <= 768) { toggleAppMenu(); }
 
-            // INSTANT SYNC
             if(tabId === 'audit') loadTeacherAudits();
             if(tabId === 'finance') loadFinanceData();
             if(tabId === 'grievance') loadPrinGrievances();
@@ -914,7 +1017,7 @@
             }, 5000);
         }
 
-        // --- 4. GLOBAL BROADCAST ENGINE ---
+        // --- 5. GLOBAL BROADCAST ENGINE ---
         function sendGlobalBroadcast() {
             let msg = document.getElementById("prin-notice-input").value;
             let isUrgent = document.getElementById("pri-urgent").checked;
@@ -928,7 +1031,7 @@
             document.getElementById("prin-notice-input").value = "";
         }
 
-        // --- 5. GRIEVANCE DESK SYNC ---
+        // --- 6. GRIEVANCE DESK SYNC ---
         function loadPrinGrievances() {
             let grev = JSON.parse(localStorage.getItem("grievanceLog")) || [];
             let list = document.getElementById("prin-grievance-list");
@@ -968,7 +1071,7 @@
             loadPrinGrievances();
         }
 
-        // --- 6. PERFORMANCE ENGINE (LIVE MARKS SYNC) ---
+        // --- 7. PERFORMANCE ENGINE (LIVE MARKS SYNC) ---
         function loadPerformance() {
             let marksDB = JSON.parse(localStorage.getItem("schoolMarksDB")) || {};
             let total = 0; let count = 0;
@@ -996,7 +1099,7 @@
             }
         }
 
-        // --- 7. CERTIFICATE GENERATOR UI LOGIC ---
+        // --- 8. CERTIFICATE GENERATOR UI LOGIC ---
         function generateCertificate() {
             let student = document.getElementById("cert-student").value;
             let type = document.getElementById("cert-type").value;
@@ -1021,7 +1124,7 @@
             preview.scrollIntoView({ behavior: 'smooth', block: 'end' });
         }
 
-        // --- 8. DEFAULTER TOGGLE ---
+        // --- 9. DEFAULTER TOGGLE ---
         function toggleDefaulter() {
             let student = document.getElementById("defaulter-student").value;
             let defaulters = JSON.parse(localStorage.getItem("defaulterList")) || [];
@@ -1037,7 +1140,7 @@
             localStorage.setItem("defaulterList", JSON.stringify(defaulters));
         }
 
-        // --- 9. PRINCIPAL AI ---
+        // --- 10. SUPREME AI ASSISTANT ---
         async function askPrincipalAI() {
             const text = document.getElementById('prin-ai-input').value;
             const fileInput = document.getElementById('prin-ai-image');
@@ -1047,8 +1150,12 @@
             }
             
             const responseBox = document.getElementById('prin-ai-response');
-            responseBox.style.display = "block";
-            responseBox.innerHTML = "⏳ Supreme AI is analyzing your request...";
+            const aiOrb = document.getElementById('ai-core-orb');
+            
+            responseBox.style.display = "flex"; 
+            responseBox.innerHTML = "> Establishing connection to Supreme AI Core...\n> Processing operational parameters...";
+            responseBox.classList.remove('active'); 
+            aiOrb.classList.add('thinking'); 
             
             try {
                 let base64Data = null;
@@ -1063,6 +1170,8 @@
                     });
                 }
 
+                setTimeout(() => { responseBox.innerHTML += "\n> Analyzing query intent..."; }, 800);
+
                 const response = await fetch('/api/gemini', {
                     method: "POST", headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ 
@@ -1076,16 +1185,21 @@
                 const data = await response.json();
                 
                 if(data.candidates && data.candidates[0]) {
-                    responseBox.innerHTML = "💡 <strong>Supreme AI Analysis:</strong><br><br>" + data.candidates[0].content.parts[0].text.replace(/\n/g, '<br>');
+                    const aiAnswer = data.candidates[0].content.parts[0].text.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                    aiOrb.classList.remove('thinking');
+                    responseBox.classList.add('active'); 
+                    responseBox.innerHTML = "💡 <strong>Supreme AI Analysis:</strong><br><br>" + aiAnswer;
                     document.getElementById('prin-ai-input').value = "";
                     if(fileInput) fileInput.value = "";
                 }
             } catch (error) {
-                responseBox.innerHTML = `❌ Connection Error. Offline mode active.`;
+                aiOrb.classList.remove('thinking');
+                responseBox.style.color = "var(--danger)"; 
+                responseBox.innerHTML = `> [ERR_CONNECTION_REFUSED] AI Core offline.`; 
             }
         }
 
-        // --- 10. MASTER FINANCE TRACKER ---
+        // --- 11. MASTER FINANCE TRACKER ---
         function loadFinanceData() {
             let fees = JSON.parse(localStorage.getItem("studentFees")) || [];
             let history = JSON.parse(localStorage.getItem("feeHistory")) || [];
@@ -1107,7 +1221,7 @@
             if(logContainer) logContainer.innerHTML = logHtml || "<p style='color: var(--text-muted); font-size:14px; font-weight:600;'>No transactions yet.</p>";
         }
 
-        // --- 11. TEACHER AUDIT VIEWER ---
+        // --- 12. TEACHER AUDIT VIEWER ---
         function loadTeacherAudits() {
             let auditDB = JSON.parse(localStorage.getItem("teacherAuditDB")) || [];
             let container = document.getElementById("prin-audit-list");
@@ -1127,7 +1241,7 @@
             });
         }
 
-        // --- 12. CREATE NEW ACCOUNT (API SYNC) ---
+        // --- 13. CREATE NEW ACCOUNT (API SYNC) ---
         async function createNewAccount() {
             const name = document.getElementById("new-user-name").value;
             const email = document.getElementById("new-user-email").value.toLowerCase().trim();
