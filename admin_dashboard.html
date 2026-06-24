@@ -13,66 +13,90 @@
             --border-color: #e2e8f0; --sidebar-bg: #ffffff; 
             --accent-color: #0f172a; --accent-hover: #334155; --accent-text: #ffffff;
             --success: #10b981; --danger: #ef4444; --warning: #f59e0b; --info: #3b82f6;
-            --shadow-sm: 0 2px 10px rgba(0,0,0,0.03); --shadow-md: 0 8px 20px rgba(0,0,0,0.06);
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --shadow-sm: 0 4px 15px rgba(0,0,0,0.03); --shadow-md: 0 8px 25px rgba(0,0,0,0.06);
+            --transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
         /* 🌌 MAHADEV COSMIC THEME (Dark Mode) */
         body.dark-mode {
             --bg-color: #05030a; 
-            --card-bg: rgba(18, 12, 35, 0.65); 
+            --card-bg: rgba(18, 12, 35, 0.7); 
             --text-main: #f8fafc; --text-muted: #a78bfa; 
             --border-color: rgba(139, 92, 246, 0.25); 
             --sidebar-bg: rgba(10, 6, 20, 0.95);
-            /* Bhasma/Gold and Cosmic Blue gradients for Admin */
+            /* Cosmic Blue gradients for Admin */
             --accent-color: linear-gradient(135deg, #1e3a8a 0%, #312e81 100%); 
             --accent-hover: linear-gradient(135deg, #2563eb 0%, #4338ca 100%);
             --accent-text: #ffffff;
             --success: #34d399; --danger: #f87171; --warning: #fbbf24; --info: #60a5fa;
             --shadow-sm: 0 4px 15px rgba(30, 58, 138, 0.2);
-            --shadow-md: 0 8px 25px rgba(30, 58, 138, 0.4);
+            --shadow-md: 0 8px 30px rgba(30, 58, 138, 0.4);
+            --ai-bubble: rgba(96, 165, 250, 0.1); --ai-text: #93c5fd;
         }
 
-        body { display: flex; flex-direction: column; height: 100vh; background-color: var(--bg-color); color: var(--text-main); transition: var(--transition); overflow-x: hidden; }
+        body { display: flex; flex-direction: column; height: 100vh; background-color: var(--bg-color); color: var(--text-main); transition: background-color 0.4s ease; overflow-x: hidden; }
 
         /* 📱 MOBILE APP HEADER */
-        .mobile-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: var(--sidebar-bg); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow-sm); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); transition: var(--transition); }
+        .mobile-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: var(--sidebar-bg); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow-sm); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); transition: var(--transition); }
         .header-left { display: flex; align-items: center; gap: 15px; }
         .menu-btn { font-size: 26px; cursor: pointer; background: none; border: none; color: var(--text-main); outline: none; }
-        .app-title { font-size: 18px; font-weight: 800; letter-spacing: 0.5px; }
+        .app-title { font-size: 18px; font-weight: 900; letter-spacing: 0.5px; text-transform: uppercase; color: var(--text-main);}
         .header-right { display: flex; align-items: center; gap: 15px; }
         .theme-toggle { font-size: 22px; background: none; border: none; cursor: pointer; color: var(--text-main); outline: none; transition: transform 0.3s ease; }
         .theme-toggle:active { transform: scale(0.8) rotate(45deg); }
-        .avatar { width: 36px; height: 36px; background: var(--accent-color); color: var(--accent-text); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+        
+        /* Avatar - Clickable */
+        .avatar { width: 38px; height: 38px; background: var(--accent-color); color: var(--accent-text); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: 900; font-size: 16px; box-shadow: var(--shadow-sm); border: 2px solid var(--border-color); cursor: pointer; transition: transform 0.2s; }
+        .avatar:hover { transform: scale(1.1); }
 
         /* 🍔 SLIDE-IN APP MENU */
-        .sidebar { position: fixed; top: 0; left: -100%; width: 280px; height: 100%; background: var(--sidebar-bg); z-index: 9999; transition: var(--transition); box-shadow: 5px 0 25px rgba(0,0,0,0.5); display: flex; flex-direction: column; padding-bottom: 20px; }
-        .sidebar.open { left: 0; }
-        .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9998; backdrop-filter: blur(3px); }
-        .sidebar-overlay.open { display: block; animation: fadeIn 0.3s; }
+        .sidebar { position: fixed; top: 0; left: 0; transform: translateX(-100%); width: 290px; height: 100%; background: var(--sidebar-bg); z-index: 9999; transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1); box-shadow: 10px 0 40px rgba(0,0,0,0.8); display: flex; flex-direction: column; padding-bottom: 20px; border-right: 1px solid var(--border-color); }
+        .sidebar.open { transform: translateX(0); }
+        .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9998; backdrop-filter: blur(4px); opacity: 0; transition: opacity 0.4s ease; }
+        .sidebar-overlay.open { display: block; opacity: 1; }
         
-        .sidebar-header { padding: 25px 20px; border-bottom: 1px solid var(--border-color); position: relative; }
+        .sidebar-header { padding: 25px 20px; border-bottom: 1px dashed var(--border-color); position: relative; text-align: center; }
         .close-sidebar { position: absolute; top: 20px; right: 20px; font-size: 30px; cursor: pointer; color: var(--text-main); background: none; border: none; }
-        .school-brand h2 { font-size: 22px; font-weight: 800; color: var(--text-main); }
-        .role-badge { display: inline-block; background: var(--accent-color); color: var(--accent-text); padding: 5px 12px; font-size: 11px; border-radius: 20px; font-weight: 800; margin-top: 8px; letter-spacing: 1px; }
+        .school-brand h2 { font-size: 22px; font-weight: 900; color: var(--text-main); letter-spacing: 1.5px; }
+        .role-badge { display: inline-block; background: var(--accent-color); color: var(--accent-text); padding: 5px 14px; font-size: 11px; border-radius: 20px; font-weight: 900; margin-top: 10px; letter-spacing: 1px; text-transform: uppercase; box-shadow: var(--shadow-sm); }
 
-        .nav-menu { flex-grow: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 5px; }
-        .nav-item { padding: 14px 18px; border-radius: 12px; cursor: pointer; font-size: 15px; font-weight: 600; color: var(--text-muted); display: flex; align-items: center; gap: 12px; transition: var(--transition); }
-        .nav-item:hover { background-color: var(--hover-bg); color: var(--text-main); }
-        .nav-item.active { background: var(--accent-color); color: var(--accent-text); box-shadow: var(--shadow-sm); transform: translateX(5px); }
+        .nav-menu { flex-grow: 1; overflow-y: auto; padding: 20px 15px; display: flex; flex-direction: column; gap: 6px; }
+        .nav-menu::-webkit-scrollbar { width: 4px; } .nav-menu::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
+        .nav-item { padding: 12px 18px; border-radius: 12px; cursor: pointer; font-size: 14px; font-weight: 700; color: var(--text-muted); display: flex; align-items: center; gap: 12px; transition: var(--transition); border: 1px solid transparent; }
+        .nav-item:hover { background-color: rgba(30, 58, 138, 0.2); color: var(--text-main); }
+        .nav-item.active { background: var(--accent-color); color: var(--accent-text); box-shadow: var(--shadow-md); transform: translateX(8px); border-color: rgba(255,255,255,0.2); }
+        
+        .section-title { font-size: 13px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; margin-top: 15px; border-bottom: 1px dashed var(--border-color); padding-bottom: 5px; }
+
+        /* 🧑‍💼 PROFILE MODAL (Glassmorphism) */
+        .profile-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 100000; backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s ease; }
+        .profile-modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .profile-modal { background: var(--card-bg); width: 90%; max-width: 400px; border-radius: 20px; border: 1px solid var(--border-color); box-shadow: 0 20px 50px rgba(0,0,0,0.5); transform: translateY(30px) scale(0.95); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); overflow: hidden; }
+        .profile-modal-overlay.active .profile-modal { transform: translateY(0) scale(1); }
+        .modal-header-bg { background: var(--accent-color); padding: 30px 20px 50px 20px; text-align: center; position: relative; }
+        .modal-close { position: absolute; top: 15px; right: 20px; font-size: 24px; color: #fff; cursor: pointer; border: none; background: none; }
+        .modal-avatar { width: 80px; height: 80px; background: #fff; color: #000; border-radius: 50%; font-size: 32px; font-weight: 900; display: flex; justify-content: center; align-items: center; margin: 0 auto; border: 4px solid var(--card-bg); transform: translateY(40px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .modal-body { padding: 50px 20px 30px 20px; text-align: center; }
+        .modal-name { font-size: 22px; font-weight: 900; color: var(--text-main); margin-bottom: 5px; }
+        .modal-id { font-size: 13px; color: var(--info); font-weight: 800; margin-bottom: 20px; }
+        .modal-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; text-align: left; }
+        .modal-info-box { background: rgba(0,0,0,0.03); padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); }
+        .dark-mode .modal-info-box { background: rgba(255,255,255,0.02); }
+        .modal-info-box label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 800; margin-bottom: 4px; display: block; }
+        .modal-info-box span { font-size: 13px; font-weight: 700; color: var(--text-main); }
 
         /* 🏢 MAIN WORKSPACE */
         .main-content { flex-grow: 1; overflow-y: auto; overflow-x: hidden; position: relative; }
-        .workspace { display: none; padding: 20px 15px 80px 15px; animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1); max-width: 1000px; margin: 0 auto; width: 100%; }
+        .workspace { display: none; padding: 20px 15px 80px 15px; animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); max-width: 1200px; margin: 0 auto; width: 100%; }
         .workspace.active { display: block; }
 
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         /* 📱 UNIVERSAL APP UI COMPONENTS */
-        .card { background: var(--card-bg); padding: 20px; border-radius: 20px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm); margin-bottom: 20px; transition: var(--transition); }
-        .dark-mode .card { box-shadow: inset 0 0 10px rgba(30, 58, 138, 0.05); }
-        .card-header { font-size: 18px; font-weight: 700; margin-bottom: 15px; padding-bottom: 12px; border-bottom: 1px solid var(--border-color); color: var(--text-main); display: flex; justify-content: space-between; align-items: center; }
+        .card { background: var(--card-bg); padding: 22px; border-radius: 20px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm); margin-bottom: 25px; transition: var(--transition); position: relative; overflow: hidden; }
+        .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+        .card-header { font-size: 19px; font-weight: 800; margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px dashed var(--border-color); color: var(--text-main); display: flex; justify-content: space-between; align-items: center; }
 
         .grid-1 { display: grid; grid-template-columns: 1fr; gap: 15px; }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
@@ -80,37 +104,44 @@
 
         .stat-box { background: var(--card-bg); padding: 20px; border-radius: 16px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm); display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden; }
         .stat-box.primary { background: var(--accent-color); color: var(--accent-text); border: none; box-shadow: var(--shadow-md); }
-        .stat-box h4 { font-size: 12px; opacity: 0.8; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; }
-        .stat-box h2 { font-size: 28px; font-weight: 800; margin: 0; }
+        .stat-box h4 { font-size: 13px; opacity: 0.9; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 800; }
+        .stat-box h2 { font-size: 28px; font-weight: 900; margin: 0; }
 
-        .list-card { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 14px; padding: 15px; margin-bottom: 12px; transition: var(--transition); }
+        .list-card { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 14px; padding: 16px; margin-bottom: 12px; transition: var(--transition); }
         .list-card.inactive { opacity: 0.6; filter: grayscale(100%); }
         .list-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
         .list-row:last-child { margin-bottom: 0; }
-        .list-title { font-size: 15px; font-weight: 700; color: var(--text-main); }
-        .list-subtitle { font-size: 12px; color: var(--text-muted); font-weight: 600; line-height: 1.4; }
-        .status-badge { padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 800; text-transform: uppercase; }
+        .list-title { font-size: 15px; font-weight: 900; color: var(--text-main); }
+        .list-subtitle { font-size: 13px; color: var(--text-muted); font-weight: 600; line-height: 1.4; }
+        .status-badge { padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 900; text-transform: uppercase; border: 1px solid currentColor; letter-spacing: 0.5px;}
 
-        input, select, textarea { width: 100%; background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border-color); padding: 14px 16px; border-radius: 12px; font-size: 14px; margin-bottom: 15px; outline: none; transition: var(--transition); font-weight: 500; }
-        input:focus, select:focus, textarea:focus { border-color: var(--info); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
-        label { display: block; font-size: 12px; font-weight: 700; color: var(--text-muted); margin-bottom: 6px; margin-left: 4px; text-transform: uppercase; }
+        input, select, textarea { width: 100%; background: rgba(0,0,0,0.03); color: var(--text-main); border: 1px solid var(--border-color); padding: 15px 18px; border-radius: 12px; font-size: 15px; margin-bottom: 15px; outline: none; transition: var(--transition); font-weight: 600; }
+        .dark-mode input, .dark-mode select, .dark-mode textarea { background: rgba(255,255,255,0.03); }
+        input:focus, select:focus, textarea:focus { border-color: var(--info); box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2); }
+        label { display: block; font-size: 12px; font-weight: 800; color: var(--text-muted); margin-bottom: 8px; margin-left: 4px; text-transform: uppercase; letter-spacing: 0.5px;}
 
-        .btn { width: 100%; padding: 16px; background: var(--accent-color); color: var(--accent-text); border: none; border-radius: 14px; font-size: 15px; font-weight: 800; cursor: pointer; transition: var(--transition); box-shadow: var(--shadow-sm); display: flex; justify-content: center; align-items: center; gap: 8px; }
-        .btn:active { transform: scale(0.97); }
-        .btn-success { background: var(--success); color: #fff; }
-        .btn-danger { background: var(--danger); color: #fff; }
-        .btn-warning { background: var(--warning); color: #fff; }
+        .btn { width: 100%; padding: 15px; background: var(--accent-color); color: var(--accent-text); border: none; border-radius: 12px; font-size: 15px; font-weight: 900; cursor: pointer; transition: var(--transition); box-shadow: var(--shadow-sm); display: flex; justify-content: center; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 1px; }
+        .btn:active { transform: scale(0.96); }
+        .btn-success { background: var(--success); color: #fff; border: 1px solid rgba(255,255,255,0.2);}
+        .btn-danger { background: var(--danger); color: #fff; border: 1px solid rgba(255,255,255,0.2);}
+        .btn-warning { background: var(--warning); color: #000; border: 1px solid rgba(255,255,255,0.2);}
         .btn-outline { background: transparent; border: 2px solid var(--border-color); color: var(--text-main); box-shadow: none; }
-        .btn-small { padding: 8px 12px; font-size: 12px; border-radius: 8px; width: auto; }
+        .btn-small { padding: 10px 16px; font-size: 12px; border-radius: 10px; width: auto; text-transform: none; letter-spacing: 0.5px;}
 
-        /* Section Headings within cards */
-        .section-divider { font-size: 14px; font-weight: 800; color: var(--info); margin: 25px 0 10px 0; border-bottom: 2px dashed var(--border-color); padding-bottom: 5px; text-transform: uppercase; }
+        /* 🤖 SUPER ADVANCED AI BOT STYLING */
+        .ai-core-container { display: flex; justify-content: center; align-items: center; padding: 30px 0; }
+        .ai-core { width: 80px; height: 80px; border-radius: 50%; background: radial-gradient(circle, var(--info) 0%, transparent 70%); box-shadow: 0 0 20px var(--info), inset 0 0 20px #fff; border: 2px solid rgba(96, 165, 250, 0.5); display: flex; justify-content: center; align-items: center; font-size: 30px; transition: 0.3s; }
+        .ai-core.thinking { animation: pulseAI 1.5s infinite; }
+        @keyframes pulseAI { 0% { transform: scale(0.95); box-shadow: 0 0 10px var(--info); } 50% { transform: scale(1.1); box-shadow: 0 0 40px var(--info), inset 0 0 30px #fff; } 100% { transform: scale(0.95); box-shadow: 0 0 10px var(--info); } }
+        
+        .ai-terminal { background: rgba(0,0,0,0.3); border: 1px solid rgba(96, 165, 250, 0.3); border-radius: 16px; padding: 20px; font-family: 'Courier New', Courier, monospace; min-height: 150px; color: var(--info); font-weight: bold; font-size: 14px; line-height: 1.6; display: flex; flex-direction: column; justify-content: center; }
+        .ai-terminal.active { color: var(--text-main); background: var(--ai-bubble); border-color: var(--info); font-family: 'Segoe UI', sans-serif;}
 
         /* Toast Notification */
-        #toast-container { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 10000; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 400px; pointer-events: none; }
-        .toast { padding: 15px 20px; border-radius: 12px; color: white; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.3); font-size: 14px; animation: slideUpToast 0.4s ease forwards; text-align: center; line-height: 1.4; }
-        @keyframes slideUpToast { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes fadeOutToast { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-20px); } }
+        #toast-container { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 100000; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 350px; pointer-events: none; }
+        .toast { padding: 16px 20px; border-radius: 14px; color: #fff; font-weight: 900; box-shadow: 0 15px 40px rgba(0,0,0,0.6); font-size: 15px; animation: slideUpToast 0.4s ease forwards; text-align: center; border: 2px solid rgba(255,255,255,0.5); }
+        @keyframes slideUpToast { from { opacity: 0; transform: translateY(40px) scale(0.9); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        @keyframes fadeOutToast { from { opacity: 1; transform: translateY(0) scale(1); } to { opacity: 0; transform: translateY(-20px) scale(0.9); } }
 
         @media (max-width: 768px) {
             .grid-3 { grid-template-columns: 1fr; }
@@ -119,7 +150,7 @@
         @media (min-width: 769px) {
             body { flex-direction: row; }
             .mobile-header { display: none !important; }
-            .sidebar { position: relative; left: 0; box-shadow: none; border-right: 1px solid var(--border-color); }
+            .sidebar { transform: translateX(0); position: relative; box-shadow: none; border-right: 1px solid var(--border-color); width: 300px; }
             .close-sidebar { display: none !important; }
             .grid-1 { grid-template-columns: 2fr 1fr; } 
             .grid-2 { grid-template-columns: 1fr 1fr; }
@@ -131,6 +162,28 @@
 
     <div id="toast-container"></div>
 
+    <!-- 🧑‍💼 TOP PROFILE MODAL -->
+    <div class="profile-modal-overlay" id="profile-modal-overlay" onclick="closeProfileModal(event)">
+        <div class="profile-modal">
+            <div class="modal-header-bg">
+                <button class="modal-close" onclick="closeProfileModal(event)">×</button>
+                <div class="modal-avatar" id="modal-avatar">A</div>
+            </div>
+            <div class="modal-body">
+                <div class="modal-name" id="modal-name">Admin User</div>
+                <div class="modal-id">ID: MVM-ADM-001 | Front Office</div>
+                <div class="modal-info-grid">
+                    <div class="modal-info-box"><label>Department</label><span>Administration</span></div>
+                    <div class="modal-info-box"><label>Joined</label><span style="color: var(--success);">14 Mar 2021</span></div>
+                    <div class="modal-info-box"><label>Phone</label><span>+91 9876543210</span></div>
+                    <div class="modal-info-box"><label>Access Level</label><span style="color: var(--info);">Front Desk Ops</span></div>
+                    <div class="modal-info-box" style="grid-column: 1 / -1;"><label>Office Location</label><span>Main Reception, Ground Floor</span></div>
+                </div>
+                <button class="btn btn-danger" style="margin-top: 25px;" onclick="logoutAdmin()">🚪 Secure Logout</button>
+            </div>
+        </div>
+    </div>
+
     <!-- 📱 MOBILE STICKY HEADER -->
     <div class="mobile-header">
         <div class="header-left">
@@ -138,14 +191,15 @@
             <div class="app-title" id="mobile-title">Front Office Desk</div>
         </div>
         <div class="header-right">
-            <button class="theme-toggle" onclick="toggleDarkMode()" title="Cosmic Mode">🌙</button>
-            <div class="avatar" id="mobile-avatar">A</div>
+            <button class="theme-toggle" onclick="toggleDarkMode()" title="Cosmic Mode">🔱</button>
+            <!-- Clickable Avatar -->
+            <div class="avatar" id="mobile-avatar" onclick="openProfileModal()">A</div>
         </div>
     </div>
 
     <div class="sidebar-overlay" onclick="toggleAppMenu()"></div>
 
-    <!-- 🍔 APP SIDEBAR -->
+    <!-- 🍔 APP SIDEBAR (Clean & Categorized) -->
     <div class="sidebar">
         <div class="sidebar-header">
             <button class="close-sidebar" onclick="toggleAppMenu()">×</button>
@@ -153,20 +207,32 @@
                 <h2>MVM PUBLIC</h2>
                 <div class="role-badge">ADMIN PORTAL</div>
             </div>
+            <!-- Desktop Profile Trigger -->
+            <div class="avatar hide-on-mobile" id="desktop-avatar" style="margin: 15px auto 0 auto; width: 60px; height: 60px; font-size: 24px;" onclick="openProfileModal()">A</div>
+            <div class="hide-on-mobile" style="margin-top: 10px; font-size: 14px; font-weight: bold; color: var(--text-main);">My Profile</div>
         </div>
         
         <div class="nav-menu">
+            <div class="section-title">Front Desk Ops</div>
             <div class="nav-item active" onclick="switchTab('dashboard', this)">📊 Front Office Desk</div>
             <div class="nav-item" onclick="switchTab('admission', this)">🎓 Admission Form</div>
             <div class="nav-item" onclick="switchTab('students', this)">👨‍🎓 Student Directory</div>
+            
+            <div class="section-title">Finance & Dues</div>
             <div class="nav-item" onclick="switchTab('dues', this)">🚨 Fee Dues List</div>
             <div class="nav-item" onclick="switchTab('fees', this)">💰 Fee Collection</div>
+            <div class="nav-item" onclick="switchTab('pettycash', this)">💸 Petty Cash Book</div>
+            
+            <div class="section-title">Visitors & Passes</div>
             <div class="nav-item" onclick="switchTab('pickup', this)">🏃‍♂️ Out-Pass / Pickup</div>
             <div class="nav-item" onclick="switchTab('visitors', this)">📝 Visitor & CRM Log</div>
-            <div class="nav-item" onclick="switchTab('pettycash', this)">💸 Petty Cash Book</div>
             <div class="nav-item" onclick="switchTab('lostfound', this)">🔍 Lost & Found</div>
+            
+            <div class="section-title">Comms & AI Tools</div>
             <div class="nav-item" onclick="switchTab('whatsapp', this)">📱 WhatsApp API</div>
-            <div class="nav-item" style="color: var(--danger); margin-top: 20px;" onclick="logoutAdmin()">🚪 Secure Logout</div>
+            <div class="nav-item" onclick="switchTab('admin-ai', this)">🤖 Front Desk AI</div>
+
+            <div class="nav-item" style="color: var(--danger); margin-top: 15px; border: 1px solid var(--danger);" onclick="logoutAdmin()">🚪 Secure Logout</div>
         </div>
     </div>
 
@@ -188,14 +254,14 @@
                     <div class="list-card" style="border-left: 4px solid var(--success);">
                         <div class="list-row">
                             <div class="list-title">Fee Collected</div>
-                            <div class="status-badge" style="background: rgba(16, 185, 129, 0.1); color: var(--success);">10:15 AM</div>
+                            <div class="status-badge" style="background: rgba(16, 185, 129, 0.1); color: var(--success); border:none;">10:15 AM</div>
                         </div>
                         <div class="list-subtitle" style="margin-top: 5px;">Adarsh Patel (Class 10) - UPI</div>
                     </div>
                     <div class="list-card" style="border-left: 4px solid var(--warning);">
                         <div class="list-row">
                             <div class="list-title">Early Pickup</div>
-                            <div class="status-badge" style="background: rgba(245, 158, 11, 0.1); color: var(--warning);">11:30 AM</div>
+                            <div class="status-badge" style="background: rgba(245, 158, 11, 0.1); color: var(--warning); border:none;">11:30 AM</div>
                         </div>
                         <div class="list-subtitle" style="margin-top: 5px;">Rahul Kumar (Class 9) left with Father.</div>
                     </div>
@@ -204,7 +270,7 @@
                 <div class="card">
                     <div class="card-header">Quick Actions</div>
                     <button class="btn btn-outline" style="margin-bottom: 10px;" onclick="switchTab('fees', document.querySelectorAll('.nav-item')[4])">Collect Fees</button>
-                    <button class="btn btn-outline" onclick="switchTab('visitors', document.querySelectorAll('.nav-item')[6])">Register New Visitor</button>
+                    <button class="btn btn-outline" onclick="switchTab('visitors', document.querySelectorAll('.nav-item')[7])">Register New Visitor</button>
                 </div>
             </div>
         </div>
@@ -212,10 +278,10 @@
         <!-- 2. HIGH DETAIL ADMISSION FORM -->
         <div id="admission" class="workspace">
             <div class="card">
-                <div class="card-header" style="color: var(--success);" id="adm-form-title">🎓 New Student Admission (Detailed)</div>
+                <div class="card-header" style="color: var(--success); border-bottom-color: var(--success);" id="adm-form-title">🎓 New Student Admission</div>
                 <input type="hidden" id="adm-id">
                 
-                <div class="section-divider">Student Personal Details</div>
+                <div class="section-title">Student Personal Details</div>
                 <div class="grid-3">
                     <div><label>Full Name</label><input type="text" id="adm-name" placeholder="e.g. Paridhi Sharma"></div>
                     <div><label>Date of Birth</label><input type="date" id="adm-dob"></div>
@@ -227,7 +293,7 @@
                     <div><label>Mother Tongue</label><input type="text" id="adm-tongue" placeholder="e.g. Hindi" value="Hindi"></div>
                 </div>
 
-                <div class="section-divider">Parents / Guardian Details</div>
+                <div class="section-title">Parents / Guardian Details</div>
                 <div class="grid-2">
                     <div><label>Father's Name</label><input type="text" id="adm-father" placeholder="Father Name"></div>
                     <div><label>Mother's Name</label><input type="text" id="adm-mother" placeholder="Mother Name"></div>
@@ -235,11 +301,11 @@
                     <div><label>Primary Phone No.</label><input type="number" id="adm-phone" placeholder="10-digit mobile"></div>
                 </div>
                 
-                <div class="section-divider">Contact & Address</div>
+                <div class="section-title">Contact & Address</div>
                 <label>Current Residential Address</label>
                 <textarea id="adm-address" rows="2" placeholder="House No, Street, Landmark, City, Pincode..."></textarea>
 
-                <div class="section-divider">Academic & Previous School</div>
+                <div class="section-title">Academic & Previous School</div>
                 <div class="grid-3">
                     <div>
                         <label>Admitting to Class</label>
@@ -256,9 +322,9 @@
                     <div><label>Last School Attended</label><input type="text" id="adm-prev-school" placeholder="School Name"></div>
                 </div>
 
-                <div class="section-divider">Portal Login Generation</div>
-                <div style="background: rgba(59, 130, 246, 0.1); padding: 15px; border-radius: 12px; margin-bottom: 20px;">
-                    <p style="font-size: 12px; color: var(--text-main); margin-bottom: 10px;">Setup Student App Credentials. Student can login <b>only after Principal's approval.</b></p>
+                <div class="section-title">Portal Login Generation</div>
+                <div style="background: rgba(59, 130, 246, 0.1); padding: 20px; border-radius: 12px; margin-bottom: 25px; border: 1px dashed var(--info);">
+                    <p style="font-size: 13px; color: var(--text-main); font-weight: 600; margin-bottom: 15px;">Setup Student App Credentials. Student can login <b>only after Principal's approval.</b></p>
                     <div class="grid-2">
                         <div><label>Login ID / Email</label><input type="text" id="adm-email" placeholder="e.g. stu2026@mvm.com" style="margin:0;"></div>
                         <div><label>Set Password</label><input type="text" id="adm-pass" placeholder="Default: mvm@123" value="mvm@123" style="margin:0;"></div>
@@ -266,7 +332,7 @@
                 </div>
                 
                 <button class="btn btn-success" id="adm-submit-btn" onclick="submitAdmission()">Send for Principal's Approval 🚀</button>
-                <button class="btn btn-outline" id="adm-cancel-btn" style="display: none; margin-top: 10px;" onclick="resetAdmForm()">Cancel Edit</button>
+                <button class="btn btn-outline" id="adm-cancel-btn" style="display: none; margin-top: 15px; border-color: var(--danger); color: var(--danger);" onclick="resetAdmForm()">Cancel Edit</button>
             </div>
         </div>
 
@@ -274,18 +340,19 @@
         <div id="students" class="workspace">
             <div class="card">
                 <div class="card-header">👨‍🎓 Master Student Directory</div>
-                <div class="grid-3">
-                    <input type="text" id="dir-stu-search" placeholder="Search Name/ID..." onkeyup="renderStudentDirectory()">
-                    <select id="dir-stu-class" onchange="renderStudentDirectory()">
+                <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 20px; font-weight: 600;">View profiles, edit details, and check fee history for any student.</p>
+                <div class="grid-3" style="margin-bottom: 20px;">
+                    <input type="text" id="dir-stu-search" placeholder="Search Name/ID..." onkeyup="renderStudentDirectory()" style="margin:0;">
+                    <select id="dir-stu-class" onchange="renderStudentDirectory()" style="margin:0;">
                         <option value="All">All Classes</option>
                         <option value="Class 8">Class 8</option><option value="Class 9">Class 9</option><option value="Class 10">Class 10</option>
                     </select>
-                    <select id="dir-stu-section" onchange="renderStudentDirectory()">
+                    <select id="dir-stu-section" onchange="renderStudentDirectory()" style="margin:0;">
                         <option value="All">All Sections</option><option value="A">Section A</option><option value="B">Section B</option>
                     </select>
                 </div>
                 
-                <div id="student-directory-list" style="margin-top: 15px;">
+                <div id="student-directory-list">
                     <!-- JS Dynamic -->
                 </div>
             </div>
@@ -294,10 +361,12 @@
         <!-- 4. FEE DUES LIST -->
         <div id="dues" class="workspace">
             <div class="card" style="border: 2px solid var(--danger); background: rgba(239, 68, 68, 0.03);">
-                <div class="card-header" style="color: var(--danger);">🚨 Pending Fee Defaulters</div>
-                <div class="grid-2" style="margin-bottom: 15px;">
-                    <select id="due-class-filter" onchange="renderDuesList()"><option value="All">All Classes</option><option value="Class 9">Class 9</option><option value="Class 10">Class 10</option></select>
-                    <button class="btn btn-danger" onclick="alert('Bulk SMS Reminders Sent to all listed parents!')">📱 Send Bulk SMS</button>
+                <div class="card-header" style="color: var(--danger); border-bottom-color: var(--danger);">🚨 Pending Fee Defaulters</div>
+                <p style="font-size: 14px; color: var(--text-main); margin-bottom: 20px; font-weight: 600;">List of students with unpaid fees. Send bulk SMS reminders directly.</p>
+                
+                <div class="grid-2" style="margin-bottom: 20px;">
+                    <select id="due-class-filter" onchange="renderDuesList()" style="margin:0;"><option value="All">All Classes</option><option value="Class 9">Class 9</option><option value="Class 10">Class 10</option></select>
+                    <button class="btn btn-danger" style="margin:0;" onclick="showToast('Reminders Sent', 'Bulk SMS sent to all listed parents.', 'var(--success)')">📱 Send Bulk SMS</button>
                 </div>
                 <div id="dues-list-container">
                     <!-- JS Dynamic -->
@@ -309,29 +378,35 @@
         <div id="fees" class="workspace">
             <div class="card">
                 <div class="card-header">💰 Fee Collection Desk <span style="font-size: 12px; color: var(--text-muted);">#MVM-892</span></div>
+                <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 20px; font-weight: 600;">Search student by name or ID to collect fees and generate receipt.</p>
                 
-                <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-                    <input type="text" id="fee-search-input" placeholder="Enter Student Name..." style="margin: 0;">
-                    <button class="btn btn-outline btn-small" style="width: 80px;" onclick="searchFeeStudent()">🔍</button>
+                <div style="display: flex; gap: 10px; margin-bottom: 25px;">
+                    <input type="text" id="fee-search-input" placeholder="Enter Student Name or ID..." style="margin: 0; flex-grow: 1;">
+                    <button class="btn btn-outline" style="width: auto; padding: 0 25px; border-color: var(--info); color: var(--info);" onclick="searchFeeStudent()">Search 🔍</button>
                 </div>
 
                 <div id="fee-detail-box" style="display: none;">
-                    <div class="list-card" style="border: 1px solid var(--info);">
-                        <div class="list-row"><div class="list-title" id="fd-name">Rahul Kumar</div><div class="list-subtitle" id="fd-class">Class 9</div></div>
-                        <div class="list-row" style="margin-top:10px;"><span class="list-subtitle">Pending Tuition Fee</span><span id="fd-due">₹2,500</span></div>
-                        <div class="list-row"><span class="list-subtitle">Late Fine</span><span style="color: var(--danger);">₹50</span></div>
-                        <div class="list-row" style="margin-top:10px; border-top: 1px dashed var(--border-color); padding-top: 10px;">
-                            <span class="list-title">Total Payable</span><strong style="color: var(--success); font-size: 18px;" id="fd-total">₹2,550</strong>
+                    <div class="list-card" style="border-left: 4px solid var(--info); background: rgba(0,0,0,0.2);">
+                        <div class="list-row"><div class="list-title" id="fd-name">Rahul Kumar</div><div class="list-subtitle" id="fd-class" style="color:var(--text-main); font-weight:bold;">Class 9</div></div>
+                        <div class="list-row" style="margin-top:10px;"><span class="list-subtitle">Pending Tuition Fee</span><span id="fd-due" style="color:var(--text-main); font-weight:bold;">₹2,500</span></div>
+                        <div class="list-row"><span class="list-subtitle">Late Fine</span><span style="color: var(--danger); font-weight:bold;">₹50</span></div>
+                        <div class="list-row" style="margin-top:15px; border-top: 1px dashed var(--border-color); padding-top: 15px;">
+                            <span class="list-title">Total Payable</span><strong style="color: var(--success); font-size: 22px;" id="fd-total">₹2,550</strong>
                         </div>
                     </div>
 
-                    <label>Payment Mode</label>
-                    <select id="fee-mode"><option>Cash</option><option>UPI</option><option>Card/Cheque</option></select>
-                    
-                    <label>Amount Receiving (₹)</label>
-                    <input type="number" id="fee-amount" placeholder="Enter amount">
+                    <div class="grid-2">
+                        <div>
+                            <label>Payment Mode</label>
+                            <select id="fee-mode"><option>Cash</option><option>UPI</option><option>Card/Cheque</option></select>
+                        </div>
+                        <div>
+                            <label>Amount Receiving (₹)</label>
+                            <input type="number" id="fee-amount" placeholder="Enter amount">
+                        </div>
+                    </div>
 
-                    <button class="btn btn-success" onclick="collectFee()">Collect & Print Receipt</button>
+                    <button class="btn btn-success" style="margin-top: 10px;" onclick="collectFee()">Collect & Print Receipt</button>
                 </div>
             </div>
         </div>
@@ -340,7 +415,7 @@
         <div id="pickup" class="workspace">
             <div class="card" style="border-left: 4px solid var(--warning);">
                 <div class="card-header">🏃‍♂️ Early Pickup & Gate Pass</div>
-                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Issues digital out-pass and alerts Class Teacher via App.</p>
+                <p style="font-size: 14px; color: var(--text-main); font-weight:600; margin-bottom: 20px;">Issues digital out-pass and alerts Class Teacher & Security via App.</p>
                 
                 <div class="grid-2">
                     <div><label>Student Name</label><input type="text" id="pu-name" placeholder="Search Student"></div>
@@ -349,9 +424,9 @@
                 <label>Reason for Early Leave</label>
                 <input type="text" id="pu-reason" placeholder="e.g. Medical Appointment">
                 
-                <button class="btn btn-warning" onclick="generatePickupPass()">Generate Pass & Alert Teacher</button>
+                <button class="btn btn-warning" style="color:#000;" onclick="generatePickupPass()">Generate Pass & Alert Teacher</button>
 
-                <h4 style="margin-top: 30px; margin-bottom: 15px; font-size: 14px;">Today's Out-Pass Log</h4>
+                <div class="section-title">Today's Out-Pass Log</div>
                 <div id="pickup-log"></div>
             </div>
         </div>
@@ -360,9 +435,9 @@
         <div id="visitors" class="workspace">
             <div class="card">
                 <div class="card-header">📝 Reception Desk (CRM & Visitors)</div>
-                <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-                    <button class="btn btn-small" id="tab-vis" onclick="switchDesk('vis')" style="background: var(--accent-color); color:#fff;">Visitor Kiosk</button>
-                    <button class="btn btn-outline btn-small" id="tab-enq" onclick="switchDesk('enq')">Admission Enquiry</button>
+                <div class="tab-container" style="display: flex; background: rgba(0,0,0,0.3); border-radius: 12px; padding: 5px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.08);">
+                    <button class="tab-btn active" id="tab-vis" onclick="switchDesk('vis')" style="flex:1; padding:12px; border:none; background:var(--accent-color); color:#fff; font-size:14px; font-weight:800; border-radius:8px; cursor:pointer; transition:0.3s; text-transform:uppercase;">Visitor Kiosk</button>
+                    <button class="tab-btn" id="tab-enq" onclick="switchDesk('enq')" style="flex:1; padding:12px; border:none; background:transparent; color:var(--text-muted); font-size:14px; font-weight:800; border-radius:8px; cursor:pointer; transition:0.3s; text-transform:uppercase;">Admission Enquiry</button>
                 </div>
 
                 <!-- Visitor Form -->
@@ -375,7 +450,7 @@
                     <input type="text" id="v-purpose" placeholder="e.g. Meeting Principal">
                     <button class="btn btn-outline" style="border-color: var(--info); color: var(--info);" onclick="logVisitor()">Log Entry & Print Pass</button>
                     
-                    <div class="section-divider">Today's Visitors</div>
+                    <div class="section-title">Today's Visitors</div>
                     <div id="visitor-list"></div>
                 </div>
 
@@ -391,7 +466,7 @@
                     </div>
                     <button class="btn btn-success" onclick="addEnquiry()">Save Lead (CRM)</button>
 
-                    <div class="section-divider">Active Leads</div>
+                    <div class="section-title">Active Leads</div>
                     <div id="enquiry-list"></div>
                 </div>
             </div>
@@ -401,20 +476,20 @@
         <div id="pettycash" class="workspace">
             <div class="card">
                 <div class="card-header">💸 Petty Cash Book</div>
-                <div class="grid-2">
-                    <div class="stat-box" style="padding: 15px;"><h4>Cash in Hand</h4><h2 style="color:var(--success);">₹2,500</h2></div>
-                    <div class="stat-box" style="padding: 15px;"><h4>Spent Today</h4><h2 style="color:var(--danger);" id="pc-spent">₹0</h2></div>
+                <div class="grid-2" style="margin-bottom: 25px;">
+                    <div class="stat-box" style="padding: 20px; border-left: 4px solid var(--success);"><h4>Cash in Hand</h4><h2 style="color:var(--success);">₹2,500</h2></div>
+                    <div class="stat-box" style="padding: 20px; border-left: 4px solid var(--danger);"><h4>Spent Today</h4><h2 style="color:var(--danger);" id="pc-spent">₹0</h2></div>
                 </div>
                 
-                <div class="section-divider">Add Expense</div>
+                <div class="section-title">Add Expense</div>
                 <div class="grid-3">
-                    <div><label>Particulars</label><input type="text" id="pc-desc" placeholder="e.g. Tea/Coffee"></div>
-                    <div><label>Amount (₹)</label><input type="number" id="pc-amt" placeholder="e.g. 150"></div>
-                    <div><label>Given To</label><input type="text" id="pc-to" placeholder="Name"></div>
+                    <div><label>Particulars</label><input type="text" id="pc-desc" placeholder="e.g. Tea/Coffee" style="margin:0;"></div>
+                    <div><label>Amount (₹)</label><input type="number" id="pc-amt" placeholder="e.g. 150" style="margin:0;"></div>
+                    <div><label>Given To</label><input type="text" id="pc-to" placeholder="Name" style="margin:0;"></div>
                 </div>
-                <button class="btn btn-outline" onclick="addPettyCash()">Log Expense</button>
+                <button class="btn btn-outline" style="margin-top: 15px; border-color: var(--info); color: var(--info);" onclick="addPettyCash()">Log Expense</button>
 
-                <div class="section-divider">Recent Expenses</div>
+                <div class="section-title">Recent Expenses</div>
                 <div id="pc-list"></div>
             </div>
         </div>
@@ -423,13 +498,14 @@
         <div id="lostfound" class="workspace">
             <div class="card">
                 <div class="card-header">🔍 Lost & Found Desk</div>
+                <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 20px; font-weight: 600;">Log found items to notify all student and teacher portals.</p>
                 <div class="grid-2">
-                    <div><label>Item Description</label><input type="text" id="lf-item" placeholder="e.g. Blue Milton Bottle"></div>
-                    <div><label>Found Location</label><input type="text" id="lf-loc" placeholder="e.g. Playground"></div>
+                    <div><label>Item Description</label><input type="text" id="lf-item" placeholder="e.g. Blue Milton Bottle" style="margin:0;"></div>
+                    <div><label>Found Location</label><input type="text" id="lf-loc" placeholder="e.g. Playground" style="margin:0;"></div>
                 </div>
-                <button class="btn btn-primary" onclick="addLostFound()">Add Item (Notify School)</button>
+                <button class="btn btn-primary" style="margin-top: 15px;" onclick="addLostFound()">Add Item (Notify School)</button>
 
-                <div class="section-divider">Unclaimed Items</div>
+                <div class="section-title">Unclaimed Items</div>
                 <div id="lf-list"></div>
             </div>
         </div>
@@ -437,13 +513,45 @@
         <!-- 10. WHATSAPP API -->
         <div id="whatsapp" class="workspace">
             <div class="card" style="border: 2px solid #25D366; background: rgba(37, 211, 102, 0.05);">
-                <div class="card-header" style="color: #25D366;">📱 WhatsApp Broadcast <span class="status-badge" style="background: #25D366; color: #fff;">Live API</span></div>
+                <div class="card-header" style="color: #25D366; border-bottom-color: #25D366;">📱 WhatsApp Broadcast <span class="status-badge" style="background: #25D366; color: #fff;">Live API</span></div>
+                <p style="font-size: 14px; color: var(--text-main); margin-bottom: 20px; font-weight: 600;">Send official bulk WhatsApp messages directly to parents' registered numbers.</p>
+                
                 <label>Target Audience</label>
-                <select><option>Fee Defaulters</option><option>All Parents</option></select>
+                <select><option>Fee Defaulters</option><option>All Parents (Class 10)</option><option>Entire School</option></select>
+                
                 <label>Message Template</label>
-                <select><option>🚨 Fee Reminder</option><option>☔ Holiday Notice</option></select>
-                <textarea rows="3" placeholder="Custom note..."></textarea>
-                <button class="btn" style="background: #25D366; color: #fff; margin-top: 10px;" onclick="showToast('Broadcast Sent', 'Message pushed to API successfully.', '#10b981')">Send Broadcast 🚀</button>
+                <select><option>🚨 Fee Reminder</option><option>☔ Holiday Notice</option><option>Custom Message</option></select>
+                
+                <label>Message Preview</label>
+                <textarea rows="4" placeholder="Type your custom note..." style="border-color: #25D366;"></textarea>
+                
+                <button class="btn" style="background: #25D366; color: #fff; margin-top: 10px; box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4);" onclick="showToast('Broadcast Sent', 'Message pushed to WhatsApp API successfully.', '#10b981')">Send Broadcast 🚀</button>
+            </div>
+        </div>
+
+        <!-- 11. 🤖 FRONT DESK AI ASSISTANT -->
+        <div id="admin-ai" class="workspace">
+            <div class="card" style="border: 2px solid var(--info); background: rgba(59, 130, 246, 0.05);">
+                <div class="card-header" style="color: var(--info); border-bottom-color: var(--info);">🤖 Front Desk AI Assistant</div>
+                
+                <div class="ai-core-container">
+                    <div class="ai-core" id="ai-core-orb">🧠</div>
+                </div>
+                <p style="text-align: center; color: var(--text-muted); font-size: 12px; margin-bottom: 20px; font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase;">Admin System Standby. Ready for Input.</p>
+                
+                <div class="grid-1" style="margin-bottom: 15px;">
+                    <div>
+                        <label>Attach Circular/Query (Optional)</label>
+                        <input type="file" id="admin-ai-file" accept=".pdf, image/*" style="margin: 0;">
+                    </div>
+                </div>
+
+                <label style="margin-top: 15px;">Your Command Prompt</label>
+                <textarea id="admin-ai-input" rows="3" placeholder="E.g., Draft an email to parents regarding PTM... or summarize this attached circular." style="font-family: 'Courier New', Courier, monospace; border-color: var(--info);"></textarea>
+                
+                <button onclick="askAdminAI()" class="btn" style="background: var(--info); box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);">Initialize AI Processing ✨</button>
+                
+                <div id="admin-ai-response" class="ai-terminal" style="margin-top: 25px; display: none;"></div>
             </div>
         </div>
 
@@ -451,6 +559,16 @@
 
     <!-- 🚀 MASTER ADMIN ENGINE (JS) -->
     <script>
+        // --- CUSTOM TOAST NOTIFICATION ---
+        function showToast(title, message, color) {
+            let container = document.getElementById("toast-container");
+            if(!container) { container = document.createElement("div"); container.id = "toast-container"; document.body.appendChild(container); }
+            let toast = document.createElement("div"); toast.className = "toast"; toast.style.background = color || "var(--accent-color)";
+            toast.innerHTML = `<div style="font-size:16px; margin-bottom:5px; text-transform:uppercase;">${title}</div><div style="font-size:13px; font-weight:normal; text-transform:none;">${message}</div>`;
+            container.appendChild(toast);
+            setTimeout(() => { toast.style.animation = "fadeOutToast 0.4s ease forwards"; setTimeout(() => toast.remove(), 400); }, 3500);
+        }
+
         // --- CORE DATABASE ---
         let adminStudentsDB = JSON.parse(localStorage.getItem("adminStudentsDB")) || [
             { id: "S-101", name: "Adarsh Patel", email: "adarsh@mvm.in", class: "Class 10", section: "B", phone: "9876543210", father: "Ramesh Patel", status: "Active", 
@@ -465,10 +583,26 @@
         let adminLostFoundDB = JSON.parse(localStorage.getItem("adminLostFoundDB")) || [];
         let adminPickupDB = JSON.parse(localStorage.getItem("adminPickupDB")) || [];
 
+        const loggedInUser = localStorage.getItem("loggedInUser") || "Admin Desk";
+        
+        // Profile & Avatars Set
+        document.getElementById("modal-name").innerText = loggedInUser;
+        if(document.getElementById("mobile-avatar")) document.getElementById("mobile-avatar").innerText = loggedInUser.charAt(0).toUpperCase();
+        if(document.getElementById("desktop-avatar")) document.getElementById("desktop-avatar").innerText = loggedInUser.charAt(0).toUpperCase();
+        if(document.getElementById("modal-avatar")) document.getElementById("modal-avatar").innerText = loggedInUser.charAt(0).toUpperCase();
+
+        // --- PROFILE MODAL LOGIC ---
+        function openProfileModal() {
+            document.getElementById("profile-modal-overlay").classList.add("active");
+        }
+        function closeProfileModal(event) {
+            if(event.target.id === 'profile-modal-overlay' || event.target.className === 'modal-close') {
+                document.getElementById("profile-modal-overlay").classList.remove("active");
+            }
+        }
+
+        // --- INITIALIZATION ---
         window.onload = function() {
-            const user = localStorage.getItem("loggedInUser") || "Admin Desk";
-            if(document.getElementById("mobile-avatar")) document.getElementById("mobile-avatar").innerText = user.charAt(0).toUpperCase();
-            
             document.body.classList.add("dark-mode");
             localStorage.setItem("darkMode", "true");
             let themeBtn = document.querySelector(".theme-toggle");
@@ -492,10 +626,9 @@
 
         function toggleDarkMode() {
             document.body.classList.toggle("dark-mode");
-            const isDark = document.body.classList.contains("dark-mode");
-            localStorage.setItem("darkMode", isDark);
+            localStorage.setItem("darkMode", document.body.classList.contains("dark-mode"));
             let themeBtn = document.querySelector(".theme-toggle");
-            if(themeBtn) themeBtn.innerText = isDark ? "🔱" : "☀️";
+            if(themeBtn) themeBtn.innerText = document.body.classList.contains("dark-mode") ? "🔱" : "☀️";
         }
 
         function switchTab(tabId, element) {
@@ -504,7 +637,7 @@
             element.classList.add('active');
             document.getElementById(tabId).classList.add('active');
             
-            let tabName = element.innerText.replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]|[\u2600-\u27FF]/g, '').trim(); 
+            let tabName = element.innerText.replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]|\u200D|\uFE0F|[\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|\uD83E[\uDD10-\uDDFF]/g, '').trim(); 
             if(document.getElementById('mobile-title')) document.getElementById('mobile-title').innerText = tabName;
             
             if(tabId === 'students') renderStudentDirectory();
@@ -515,20 +648,10 @@
         }
 
         function logoutAdmin() {
-            if(confirm("Are you sure you want to securely logout?")) {
+            if(confirm("Securely Logout of Admin Portal?")) {
                 localStorage.removeItem("loggedInUser");
-                localStorage.removeItem("userRole");
                 window.location.href = "index.html";
             }
-        }
-
-        function showToast(title, message, color) {
-            let container = document.getElementById("toast-container");
-            let toast = document.createElement("div");
-            toast.className = "toast"; toast.style.background = color;
-            toast.innerHTML = `<div style="font-size:15px; margin-bottom:4px;">${title}</div><div style="font-size:12px; font-weight:normal;">${message}</div>`;
-            container.appendChild(toast);
-            setTimeout(() => { toast.style.animation = "fadeOutToast 0.4s ease forwards"; setTimeout(() => toast.remove(), 400); }, 3500);
         }
 
         function updateDashboardStats() {
@@ -539,32 +662,26 @@
 
         // --- 1. ADMISSION ENGINE (Detailed) ---
         function submitAdmission() {
-            let id = document.getElementById('adm-id').value;
-            let name = document.getElementById('adm-name').value;
-            let cls = document.getElementById('adm-class').value;
-            let sec = document.getElementById('adm-section').value;
-            let phone = document.getElementById('adm-phone').value;
-            let father = document.getElementById('adm-father').value;
-            let email = document.getElementById('adm-email').value;
-            let pass = document.getElementById('adm-pass').value;
+            let id = document.getElementById('adm-id').value; let name = document.getElementById('adm-name').value;
+            let cls = document.getElementById('adm-class').value; let sec = document.getElementById('adm-section').value;
+            let phone = document.getElementById('adm-phone').value; let father = document.getElementById('adm-father').value;
+            let email = document.getElementById('adm-email').value; let pass = document.getElementById('adm-pass').value;
 
-            if(!name || !cls || !phone) return showToast('Error', 'Name, Class, and Phone are mandatory!', '#ef4444');
+            if(!name || !cls || !phone) return showToast('Error', 'Name, Class, and Phone are mandatory!', 'var(--danger)');
 
             if(id) {
-                // Edit
                 let stu = adminStudentsDB.find(s => s.id === id);
                 if(stu) {
                     stu.name = name; stu.class = cls; stu.section = sec; stu.phone = phone; stu.father = father;
-                    showToast('Updated 📝', `Profile of ${name} updated.`, '#3b82f6');
+                    showToast('Updated 📝', `Profile of ${name} updated.`, 'var(--info)');
                 }
             } else {
-                // New
                 let newId = `S-${Math.floor(1000 + Math.random() * 9000)}`;
                 adminStudentsDB.push({
                     id: newId, name: name, email: email, password: pass, class: cls, section: sec, phone: phone, father: father, 
                     status: "Pending Approval", feeHistory: []
                 });
-                showToast('Sent to Principal 🚀', `${name}'s file sent for approval. ID: ${newId}`, '#f59e0b');
+                showToast('Sent to Principal 🚀', `${name}'s file sent for approval. ID: ${newId}`, 'var(--warning)');
             }
 
             localStorage.setItem("adminStudentsDB", JSON.stringify(adminStudentsDB));
@@ -573,13 +690,13 @@
 
         function resetAdmForm() {
             document.querySelectorAll('#admission input, #admission textarea').forEach(el => el.value = '');
-            document.getElementById('adm-pass').value = "mvm@123"; // default
+            document.getElementById('adm-pass').value = "mvm@123"; 
             document.getElementById('adm-form-title').innerText = "🎓 New Student Admission (Detailed)";
             document.getElementById('adm-submit-btn').innerText = "Send for Principal's Approval 🚀";
             document.getElementById('adm-cancel-btn').style.display = "none";
         }
 
-        // --- 2. STUDENT DIRECTORY (View/Edit/Deactivate/History) ---
+        // --- 2. STUDENT DIRECTORY ---
         function renderStudentDirectory() {
             const list = document.getElementById('student-directory-list');
             const search = document.getElementById('dir-stu-search').value.toLowerCase();
@@ -587,7 +704,6 @@
             const sec = document.getElementById('dir-stu-section').value;
             
             list.innerHTML = "";
-            
             let filtered = adminStudentsDB.filter(s => {
                 let mSearch = s.name.toLowerCase().includes(search) || s.id.toLowerCase().includes(search);
                 let mCls = cls === "All" ? true : s.class === cls;
@@ -595,33 +711,30 @@
                 return mSearch && mCls && mSec;
             });
 
-            if(filtered.length === 0) return list.innerHTML = `<p style="text-align:center; color:var(--text-muted); padding: 20px;">No students found.</p>`;
+            if(filtered.length === 0) return list.innerHTML = `<p style="text-align:center; color:var(--text-muted); padding: 20px; font-weight:bold;">No students found.</p>`;
 
             filtered.forEach(s => {
                 let badgeColor = s.status === "Active" ? "var(--success)" : (s.status==="Pending Approval" ? "var(--warning)" : "var(--danger)");
-                let bgBadge = s.status === "Active" ? "rgba(16, 185, 129, 0.1)" : (s.status==="Pending Approval" ? "rgba(245, 158, 11, 0.1)" : "rgba(239, 68, 68, 0.1)");
                 
-                // Construct Fee History HTML
-                let feeHtml = s.feeHistory.map(f => `<div style="font-size:12px; display:flex; justify-content:space-between; margin-bottom:4px; padding-bottom:4px; border-bottom:1px dashed var(--border-color);"><span>${f.month}</span> <span>Paid: ₹${f.paid} | <span style="color:${f.due>0?'var(--danger)':'var(--success)'}">Due: ₹${f.due}</span></span></div>`).join('');
-                if(!feeHtml) feeHtml = "<span style='font-size:12px; color:var(--text-muted);'>No fee records.</span>";
+                let feeHtml = s.feeHistory.map(f => `<div style="font-size:13px; display:flex; justify-content:space-between; margin-bottom:8px; padding-bottom:8px; border-bottom:1px dashed var(--border-color); color:var(--text-main);"><span style="font-weight:700;">${f.month}</span> <span>Paid: ₹${f.paid} | <span style="color:${f.due>0?'var(--danger)':'var(--success)'}; font-weight:bold;">Due: ₹${f.due}</span></span></div>`).join('');
+                if(!feeHtml) feeHtml = "<span style='font-size:13px; color:var(--text-muted); font-weight:600;'>No fee records.</span>";
 
                 list.innerHTML += `
-                    <div class="list-card" style="${s.status!=='Active'?'opacity:0.7':''}">
+                    <div class="list-card" style="border-left: 4px solid ${badgeColor}; ${s.status!=='Active'?'opacity:0.6':''}">
                         <div class="list-row">
-                            <div><div class="list-title">${s.name}</div><div class="list-subtitle">${s.class} - ${s.section} | ID: ${s.id}</div></div>
-                            <div class="status-badge" style="background: ${bgBadge}; color: ${badgeColor};">${s.status}</div>
+                            <div><div class="list-title">${s.name}</div><div class="list-subtitle" style="margin-top:4px;">${s.class} - ${s.section} | ID: <strong style="color:var(--text-main);">${s.id}</strong></div></div>
+                            <div class="status-badge" style="color: ${badgeColor}; border-color: ${badgeColor};">${s.status}</div>
                         </div>
-                        <div style="margin-top:10px; font-size:13px; color:var(--text-main);">Father: ${s.father} | 📞 ${s.phone}</div>
+                        <div style="margin-top:15px; font-size:13px; color:var(--text-main); font-weight:600;">Father: ${s.father} | 📞 ${s.phone}</div>
                         
-                        <!-- Collapsible Fee History -->
-                        <details style="margin-top: 10px; border: 1px solid var(--border-color); border-radius: 8px; padding: 8px; background: var(--bg-color);">
-                            <summary style="font-size:12px; font-weight:bold; cursor:pointer; outline:none; color:var(--info);">📜 View Fee History</summary>
-                            <div style="margin-top: 10px;">${feeHtml}</div>
+                        <details style="margin-top: 15px; border: 1px solid var(--border-color); border-radius: 10px; padding: 12px; background: rgba(0,0,0,0.2);">
+                            <summary style="font-size:13px; font-weight:800; cursor:pointer; outline:none; color:var(--info);">📜 View Fee History</summary>
+                            <div style="margin-top: 15px;">${feeHtml}</div>
                         </details>
 
-                        <div style="display:flex; gap:8px; margin-top:15px;">
+                        <div style="display:flex; gap:10px; margin-top:15px;">
                             <button class="btn btn-outline btn-small" onclick="editStudent('${s.id}')">✏️ Edit</button>
-                            <button class="btn btn-danger btn-small" style="background: ${s.status==='Active'?'var(--danger)':'var(--success)'}" onclick="toggleStudentStatus('${s.id}')">${s.status==='Active'?'Deactivate':'Activate'}</button>
+                            <button class="btn btn-small" style="background: ${s.status==='Active'?'var(--danger)':'var(--success)'}; color:#fff;" onclick="toggleStudentStatus('${s.id}')">${s.status==='Active'?'Deactivate':'Activate'}</button>
                         </div>
                     </div>`;
             });
@@ -649,9 +762,7 @@
             if(stu) {
                 if(stu.status === "Active") {
                     if(confirm(`Deactivate ${stu.name}? They won't be able to login.`)) stu.status = "Inactive";
-                } else {
-                    stu.status = "Active";
-                }
+                } else { stu.status = "Active"; }
                 localStorage.setItem("adminStudentsDB", JSON.stringify(adminStudentsDB));
                 renderStudentDirectory(); updateDashboardStats();
             }
@@ -660,16 +771,14 @@
         // --- 3. FEE DUES LIST ---
         function renderDuesList() {
             let clsFilter = document.getElementById('due-class-filter').value;
-            let list = document.getElementById('dues-list-container');
-            list.innerHTML = "";
+            let list = document.getElementById('dues-list-container'); list.innerHTML = "";
 
             let defaulters = adminStudentsDB.filter(s => {
                 if(clsFilter !== "All" && s.class !== clsFilter) return false;
-                // Check if any month has due > 0
                 return s.feeHistory.some(f => f.due > 0);
             });
 
-            if(defaulters.length === 0) return list.innerHTML = `<p style="text-align:center; color:var(--text-muted);">No defaulters found.</p>`;
+            if(defaulters.length === 0) return list.innerHTML = `<p style="text-align:center; color:var(--text-muted); font-weight:bold;">No defaulters found.</p>`;
 
             defaulters.forEach(s => {
                 let totalDue = s.feeHistory.reduce((sum, f) => sum + f.due, 0);
@@ -677,9 +786,9 @@
                 <div class="list-card" style="border-left: 4px solid var(--danger);">
                     <div class="list-row">
                         <div><div class="list-title">${s.name}</div><div class="list-subtitle">${s.class}-${s.section} | ID: ${s.id}</div></div>
-                        <div class="list-title" style="color:var(--danger);">Due: ₹${totalDue}</div>
+                        <div class="list-title" style="color:var(--danger); font-size:18px;">Due: ₹${totalDue}</div>
                     </div>
-                    <button class="btn btn-outline btn-small" style="margin-top:10px;" onclick="showToast('Reminder Sent', 'SMS sent to ${s.father}.', '#10b981')">Send SMS Reminder</button>
+                    <button class="btn btn-outline btn-small" style="margin-top:15px; width:100%; border-color:var(--success); color:var(--success);" onclick="showToast('Reminder Sent', 'SMS sent to ${s.father}.', 'var(--success)')">📱 Send SMS Reminder</button>
                 </div>`;
             });
         }
@@ -693,39 +802,38 @@
                 document.getElementById('fd-name').innerText = stu.name;
                 document.getElementById('fd-class').innerText = `${stu.class}-${stu.section}`;
                 let totalDue = stu.feeHistory.reduce((sum, f) => sum + f.due, 0);
-                // Mock adding a current month due
-                totalDue += 2500; 
+                totalDue += 2500; // Mock current month
                 document.getElementById('fd-due').innerText = `₹${totalDue}`;
-                document.getElementById('fd-total').innerText = `₹${totalDue + 50}`; // + late fine
+                document.getElementById('fd-total').innerText = `₹${totalDue + 50}`; 
                 document.getElementById('fee-amount').value = totalDue + 50;
             } else {
-                showToast('Not Found', 'Student not found in database.', '#ef4444');
+                showToast('Not Found', 'Student not found in database.', 'var(--danger)');
                 document.getElementById('fee-detail-box').style.display = "none";
             }
         }
         function collectFee() {
-            showToast('Payment Collected ✅', 'Receipt generated successfully. Ledger updated.', '#10b981');
+            showToast('Payment Collected ✅', 'Receipt generated successfully. Ledger updated.', 'var(--success)');
             document.getElementById('fee-detail-box').style.display = "none";
             document.getElementById('fee-search-input').value = "";
         }
 
-        // --- 5. EARLY PICKUP (GATE PASS) ---
+        // --- 5. EARLY PICKUP ---
         function generatePickupPass() {
-            let name = document.getElementById('pu-name').value;
-            let person = document.getElementById('pu-person').value;
-            if(!name || !person) return showToast('Error', 'Enter student and pickup person details.', '#ef4444');
+            let name = document.getElementById('pu-name').value; let person = document.getElementById('pu-person').value;
+            if(!name || !person) return showToast('Error', 'Enter student and pickup person details.', 'var(--danger)');
             
             adminPickupDB.push({ name, person, time: new Date().toLocaleTimeString() });
             localStorage.setItem("adminPickupDB", JSON.stringify(adminPickupDB));
             
-            showToast('Pass Generated 🏃‍♂️', 'Class Teacher alerted on App. Gate pass sent to security.', '#f59e0b');
+            showToast('Pass Generated 🏃‍♂️', 'Teacher alerted. Gate pass sent to security.', 'var(--warning)');
             document.getElementById('pu-name').value = ""; document.getElementById('pu-person').value = ""; document.getElementById('pu-reason').value = "";
             renderPickupLog();
         }
         function renderPickupLog() {
             let log = document.getElementById('pickup-log'); log.innerHTML = "";
+            if(adminPickupDB.length === 0) return log.innerHTML = "<p style='color:var(--text-muted); font-weight:bold;'>No out-pass generated today.</p>";
             adminPickupDB.slice().reverse().forEach(p => {
-                log.innerHTML += `<div class="list-card"><div class="list-row"><div class="list-title">${p.name}</div><div class="status-badge" style="background:var(--warning); color:#fff;">Left: ${p.time}</div></div><div class="list-subtitle">With: ${p.person}</div></div>`;
+                log.innerHTML += `<div class="list-card"><div class="list-row"><div class="list-title">${p.name}</div><div class="status-badge" style="background:rgba(245, 158, 11, 0.1); color:var(--warning); border:none;">Left: ${p.time}</div></div><div class="list-subtitle" style="margin-top:5px;">With: <strong style="color:var(--text-main);">${p.person}</strong></div></div>`;
             });
         }
 
@@ -734,88 +842,129 @@
             document.getElementById('desk-visitor').style.display = type === 'vis' ? 'block' : 'none';
             document.getElementById('desk-enquiry').style.display = type === 'enq' ? 'block' : 'none';
             document.getElementById('tab-vis').style.background = type === 'vis' ? 'var(--accent-color)' : 'transparent';
-            document.getElementById('tab-vis').style.color = type === 'vis' ? '#fff' : 'var(--text-main)';
+            document.getElementById('tab-vis').style.color = type === 'vis' ? '#fff' : 'var(--text-muted)';
             document.getElementById('tab-enq').style.background = type === 'enq' ? 'var(--accent-color)' : 'transparent';
-            document.getElementById('tab-enq').style.color = type === 'enq' ? '#fff' : 'var(--text-main)';
+            document.getElementById('tab-enq').style.color = type === 'enq' ? '#fff' : 'var(--text-muted)';
         }
         function logVisitor() {
-            let name = document.getElementById('v-name').value;
-            let purp = document.getElementById('v-purpose').value;
-            if(!name) return showToast('Error', 'Visitor name required.', '#ef4444');
+            let name = document.getElementById('v-name').value; let purp = document.getElementById('v-purpose').value;
+            if(!name) return showToast('Error', 'Visitor name required.', 'var(--danger)');
             adminVisitorDB.push({ name, purp, time: new Date().toLocaleTimeString() });
             localStorage.setItem("adminVisitorDB", JSON.stringify(adminVisitorDB));
-            showToast('Logged ✅', 'Visitor pass generated. Host notified.', '#10b981');
+            showToast('Logged ✅', 'Visitor pass generated. Host notified.', 'var(--success)');
             document.getElementById('v-name').value = ""; document.getElementById('v-purpose').value = ""; document.getElementById('v-phone').value = "";
             renderVisitorList(); updateDashboardStats();
         }
         function renderVisitorList() {
             let list = document.getElementById('visitor-list'); list.innerHTML = "";
+            if(adminVisitorDB.length === 0) return list.innerHTML = "<p style='color:var(--text-muted); font-weight:bold;'>No visitors yet.</p>";
             adminVisitorDB.slice().reverse().forEach(v => {
-                list.innerHTML += `<div class="list-card"><div class="list-row"><div class="list-title">${v.name}</div><div class="list-subtitle">${v.time}</div></div><div class="list-subtitle">Purpose: ${v.purp}</div></div>`;
+                list.innerHTML += `<div class="list-card"><div class="list-row"><div class="list-title">${v.name}</div><div class="list-subtitle">${v.time}</div></div><div class="list-subtitle" style="margin-top:5px; color:var(--text-main);">Purpose: ${v.purp}</div></div>`;
             });
         }
         function addEnquiry() {
-            let name = document.getElementById('e-name').value;
-            let cls = document.getElementById('e-class').value;
-            if(!name) return;
+            let name = document.getElementById('e-name').value; let cls = document.getElementById('e-class').value;
+            if(!name) return showToast('Error', 'Name required.', 'var(--danger)');
             adminEnquiryDB.push({ name, cls, date: new Date().toLocaleDateString() });
             localStorage.setItem("adminEnquiryDB", JSON.stringify(adminEnquiryDB));
-            showToast('Lead Saved 📈', 'Added to CRM for follow-up.', '#3b82f6');
+            showToast('Lead Saved 📈', 'Added to CRM for follow-up.', 'var(--info)');
             document.getElementById('e-name').value = ""; document.getElementById('e-class').value = ""; document.getElementById('e-phone').value = "";
             renderEnquiryList(); updateDashboardStats();
         }
         function renderEnquiryList() {
             let list = document.getElementById('enquiry-list'); list.innerHTML = "";
+            if(adminEnquiryDB.length === 0) return list.innerHTML = "<p style='color:var(--text-muted); font-weight:bold;'>No active leads.</p>";
             adminEnquiryDB.slice().reverse().forEach((e, i) => {
-                list.innerHTML += `<div class="list-card" style="border-left: 4px solid var(--info);"><div class="list-row"><div class="list-title">${e.name}</div><div class="list-subtitle">${e.date}</div></div><div class="list-subtitle">Seeking: ${e.cls}</div><button class="btn btn-outline btn-small" style="margin-top:10px;" onclick="showToast('WhatsApp Sent','Follow up message sent.','#10b981')">Send Follow-up WhatsApp</button></div>`;
+                list.innerHTML += `<div class="list-card" style="border-left: 4px solid var(--info);"><div class="list-row"><div class="list-title">${e.name}</div><div class="list-subtitle">${e.date}</div></div><div class="list-subtitle" style="margin-top:5px; color:var(--text-main); font-weight:800;">Seeking: ${e.cls}</div><button class="btn btn-outline btn-small" style="margin-top:15px; width:100%; border-color:var(--success); color:var(--success);" onclick="showToast('WhatsApp Sent','Follow up message sent.','var(--success)')">Send Follow-up WhatsApp</button></div>`;
             });
         }
 
         // --- 7. PETTY CASH ---
         function addPettyCash() {
-            let desc = document.getElementById('pc-desc').value;
-            let amt = parseInt(document.getElementById('pc-amt').value);
-            if(!desc || !amt) return;
+            let desc = document.getElementById('pc-desc').value; let amt = parseInt(document.getElementById('pc-amt').value);
+            if(!desc || !amt) return showToast('Error', 'Fill particulars and amount.', 'var(--danger)');
             adminPettyCashDB.push({ desc, amt, time: new Date().toLocaleTimeString() });
             localStorage.setItem("adminPettyCashDB", JSON.stringify(adminPettyCashDB));
             document.getElementById('pc-desc').value = ""; document.getElementById('pc-amt').value = ""; document.getElementById('pc-to').value = "";
             renderPettyCash();
         }
         function renderPettyCash() {
-            let list = document.getElementById('pc-list'); list.innerHTML = "";
-            let spent = 0;
+            let list = document.getElementById('pc-list'); list.innerHTML = ""; let spent = 0;
+            if(adminPettyCashDB.length === 0) return list.innerHTML = "<p style='color:var(--text-muted); font-weight:bold;'>No expenses today.</p>";
             adminPettyCashDB.slice().reverse().forEach(p => {
                 spent += p.amt;
-                list.innerHTML += `<div class="list-row" style="padding:10px 0; border-bottom:1px dashed var(--border-color);"><div class="list-title" style="font-weight:normal;">${p.desc} <span style="font-size:11px; color:var(--text-muted); display:block;">${p.time}</span></div><div class="list-title" style="color:var(--danger);">-₹${p.amt}</div></div>`;
+                list.innerHTML += `<div class="list-row" style="padding:12px 0; border-bottom:1px dashed var(--border-color);"><div class="list-title" style="font-weight:700;">${p.desc} <span style="font-size:11px; color:var(--text-muted); display:block; margin-top:4px;">${p.time}</span></div><div class="list-title" style="color:var(--danger); font-size:18px;">-₹${p.amt}</div></div>`;
             });
             document.getElementById('pc-spent').innerText = `₹${spent}`;
         }
 
         // --- 8. LOST & FOUND ---
         function addLostFound() {
-            let item = document.getElementById('lf-item').value;
-            let loc = document.getElementById('lf-loc').value;
-            if(!item) return;
+            let item = document.getElementById('lf-item').value; let loc = document.getElementById('lf-loc').value;
+            if(!item) return showToast('Error', 'Enter item description.', 'var(--danger)');
             adminLostFoundDB.push({ item, loc, status: "Unclaimed", id: Date.now() });
             localStorage.setItem("adminLostFoundDB", JSON.stringify(adminLostFoundDB));
-            showToast('Item Logged 🔍', 'Notification sent to Student & Teacher Apps.', '#f59e0b');
+            showToast('Item Logged 🔍', 'Notification sent to Student & Teacher Apps.', 'var(--warning)');
             document.getElementById('lf-item').value = ""; document.getElementById('lf-loc').value = "";
             renderLostFound();
         }
         function renderLostFound() {
             let list = document.getElementById('lf-list'); list.innerHTML = "";
-            adminLostFoundDB.slice().reverse().forEach((l, i) => {
-                if(l.status === "Unclaimed") {
-                    let realIdx = adminLostFoundDB.indexOf(l);
-                    list.innerHTML += `<div class="list-card"><div class="list-row"><div class="list-title">${l.item}</div><button class="btn btn-success btn-small" onclick="claimItem(${realIdx})">Mark Claimed</button></div><div class="list-subtitle">Found: ${l.loc}</div></div>`;
-                }
+            let unclaimed = adminLostFoundDB.filter(l => l.status === "Unclaimed");
+            if(unclaimed.length === 0) return list.innerHTML = "<p style='color:var(--text-muted); font-weight:bold;'>All items claimed.</p>";
+            
+            unclaimed.slice().reverse().forEach((l) => {
+                let realIdx = adminLostFoundDB.indexOf(l);
+                list.innerHTML += `<div class="list-card"><div class="list-row"><div class="list-title">${l.item}</div><button class="btn btn-success btn-small" onclick="claimItem(${realIdx})">Mark Claimed</button></div><div class="list-subtitle" style="margin-top:5px; color:var(--text-main);">Found: ${l.loc}</div></div>`;
             });
         }
         function claimItem(idx) {
             adminLostFoundDB[idx].status = "Claimed";
             localStorage.setItem("adminLostFoundDB", JSON.stringify(adminLostFoundDB));
-            showToast('Item Claimed ✅', 'Removed from active list.', '#10b981');
+            showToast('Item Claimed ✅', 'Removed from active list.', 'var(--success)');
             renderLostFound();
+        }
+
+        // --- 9. FRONT DESK AI BOT (JARVIS VIBE) ---
+        async function askAdminAI() {
+            const text = document.getElementById('admin-ai-input').value; 
+            const fileInput = document.getElementById('admin-ai-file');
+            
+            if(!text && (!fileInput || fileInput.files.length === 0)) return showToast("Error", "Provide a command or upload a document.", "var(--danger)");
+            
+            const responseBox = document.getElementById('admin-ai-response');
+            const aiOrb = document.getElementById('ai-core-orb');
+            
+            responseBox.style.display = "flex"; 
+            responseBox.innerHTML = "> Establishing connection to Admin AI Core...\n> Processing operational parameters...";
+            responseBox.classList.remove('active'); 
+            aiOrb.classList.add('thinking'); 
+            
+            try {
+                let base64Data = null; let mimeType = null;
+                if (fileInput && fileInput.files.length > 0) {
+                    const file = fileInput.files[0]; mimeType = file.type;
+                    base64Data = await new Promise((resolve) => { const reader = new FileReader(); reader.onloadend = () => resolve(reader.result.split(',')[1]); reader.readAsDataURL(file); });
+                }
+
+                setTimeout(() => { responseBox.innerHTML += "\n> Analyzing query intent..."; }, 800);
+
+                const response = await fetch('/api/gemini', { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ message: `Act as a school front desk admin expert. Answer this: ${text}`, imageBase64: base64Data, mimeType: mimeType }) });
+                if (!response.ok) throw new Error("API Failed");
+                const data = await response.json();
+                
+                if(data.candidates && data.candidates[0]) {
+                    const aiAnswer = data.candidates[0].content.parts[0].text.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                    aiOrb.classList.remove('thinking');
+                    responseBox.classList.add('active'); 
+                    responseBox.innerHTML = "💡 <strong>AI Operations Complete:</strong><br><br>" + aiAnswer;
+                    document.getElementById('admin-ai-input').value = ""; if(fileInput) fileInput.value = "";
+                }
+            } catch (error) { 
+                aiOrb.classList.remove('thinking');
+                responseBox.style.color = "var(--danger)"; 
+                responseBox.innerHTML = `> [ERR_CONNECTION_REFUSED] AI Core offline.`; 
+            }
         }
     </script>
 </body>
