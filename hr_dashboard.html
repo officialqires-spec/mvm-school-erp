@@ -13,65 +13,91 @@
             --border-color: #e2e8f0; --sidebar-bg: #ffffff; 
             --accent-color: #0f172a; --accent-hover: #334155; --accent-text: #ffffff;
             --success: #10b981; --danger: #ef4444; --warning: #f59e0b; --info: #3b82f6;
-            --shadow-sm: 0 2px 10px rgba(0,0,0,0.03); --shadow-md: 0 8px 20px rgba(0,0,0,0.06);
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --shadow-sm: 0 4px 15px rgba(0,0,0,0.03); --shadow-md: 0 8px 25px rgba(0,0,0,0.06);
+            --transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        /* 🌌 MAHADEV COSMIC THEME (Dark Mode) */
+        /* 🌌 MAHADEV COSMIC THEME (Deep Purple & Indigo Vibe) */
         body.dark-mode {
-            --bg-color: #05030a; 
-            --card-bg: rgba(18, 12, 35, 0.65); 
+            --bg-color: #05030a; /* Deep Space Black */
+            --card-bg: rgba(18, 12, 35, 0.7); /* Translucent Cosmic Purple */
             --text-main: #f8fafc; --text-muted: #a78bfa; 
-            --border-color: rgba(139, 92, 246, 0.25); 
+            --border-color: rgba(139, 92, 246, 0.25); /* Glowing Violet Borders */
             --sidebar-bg: rgba(10, 6, 20, 0.95);
+            /* HR Accent: Cosmic Indigo/Purple Gradient */
             --accent-color: linear-gradient(135deg, #4c1d95 0%, #312e81 100%); 
             --accent-hover: linear-gradient(135deg, #5b21b6 0%, #3730a3 100%);
             --accent-text: #ffffff;
-            --success: #34d399; --danger: #f87171; --warning: #fbbf24; --info: #60a5fa;
+            --success: #34d399; --danger: #f87171; --warning: #fbbf24; --info: #8b5cf6; /* Adjusted info color to match theme */
             --shadow-sm: 0 4px 15px rgba(76, 29, 149, 0.15);
-            --shadow-md: 0 8px 25px rgba(76, 29, 149, 0.3);
+            --shadow-md: 0 8px 30px rgba(76, 29, 149, 0.3);
+            --ai-bubble: rgba(139, 92, 246, 0.1); --ai-text: #c4b5fd;
         }
 
-        body { display: flex; flex-direction: column; height: 100vh; background-color: var(--bg-color); color: var(--text-main); transition: var(--transition); overflow-x: hidden; }
+        body { display: flex; flex-direction: column; height: 100vh; background-color: var(--bg-color); color: var(--text-main); transition: background-color 0.4s ease; overflow-x: hidden; }
 
         /* 📱 MOBILE APP HEADER */
-        .mobile-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: var(--sidebar-bg); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow-sm); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); transition: var(--transition); }
+        .mobile-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: var(--sidebar-bg); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow-sm); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); transition: var(--transition); }
         .header-left { display: flex; align-items: center; gap: 15px; }
         .menu-btn { font-size: 26px; cursor: pointer; background: none; border: none; color: var(--text-main); outline: none; }
-        .app-title { font-size: 18px; font-weight: 800; letter-spacing: 0.5px; }
-        .header-right { display: flex; align-items: center; gap: 15px; }
+        .app-title { font-size: 18px; font-weight: 900; letter-spacing: 0.5px; color: var(--text-main); text-transform: uppercase; }
+        .header-right { display: flex; align-items: center; gap: 12px; }
         .theme-toggle { font-size: 22px; background: none; border: none; cursor: pointer; color: var(--text-main); outline: none; transition: transform 0.3s ease; }
         .theme-toggle:active { transform: scale(0.8) rotate(45deg); }
-        .avatar { width: 36px; height: 36px; background: var(--accent-color); color: var(--accent-text); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+        
+        /* Avatar - Clickable for Profile */
+        .avatar { width: 38px; height: 38px; background: var(--accent-color); color: var(--accent-text); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: 900; font-size: 16px; box-shadow: var(--shadow-sm); border: 2px solid var(--border-color); cursor: pointer; transition: transform 0.2s; }
+        .avatar:hover { transform: scale(1.1); }
 
         /* 🍔 SLIDE-IN APP MENU */
-        .sidebar { position: fixed; top: 0; left: -100%; width: 280px; height: 100%; background: var(--sidebar-bg); z-index: 9999; transition: var(--transition); box-shadow: 5px 0 25px rgba(0,0,0,0.5); display: flex; flex-direction: column; padding-bottom: 20px; }
-        .sidebar.open { left: 0; }
-        .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9998; backdrop-filter: blur(3px); }
-        .sidebar-overlay.open { display: block; animation: fadeIn 0.3s; }
+        .sidebar { position: fixed; top: 0; left: 0; transform: translateX(-100%); width: 290px; height: 100%; background: var(--sidebar-bg); z-index: 9999; transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1); box-shadow: 10px 0 40px rgba(0,0,0,0.8); display: flex; flex-direction: column; padding-bottom: 20px; border-right: 1px solid var(--border-color); }
+        .sidebar.open { transform: translateX(0); }
         
-        .sidebar-header { padding: 25px 20px; border-bottom: 1px solid var(--border-color); position: relative; }
+        .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9998; backdrop-filter: blur(4px); opacity: 0; transition: opacity 0.4s ease; }
+        .sidebar-overlay.open { display: block; opacity: 1; }
+        
+        .sidebar-header { padding: 25px 20px; border-bottom: 1px dashed var(--border-color); position: relative; text-align: center; }
         .close-sidebar { position: absolute; top: 20px; right: 20px; font-size: 30px; cursor: pointer; color: var(--text-main); background: none; border: none; }
-        .school-brand h2 { font-size: 22px; font-weight: 800; color: var(--text-main); }
-        .role-badge { display: inline-block; background: var(--accent-color); color: var(--accent-text); padding: 5px 12px; font-size: 11px; border-radius: 20px; font-weight: 800; margin-top: 8px; letter-spacing: 1px; }
+        .school-brand h2 { font-size: 22px; font-weight: 900; color: var(--text-main); letter-spacing: 1.5px; }
+        .role-badge { display: inline-block; background: var(--accent-color); color: var(--accent-text); padding: 5px 14px; font-size: 11px; border-radius: 20px; font-weight: 900; margin-top: 10px; letter-spacing: 1px; text-transform: uppercase; box-shadow: var(--shadow-sm); }
 
-        .nav-menu { flex-grow: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 5px; }
-        .nav-item { padding: 14px 18px; border-radius: 12px; cursor: pointer; font-size: 15px; font-weight: 600; color: var(--text-muted); display: flex; align-items: center; gap: 12px; transition: var(--transition); }
-        .nav-item:hover { background-color: var(--hover-bg); color: var(--text-main); }
-        .nav-item.active { background: var(--accent-color); color: var(--accent-text); box-shadow: var(--shadow-sm); transform: translateX(5px); }
+        .nav-menu { flex-grow: 1; overflow-y: auto; padding: 20px 15px; display: flex; flex-direction: column; gap: 6px; }
+        .nav-menu::-webkit-scrollbar { width: 4px; } .nav-menu::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
+        .nav-item { padding: 12px 18px; border-radius: 12px; cursor: pointer; font-size: 14px; font-weight: 700; color: var(--text-muted); display: flex; align-items: center; gap: 12px; transition: var(--transition); border: 1px solid transparent; }
+        .nav-item:hover { background-color: rgba(139, 92, 246, 0.1); color: var(--text-main); }
+        .nav-item.active { background: var(--accent-color); color: var(--accent-text); box-shadow: var(--shadow-md); transform: translateX(8px); border-color: rgba(255,255,255,0.2); }
+        
+        .section-title { font-size: 13px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; margin-top: 15px; border-bottom: 1px dashed var(--border-color); padding-bottom: 5px; }
+
+        /* 🧑‍💼 PROFILE MODAL (Glassmorphism) */
+        .profile-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 100000; backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s ease; }
+        .profile-modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .profile-modal { background: var(--card-bg); width: 90%; max-width: 400px; border-radius: 20px; border: 1px solid var(--border-color); box-shadow: 0 20px 50px rgba(0,0,0,0.5); transform: translateY(30px) scale(0.95); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); overflow: hidden; }
+        .profile-modal-overlay.active .profile-modal { transform: translateY(0) scale(1); }
+        .modal-header-bg { background: var(--accent-color); padding: 30px 20px 50px 20px; text-align: center; position: relative; }
+        .modal-close { position: absolute; top: 15px; right: 20px; font-size: 24px; color: #fff; cursor: pointer; border: none; background: none; }
+        .modal-avatar { width: 80px; height: 80px; background: #fff; color: #000; border-radius: 50%; font-size: 32px; font-weight: 900; display: flex; justify-content: center; align-items: center; margin: 0 auto; border: 4px solid var(--card-bg); transform: translateY(40px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .modal-body { padding: 50px 20px 30px 20px; text-align: center; }
+        .modal-name { font-size: 22px; font-weight: 900; color: var(--text-main); margin-bottom: 5px; }
+        .modal-id { font-size: 13px; color: var(--info); font-weight: 800; margin-bottom: 20px; }
+        .modal-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; text-align: left; }
+        .modal-info-box { background: rgba(0,0,0,0.03); padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); }
+        .dark-mode .modal-info-box { background: rgba(255,255,255,0.02); }
+        .modal-info-box label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 800; margin-bottom: 4px; display: block; }
+        .modal-info-box span { font-size: 13px; font-weight: 700; color: var(--text-main); }
 
         /* 🏢 MAIN WORKSPACE */
         .main-content { flex-grow: 1; overflow-y: auto; overflow-x: hidden; position: relative; }
-        .workspace { display: none; padding: 20px 15px 80px 15px; animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1); max-width: 1000px; margin: 0 auto; width: 100%; }
+        .workspace { display: none; padding: 20px 15px 80px 15px; animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); max-width: 1200px; margin: 0 auto; width: 100%; }
         .workspace.active { display: block; }
 
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         /* 📱 UNIVERSAL APP UI COMPONENTS */
-        .card { background: var(--card-bg); padding: 20px; border-radius: 20px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm); margin-bottom: 20px; transition: var(--transition); }
-        .dark-mode .card { box-shadow: inset 0 0 10px rgba(138, 43, 226, 0.05); }
-        .card-header { font-size: 18px; font-weight: 700; margin-bottom: 15px; padding-bottom: 12px; border-bottom: 1px solid var(--border-color); color: var(--text-main); display: flex; justify-content: space-between; align-items: center; }
+        .card { background: var(--card-bg); padding: 22px; border-radius: 20px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm); margin-bottom: 25px; transition: var(--transition); position: relative; overflow: hidden; }
+        .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+        .card-header { font-size: 19px; font-weight: 800; margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px dashed var(--border-color); color: var(--text-main); display: flex; justify-content: space-between; align-items: center; }
 
         .grid-1 { display: grid; grid-template-columns: 1fr; gap: 15px; }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
@@ -79,44 +105,58 @@
 
         .stat-box { background: var(--card-bg); padding: 20px; border-radius: 16px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm); display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden; }
         .stat-box.primary { background: var(--accent-color); color: var(--accent-text); border: none; box-shadow: var(--shadow-md); }
-        .stat-box h4 { font-size: 12px; opacity: 0.8; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; }
-        .stat-box h2 { font-size: 28px; font-weight: 800; margin: 0; }
+        .stat-box h4 { font-size: 13px; opacity: 0.9; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 800; }
+        .stat-box h2 { font-size: 28px; font-weight: 900; margin: 0; }
 
+        /* Modern Lists */
         .list-card { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 14px; padding: 15px; margin-bottom: 12px; transition: var(--transition); }
         .list-card.inactive { opacity: 0.6; filter: grayscale(100%); }
         .list-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
         .list-row:last-child { margin-bottom: 0; }
-        .list-title { font-size: 15px; font-weight: 700; color: var(--text-main); }
-        .list-subtitle { font-size: 12px; color: var(--text-muted); font-weight: 600; }
-        .status-badge { padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 800; text-transform: uppercase; }
+        .list-title { font-size: 15px; font-weight: 800; color: var(--text-main); }
+        .list-subtitle { font-size: 13px; color: var(--text-muted); font-weight: 600; line-height: 1.4;}
+        .status-badge { padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 900; text-transform: uppercase; border: 1px solid currentColor; letter-spacing: 0.5px;}
 
-        input, select, textarea { width: 100%; background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border-color); padding: 14px 16px; border-radius: 12px; font-size: 14px; margin-bottom: 15px; outline: none; transition: var(--transition); font-weight: 500; }
-        input:focus, select:focus, textarea:focus { border-color: var(--info); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
-        label { display: block; font-size: 12px; font-weight: 700; color: var(--text-muted); margin-bottom: 6px; margin-left: 4px; text-transform: uppercase; }
+        /* Form Elements */
+        input[type="text"], input[type="number"], input[type="date"], select, textarea { width: 100%; background: rgba(0,0,0,0.03); color: var(--text-main); border: 1px solid var(--border-color); padding: 14px 16px; border-radius: 12px; font-size: 15px; margin-bottom: 15px; outline: none; transition: var(--transition); font-weight: 600; }
+        .dark-mode input, .dark-mode select, .dark-mode textarea { background: rgba(255,255,255,0.03); }
+        input:focus, select:focus, textarea:focus { border-color: var(--info); box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2); }
+        label { display: block; font-size: 12px; font-weight: 800; color: var(--text-muted); margin-bottom: 6px; margin-left: 4px; text-transform: uppercase; letter-spacing: 0.5px;}
 
-        .btn { width: 100%; padding: 16px; background: var(--accent-color); color: var(--accent-text); border: none; border-radius: 14px; font-size: 15px; font-weight: 800; cursor: pointer; transition: var(--transition); box-shadow: var(--shadow-sm); display: flex; justify-content: center; align-items: center; gap: 8px; }
-        .btn:active { transform: scale(0.97); }
-        .btn-success { background: var(--success); color: #fff; }
-        .btn-danger { background: var(--danger); color: #fff; }
+        .btn { width: 100%; padding: 15px; background: var(--accent-color); color: var(--accent-text); border: none; border-radius: 12px; font-size: 14px; font-weight: 900; cursor: pointer; transition: var(--transition); box-shadow: var(--shadow-sm); display: flex; justify-content: center; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 1px; }
+        .btn:active { transform: scale(0.96); }
+        .btn-success { background: var(--success); color: #fff; border: 1px solid rgba(255,255,255,0.2);}
+        .btn-danger { background: var(--danger); color: #fff; border: 1px solid rgba(255,255,255,0.2);}
+        .btn-warning { background: var(--warning); color: #000; border: 1px solid rgba(255,255,255,0.2);}
         .btn-outline { background: transparent; border: 2px solid var(--border-color); color: var(--text-main); box-shadow: none; }
-        .btn-small { padding: 8px 12px; font-size: 12px; border-radius: 8px; width: auto; }
+        .btn-small { padding: 8px 12px; font-size: 12px; border-radius: 8px; width: auto; text-transform: none; }
+
+        /* 🤖 SUPER ADVANCED AI BOT STYLING */
+        .ai-core-container { display: flex; justify-content: center; align-items: center; padding: 30px 0; }
+        .ai-core { width: 80px; height: 80px; border-radius: 50%; background: radial-gradient(circle, var(--info) 0%, transparent 70%); box-shadow: 0 0 20px var(--info), inset 0 0 20px #fff; border: 2px solid rgba(139, 92, 246, 0.5); display: flex; justify-content: center; align-items: center; font-size: 30px; transition: 0.3s; }
+        .ai-core.thinking { animation: pulseAI 1.5s infinite; }
+        @keyframes pulseAI { 0% { transform: scale(0.95); box-shadow: 0 0 10px var(--info); } 50% { transform: scale(1.1); box-shadow: 0 0 40px var(--info), inset 0 0 30px #fff; } 100% { transform: scale(0.95); box-shadow: 0 0 10px var(--info); } }
+        
+        .ai-terminal { background: rgba(0,0,0,0.3); border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 16px; padding: 20px; font-family: 'Courier New', Courier, monospace; min-height: 150px; color: var(--info); font-weight: bold; font-size: 14px; line-height: 1.6; display: flex; flex-direction: column; justify-content: center; }
+        .ai-terminal.active { color: var(--text-main); background: var(--ai-bubble); border-color: var(--info); font-family: 'Segoe UI', sans-serif;}
 
         /* Toast Notification */
-        #toast-container { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 10000; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 400px; pointer-events: none; }
-        .toast { padding: 15px 20px; border-radius: 12px; color: white; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.3); font-size: 14px; animation: slideUpToast 0.4s ease forwards; text-align: center; line-height: 1.4; }
-        @keyframes slideUpToast { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes fadeOutToast { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-20px); } }
+        #toast-container { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 100000; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 350px; pointer-events: none; }
+        .toast { padding: 16px 20px; border-radius: 14px; color: #fff; font-weight: 900; box-shadow: 0 10px 30px rgba(0,0,0,0.6); font-size: 14px; animation: slideUpToast 0.4s ease forwards; text-align: center; border: 1px solid rgba(255,255,255,0.2); line-height: 1.4; backdrop-filter: blur(10px);}
+        @keyframes slideUpToast { from { opacity: 0; transform: translateY(30px) scale(0.9); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        @keyframes fadeOutToast { from { opacity: 1; transform: translateY(0) scale(1); } to { opacity: 0; transform: translateY(-20px) scale(0.9); } }
 
+        /* Mobile Fixes for Tables & Layouts */
         @media (max-width: 768px) {
             .grid-3 { grid-template-columns: 1fr; }
+            .hide-on-mobile { display: none !important; }
         }
         @media (min-width: 769px) {
             body { flex-direction: row; }
             .mobile-header { display: none !important; }
-            .sidebar { position: relative; left: 0; box-shadow: none; border-right: 1px solid var(--border-color); }
+            .sidebar { transform: translateX(0); position: relative; box-shadow: none; border-right: 1px solid var(--border-color); width: 300px; }
             .close-sidebar { display: none !important; }
             .grid-1 { grid-template-columns: 2fr 1fr; } 
-            .grid-2 { grid-template-columns: 1fr 1fr 1fr; }
             .workspace { padding: 40px; }
         }
     </style>
@@ -125,49 +165,87 @@
 
     <div id="toast-container"></div>
 
+    <!-- 🧑‍💼 TOP PROFILE MODAL -->
+    <div class="profile-modal-overlay" id="profile-modal-overlay" onclick="closeProfileModal(event)">
+        <div class="profile-modal">
+            <div class="modal-header-bg">
+                <button class="modal-close" onclick="closeProfileModal(event)">×</button>
+                <div class="modal-avatar" id="modal-avatar">H</div>
+            </div>
+            <div class="modal-body">
+                <div class="modal-name" id="modal-name">HR Manager</div>
+                <div class="modal-id">ID: MVM-HR-001 | Head of HR</div>
+                <div class="modal-info-grid">
+                    <div class="modal-info-box"><label>Department</label><span>Administration</span></div>
+                    <div class="modal-info-box"><label>Joined</label><span style="color: var(--success);">12 Aug 2019</span></div>
+                    <div class="modal-info-box"><label>Phone</label><span>+91 9876543210</span></div>
+                    <div class="modal-info-box"><label>Access Level</label><span style="color: var(--warning);">Master Tier</span></div>
+                    <div class="modal-info-box" style="grid-column: 1 / -1;"><label>Office Location</label><span>Admin Block, MVM Public School</span></div>
+                </div>
+                <button class="btn btn-danger" style="margin-top: 25px;" onclick="logoutHR()">🚪 Secure Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 📱 MOBILE STICKY HEADER -->
     <div class="mobile-header">
         <div class="header-left">
             <button class="menu-btn" onclick="toggleAppMenu()">☰</button>
             <div class="app-title" id="mobile-title">HR Overview</div>
         </div>
         <div class="header-right">
-            <button class="theme-toggle" onclick="toggleDarkMode()" title="Cosmic Mode">🌙</button>
-            <div class="avatar" id="mobile-avatar">H</div>
+            <button class="theme-toggle" onclick="toggleDarkMode()" title="Cosmic Mode">🔱</button>
+            <!-- Clickable Avatar -->
+            <div class="avatar" id="mobile-avatar" onclick="openProfileModal()">H</div>
         </div>
     </div>
 
     <div class="sidebar-overlay" onclick="toggleAppMenu()"></div>
 
+    <!-- 🍔 APP SIDEBAR (CLEAN & CATEGORIZED) -->
     <div class="sidebar">
         <div class="sidebar-header">
             <button class="close-sidebar" onclick="toggleAppMenu()">×</button>
             <div class="school-brand">
                 <h2>MVM PUBLIC</h2>
-                <div class="role-badge">HR PORTAL</div>
+                <div class="role-badge">HUMAN RESOURCES</div>
             </div>
+            <!-- Desktop Profile Trigger -->
+            <div class="avatar hide-on-mobile" id="desktop-avatar" style="margin: 15px auto 0 auto; width: 60px; height: 60px; font-size: 24px;" onclick="openProfileModal()">H</div>
+            <div class="hide-on-mobile" style="margin-top: 10px; font-size: 14px; font-weight: bold; color: var(--text-main);">My Profile</div>
         </div>
         
         <div class="nav-menu">
+            <div class="section-title">Core Operations</div>
             <div class="nav-item active" onclick="switchTab('dashboard', this)">📊 HR Overview</div>
             <div class="nav-item" onclick="switchTab('onboarding', this)">📝 Staff Entry (KYC)</div>
             <div class="nav-item" onclick="switchTab('directory', this)">🗂️ Staff Directory</div>
+            
+            <div class="section-title">Tools & AI</div>
+            <div class="nav-item" onclick="switchTab('documents', this)">🖨️ Document Generator</div>
+            <div class="nav-item" onclick="switchTab('hr-ai', this)">🤖 Supreme AI Bot</div>
+
+            <div class="section-title">Management Logs</div>
             <div class="nav-item" onclick="switchTab('designations', this)">⚙️ Designations</div>
             <div class="nav-item" onclick="switchTab('payroll', this)">💸 Payroll & Tax</div>
             <div class="nav-item" onclick="switchTab('helpdesk', this)">🛠️ Staff Helpdesk</div>
             <div class="nav-item" onclick="switchTab('attendance', this)">📍 App Attendance</div>
             <div class="nav-item" onclick="switchTab('leave', this)">📅 Approvals</div>
             <div class="nav-item" onclick="switchTab('recruitment', this)">🎯 Recruitment</div>
-            <div class="nav-item" style="color: var(--danger); margin-top: 20px;" onclick="logoutHR()">🚪 Secure Logout</div>
+            
+            <div class="nav-item" style="color: var(--danger); margin-top: 15px; border: 1px solid var(--danger);" onclick="logoutHR()">🚪 Secure Logout</div>
         </div>
     </div>
 
+    <!-- 🏢 MAIN CONTENT AREA -->
     <div class="main-content">
         
+        <!-- 1. DASHBOARD -->
         <div id="dashboard" class="workspace active">
-            <div class="grid-2">
+            <div class="grid-3">
                 <div class="stat-box primary"><h4>Total Active Staff</h4><h2 id="dash-active-staff">0</h2></div>
-                <div class="stat-box"><h4>Inactive/Left</h4><h2 id="dash-inactive-staff" style="color: var(--danger);">0</h2></div>
-                <div class="stat-box"><h4>Pending KYC</h4><h2 style="color: var(--warning);">2</h2></div>
+                <div class="stat-box" style="border-left: 4px solid var(--danger);"><h4>Inactive/Left</h4><h2 id="dash-inactive-staff" style="color: var(--danger);">0</h2></div>
+                <div class="stat-box" style="border-left: 4px solid var(--warning);"><h4>Pending KYC</h4><h2 style="color: var(--warning);">2</h2></div>
             </div>
 
             <div class="grid-1" style="margin-top: 25px;">
@@ -176,9 +254,9 @@
                     <div class="list-card" style="border-left: 4px solid var(--info);">
                         <div class="list-row">
                             <div class="list-title">Neha Gupta (English)</div>
-                            <div class="status-badge" style="background: rgba(59, 130, 246, 0.1); color: var(--info);">Birthday Today</div>
+                            <div class="status-badge" style="background: rgba(59, 130, 246, 0.1); color: var(--info); border: none;">Birthday Today</div>
                         </div>
-                        <button class="btn btn-outline" style="margin-top:10px; padding: 10px;" onclick="sendWishes()">🎉 Send App Notification</button>
+                        <button class="btn btn-outline btn-small" style="margin-top:10px; width:100%; border-color:var(--info); color:var(--info);" onclick="sendWishes()">🎉 Send App Notification & WhatsApp</button>
                     </div>
                 </div>
 
@@ -186,19 +264,20 @@
                     <div class="card-header">Recent HR Alerts</div>
                     <div class="list-card" style="border-left: 4px solid var(--warning);">
                         <div class="list-title">Leave Request</div>
-                        <div class="list-subtitle">2 days leave applied by Math Teacher.</div>
+                        <div class="list-subtitle" style="margin-top: 5px;">2 days leave applied by Math Teacher.</div>
                     </div>
                     <div class="list-card" style="border-left: 4px solid var(--danger);">
                         <div class="list-title">Late Check-in</div>
-                        <div class="list-subtitle">3 staff members marked late today via App.</div>
+                        <div class="list-subtitle" style="margin-top: 5px;">3 staff members marked late today via App.</div>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- 2. STAFF KYC -->
         <div id="onboarding" class="workspace">
-            <div class="card">
-                <div class="card-header" style="color: var(--success);" id="kyc-title">📝 New Staff Entry & KYC</div>
+            <div class="card" style="border: 2px solid var(--success); background: rgba(16, 185, 129, 0.05);">
+                <div class="card-header" style="color: var(--success); border-bottom-color: var(--success);" id="kyc-title">📝 New Staff Entry & KYC</div>
                 <input type="hidden" id="kyc-id">
                 
                 <div class="grid-3">
@@ -240,44 +319,37 @@
                     </div>
                 </div>
 
-                <label>Parents / Spouse Name</label>
-                <input type="text" id="kyc-guardian" placeholder="Father or Husband Name">
+                <div class="grid-2">
+                    <div>
+                        <label>Parents / Spouse Name</label>
+                        <input type="text" id="kyc-guardian" placeholder="Father or Husband Name">
+                    </div>
+                    <div>
+                        <label>Previous Experience / Work Details</label>
+                        <input type="text" id="kyc-exp" placeholder="e.g. 3 Years at DPS School...">
+                    </div>
+                </div>
 
                 <label>Full Residential Address</label>
                 <textarea id="kyc-address" rows="2" placeholder="House No, Street, City..."></textarea>
 
-                <label>Previous Experience / Work Details</label>
-                <textarea id="kyc-exp" rows="2" placeholder="e.g. 3 Years at DPS School..."></textarea>
-
-                <div style="background: rgba(16, 185, 129, 0.1); padding: 15px; border-radius: 12px; margin-bottom: 20px;">
-                    <p style="font-size: 13px; color: var(--success); font-weight: bold; margin-bottom: 5px;">🤖 Smart ID Generation</p>
-                    <p style="font-size: 11px; color: var(--text-main);">Final submit karte hi system automatically Login ID & Password generate karega aur App portal ka access de dega.</p>
+                <div style="background: rgba(16, 185, 129, 0.1); padding: 18px; border-radius: 12px; margin-bottom: 20px; border: 1px dashed var(--success);">
+                    <p style="font-size: 14px; color: var(--success); font-weight: 900; margin-bottom: 5px;">🤖 Smart ID Generation Active</p>
+                    <p style="font-size: 13px; color: var(--text-main); font-weight: 600;">System will automatically generate Login ID & Password and grant App portal access upon final submission.</p>
                 </div>
 
                 <button class="btn btn-success" id="kyc-submit-btn" onclick="submitKYC()">Final Submit & Generate Login</button>
-                <button class="btn btn-outline" id="kyc-cancel-btn" style="display: none; margin-top: 10px;" onclick="resetKYCForm()">Cancel Edit</button>
+                <button class="btn btn-outline" id="kyc-cancel-btn" style="display: none; margin-top: 15px; border-color: var(--danger); color: var(--danger);" onclick="resetKYCForm()">Cancel Edit</button>
             </div>
         </div>
 
+        <!-- 3. STAFF DIRECTORY -->
         <div id="directory" class="workspace">
-            <div class="card" style="border: 2px solid var(--info); background: rgba(59, 130, 246, 0.05);">
-                <div class="card-header" style="color: var(--info);">🖨️ Auto Doc Generator (ID Card/Letter)</div>
-                <div class="grid-2">
-                    <select id="doc-staff"><option>Select Staff...</option></select>
-                    <select id="doc-type">
-                        <option>Digital ID Card</option>
-                        <option>Official Offer Letter</option>
-                        <option>Experience Certificate</option>
-                        <option>Relieving Letter</option>
-                    </select>
-                </div>
-                <button class="btn" style="background: var(--info); color: #fff;" onclick="generateLetter()">Download PDF Template</button>
-            </div>
-
             <div class="card">
                 <div class="card-header">🗂️ Master Staff Directory</div>
-                <div class="grid-2">
-                    <input type="text" id="dir-search" placeholder="Search by name..." onkeyup="renderDirectory()">
+                <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 20px; font-weight: 600;">View, edit, or deactivate staff portal access securely.</p>
+                <div class="grid-2" style="margin-bottom: 20px;">
+                    <input type="text" id="dir-search" placeholder="Search by name or ID..." onkeyup="renderDirectory()">
                     <select id="dir-filter" onchange="renderDirectory()">
                         <option value="All">All Departments</option>
                         <option value="Teacher">Academic (Teacher)</option>
@@ -288,80 +360,152 @@
                     </select>
                 </div>
                 
-                <div id="directory-list" style="margin-top: 15px;">
-                    </div>
+                <div id="directory-list"></div>
             </div>
         </div>
 
+        <!-- 4. DOCUMENT GENERATOR (NEW TAB) -->
+        <div id="documents" class="workspace">
+            <div class="card" style="border: 2px solid var(--info); background: rgba(59, 130, 246, 0.05);">
+                <div class="card-header" style="color: var(--info); border-bottom-color: var(--info);">🖨️ Auto Doc Generator (ID Card/Letter)</div>
+                <p style="font-size: 14px; color: var(--text-main); margin-bottom: 20px; font-weight: 600;">Select active staff to instantly generate official PDF documents and letters.</p>
+                <div class="grid-2">
+                    <div>
+                        <label>Select Active Staff</label>
+                        <select id="doc-staff"><option>Loading Staff...</option></select>
+                    </div>
+                    <div>
+                        <label>Document Type</label>
+                        <select id="doc-type">
+                            <option>Digital ID Card</option>
+                            <option>Official Offer Letter</option>
+                            <option>Experience Certificate</option>
+                            <option>Relieving Letter</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn" style="background: var(--info); margin-top: 10px;" onclick="generateLetter()">Download PDF Template</button>
+            </div>
+        </div>
+
+        <!-- 5. SUPREME HR AI ASSISTANT -->
+        <div id="hr-ai" class="workspace">
+            <div class="card" style="border: 2px solid var(--info); background: rgba(139, 92, 246, 0.05);">
+                <div class="card-header" style="color: var(--info); border-bottom-color: var(--info);">🤖 Supreme HR AI Assistant</div>
+                
+                <div class="ai-core-container">
+                    <div class="ai-core" id="ai-core-orb">🧠</div>
+                </div>
+                <p style="text-align: center; color: var(--text-muted); font-size: 12px; margin-bottom: 20px; font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase;">HR System Standby. Ready for Input.</p>
+                
+                <div class="grid-1" style="margin-bottom: 15px;">
+                    <div>
+                        <label>Attach Resume/Document (Optional)</label>
+                        <input type="file" id="hr-ai-file" accept=".pdf, image/*" style="margin: 0;">
+                    </div>
+                </div>
+
+                <label style="margin-top: 15px;">Your Command Prompt</label>
+                <textarea id="hr-ai-input" rows="3" placeholder="E.g., Screen this resume, draft an offer letter, or suggest employee engagement activities..." style="font-family: 'Courier New', Courier, monospace; border-color: var(--info);"></textarea>
+                
+                <button onclick="askHRAI()" class="btn" style="background: var(--info); box-shadow: 0 0 15px rgba(139, 92, 246, 0.5);">Initialize AI Processing ✨</button>
+                
+                <div id="hr-ai-response" class="ai-terminal" style="margin-top: 25px; display: none;"></div>
+            </div>
+        </div>
+
+        <!-- 6. DESIGNATIONS -->
         <div id="designations" class="workspace">
             <div class="card">
                 <div class="card-header">⚙️ Manage Designations & Roles</div>
-                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Add or remove job titles for different departments. These will show up in the KYC form.</p>
+                <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 20px; font-weight: 600;">Add or remove job titles for different departments. These will show up in the KYC form dropdown.</p>
                 
-                <div class="grid-2" style="margin-bottom: 20px;">
-                    <select id="desig-dept-select" onchange="renderDesignationList()">
-                        <option value="Teacher">Academic (Teacher)</option>
-                        <option value="Transport">Transport (Driver/Cond)</option>
-                        <option value="Admin">Admin Staff</option>
-                        <option value="Support">Support/Peon</option>
-                        <option value="Principal">Principal/VP</option>
-                    </select>
-                    <div style="display: flex; gap: 10px;">
-                        <input type="text" id="new-desig-input" placeholder="e.g. Head of Dept" style="margin: 0;">
-                        <button class="btn btn-success btn-small" onclick="addDesignation()">+ Add</button>
+                <div class="grid-2" style="margin-bottom: 25px;">
+                    <div>
+                        <label>Select Department</label>
+                        <select id="desig-dept-select" onchange="renderDesignationList()" style="margin: 0;">
+                            <option value="Teacher">Academic (Teacher)</option>
+                            <option value="Transport">Transport (Driver/Cond)</option>
+                            <option value="Admin">Admin Staff</option>
+                            <option value="Support">Support/Peon</option>
+                            <option value="Principal">Principal/VP</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Add New Role</label>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" id="new-desig-input" placeholder="e.g. Head of Dept" style="margin: 0; flex-grow: 1;">
+                            <button class="btn btn-success" style="width: auto; padding: 0 25px;" onclick="addDesignation()">+ Add</button>
+                        </div>
                     </div>
                 </div>
 
-                <div id="designation-list-container">
-                    </div>
+                <div id="designation-list-container"></div>
             </div>
         </div>
 
+        <!-- 7. PAYROLL -->
         <div id="payroll" class="workspace">
             <div class="card" style="border-left: 4px solid var(--warning);">
-                <div class="card-header">💸 Salary Advance Requests</div>
+                <div class="card-header" style="color: var(--warning); border-bottom-color: var(--warning);">💸 Salary Advance Requests</div>
                 <div class="list-card" id="advance-req-1">
                     <div class="list-row">
                         <div class="list-title">Rahul Kumar (T-108)</div>
-                        <div class="list-title" style="color: var(--danger);">₹5,000</div>
+                        <div class="list-title" style="color: var(--danger); font-size: 20px;">₹5,000</div>
                     </div>
-                    <div class="list-subtitle" style="margin-top: 5px;">Reason: Medical Emergency (Deduct next month)</div>
-                    <div style="display: flex; gap: 10px; margin-top: 15px;">
-                        <button class="btn btn-success btn-small" onclick="handleAdvance('advance-req-1', 'Approved')">Approve</button>
-                        <button class="btn btn-danger btn-small" onclick="handleAdvance('advance-req-1', 'Rejected')">Reject</button>
+                    <div class="list-subtitle" style="margin-top: 5px; color: var(--text-main);">Reason: Medical Emergency (Deduct next month)</div>
+                    <div class="grid-2" style="margin-top: 20px;">
+                        <button class="btn btn-success btn-small" onclick="handleAdvance('advance-req-1', 'Approved')">Approve Transfer</button>
+                        <button class="btn btn-danger btn-small" onclick="handleAdvance('advance-req-1', 'Rejected')">Reject Request</button>
                     </div>
                 </div>
             </div>
 
-            <div class="card">
-                <div class="card-header"><span>Dynamic Payroll</span> <span style="font-size: 12px; color: var(--text-muted);">June 2026</span></div>
-                <div class="list-card">
-                    <div class="list-row"><div class="list-title">Ramesh (Librarian)</div><div class="list-title" style="color: var(--success); font-size: 18px;">Net: ₹22,700</div></div>
-                    <div class="list-row" style="margin-top: 5px;"><span class="list-subtitle">Base: ₹25,000</span><span class="list-subtitle" style="color: var(--danger);">- PF: ₹1500 | TDS: ₹0</span></div>
-                    <div class="list-row" style="margin-top: 5px;"><span class="list-subtitle" style="color: var(--warning);">- Advance Deduction: ₹800</span></div>
+            <div class="card" style="border: 2px solid var(--success); background: rgba(16, 185, 129, 0.05);">
+                <div class="card-header" style="color: var(--success); border-bottom-color: var(--success);">
+                    <span>🏦 Dynamic Payroll</span> 
+                    <span style="font-size: 13px; color: var(--text-muted); background: var(--bg-color); padding: 5px 10px; border-radius: 8px;">June 2026</span>
                 </div>
-                <button class="btn" style="margin-top: 15px;" onclick="disbursePayroll()">🏦 Disburse Payslips (Smart Calculate)</button>
+                <div class="list-card">
+                    <div class="list-row"><div class="list-title">Ramesh (Librarian)</div><div class="list-title" style="color: var(--success); font-size: 20px;">Net: ₹22,700</div></div>
+                    <div class="list-row" style="margin-top: 10px;"><span class="list-subtitle">Base: ₹25,000</span><span class="list-subtitle" style="color: var(--danger);">- PF: ₹1500 | TDS: ₹0</span></div>
+                    <div class="list-row" style="margin-top: 5px;"><span class="list-subtitle" style="color: var(--warning); font-weight: 800;">- Advance Deduction: ₹800</span></div>
+                </div>
+                <button class="btn btn-success" style="margin-top: 15px;" onclick="disbursePayroll()">💸 Disburse Payslips (Smart Calculate)</button>
             </div>
         </div>
 
+        <!-- 8. HELPDESK -->
         <div id="helpdesk" class="workspace">
             <div class="card">
                 <div class="card-header">🛠️ Internal Staff Helpdesk</div>
-                <div class="list-card" id="ticket-1">
-                    <div class="list-row"><div class="list-title">Projector not working in 10-A</div><div class="status-badge" style="background: var(--warning); color: #fff;">Pending</div></div>
-                    <div class="list-subtitle" style="margin-top:5px; margin-bottom: 15px;">Reported by: Sharma Sir (Maths) - 2 Hours Ago</div>
-                    <button class="btn btn-success btn-small" onclick="resolveTicket('ticket-1')">Mark as Resolved ✅</button>
+                <div class="list-card" id="ticket-1" style="border-left: 4px solid var(--warning);">
+                    <div class="list-row"><div class="list-title">Projector not working in 10-A</div><div class="status-badge" style="background: rgba(245, 158, 11, 0.1); color: var(--warning); border: none;">Pending Fix</div></div>
+                    <div class="list-subtitle" style="margin-top:8px; margin-bottom: 20px;">Reported by: Sharma Sir (Maths) - 2 Hours Ago</div>
+                    <button class="btn btn-success btn-small" style="width: 100%;" onclick="resolveTicket('ticket-1')">Mark as Resolved ✅</button>
                 </div>
             </div>
         </div>
 
-        <div id="attendance" class="workspace"><div class="card"><div class="card-header">Geo-Location Tracker</div><p style="font-size: 13px; color: var(--text-muted);">GPS Perimeter Active. All staff checking in securely.</p></div></div>
-        <div id="leave" class="workspace"><div class="card"><div class="card-header">Leave Approvals</div><p style="font-size: 13px; color: var(--text-muted);">No pending leaves right now.</p></div></div>
-        <div id="recruitment" class="workspace"><div class="card"><div class="card-header">Post Vacancy</div><p style="font-size: 13px; color: var(--text-muted);">Manage external hiring pipeline.</p></div></div>
+        <!-- PLACEHOLDERS -->
+        <div id="attendance" class="workspace"><div class="card"><div class="card-header">📍 Geo-Location Tracker</div><p style="font-size: 14px; color: var(--text-muted); font-weight:600;">GPS Perimeter Active. All staff checking in securely.</p></div></div>
+        <div id="leave" class="workspace"><div class="card"><div class="card-header">📅 Leave Approvals</div><p style="font-size: 14px; color: var(--text-muted); font-weight:600;">No pending leaves right now.</p></div></div>
+        <div id="recruitment" class="workspace"><div class="card"><div class="card-header">🎯 Post Vacancy</div><p style="font-size: 14px; color: var(--text-muted); font-weight:600;">Manage external hiring pipeline and interviews.</p></div></div>
     </div>
 
+    <!-- 🚀 MASTER HR LOGIC -->
     <script>
-        // --- 1. CORE DATA & INITIALIZATION ---
+        // --- CUSTOM TOAST NOTIFICATION ---
+        function showToast(title, message, color) {
+            let container = document.getElementById("toast-container");
+            if(!container) { container = document.createElement("div"); container.id = "toast-container"; document.body.appendChild(container); }
+            let toast = document.createElement("div"); toast.className = "toast"; toast.style.background = color || "var(--accent-color)";
+            toast.innerHTML = `<div style="font-size:16px; margin-bottom:5px;">${title}</div><div style="font-size:13px; font-weight:normal; text-transform:none;">${message}</div>`;
+            container.appendChild(toast);
+            setTimeout(() => { toast.style.animation = "fadeOutToast 0.4s ease forwards"; setTimeout(() => toast.remove(), 400); }, 3500);
+        }
+
+        // --- CORE DATA ---
         let staffDB = JSON.parse(localStorage.getItem("hrStaffDB")) || [
             { id: "T-101", name: "S.K. Mishra", dept: "Teacher", role: "PGT Science", phone: "9876543210", salary: "45000", status: "Active", login: {user: "T-101", pass: "pass@123"} },
             { id: "D-102", name: "Raju Driver", dept: "Transport", role: "Bus Driver", phone: "8765432109", salary: "18000", status: "Active", login: {user: "D-102", pass: "pass@123"} }
@@ -375,10 +519,24 @@
             "Principal": ["Principal", "Vice Principal"]
         };
 
+        const loggedInUser = localStorage.getItem("loggedInUser") || "HR Manager";
+        document.getElementById("modal-name").innerText = loggedInUser;
+        if(document.getElementById("mobile-avatar")) document.getElementById("mobile-avatar").innerText = "H";
+        if(document.getElementById("desktop-avatar")) document.getElementById("desktop-avatar").innerText = "H";
+        if(document.getElementById("modal-avatar")) document.getElementById("modal-avatar").innerText = "H";
+
+        // --- PROFILE MODAL LOGIC ---
+        function openProfileModal() {
+            document.getElementById("profile-modal-overlay").classList.add("active");
+        }
+        function closeProfileModal(event) {
+            if(event.target.id === 'profile-modal-overlay' || event.target.className === 'modal-close') {
+                document.getElementById("profile-modal-overlay").classList.remove("active");
+            }
+        }
+
+        // --- INITIALIZATION ---
         window.onload = function() {
-            const user = localStorage.getItem("loggedInUser") || "HR Manager";
-            if(document.getElementById("mobile-avatar")) document.getElementById("mobile-avatar").innerText = user.charAt(0).toUpperCase();
-            
             document.body.classList.add("dark-mode");
             localStorage.setItem("darkMode", "true");
             let themeBtn = document.querySelector(".theme-toggle");
@@ -390,18 +548,17 @@
             renderDesignationList();
         };
 
-        // --- 2. THEME & NAVIGATION ---
+        // --- THEME & NAVIGATION ---
+        function toggleDarkMode() {
+            document.body.classList.toggle("dark-mode");
+            localStorage.setItem("darkMode", document.body.classList.contains("dark-mode"));
+            let themeBtn = document.querySelector(".theme-toggle");
+            if(themeBtn) themeBtn.innerText = document.body.classList.contains("dark-mode") ? "🔱" : "☀️";
+        }
+
         function toggleAppMenu() {
             document.querySelector('.sidebar').classList.toggle('open');
             document.querySelector('.sidebar-overlay').classList.toggle('open');
-        }
-
-        function toggleDarkMode() {
-            document.body.classList.toggle("dark-mode");
-            const isDark = document.body.classList.contains("dark-mode");
-            localStorage.setItem("darkMode", isDark);
-            let themeBtn = document.querySelector(".theme-toggle");
-            if(themeBtn) themeBtn.innerText = isDark ? "🔱" : "☀️";
         }
 
         function switchTab(tabId, element) {
@@ -410,32 +567,24 @@
             element.classList.add('active');
             document.getElementById(tabId).classList.add('active');
             
-            let tabName = element.innerText.replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]|[\u2600-\u27FF]/g, '').trim(); 
-            if(document.getElementById('mobile-title')) document.getElementById('mobile-title').innerText = tabName;
+            let cleanTitle = element.innerText.replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]|\u200D|\uFE0F|[\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|\uD83E[\uDD10-\uDDFF]/g, '').trim(); 
+            if(document.getElementById('mobile-title')) document.getElementById('mobile-title').innerText = cleanTitle;
             
             if(tabId === 'directory') renderDirectory();
+            if(tabId === 'documents') populateDocDropdown();
             if(tabId === 'designations') renderDesignationList();
+            
             if(window.innerWidth <= 768) { toggleAppMenu(); }
         }
 
         function logoutHR() {
-            if(confirm("Are you sure you want to securely logout?")) {
+            if(confirm("Securely Logout of HR Portal?")) {
                 localStorage.removeItem("loggedInUser");
-                localStorage.removeItem("userRole");
                 window.location.href = "index.html";
             }
         }
 
-        function showToast(title, message, color) {
-            let container = document.getElementById("toast-container");
-            let toast = document.createElement("div");
-            toast.className = "toast"; toast.style.background = color;
-            toast.innerHTML = `<div style="font-size:15px; margin-bottom:4px;">${title}</div><div style="font-size:12px; font-weight:normal;">${message}</div>`;
-            container.appendChild(toast);
-            setTimeout(() => { toast.style.animation = "fadeOutToast 0.4s ease forwards"; setTimeout(() => toast.remove(), 400); }, 3500);
-        }
-
-        // --- 3. SMART KYC & ONBOARDING ENGINE ---
+        // --- SMART KYC & ONBOARDING ENGINE ---
         function populateDesignations() {
             const dept = document.getElementById('kyc-dept').value;
             const roleSelect = document.getElementById('kyc-role');
@@ -455,87 +604,70 @@
             let phone = document.getElementById('kyc-phone').value;
             let salary = document.getElementById('kyc-salary').value;
 
-            if(!name || !dept || !role || !phone) return showToast('Validation Error', 'Name, Dept, Role, and Phone are mandatory!', '#ef4444');
+            if(!name || !dept || !role || !phone) return showToast('Error', 'Name, Dept, Role, and Phone are mandatory!', 'var(--danger)');
 
             if(id) {
-                // EDIT EXISTING
                 let staff = staffDB.find(s => s.id === id);
                 if(staff) {
                     staff.name = name; staff.dept = dept; staff.role = role; staff.phone = phone; staff.salary = salary;
-                    showToast('KYC Updated 📝', `${name}'s profile has been updated.`, '#3b82f6');
+                    showToast('KYC Updated 📝', `${name}'s profile has been updated.`, 'var(--info)');
                 }
             } else {
-                // NEW ENTRY - Auto Generate ID/Pass
                 let prefix = dept.charAt(0).toUpperCase();
                 if(dept === "Transport") prefix = "D";
                 let newId = `${prefix}-${Math.floor(100 + Math.random() * 900)}`;
                 let loginObj = { user: newId, pass: "pass@123" };
                 
-                staffDB.push({
-                    id: newId, name: name, dept: dept, role: role, phone: phone, salary: salary, status: "Active", login: loginObj
-                });
-                
-                // Magic Toast with Login Details
-                showToast('Welcome Aboard! 🎉', `Staff saved. App Login -> ID: <b>${newId}</b> | Pass: <b>pass@123</b>`, '#10b981');
+                staffDB.push({ id: newId, name: name, dept: dept, role: role, phone: phone, salary: salary, status: "Active", login: loginObj });
+                showToast('Welcome Aboard! 🎉', `Staff saved. App Login -> ID: <b>${newId}</b> | Pass: <b>pass@123</b>`, 'var(--success)');
             }
 
             localStorage.setItem("hrStaffDB", JSON.stringify(staffDB));
-            resetKYCForm();
-            updateDashboardStats();
-            populateDocDropdown();
+            resetKYCForm(); updateDashboardStats(); populateDocDropdown();
         }
 
         function resetKYCForm() {
-            document.getElementById('kyc-id').value = "";
-            document.getElementById('kyc-name').value = "";
+            document.querySelectorAll('#onboarding input, #onboarding textarea').forEach(el => el.value = '');
             document.getElementById('kyc-dept').value = "";
             document.getElementById('kyc-role').innerHTML = '<option value="">-- Select Dept First --</option>';
-            document.getElementById('kyc-phone').value = "";
-            document.getElementById('kyc-gov').value = "";
-            document.getElementById('kyc-salary').value = "";
-            document.getElementById('kyc-guardian').value = "";
-            document.getElementById('kyc-address').value = "";
-            document.getElementById('kyc-exp').value = "";
-            
             document.getElementById('kyc-title').innerText = "📝 New Staff Entry & KYC";
             document.getElementById('kyc-submit-btn').innerText = "Final Submit & Generate Login";
             document.getElementById('kyc-cancel-btn').style.display = "none";
         }
 
-        // --- 4. STAFF DIRECTORY ENGINE ---
+        // --- STAFF DIRECTORY ENGINE ---
         function renderDirectory() {
             const list = document.getElementById('directory-list');
             const search = document.getElementById('dir-search').value.toLowerCase();
             const filter = document.getElementById('dir-filter').value;
             
             list.innerHTML = "";
-            
             let filtered = staffDB.filter(s => {
                 let matchSearch = s.name.toLowerCase().includes(search) || s.id.toLowerCase().includes(search);
                 let matchFilter = filter === "All" ? true : s.dept === filter;
                 return matchSearch && matchFilter;
             });
 
-            if(filtered.length === 0) return list.innerHTML = `<p style="text-align:center; color:var(--text-muted); padding: 20px;">No staff found.</p>`;
+            if(filtered.length === 0) return list.innerHTML = `<p style="text-align:center; color:var(--text-muted); padding: 20px; font-weight:bold;">No staff found.</p>`;
 
             filtered.forEach(s => {
                 let isInactive = s.status !== "Active";
-                let badge = isInactive ? `<div class="status-badge" style="background:var(--danger); color:#fff;">Inactive</div>` : `<div class="status-badge" style="background: rgba(16, 185, 129, 0.1); color: var(--success);">Active</div>`;
+                let badgeCol = isInactive ? "var(--danger)" : "var(--success)";
                 let btnText = isInactive ? "Re-Activate" : "Deactivate";
                 let btnColor = isInactive ? "btn-success" : "btn-danger";
 
                 list.innerHTML += `
-                    <div class="list-card ${isInactive ? 'inactive' : ''}">
+                    <div class="list-card ${isInactive ? 'inactive' : ''}" style="border-left: 4px solid ${badgeCol};">
                         <div class="list-row">
                             <div>
                                 <div class="list-title">${s.name}</div>
-                                <div class="list-subtitle">${s.role} | ID: ${s.id} | Dept: ${s.dept}</div>
+                                <div class="list-subtitle" style="margin-top:4px;">${s.role} | ID: <strong style="color:var(--text-main);">${s.id}</strong> | Dept: ${s.dept}</div>
                             </div>
-                            <div style="text-align: right;">${badge}</div>
+                            <div class="status-badge" style="color:${badgeCol}; border-color:${badgeCol};">${s.status}</div>
                         </div>
-                        <div class="list-row" style="margin-top: 15px; border-top: 1px dashed var(--border-color); padding-top: 10px;">
+                        <div class="list-row" style="margin-top: 15px; border-top: 1px dashed var(--border-color); padding-top: 15px;">
                             <span class="list-subtitle">📞 ${s.phone}</span>
-                            <div style="display:flex; gap:8px;">
+                            <div style="display:flex; gap:10px;">
                                 <button class="btn btn-outline btn-small" onclick="editStaff('${s.id}')">✏️ Edit</button>
                                 <button class="btn ${btnColor} btn-small" onclick="toggleStatus('${s.id}')">${btnText}</button>
                             </div>
@@ -567,20 +699,27 @@
             let staff = staffDB.find(s => s.id === id);
             if(staff) {
                 if(staff.status === "Active") {
-                    if(confirm(`Are you sure you want to deactivate ${staff.name}? They won't be able to login.`)) {
+                    if(confirm(`Deactivate ${staff.name}? They won't be able to login.`)) {
                         staff.status = "Inactive";
-                        showToast('Staff Deactivated 🛑', 'Account disabled and moved to inactive list.', '#ef4444');
+                        showToast('Staff Deactivated 🛑', 'Account disabled.', 'var(--danger)');
                     }
                 } else {
                     staff.status = "Active";
-                    showToast('Staff Reactivated ✅', 'Account restored successfully.', '#10b981');
+                    showToast('Staff Reactivated ✅', 'Account restored.', 'var(--success)');
                 }
                 localStorage.setItem("hrStaffDB", JSON.stringify(staffDB));
-                renderDirectory();
-                updateDashboardStats();
+                renderDirectory(); updateDashboardStats(); populateDocDropdown();
             }
         }
 
+        function updateDashboardStats() {
+            let active = staffDB.filter(s => s.status === "Active").length;
+            let inactive = staffDB.filter(s => s.status === "Inactive").length;
+            document.getElementById('dash-active-staff').innerText = active;
+            document.getElementById('dash-inactive-staff').innerText = inactive;
+        }
+
+        // --- DOCUMENTS ---
         function populateDocDropdown() {
             let sel = document.getElementById('doc-staff');
             if(!sel) return;
@@ -591,20 +730,12 @@
         }
 
         function generateLetter() {
-            const staff = document.getElementById('doc-staff').value;
-            const type = document.getElementById('doc-type').value;
-            if(!staff) return showToast('Error', 'Please select a staff member.', '#ef4444');
-            showToast('Document Generated 🖨️', `${type} generated for ID: ${staff}. PDF saved.`, '#3b82f6');
+            const staff = document.getElementById('doc-staff').value; const type = document.getElementById('doc-type').value;
+            if(!staff) return showToast('Error', 'Select a staff member first.', 'var(--danger)');
+            showToast('Document Generated 🖨️', `${type} generated for ID: ${staff}. PDF saved.`, 'var(--info)');
         }
 
-        function updateDashboardStats() {
-            let active = staffDB.filter(s => s.status === "Active").length;
-            let inactive = staffDB.filter(s => s.status === "Inactive").length;
-            document.getElementById('dash-active-staff').innerText = active;
-            document.getElementById('dash-inactive-staff').innerText = inactive;
-        }
-
-        // --- 5. DESIGNATION MANAGER ---
+        // --- DESIGNATION MANAGER ---
         function renderDesignationList() {
             const dept = document.getElementById('desig-dept-select').value;
             const list = document.getElementById('designation-list-container');
@@ -613,52 +744,91 @@
             if(rolesDB[dept] && rolesDB[dept].length > 0) {
                 rolesDB[dept].forEach((role, i) => {
                     list.innerHTML += `
-                    <div class="list-card" style="padding: 10px 15px; margin-bottom: 8px; display:flex; justify-content:space-between; align-items:center;">
-                        <span class="list-title">${role}</span>
-                        <button style="background:none; border:none; color:var(--danger); font-size:18px; cursor:pointer;" onclick="deleteDesignation('${dept}', ${i})">🗑️</button>
+                    <div class="list-card" style="padding: 15px; margin-bottom: 10px; display:flex; justify-content:space-between; align-items:center;">
+                        <span class="list-title" style="color:var(--text-main); font-size:16px;">${role}</span>
+                        <button style="background:none; border:none; color:var(--danger); font-size:20px; cursor:pointer;" onclick="deleteDesignation('${dept}', ${i})">🗑️</button>
                     </div>`;
                 });
             } else {
-                list.innerHTML = `<p style="color:var(--text-muted); font-size:13px;">No designations found. Add one above.</p>`;
+                list.innerHTML = `<p style="color:var(--text-muted); font-size:14px; font-weight:bold;">No designations found. Add one above.</p>`;
             }
         }
 
         function addDesignation() {
             const dept = document.getElementById('desig-dept-select').value;
-            const input = document.getElementById('new-desig-input');
-            const val = input.value.trim();
-            if(!val) return showToast('Error', 'Enter a designation name.', '#ef4444');
+            const input = document.getElementById('new-desig-input'); const val = input.value.trim();
+            if(!val) return showToast('Error', 'Enter a designation name.', 'var(--danger)');
             
             if(!rolesDB[dept]) rolesDB[dept] = [];
             rolesDB[dept].push(val);
             localStorage.setItem("hrRolesDB", JSON.stringify(rolesDB));
-            input.value = "";
-            renderDesignationList();
-            showToast('Role Added ⚙️', `${val} added to ${dept} department.`, '#10b981');
+            input.value = ""; renderDesignationList();
+            showToast('Role Added ⚙️', `${val} added to ${dept}.`, 'var(--success)');
         }
 
         function deleteDesignation(dept, index) {
             if(confirm("Delete this designation? It will be removed from KYC dropdown.")) {
                 rolesDB[dept].splice(index, 1);
-                localStorage.setItem("hrRolesDB", JSON.stringify(rolesDB));
-                renderDesignationList();
+                localStorage.setItem("hrRolesDB", JSON.stringify(rolesDB)); renderDesignationList();
             }
         }
 
-        // --- 6. PREVIOUS FEATURES (Working) ---
-        function sendWishes() { showToast('Wishes Sent! 🎉', 'App notification and WhatsApp message sent.', '#3b82f6'); }
+        // --- SUPREME HR AI ASSISTANT ---
+        async function askHRAI() {
+            const text = document.getElementById('hr-ai-input').value; 
+            const fileInput = document.getElementById('hr-ai-file');
+            
+            if(!text && (!fileInput || fileInput.files.length === 0)) return showToast("Error", "Provide a command or upload a document.", "var(--danger)");
+            
+            const responseBox = document.getElementById('hr-ai-response');
+            const aiOrb = document.getElementById('ai-core-orb');
+            
+            responseBox.style.display = "flex"; 
+            responseBox.innerHTML = "> Establishing connection to HR AI Core...\n> Processing document parameters...";
+            responseBox.classList.remove('active'); 
+            aiOrb.classList.add('thinking'); 
+            
+            try {
+                let base64Data = null; let mimeType = null;
+                if (fileInput && fileInput.files.length > 0) {
+                    const file = fileInput.files[0]; mimeType = file.type;
+                    base64Data = await new Promise((resolve) => { const reader = new FileReader(); reader.onloadend = () => resolve(reader.result.split(',')[1]); reader.readAsDataURL(file); });
+                }
+
+                setTimeout(() => { responseBox.innerHTML += "\n> Analyzing staff frameworks..."; }, 800);
+
+                const response = await fetch('/api/gemini', { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ message: `Act as a senior HR Manager. Answer this: ${text}`, imageBase64: base64Data, mimeType: mimeType }) });
+                if (!response.ok) throw new Error("API Failed");
+                const data = await response.json();
+                
+                if(data.candidates && data.candidates[0]) {
+                    const aiAnswer = data.candidates[0].content.parts[0].text.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                    aiOrb.classList.remove('thinking');
+                    responseBox.classList.add('active'); 
+                    responseBox.innerHTML = "💡 <strong>AI Analysis Complete:</strong><br><br>" + aiAnswer;
+                    document.getElementById('hr-ai-input').value = ""; if(fileInput) fileInput.value = "";
+                }
+            } catch (error) { 
+                aiOrb.classList.remove('thinking');
+                responseBox.style.color = "var(--danger)"; 
+                responseBox.innerHTML = `> [ERR_CONNECTION_REFUSED] AI Core offline.`; 
+            }
+        }
+
+        // --- PREVIOUS FEATURES ---
+        function sendWishes() { showToast('Wishes Sent! 🎉', 'App notification and WhatsApp message sent.', 'var(--info)'); }
         function handleAdvance(id, status) {
             document.getElementById(id).style.display = 'none';
-            let color = status === 'Approved' ? '#10b981' : '#ef4444';
+            let color = status === 'Approved' ? 'var(--success)' : 'var(--danger)';
             showToast(`Advance ${status}`, `Salary advance request has been ${status.toLowerCase()}.`, color);
         }
         function resolveTicket(id) {
             let card = document.getElementById(id); let badge = card.querySelector('.status-badge');
-            badge.innerText = "Resolved"; badge.style.background = "var(--success)";
+            badge.innerText = "Resolved"; badge.style.background = "var(--success)"; badge.style.color = "#fff";
             card.querySelector('.btn').style.display = "none";
-            showToast('Ticket Closed 🛠️', 'Staff has been notified.', '#10b981');
+            showToast('Ticket Closed 🛠️', 'Staff has been notified.', 'var(--success)');
         }
-        function disbursePayroll() { showToast('Payroll Disbursed 🏦', 'Salaries, PF & TDS processed automatically.', '#10b981'); }
+        function disbursePayroll() { showToast('Payroll Disbursed 🏦', 'Salaries, PF & TDS processed automatically.', 'var(--success)'); }
     </script>
 </body>
 </html>
