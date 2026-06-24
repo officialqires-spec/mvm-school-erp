@@ -7,26 +7,25 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; -webkit-tap-highlight-color: transparent; }
         
-        /* ☀️ LIGHT MODE (Clean iOS Style) */
+        /* ☀️ LIGHT MODE */
         :root {
             --bg-color: #f4f6f9; --card-bg: #ffffff; --text-main: #111827; --text-muted: #64748b;
             --border-color: #e2e8f0; --sidebar-bg: #ffffff; 
             --accent-color: #0ea5e9; --accent-hover: #0284c7; --accent-text: #ffffff;
             --success: #10b981; --danger: #ef4444; --warning: #f59e0b; --info: #3b82f6;
             --shadow-sm: 0 4px 15px rgba(0,0,0,0.03); --shadow-md: 0 8px 25px rgba(0,0,0,0.06);
-            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            --transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
             --present-bg: #e8f5e9; --present-text: #2e7d32; --absent-bg: #ffebee; --absent-text: #c62828;
             --ai-bubble: #e0f2fe; --ai-text: #0369a1;
         }
 
         /* 🌌 SUPREME COSMIC THEME (Mahadev Scholar Mode) */
         body.dark-mode {
-            --bg-color: #020308; /* Deep Space Black */
-            --card-bg: rgba(12, 16, 28, 0.7); /* Translucent Cosmic Blue */
+            --bg-color: #020308; 
+            --card-bg: rgba(12, 16, 28, 0.7); 
             --text-main: #f8fafc; --text-muted: #94a3b8; 
-            --border-color: rgba(14, 165, 233, 0.25); /* Glowing Cyan Borders */
+            --border-color: rgba(14, 165, 233, 0.25); 
             --sidebar-bg: rgba(5, 8, 15, 0.95);
-            /* Bhasma & Cosmic Blue Gradient */
             --accent-color: linear-gradient(135deg, #0284c7 0%, #3b82f6 100%); 
             --accent-hover: linear-gradient(135deg, #0369a1 0%, #2563eb 100%);
             --accent-text: #ffffff;
@@ -49,13 +48,17 @@
         .theme-toggle { font-size: 22px; background: none; border: none; cursor: pointer; color: var(--text-main); outline: none; transition: transform 0.3s ease; }
         .theme-toggle:active { transform: scale(0.8) rotate(45deg); }
         .points-badge { background: linear-gradient(135deg, #FFD700, #F5A623); color: #000; padding: 6px 12px; border-radius: 20px; font-weight: 900; font-size: 13px; box-shadow: 0 4px 10px rgba(245, 166, 35, 0.4); cursor: pointer; display: flex; align-items: center; gap: 5px; border: 1px solid #fff; }
-        .avatar { width: 38px; height: 38px; background: var(--accent-color); color: var(--accent-text); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: 900; font-size: 16px; box-shadow: var(--shadow-sm); border: 2px solid var(--border-color); }
+        
+        /* Avatar - Now Clickable for Profile */
+        .avatar { width: 38px; height: 38px; background: var(--accent-color); color: var(--accent-text); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: 900; font-size: 16px; box-shadow: var(--shadow-sm); border: 2px solid var(--border-color); cursor: pointer; transition: transform 0.2s; }
+        .avatar:hover { transform: scale(1.1); }
 
-        /* 🍔 SLIDE-IN APP MENU */
-        .sidebar { position: fixed; top: 0; left: -100%; width: 290px; height: 100%; background: var(--sidebar-bg); z-index: 9999; transition: var(--transition); box-shadow: 10px 0 40px rgba(0,0,0,0.8); display: flex; flex-direction: column; padding-bottom: 20px; border-right: 1px solid var(--border-color); }
-        .sidebar.open { left: 0; }
-        .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9998; backdrop-filter: blur(4px); }
-        .sidebar-overlay.open { display: block; animation: fadeIn 0.3s; }
+        /* 🍔 SLIDE-IN APP MENU (Upgraded Animation) */
+        .sidebar { position: fixed; top: 0; left: 0; transform: translateX(-100%); width: 290px; height: 100%; background: var(--sidebar-bg); z-index: 9999; transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1); box-shadow: 10px 0 40px rgba(0,0,0,0.8); display: flex; flex-direction: column; padding-bottom: 20px; border-right: 1px solid var(--border-color); }
+        .sidebar.open { transform: translateX(0); }
+        
+        .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9998; backdrop-filter: blur(4px); opacity: 0; transition: opacity 0.4s ease; }
+        .sidebar-overlay.open { display: block; opacity: 1; }
         
         .sidebar-header { padding: 25px 20px; border-bottom: 1px dashed var(--border-color); position: relative; text-align: center; }
         .close-sidebar { position: absolute; top: 20px; right: 20px; font-size: 30px; cursor: pointer; color: var(--text-main); background: none; border: none; }
@@ -67,6 +70,23 @@
         .nav-item { padding: 14px 18px; border-radius: 12px; cursor: pointer; font-size: 15px; font-weight: 700; color: var(--text-muted); display: flex; align-items: center; gap: 12px; transition: var(--transition); border: 1px solid transparent; }
         .nav-item:hover { background-color: rgba(14, 165, 233, 0.1); color: var(--text-main); }
         .nav-item.active { background: var(--accent-color); color: var(--accent-text); box-shadow: var(--shadow-md); transform: translateX(8px); border-color: rgba(255,255,255,0.2); }
+
+        /* 🧑‍🎓 PROFILE MODAL (New Feature) */
+        .profile-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 100000; backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s ease; }
+        .profile-modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .profile-modal { background: var(--card-bg); width: 90%; max-width: 400px; border-radius: 20px; border: 1px solid var(--border-color); box-shadow: 0 20px 50px rgba(0,0,0,0.5); transform: translateY(30px) scale(0.95); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); overflow: hidden; }
+        .profile-modal-overlay.active .profile-modal { transform: translateY(0) scale(1); }
+        .modal-header-bg { background: var(--accent-color); padding: 30px 20px 50px 20px; text-align: center; position: relative; }
+        .modal-close { position: absolute; top: 15px; right: 20px; font-size: 24px; color: #fff; cursor: pointer; border: none; background: none; }
+        .modal-avatar { width: 80px; height: 80px; background: #fff; color: #000; border-radius: 50%; font-size: 32px; font-weight: 900; display: flex; justify-content: center; align-items: center; margin: 0 auto; border: 4px solid var(--card-bg); transform: translateY(40px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .modal-body { padding: 50px 20px 30px 20px; text-align: center; }
+        .modal-name { font-size: 22px; font-weight: 900; color: var(--text-main); margin-bottom: 5px; }
+        .modal-id { font-size: 13px; color: var(--info); font-weight: 800; margin-bottom: 20px; }
+        .modal-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; text-align: left; }
+        .modal-info-box { background: rgba(0,0,0,0.03); padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); }
+        .dark-mode .modal-info-box { background: rgba(255,255,255,0.02); }
+        .modal-info-box label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 800; margin-bottom: 4px; display: block; }
+        .modal-info-box span { font-size: 13px; font-weight: 700; color: var(--text-main); }
 
         /* 🏢 MAIN WORKSPACE */
         .main-content { flex-grow: 1; overflow-y: auto; overflow-x: hidden; position: relative; }
@@ -90,20 +110,9 @@
         .stat-box h4 { font-size: 13px; opacity: 0.9; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 800; }
         .stat-box h2 { font-size: 28px; font-weight: 900; margin: 0; }
 
-        /* Profile Card */
-        .profile-card { background: var(--card-bg); border-radius: 20px; border: 1px solid var(--border-color); padding: 25px; margin-bottom: 25px; box-shadow: var(--shadow-sm); display: flex; gap: 20px; align-items: center; }
-        .profile-photo { width: 90px; height: 90px; border-radius: 50%; background: var(--accent-color); color: var(--accent-text); display: flex; justify-content: center; align-items: center; font-size: 40px; font-weight: 900; flex-shrink: 0; box-shadow: var(--shadow-md); border: 3px solid var(--border-color); }
-        .profile-details { flex-grow: 1; }
-        .profile-details h2 { font-size: 24px; margin-bottom: 5px; font-weight: 900; color: var(--text-main); }
-        
-        .profile-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; margin-top: 15px; }
-        .profile-item { background: rgba(0,0,0,0.03); padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); }
-        .dark-mode .profile-item { background: rgba(255,255,255,0.02); }
-        .profile-item label { display: block; font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 800; margin-bottom: 4px; }
-        .profile-item span { font-size: 14px; font-weight: 700; color: var(--text-main); }
-
         /* Modern Lists */
         .list-card { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 14px; padding: 15px; margin-bottom: 12px; transition: var(--transition); }
+        .list-card:active { transform: scale(0.98); }
         .list-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
         .list-row:last-child { margin-bottom: 0; }
         .list-title { font-size: 15px; font-weight: 800; color: var(--text-main); }
@@ -120,10 +129,18 @@
         .task-item input { width: 20px; height: 20px; accent-color: var(--info); cursor: pointer; flex-shrink: 0; }
         .task-item label { font-size: 14px; font-weight: 700; cursor: pointer; flex-grow: 1; color: var(--text-main); transition: 0.3s; }
         .task-item.completed label { text-decoration: line-through; color: var(--text-muted); }
-        .tag { padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 900; background: var(--border-color); color: var(--text-main); }
-        .tag.urgent { background: rgba(239, 68, 68, 0.1); color: var(--danger); border: 1px solid var(--danger); }
 
-        /* Forms */
+        /* 🤖 SUPER ADVANCED AI BOT STYLING */
+        .ai-dashboard { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        .ai-core-container { display: flex; justify-content: center; align-items: center; padding: 30px 0; }
+        .ai-core { width: 80px; height: 80px; border-radius: 50%; background: radial-gradient(circle, var(--info) 0%, transparent 70%); box-shadow: 0 0 20px var(--info), inset 0 0 20px #fff; border: 2px solid rgba(59, 130, 246, 0.5); display: flex; justify-content: center; align-items: center; font-size: 30px; transition: 0.3s; }
+        .ai-core.thinking { animation: pulseAI 1.5s infinite; }
+        @keyframes pulseAI { 0% { transform: scale(0.95); box-shadow: 0 0 10px var(--info); } 50% { transform: scale(1.1); box-shadow: 0 0 40px var(--info), inset 0 0 30px #fff; } 100% { transform: scale(0.95); box-shadow: 0 0 10px var(--info); } }
+        
+        .ai-terminal { background: rgba(0,0,0,0.3); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 16px; padding: 20px; font-family: 'Courier New', Courier, monospace; min-height: 150px; color: var(--info); font-weight: bold; font-size: 14px; line-height: 1.6; display: flex; flex-direction: column; justify-content: center; }
+        .ai-terminal.active { color: var(--text-main); background: var(--ai-bubble); border-color: var(--info); font-family: 'Segoe UI', sans-serif;}
+        
+        /* Form Inputs */
         input, select, textarea { width: 100%; background: rgba(0,0,0,0.03); color: var(--text-main); border: 1px solid var(--border-color); padding: 14px 16px; border-radius: 12px; font-size: 15px; margin-bottom: 15px; outline: none; transition: var(--transition); font-weight: 600; }
         .dark-mode input, .dark-mode select, .dark-mode textarea { background: rgba(255,255,255,0.02); }
         input:focus, select:focus, textarea:focus { border-color: var(--info); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); }
@@ -152,26 +169,25 @@
         .data-table th { background: var(--bg-color); font-weight: 800; color: var(--text-muted); font-size: 13px; text-transform: uppercase; }
 
         /* Toast Notification */
-        #toast-container { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 10000; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 350px; pointer-events: none; }
+        #toast-container { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 100000; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 350px; pointer-events: none; }
         .toast { padding: 16px 20px; border-radius: 14px; color: #fff; font-weight: 800; box-shadow: 0 10px 30px rgba(0,0,0,0.5); font-size: 14px; animation: slideUpToast 0.4s ease forwards; text-align: center; border: 1px solid rgba(255,255,255,0.2); line-height: 1.4; }
         @keyframes slideUpToast { from { opacity: 0; transform: translateY(30px) scale(0.9); } to { opacity: 1; transform: translateY(0) scale(1); } }
         @keyframes fadeOutToast { from { opacity: 1; transform: translateY(0) scale(1); } to { opacity: 0; transform: translateY(-20px) scale(0.9); } }
 
         /* Mobile Fixes */
         @media (max-width: 768px) {
-            .profile-card { flex-direction: column; text-align: center; padding: 25px 15px; }
-            .profile-grid { grid-template-columns: 1fr; width: 100%; }
             .grid-3 { grid-template-columns: 1fr; }
             .data-table thead { display: none; }
             .data-table tbody tr { display: block; background: var(--bg-color); margin-bottom: 15px; border-radius: 12px; border: 1px solid var(--border-color); padding: 12px; }
             .data-table tbody td { display: flex; justify-content: space-between; align-items: center; padding: 8px 5px; border-bottom: 1px dashed var(--border-color); font-size: 14px; font-weight: 700;}
             .data-table tbody td:last-child { border-bottom: none; }
             .data-table tbody td::before { content: attr(data-label); font-weight: 800; color: var(--text-muted); font-size: 11px; text-transform: uppercase; }
+            .hide-on-mobile { display: none !important; }
         }
         @media (min-width: 769px) {
             body { flex-direction: row; }
             .mobile-header { display: none !important; }
-            .sidebar { position: relative; left: 0; box-shadow: none; border-right: 1px solid var(--border-color); }
+            .sidebar { transform: translateX(0); position: relative; box-shadow: none; border-right: 1px solid var(--border-color); }
             .close-sidebar { display: none !important; }
             .grid-1 { grid-template-columns: 2fr 1fr; } 
             .workspace { padding: 40px; }
@@ -182,10 +198,34 @@
 
     <div id="toast-container"></div>
 
+    <!-- 🚨 GLOBAL LOCKDOWN SCREEN -->
     <div id="global-sos-screen" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#b71c1c; color:white; z-index:999999; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding: 20px;">
-        <h1 style="font-size: 60px; margin-bottom: 20px;">🚨 LOCKDOWN 🚨</h1>
+        <h1 style="font-size: 60px; margin-bottom: 20px; font-weight: 900;">🚨 LOCKDOWN 🚨</h1>
         <h2>Emergency SOS Activated</h2>
         <p style="margin-top:20px; font-size:16px; max-width: 600px;">All portals are frozen. Please remain in your classrooms and await further instructions from the Vice Principal.</p>
+    </div>
+
+    <!-- 🧑‍🎓 TOP PROFILE MODAL -->
+    <div class="profile-modal-overlay" id="profile-modal-overlay" onclick="closeProfileModal(event)">
+        <div class="profile-modal">
+            <div class="modal-header-bg">
+                <button class="modal-close" onclick="closeProfileModal(event)">×</button>
+                <div class="modal-avatar" id="modal-avatar">A</div>
+            </div>
+            <div class="modal-body">
+                <div class="modal-name" id="modal-name">Adarsh Patel</div>
+                <div class="modal-id">ID: MVM-2023-8945 | Class 10 - B</div>
+                <div class="modal-info-grid">
+                    <div class="modal-info-box"><label>Roll No</label><span>24</span></div>
+                    <div class="modal-info-box"><label>Blood Grp</label><span style="color: var(--danger);">O+</span></div>
+                    <div class="modal-info-box"><label>Phone</label><span>+91 9876543210</span></div>
+                    <div class="modal-info-box"><label>Transport</label><span>Bus 01 (Route A)</span></div>
+                    <div class="modal-info-box" style="grid-column: 1 / -1;"><label>Father's Name</label><span>Mr. Ramesh Patel</span></div>
+                    <div class="modal-info-box" style="grid-column: 1 / -1;"><label>Address</label><span>Civil Lines, Mirzapur, UP</span></div>
+                </div>
+                <button class="btn btn-danger" style="margin-top: 20px;" onclick="logout()">🚪 Secure Logout</button>
+            </div>
+        </div>
     </div>
 
     <!-- 📱 MOBILE STICKY HEADER -->
@@ -197,7 +237,8 @@
         <div class="header-right">
             <button class="theme-toggle" onclick="toggleDarkMode()" title="Cosmic Mode">🔱</button>
             <div class="points-badge" onclick="switchTab('badges', document.querySelectorAll('.nav-item')[9])">⭐ <span id="m-xp-counter">450</span></div>
-            <div class="avatar" id="mobile-avatar">A</div>
+            <!-- Click to open Profile Modal -->
+            <div class="avatar" id="mobile-avatar" onclick="openProfileModal()">A</div>
         </div>
     </div>
 
@@ -211,6 +252,9 @@
                 <h2>MVM PUBLIC</h2>
                 <div class="role-badge">STUDENT PORTAL</div>
             </div>
+            <!-- Desktop Profile Trigger -->
+            <div class="avatar hide-on-mobile" id="desktop-avatar" style="margin: 15px auto 0 auto; width: 60px; height: 60px; font-size: 24px;" onclick="openProfileModal()">A</div>
+            <div class="hide-on-mobile" style="margin-top: 10px; font-size: 14px; font-weight: bold; color: var(--text-main);">My Profile</div>
         </div>
         
         <div class="nav-menu">
@@ -228,7 +272,7 @@
             <div class="nav-item" onclick="switchTab('library', this)">📚 NCERT Library</div>
             <div class="nav-item" onclick="switchTab('focus', this)">⏳ Focus Room</div>
             <div class="nav-item" onclick="switchTab('sandbox', this)">💻 Code Lab</div>
-            <div class="nav-item" style="color: var(--danger); margin-top: 20px;" onclick="logout()">🚪 Secure Logout</div>
+            <div class="nav-item" style="color: var(--danger); margin-top: 15px;" onclick="logout()">🚪 Secure Logout</div>
         </div>
     </div>
 
@@ -238,20 +282,6 @@
         <!-- 1. DASHBOARD -->
         <div id="dashboard" class="workspace active">
             
-            <div class="profile-card">
-                <div class="profile-photo">A</div>
-                <div class="profile-details">
-                    <h2>Adarsh Patel</h2>
-                    <p style="color: var(--text-muted); font-weight: 700; font-size: 14px;">ID: MVM-2023-8945 | Class 10 - B</p>
-                    
-                    <div class="profile-grid">
-                        <div class="profile-item"><label>Roll Number</label><span>24</span></div>
-                        <div class="profile-item"><label>Blood Group</label><span style="color: var(--danger);">O+</span></div>
-                        <div class="profile-item"><label>Contact</label><span>+91 98765 43210</span></div>
-                    </div>
-                </div>
-            </div>
-
             <div id="performance-alert"></div>
             
             <!-- Live Quiz Alert -->
@@ -301,8 +331,12 @@
                 <div>
                     <div class="card" id="notice-board-card">
                         <div class="card-header">School Notices</div>
-                        <div class="notice-item alert"><h4>Holiday Alert</h4><p>School closed tomorrow due to heavy rain.</p></div>
-                        <div class="notice-item"><h4>Fees Reminder</h4><p>Last date for Term 2 fee is 25th.</p></div>
+                        <div class="notice-item alert" style="background: rgba(239, 68, 68, 0.1); padding: 15px; border-left: 4px solid var(--danger); border-radius: 8px; margin-bottom: 10px;">
+                            <h4 style="color: var(--danger); margin-bottom: 5px;">Holiday Alert</h4><p style="font-size: 13px;">School closed tomorrow due to heavy rain.</p>
+                        </div>
+                        <div class="notice-item" style="background: rgba(245, 158, 11, 0.1); padding: 15px; border-left: 4px solid var(--warning); border-radius: 8px;">
+                            <h4 style="color: var(--warning); margin-bottom: 5px;">Fees Reminder</h4><p style="font-size: 13px;">Last date for Term 2 fee is 25th.</p>
+                        </div>
                     </div> 
                     
                     <div class="card">
@@ -338,19 +372,39 @@
             </div>
         </div>
 
-        <!-- 3. AI DOUBT -->
+        <!-- 3. ULTRA ADVANCED AI DOUBT BOT -->
         <div id="ai-doubt" class="workspace">
-            <div class="card">
-                <div class="card-header">🤖 AI Doubt Assistant</div>
-                <label>Upload Question Photo (Optional)</label>
-                <input type="file" id="ai-image" accept="image/*">
-                <label>Your Question</label>
-                <textarea id="doubt-text" rows="4" placeholder="Type your question here..."></textarea>
-                <button onclick="askDoubt()" class="btn">✨ Ask AI</button>
-                <div id="ai-response" style="margin-top: 20px; padding: 20px; background: var(--ai-bubble); color: var(--ai-text); border-radius: 12px; display: none; font-size: 15px; line-height: 1.6; font-weight: 600;"></div>
+            <div class="card" style="border: 2px solid var(--info); background: rgba(59, 130, 246, 0.05);">
+                <div class="card-header" style="color: var(--info); border-bottom-color: var(--info);">🤖 Quantum AI Assistant</div>
+                
+                <div class="ai-core-container">
+                    <div class="ai-core" id="ai-core-orb">🧠</div>
+                </div>
+                <p style="text-align: center; color: var(--text-muted); font-size: 12px; margin-bottom: 20px; font-weight: bold; letter-spacing: 1px;">SYSTEM STANDBY. READY FOR INPUT.</p>
+
+                <div class="grid-2" style="margin-bottom: 15px;">
+                    <div>
+                        <label>Image Scan (Optional)</label>
+                        <input type="file" id="ai-image" accept="image/*" style="margin: 0;">
+                    </div>
+                    <div>
+                        <label>Query Subject</label>
+                        <select id="ai-subject" style="margin: 0;">
+                            <option>Mathematics</option><option>Science</option><option>Grammar</option><option>General Knowledge</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <label>Command Prompt</label>
+                <textarea id="doubt-text" rows="3" placeholder="Initialize query here..." style="font-family: 'Courier New', Courier, monospace;"></textarea>
+                
+                <button onclick="askAdvancedDoubt()" class="btn" style="background: var(--info); box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);">Initialize Processing ✨</button>
+                
+                <div id="ai-response" class="ai-terminal" style="margin-top: 20px; display: none;"></div>
             </div>
+
             <div class="card">
-                <div class="card-header">📜 Doubt History <button onclick="clearAIHistory()" class="btn-outline btn-small" style="color:var(--danger); border-color:var(--danger);">🗑️ Clear</button></div>
+                <div class="card-header">📜 Intelligence Log <button onclick="clearAIHistory()" class="btn-outline btn-small" style="color:var(--danger); border-color:var(--danger);">🗑️ Purge</button></div>
                 <div id="ai-history-container"></div>
             </div>
         </div>
@@ -379,7 +433,7 @@
             </div>
             <div class="card">
                 <div class="card-header">Submission History</div>
-                <ul id="hw-history" class="history-list"></ul>
+                <ul id="hw-history" style="list-style: none;"></ul>
             </div>
         </div>
         
@@ -431,7 +485,7 @@
             </div>
             <div class="card">
                 <div class="card-header">Payment History</div>
-                <ul id="fee-history" class="history-list"></ul>
+                <ul id="fee-history" style="list-style: none;"></ul>
             </div>
         </div>
         
@@ -449,7 +503,7 @@
             </div>
             <div class="card">
                 <div class="card-header">Leave History</div>
-                <ul id="leave-history" class="history-list"></ul>
+                <ul id="leave-history" style="list-style: none;"></ul>
             </div>
         </div>
 
@@ -543,7 +597,24 @@
     <script>
         const loggedInUser = localStorage.getItem("loggedInUser") || "Adarsh";
         const studentClass = "Class 9"; 
-        document.getElementById("student-name").innerText = loggedInUser;
+        
+        // Setup Avatars & Profile Modal Data
+        document.getElementById("student-name") ? document.getElementById("student-name").innerText = loggedInUser : null;
+        document.getElementById("mobile-avatar").innerText = loggedInUser.charAt(0);
+        document.getElementById("desktop-avatar").innerText = loggedInUser.charAt(0);
+        document.getElementById("modal-avatar").innerText = loggedInUser.charAt(0);
+        document.getElementById("modal-name").innerText = loggedInUser;
+
+        // --- PROFILE MODAL LOGIC ---
+        function openProfileModal() {
+            document.getElementById("profile-modal-overlay").classList.add("active");
+        }
+        function closeProfileModal(event) {
+            // Close if clicking outside the modal box or on the X button
+            if(event.target.id === 'profile-modal-overlay' || event.target.className === 'modal-close') {
+                document.getElementById("profile-modal-overlay").classList.remove("active");
+            }
+        }
 
         const ncertDatabase = {
             "9": {
@@ -608,8 +679,8 @@
 
         function updateXP() {
             let xp = localStorage.getItem("studentXP") || 450;
-            document.getElementById("xp-counter").innerText = xp;
-            document.getElementById("m-xp-counter").innerText = xp;
+            if(document.getElementById("xp-counter")) document.getElementById("xp-counter").innerText = xp;
+            if(document.getElementById("m-xp-counter")) document.getElementById("m-xp-counter").innerText = xp;
         }
 
         function renderCalendar() {
@@ -672,11 +743,14 @@
         }
 
         function checkPerformanceAI() {
-            document.getElementById("performance-alert").innerHTML = `
-            <div style="background: rgba(239, 68, 68, 0.1); border-left: 4px solid var(--danger); padding: 15px 20px; border-radius: 16px; margin-bottom: 25px; display: flex; align-items: center; justify-content: space-between;">
-                <div><h4 style="color: var(--danger); margin-bottom: 5px; font-size:15px; font-weight:900;">⚠️ Performance Alert</h4><p style="font-size: 13px; color: var(--text-main); font-weight:600;">You are in the <strong>'Focus Batch'</strong>. Complete pending tasks.</p></div>
-                <div style="font-size: 28px;">🚨</div>
-            </div>`;
+            let pAlert = document.getElementById("performance-alert");
+            if(pAlert) {
+                pAlert.innerHTML = `
+                <div style="background: rgba(239, 68, 68, 0.1); border-left: 4px solid var(--danger); padding: 15px 20px; border-radius: 16px; margin-bottom: 25px; display: flex; align-items: center; justify-content: space-between;">
+                    <div><h4 style="color: var(--danger); margin-bottom: 5px; font-size:15px; font-weight:900;">⚠️ Performance Alert</h4><p style="font-size: 13px; color: var(--text-main); font-weight:600;">You are in the <strong>'Focus Batch'</strong>. Complete pending tasks.</p></div>
+                    <div style="font-size: 28px;">🚨</div>
+                </div>`;
+            }
         }
 
         function toggleDarkMode() {
@@ -711,9 +785,12 @@
             localStorage.setItem(taskId, isChecked); toggleUI(taskId, isChecked);
         }
         function toggleUI(taskId, isChecked) {
-            document.getElementById(taskId).checked = isChecked;
+            let chk = document.getElementById(taskId);
+            if(chk) chk.checked = isChecked;
             const div = document.getElementById(taskId + "-div");
-            if(isChecked) div.classList.add('completed'); else div.classList.remove('completed');
+            if(div) {
+                if(isChecked) div.classList.add('completed'); else div.classList.remove('completed');
+            }
         }
 
         function loadNotices() {
@@ -722,7 +799,7 @@
             const newNotice = localStorage.getItem("schoolBroadcast");
             if(newNotice) {
                 if(!document.getElementById('dynamic-notice')) {
-                    cont.querySelector('.card-header').insertAdjacentHTML('afterend', `<div class="notice-item alert" id="dynamic-notice" style="border-left-color: var(--info); background: rgba(59, 130, 246, 0.1);"><h4>📢 Broadcast Notice</h4><p id="dyn-notice-text" style="color:var(--text-main); font-weight:bold;"></p></div>`);
+                    cont.querySelector('.card-header').insertAdjacentHTML('afterend', `<div class="notice-item alert" id="dynamic-notice" style="border-left-color: var(--info); background: rgba(59, 130, 246, 0.1); padding: 15px; border-radius: 8px; margin-bottom: 10px;"><h4 style="color: var(--info); margin-bottom: 5px;">📢 Broadcast Notice</h4><p id="dyn-notice-text" style="color:var(--text-main); font-weight:bold; font-size:13px;"></p></div>`);
                 }
                 document.getElementById('dyn-notice-text').textContent = newNotice;
             }
@@ -734,7 +811,8 @@
             let container = document.getElementById("voice-notice-container");
             let player = document.getElementById("student-audio-player");
             if(voiceData && voiceData.startsWith("data:audio") && currentAudioHash !== voiceData.substring(0, 50)) {
-                container.style.display = "block"; player.src = voiceData; player.load(); 
+                if(container) container.style.display = "block"; 
+                if(player) { player.src = voiceData; player.load(); }
                 currentAudioHash = voiceData.substring(0, 50); 
             }
         }
@@ -759,14 +837,19 @@
         function deleteAIChat(index) { setTimeout(() => { if(confirm("Delete doubt?")) { let h = JSON.parse(localStorage.getItem("aiChatHistory")); h.splice(index, 1); localStorage.setItem("aiChatHistory", JSON.stringify(h)); renderAIHistory(); } }, 10); }
         function clearAIHistory() { if(confirm("Clear ALL doubt history?")) { localStorage.removeItem("aiChatHistory"); renderAIHistory(); } }
 
-        async function askDoubt() {
+        // 🤖 ADVANCED AI BOT FUNCTION
+        async function askAdvancedDoubt() {
             const text = document.getElementById('doubt-text').value;
             const fileInput = document.getElementById('ai-image');
-            if(!text && fileInput.files.length === 0) return showToast('Error', 'Type a question or upload image.', '#ef4444');
+            if(!text && fileInput.files.length === 0) return showToast('Input Required', 'Provide a query or upload an image.', '#ef4444');
             
             const responseBox = document.getElementById('ai-response');
-            responseBox.style.display = "block"; responseBox.style.color = "var(--text-main)";
-            responseBox.innerHTML = "⏳ AI is scanning securely...";
+            const aiOrb = document.getElementById('ai-core-orb');
+            
+            responseBox.style.display = "block"; 
+            responseBox.innerHTML = "> Establishing connection to Quantum Core...\n> Scanning vectors...";
+            responseBox.classList.remove('active'); // Terminal text color
+            aiOrb.classList.add('thinking'); // Pulse animation
             
             try {
                 let base64Data = null; let mimeType = null;
@@ -775,17 +858,29 @@
                     base64Data = await new Promise((resolve) => { const reader = new FileReader(); reader.onloadend = () => resolve(reader.result.split(',')[1]); reader.readAsDataURL(file); });
                 }
 
-                const response = await fetch('/api/gemini', { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ message: `Explain this for a ${studentClass} student: ${text}`, imageBase64: base64Data, mimeType: mimeType }) });
+                // Simulate processing delay for effect
+                setTimeout(() => { responseBox.innerHTML += "\n> Analyzing structure..."; }, 800);
+
+                const response = await fetch('/api/gemini', { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ message: `Explain this clearly for a ${studentClass} student: ${text}`, imageBase64: base64Data, mimeType: mimeType }) });
                 if (!response.ok) throw new Error("API Failed");
                 const data = await response.json();
                 
                 if(data.candidates && data.candidates[0]) {
                     const aiAnswer = data.candidates[0].content.parts[0].text.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-                    responseBox.innerHTML = "💡 <strong>AI Answer:</strong><br><br>" + aiAnswer;
-                    let h = JSON.parse(localStorage.getItem("aiChatHistory")) || []; h.push({ question: text || "Image Uploaded", answer: aiAnswer }); localStorage.setItem("aiChatHistory", JSON.stringify(h));
+                    
+                    // Success State
+                    aiOrb.classList.remove('thinking');
+                    responseBox.classList.add('active'); // Switch to friendly bubble UI
+                    responseBox.innerHTML = "💡 <strong>Quantum AI Answer:</strong><br><br>" + aiAnswer;
+                    
+                    let h = JSON.parse(localStorage.getItem("aiChatHistory")) || []; h.push({ question: text || "Image Scan", answer: aiAnswer }); localStorage.setItem("aiChatHistory", JSON.stringify(h));
                     renderAIHistory(); document.getElementById('doubt-text').value = ""; fileInput.value = "";
                 }
-            } catch (error) { responseBox.style.color = "var(--danger)"; responseBox.innerHTML = `❌ Error connecting to AI core.`; }
+            } catch (error) { 
+                aiOrb.classList.remove('thinking');
+                responseBox.style.color = "var(--danger)"; 
+                responseBox.innerHTML = `> [ERR_CONNECTION_REFUSED] AI Core offline.`; 
+            }
         }
 
         function renderFeesTable() {
@@ -803,8 +898,8 @@
             
             const historyList = document.getElementById("fee-history");
             let history = JSON.parse(localStorage.getItem("feeHistory")) || [];
-            historyList.innerHTML = history.length>0 ? "" : `<li style="color:var(--text-muted); font-weight:700;">No recent payments.</li>`;
-            history.forEach(h => historyList.innerHTML += `<li>✅ Paid <strong style="color:var(--text-main);">₹${h.amount}</strong> via UPI on ${h.date}</li>`);
+            historyList.innerHTML = history.length>0 ? "" : `<li style="color:var(--text-muted); font-weight:700; padding:10px;">No recent payments.</li>`;
+            history.forEach(h => historyList.innerHTML += `<li style="padding:10px; border-bottom:1px dashed var(--border-color);">✅ Paid <strong style="color:var(--text-main);">₹${h.amount}</strong> via UPI on ${h.date}</li>`);
         }
 
         function payFees() {
@@ -862,8 +957,8 @@
         function renderHomeworkHistory() {
             const myHW = (JSON.parse(localStorage.getItem("hwList")) || []).filter(hw => hw.student === loggedInUser);
             const list = document.getElementById("hw-history");
-            list.innerHTML = myHW.length>0 ? "" : `<li style="color:var(--text-muted); font-weight:700;">No submissions.</li>`;
-            myHW.forEach(hw => list.innerHTML += `<li><strong>${hw.subject}</strong> <span style="float:right; font-size:11px; opacity:0.7;">${hw.date}</span> <br><span style="color:var(--info); font-size:13px; margin-top:5px; display:block;">${hw.link}</span></li>`);
+            list.innerHTML = myHW.length>0 ? "" : `<li style="color:var(--text-muted); font-weight:700; padding:10px;">No submissions.</li>`;
+            myHW.forEach(hw => list.innerHTML += `<li style="padding:10px; border-bottom:1px dashed var(--border-color);"><strong>${hw.subject}</strong> <span style="float:right; font-size:11px; opacity:0.7;">${hw.date}</span> <br><span style="color:var(--info); font-size:13px; margin-top:5px; display:block;">${hw.link}</span></li>`);
         }
 
         function applyLeave() {
@@ -880,11 +975,17 @@
         function renderLeaveHistory() {
             const myLeaves = (JSON.parse(localStorage.getItem("leaveRequests")) || []).filter(lv => lv.student === loggedInUser);
             const list = document.getElementById("leave-history");
-            list.innerHTML = myLeaves.length>0 ? "" : `<li style="color:var(--text-muted); font-weight:700;">No leaves.</li>`;
-            myLeaves.forEach(lv => list.innerHTML += `<li><strong>${lv.dates} <span style="color:var(--warning);">(${lv.days||1} Days)</span></strong><br><span style="font-size:13px; font-weight:600; margin-top:5px; display:block;">${lv.reason}</span> <br><span style="font-size:11px; color:var(--danger); font-weight:900; display:block; margin-top:5px;">[${lv.status}]</span></li>`);
+            list.innerHTML = myLeaves.length>0 ? "" : `<li style="color:var(--text-muted); font-weight:700; padding:10px;">No leaves.</li>`;
+            myLeaves.forEach(lv => list.innerHTML += `<li style="padding:10px; border-bottom:1px dashed var(--border-color);"><strong>${lv.dates} <span style="color:var(--warning);">(${lv.days||1} Days)</span></strong><br><span style="font-size:13px; font-weight:600; margin-top:5px; display:block;">${lv.reason}</span> <br><span style="font-size:11px; color:var(--danger); font-weight:900; display:block; margin-top:5px;">[${lv.status}]</span></li>`);
         }
 
-        function logout() { if(confirm("Securely Logout?")) { localStorage.removeItem("loggedInUser"); document.body.innerHTML = "<h2 style='color:var(--text-main); padding: 50px; text-align:center;'>Logged Out Successfully.</h2>"; } }
+        // 🚪 SECURE LOGOUT LOGIC
+        function logout() { 
+            if(confirm("Securely Logout of Student Portal?")) { 
+                localStorage.removeItem("loggedInUser"); 
+                window.location.href = "index.html"; 
+            } 
+        }
 
         let timerInterval; let timeLeft = 25 * 60; let isTimerRunning = false;
         function startTimer() {
