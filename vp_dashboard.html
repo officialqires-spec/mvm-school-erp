@@ -1196,15 +1196,73 @@
                     headers: { "Content-Type": "application/json" }, 
                     body: JSON.stringify({ message: `Act as the Vice Principal. Write a short, highly professional, strict but polite official circular regarding: ${text}. Format it with HTML tags like <br> and <strong>.` }) 
                 });
-                
-                if (!response.ok) throw new Error("API Failed");
                 const data = await response.json();
                 
                 if(data.candidates && data.candidates[0]) { 
                     responseBox.innerHTML = data.candidates[0].content.parts[0].text.replace(/\n/g, '<br>'); 
+                } else if (data.error) {
+                    throw new Error(data.error.message || "Invalid API Key");
+                } else {
+                    throw new Error("API Error");
                 }
             } catch (error) { 
-                responseBox.innerHTML = `❌ Connection Error. Offline mode active.`; 
+                responseBox.innerHTML = `❌ [ERROR]: ${error.message}`; 
+            }
+        }
+
+        async function askGeneralVPAI() {
+            const text = document.getElementById('vp-general-input').value; 
+            const fileInput = document.getElementById('vp-general-image');
+            
+            if(!text && (!fileInput || fileInput.files.length === 0)) return showUniversalToast("Error", "Type prompt or upload image.", "var(--danger)");
+            
+            const responseBox = document.getElementById('vp-general-response');
+            const aiOrb = document.getElementById('ai-core-orb');
+            
+            responseBox.style.display = "flex"; 
+            responseBox.innerHTML = "> Establishing connection to VP AI Core...\n> Processing parameters...";
+            responseBox.classList.remove('active'); 
+            aiOrb.classList.add('thinking'); 
+            
+            try {
+                let base64Data = null; 
+                let mimeType = null;
+                
+                if (fileInput && fileInput.files.length > 0) { 
+                    const file = fileInput.files[0]; 
+                    mimeType = file.type; 
+                    base64Data = await new Promise((resolve) => { 
+                        const reader = new FileReader(); 
+                        reader.onloadend = () => resolve(reader.result.split(',')[1]); 
+                        reader.readAsDataURL(file); 
+                    }); 
+                }
+                
+                setTimeout(() => { responseBox.innerHTML += "\n> Analyzing infrastructure intent..."; }, 800);
+
+                const response = await fetch('/api/gemini', { 
+                    method: "POST", 
+                    headers: { "Content-Type": "application/json" }, 
+                    body: JSON.stringify({ message: text || 'Analyze this document for a Vice Principal.', imageBase64: base64Data, mimeType: mimeType }) 
+                });
+                
+                const data = await response.json();
+                
+                if(data.candidates && data.candidates[0]) { 
+                    aiOrb.classList.remove('thinking');
+                    responseBox.classList.add('active'); 
+                    responseBox.innerHTML = "💡 <strong>AI Analysis Complete:</strong><br><br>" + data.candidates[0].content.parts[0].text.replace(/\n/g, '<br>'); 
+                    document.getElementById('vp-general-input').value = ""; 
+                    if(fileInput) fileInput.value = ""; 
+                } else if (data.error) {
+                    throw new Error(data.error.message || "Invalid API Key");
+                } else {
+                    throw new Error("API Error");
+                }
+            } catch (error) { 
+                aiOrb.classList.remove('thinking');
+                responseBox.style.color = "var(--danger)"; 
+                responseBox.innerHTML = `> [ERROR]: ${error.message}`; 
             }
         }
 
