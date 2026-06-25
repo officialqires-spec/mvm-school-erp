@@ -1,4 +1,4 @@
-export default async function handler(req, res) {
+module.exports = async function(req, res) {
     // 1. Agar request POST nahi hai, toh reject kar do
     if (req.method !== 'POST') return res.status(405).send('Method Not Allowed');
 
@@ -11,13 +11,13 @@ export default async function handler(req, res) {
         process.env.GEMINI_KEY_7, process.env.GEMINI_KEY_8, process.env.GEMINI_KEY_9,
         process.env.GEMINI_KEY_10, process.env.GEMINI_KEY_11, process.env.GEMINI_KEY_12,
         process.env.GEMINI_KEY_13, process.env.GEMINI_KEY_14, process.env.GEMINI_KEY_15
-    ].filter(Boolean); // Jo key Vercel me set hogi sirf wahi list me aayegi
+    ].filter(Boolean); 
 
     if (keys.length === 0) {
-        return res.status(500).json({ error: "API Keys are missing in backend!" });
+        return res.status(500).json({ error: { message: "API Keys are missing in Vercel backend!" } });
     }
 
-    // 3. Randomly ek key pick karenge (Limit bypass karne ki master trick)
+    // 3. Randomly ek key pick karenge
     const randomKey = keys[Math.floor(Math.random() * keys.length)];
 
     // 4. Gemini ko bhejne ke liye payload taiyar karenge
@@ -29,8 +29,8 @@ export default async function handler(req, res) {
         });
     }
 
-    // 1.5-flash fast aur API quotas ke liye zyada stable hai
-    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${randomKey}`;
+    // YAHAN CHANGE KIYA HAI: Model ka naam "gemini-1.5-flash-latest" kar diya gaya hai
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${randomKey}`;
 
     try {
         // 5. Gemini se baat karo
@@ -44,6 +44,6 @@ export default async function handler(req, res) {
         res.status(200).json(data); // Answer Frontend ko bhej do
         
     } catch (error) {
-        res.status(500).json({ error: "Backend failed to contact Gemini" });
+        res.status(500).json({ error: { message: "Backend failed to contact Gemini" } });
     }
-}
+};
