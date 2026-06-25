@@ -979,8 +979,9 @@
             const daysInMonth = new Date(year, dateObj.getMonth() + 1, 0).getDate();
             const startDay = new Date(year, dateObj.getMonth(), 1).getDay(); 
             let attendanceDB = JSON.parse(localStorage.getItem("attendanceDB")) || [];
+            let currentP = 0, currentA = 0;
             
-            let html = `<div class="cal-day header">S</div><div class="cal-day header">M</div><div class="cal-day header">T</div><div class="cal-day header">W</div><div class="cal-day header">T</div><div class="cal-day header">F</div><div class="cal-day header">S</div>`; 
+            let html = `<div class="cal-day header">S</div><div class="cal-day header">M</div><div class="cal-day header">T</div><div class="cal-day header">W</div><div class="cal-day header">T</div><div class="cal-day header">F</div><div class="cal-day header">S</div>`;
             for(let i=0; i<startDay; i++) { html += `<div></div>`; }
             for(let i=1; i<=daysInMonth; i++) {
                 let currentDayIndex = (startDay + i - 1) % 7;
@@ -1143,45 +1144,49 @@
         async function askAdvancedDoubt() {
             const text = document.getElementById('doubt-text').value;
             const fileInput = document.getElementById('ai-image');
-            if(!text && fileInput.files.length === 0) return showToast('Input Required', 'Provide a query or upload an image.', '#ef4444');
+            if(!text && (!fileInput || fileInput.files.length === 0)) return showToast('Input Required', 'Provide a query or upload an image.', '#ef4444');
             
             const responseBox = document.getElementById('ai-response');
             const aiOrb = document.getElementById('ai-core-orb');
             
             responseBox.style.display = "block"; 
             responseBox.innerHTML = "> Establishing connection to Quantum Core...\n> Scanning vectors...";
-            responseBox.classList.remove('active'); // Terminal text color
-            aiOrb.classList.add('thinking'); // Pulse animation
+            responseBox.classList.remove('active'); 
+            aiOrb.classList.add('thinking'); 
             
             try {
                 let base64Data = null; let mimeType = null;
-                if (fileInput.files.length > 0) {
+                if (fileInput && fileInput.files.length > 0) {
                     const file = fileInput.files[0]; mimeType = file.type;
                     base64Data = await new Promise((resolve) => { const reader = new FileReader(); reader.onloadend = () => resolve(reader.result.split(',')[1]); reader.readAsDataURL(file); });
                 }
 
-                // Simulate processing delay for effect
                 setTimeout(() => { responseBox.innerHTML += "\n> Analyzing structure..."; }, 800);
 
                 const response = await fetch('/api/gemini', { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ message: `Explain this clearly for a ${studentClass} student: ${text}`, imageBase64: base64Data, mimeType: mimeType }) });
-                if (!response.ok) throw new Error("API Failed");
+                
                 const data = await response.json();
                 
                 if(data.candidates && data.candidates[0]) {
                     const aiAnswer = data.candidates[0].content.parts[0].text.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
                     
-                    // Success State
                     aiOrb.classList.remove('thinking');
-                    responseBox.classList.add('active'); // Switch to friendly bubble UI
+                    responseBox.classList.add('active'); 
                     responseBox.innerHTML = "💡 <strong>Quantum AI Answer:</strong><br><br>" + aiAnswer;
                     
                     let h = JSON.parse(localStorage.getItem("aiChatHistory")) || []; h.push({ question: text || "Image Scan", answer: aiAnswer }); localStorage.setItem("aiChatHistory", JSON.stringify(h));
-                    renderAIHistory(); document.getElementById('doubt-text').value = ""; fileInput.value = "";
+                    renderAIHistory(); document.getElementById('doubt-text').value = ""; if(fileInput) fileInput.value = "";
+                    
+                } else if (data.error) {
+                    // Agar API key galat hai ya limit khatam ho gayi hai, toh screen par error dikhega
+                    throw new Error(data.error.message || "Invalid API Key or Quota Exceeded");
+                } else {
+                    throw new Error("API keys not linked properly in Vercel.");
                 }
             } catch (error) { 
                 aiOrb.classList.remove('thinking');
                 responseBox.style.color = "var(--danger)"; 
-                responseBox.innerHTML = `> [ERR_CONNECTION_REFUSED] AI Core offline.`; 
+                responseBox.innerHTML = `> [ERROR]: ${error.message}`; 
             }
         }
 
