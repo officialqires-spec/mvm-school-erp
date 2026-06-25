@@ -723,7 +723,6 @@
         async function askOwnerAI() {
             const text = document.getElementById('owner-ai-input').value; 
             const fileInput = document.getElementById('owner-ai-file');
-            
             if(!text && (!fileInput || fileInput.files.length === 0)) return showToast("Error", "Provide a command or upload a document.", "var(--danger)");
             
             const responseBox = document.getElementById('owner-ai-response');
@@ -744,7 +743,6 @@
                 setTimeout(() => { responseBox.innerHTML += "\n> Analyzing institutional data..."; }, 800);
 
                 const response = await fetch('/api/gemini', { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ message: `Act as a senior strategic advisor for a school owner. Answer this: ${text}`, imageBase64: base64Data, mimeType: mimeType }) });
-                if (!response.ok) throw new Error("API Failed");
                 const data = await response.json();
                 
                 if(data.candidates && data.candidates[0]) {
@@ -753,11 +751,15 @@
                     responseBox.classList.add('active'); 
                     responseBox.innerHTML = "💡 <strong>Supreme Analysis Complete:</strong><br><br>" + aiAnswer;
                     document.getElementById('owner-ai-input').value = ""; if(fileInput) fileInput.value = "";
+                } else if (data.error) {
+                    throw new Error(data.error.message || "Invalid API Key");
+                } else {
+                    throw new Error("API Error");
                 }
             } catch (error) { 
                 aiOrb.classList.remove('thinking');
                 responseBox.style.color = "var(--danger)"; 
-                responseBox.innerHTML = `> [ERR_CONNECTION_REFUSED] AI Core offline.`; 
+                responseBox.innerHTML = `> [ERROR]: ${error.message}`; 
             }
         }
 
