@@ -25,8 +25,8 @@ module.exports = async function(req, res) {
         });
     }
 
-    // EXACT MODEL NAME FIX: Sirf "gemini-1.5-flash"
-    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${randomKey}`;
+    // TUMHARI DEMAND PAR: Wapas "gemini-2.5-flash" set kar diya gaya hai
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${randomKey}`;
 
     try {
         const response = await fetch(apiUrl, {
