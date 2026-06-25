@@ -218,8 +218,10 @@
                 <div class="modal-info-grid">
                     <div class="modal-info-box"><label>Roll No</label><span>24</span></div>
                     <div class="modal-info-box"><label>Blood Grp</label><span style="color: var(--danger);">O+</span></div>
+                    <div class="modal-info-box" style="grid-column: 1 / -1;"><label>Class Teacher</label><span style="color: var(--info);">Mr. S.K. Mishra</span></div>
                     <div class="modal-info-box"><label>Phone</label><span>+91 9876543210</span></div>
                     <div class="modal-info-box"><label>Transport</label><span>Bus 01 (Route A)</span></div>
+                    <div class="modal-info-box" style="grid-column: 1 / -1;"><label>Class Teacher</label><span style="color: var(--info);">Mr. S.K. Mishra</span></div>
                     <div class="modal-info-box" style="grid-column: 1 / -1;"><label>Father's Name</label><span>Mr. Ramesh Patel</span></div>
                     <div class="modal-info-box" style="grid-column: 1 / -1;"><label>Address</label><span>Civil Lines, Mirzapur, UP</span></div>
                 </div>
@@ -263,7 +265,8 @@
             <div class="nav-item" onclick="switchTab('ai-doubt', this)">🤖 AI Doubt Bot</div>
             <div class="nav-item" onclick="switchTab('homework', this)">📝 Homework</div>
             <div class="nav-item" onclick="switchTab('exams', this)">🏆 Exams & Result</div>
-            <div class="nav-item" onclick="switchTab('bus', this)">🚌 Bus Radar</div>
+            <div class="nav-item" onclick="switchTab('chat', this)">💬 School Chat</div>
+            <div class="nav-item" onclick="switchTab('bus', this)">🚌 My Transport</div>
             <div class="nav-item" onclick="switchTab('fees', this)">💳 Fee Portal</div>
             <div class="nav-item" onclick="switchTab('leave', this)">📅 Apply Leave</div>
             <div class="nav-item" onclick="switchTab('grievance', this)">🕵️ Secret Box</div>
@@ -282,6 +285,30 @@
         <!-- 1. DASHBOARD -->
         <div id="dashboard" class="workspace active">
             
+            <!-- Live Today's Attendance Status -->
+            <div id="today-att-status" style="background: rgba(148, 163, 184, 0.1); color: var(--text-muted); padding: 15px 20px; border-radius: 16px; margin-bottom: 20px; font-size: 15px; font-weight: 800; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; transition: 0.3s;">
+                <span style="color: var(--text-main);">📅 Today's Attendance</span>
+                <span id="att-status-badge" style="background: var(--bg-color); padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 900; letter-spacing: 0.5px; text-transform: uppercase;">⏳ Awaiting Teacher</span>
+            </div>
+
+            <!-- Global New Event Banner -->
+            <div id="global-notification-banner" style="display:none; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 15px 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: var(--shadow-md); display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <span style="font-size: 24px;">🔔</span>
+                    <div>
+                        <h4 style="margin: 0; font-size: 15px; font-weight: 900;">New Exam Dates Announced!</h4>
+                        <p style="margin: 5px 0 0 0; font-size: 13px;">Term 1 Mathematics exam has been preponed to 15th Oct. Check Syllabus.</p>
+                    </div>
+                </div>
+                <button onclick="this.parentElement.style.display='none'; sessionStorage.setItem('bannerDismissed', 'true');" style="background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.2s;">Got it</button>
+            </div>
+
+            <!-- Live Today's Attendance Status -->
+            <div id="today-att-status" style="background: rgba(148, 163, 184, 0.1); color: var(--text-muted); padding: 15px 20px; border-radius: 16px; margin-bottom: 20px; font-size: 15px; font-weight: 800; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; transition: 0.3s;">
+                <span style="color: var(--text-main);">📅 Today's Attendance</span>
+                <span id="att-status-badge" style="background: var(--bg-color); padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 900; letter-spacing: 0.5px; text-transform: uppercase;">⏳ Awaiting Teacher</span>
+            </div>
+
             <div id="performance-alert"></div>
             
             <!-- Live Quiz Alert -->
@@ -303,14 +330,30 @@
                 <div class="stat-box"><h4>Next Exam</h4><h2 style="font-size: 22px; margin-top: 5px; color: var(--info);">Maths (15th)</h2></div>
             </div>
 
-            <div class="grid-1">
+            <div class="grid-2">
                 <div>
                     <div class="card">
-                        <div class="card-header">Today's Timetable <span id="current-day" class="tag">Day</span></div>
-                        <div class="tt-item"><span class="tt-time">08:00 AM</span><span class="tt-subject">Physics</span><span style="color: var(--text-muted); font-size: 13px; font-weight:700;">R-201</span></div>
-                        <div class="tt-item"><span class="tt-time">09:00 AM</span><span class="tt-subject">Mathematics</span><span style="color: var(--text-muted); font-size: 13px; font-weight:700;">R-201</span></div>
-                        <div class="tt-item"><span class="tt-time">10:00 AM</span><span class="tt-subject" style="color: var(--warning);">Break Time</span><span>☕</span></div>
-                        <div class="tt-item"><span class="tt-time">10:30 AM</span><span class="tt-subject">Computer</span><span style="color: var(--text-muted); font-size: 13px; font-weight:700;">Lab 2</span></div>
+                        <div class="card-header">
+                            📅 Synced Timetable 
+                            <select style="width: auto; padding: 5px 10px; margin: 0; border-radius: 8px; font-size: 12px;"><option>Today</option><option>Weekly View</option></select>
+                        </div>
+                        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 15px;">Tick boxes to pack your bag according to today's subjects.</p>
+                        
+                        <div class="tt-item">
+                            <input type="checkbox" style="width:16px; height:16px; margin:0 10px 0 0; accent-color: var(--success);">
+                            <span class="tt-time">08:00 (P1)</span><span class="tt-subject">Physics</span><span style="color: var(--text-muted); font-size: 13px; font-weight:700;">R-201</span>
+                        </div>
+                        <div class="tt-item">
+                            <input type="checkbox" style="width:16px; height:16px; margin:0 10px 0 0; accent-color: var(--success);">
+                            <span class="tt-time">09:00 (P2)</span><span class="tt-subject">Mathematics</span><span style="color: var(--text-muted); font-size: 13px; font-weight:700;">R-201</span>
+                        </div>
+                        <div class="tt-item">
+                            <span class="tt-time">10:00 AM</span><span class="tt-subject" style="color: var(--warning); margin-left: 26px;">Break Time</span><span>☕</span>
+                        </div>
+                        <div class="tt-item">
+                            <input type="checkbox" style="width:16px; height:16px; margin:0 10px 0 0; accent-color: var(--success);">
+                            <span class="tt-time">10:30 (P3)</span><span class="tt-subject">Computer</span><span style="color: var(--text-muted); font-size: 13px; font-weight:700;">Lab 2</span>
+                        </div>
                     </div>
 
                     <div class="card">
@@ -330,28 +373,90 @@
 
                 <div>
                     <div class="card" id="notice-board-card">
-                        <div class="card-header">School Notices</div>
+                        <div class="card-header">Official School Notices</div>
                         <div class="notice-item alert" style="background: rgba(239, 68, 68, 0.1); padding: 15px; border-left: 4px solid var(--danger); border-radius: 8px; margin-bottom: 10px;">
-                            <h4 style="color: var(--danger); margin-bottom: 5px;">Holiday Alert</h4><p style="font-size: 13px;">School closed tomorrow due to heavy rain.</p>
+                            <h4 style="color: var(--danger); margin-bottom: 5px; display: flex; justify-content: space-between;">Holiday Alert <span style="font-size: 10px; background: var(--danger); color: #fff; padding: 2px 6px; border-radius: 6px;">From: Principal</span></h4>
+                            <p style="font-size: 13px;">School closed tomorrow due to heavy rain.</p>
                         </div>
                         <div class="notice-item" style="background: rgba(245, 158, 11, 0.1); padding: 15px; border-left: 4px solid var(--warning); border-radius: 8px;">
-                            <h4 style="color: var(--warning); margin-bottom: 5px;">Fees Reminder</h4><p style="font-size: 13px;">Last date for Term 2 fee is 25th.</p>
+                            <h4 style="color: var(--warning); margin-bottom: 5px; display: flex; justify-content: space-between;">Fees Reminder <span style="font-size: 10px; background: var(--warning); color: #fff; padding: 2px 6px; border-radius: 6px;">From: Admin</span></h4>
+                            <p style="font-size: 13px;">Last date for Term 2 fee is 25th.</p>
                         </div>
                     </div> 
                     
-                    <div class="card">
-                        <div class="card-header">💬 Teacher Chat</div>
-                        <div id="voice-notice-container" style="display:none; margin-bottom:15px; padding:15px; background:var(--bg-color); border-radius:12px; border:1px solid var(--info);">
-                            <strong style="font-size:12px; color:var(--info); display:block; margin-bottom:10px; text-transform:uppercase;">🔊 Voice Note from Teacher</strong>
-                            <audio id="student-audio-player" controls preload="auto" style="width:100%; height:40px; border-radius: 8px;"></audio>
+                    <div class="card" id="voice-notice-card" style="display:none;">
+                        <div class="card-header">🔊 Class Announcements</div>
+                        <div id="voice-notice-container" style="padding:15px; background:rgba(59, 130, 246, 0.1); border-radius:12px; border:1px solid var(--info);">
+                            <strong style="font-size:12px; color:var(--info); display:block; margin-bottom:10px; text-transform:uppercase;">Voice Note from Class Teacher</strong>
+                            <audio id="student-audio-player" controls preload="auto" style="width:100%; height:40px; border-radius: 8px; outline: none;"></audio>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CHAT SYSTEM (WhatsApp Style) -->
+        <div id="chat" class="workspace">
+            <div class="card" style="padding: 0; display: flex; height: 75vh; border: 1px solid var(--border-color); overflow: hidden; border-radius: 20px;">
+                
+                <!-- Chat Sidebar (Contacts) -->
+                <div class="chat-sidebar hide-on-mobile" style="width: 320px; border-right: 1px solid var(--border-color); display: flex; flex-direction: column; background: rgba(0,0,0,0.02);">
+                    <div style="padding: 20px; border-bottom: 1px solid var(--border-color); background: var(--card-bg);">
+                        <h3 style="font-size: 18px; font-weight: 900; color: var(--text-main); margin-bottom: 15px;">💬 School Chat</h3>
+                        <input type="text" placeholder="Search Teachers..." style="margin: 0; padding: 12px 15px; border-radius: 20px; font-size: 13px;">
+                    </div>
+                    <div style="overflow-y: auto; flex-grow: 1;">
+                        <div class="section-title" style="padding: 0 20px;">Class Teachers</div>
                         
-                        <div id="student-chat-box" style="padding: 15px; border: 1px solid var(--border-color); border-radius: 12px; height: 250px; overflow-y: auto; background: var(--bg-color); margin-bottom: 15px;"></div>
-                        
-                        <div style="display: flex; gap: 10px;">
-                            <input type="text" id="student-chat-input" placeholder="Message..." style="margin: 0; flex-grow: 1; border-radius: 20px;">
-                            <button onclick="sendStudentChat()" class="btn" style="width: auto; padding: 0 25px; border-radius: 20px;">▶</button>
+                        <!-- Contact 1 -->
+                        <div class="list-card" style="margin: 10px; cursor: pointer; border: 1px solid var(--info); background: rgba(59, 130, 246, 0.05);" onclick="switchChatUser('S.K. Mishra', 'Class Teacher (Science)')">
+                            <div style="display: flex; gap: 12px; align-items: center;">
+                                <div class="avatar" style="width: 45px; height: 45px; font-size: 18px;">S</div>
+                                <div style="flex-grow: 1;">
+                                    <div style="display:flex; justify-content:space-between;"><strong style="font-size:15px; color:var(--text-main);">S.K. Mishra</strong><span style="font-size:11px; color:var(--success); font-weight:800;">Online</span></div>
+                                    <div style="font-size:12px; color:var(--text-muted); font-weight:600; margin-top:2px;">Class Teacher (Science)</div>
+                                </div>
+                            </div>
                         </div>
+
+                        <div class="section-title" style="padding: 0 20px; margin-top: 10px;">Subject Teachers</div>
+                        
+                        <!-- Contact 2 -->
+                        <div class="list-card" style="margin: 10px; cursor: pointer; border: 1px solid transparent;" onclick="switchChatUser('Anjali Mam', 'Computer Science')">
+                            <div style="display: flex; gap: 12px; align-items: center;">
+                                <div class="avatar" style="width: 45px; height: 45px; font-size: 18px; background: var(--danger); color: #fff;">A</div>
+                                <div style="flex-grow: 1;">
+                                    <div style="display:flex; justify-content:space-between;"><strong style="font-size:15px; color:var(--text-main);">Anjali Mam</strong><span style="font-size:11px; color:var(--text-muted); font-weight:800;">2h ago</span></div>
+                                    <div style="font-size:12px; color:var(--text-muted); font-weight:600; margin-top:2px;">Computer Science</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Area -->
+                <div style="flex-grow: 1; display: flex; flex-direction: column; background: var(--bg-color); position: relative;">
+                    <!-- Chat Header -->
+                    <div style="padding: 15px 25px; border-bottom: 1px solid var(--border-color); background: var(--card-bg); display: flex; align-items: center; gap: 15px; z-index: 10;">
+                        <button class="btn btn-outline hide-on-desktop" style="width:auto; padding: 8px; border:none; display:none;">🔙</button>
+                        <div class="avatar" style="width: 42px; height: 42px; font-size: 18px;" id="chat-active-avatar">S</div>
+                        <div>
+                            <strong style="font-size:16px; color:var(--text-main); display:block;" id="chat-active-name">S.K. Mishra</strong>
+                            <span style="font-size:12px; color:var(--success); font-weight:800;" id="chat-active-status">Online</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Chat Messages Area -->
+                    <div id="full-chat-box" style="flex-grow: 1; padding: 25px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px;">
+                        <div style="text-align:center; margin-bottom: 10px;"><span style="background: rgba(0,0,0,0.1); color: var(--text-muted); padding: 5px 12px; border-radius: 12px; font-size: 11px; font-weight:800;">Today</span></div>
+                        <!-- JS Loaded Msgs -->
+                    </div>
+                    
+                    <!-- Chat Input -->
+                    <div style="padding: 15px 25px; background: var(--card-bg); border-top: 1px solid var(--border-color); display: flex; gap: 15px; align-items: center; z-index: 10;">
+                        <button style="background:none; border:none; font-size:24px; cursor:pointer; color:var(--text-muted);">+</button>
+                        <input type="text" id="full-chat-input" placeholder="Type your message here..." style="margin: 0; flex-grow: 1; border-radius: 25px; border: 1px solid var(--border-color); background: var(--bg-color); padding: 15px 20px;">
+                        <button onclick="sendFullChat()" class="btn" style="width: 50px; height: 50px; border-radius: 50%; padding: 0; background: var(--info); box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);">▶</button>
                     </div>
                 </div>
             </div>
@@ -367,7 +472,13 @@
                 </div>
             </div>
             <div class="card">
-                <div class="card-header">📅 Calendar View <input type="month" id="attendance-month" onchange="renderCalendar()" style="width: auto; margin: 0; padding: 8px 12px;"></div>
+                <div class="card-header">
+                    📅 Calendar View 
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span id="monthly-att-pct" style="font-size: 14px; font-weight: 900; color: var(--success); background: rgba(16, 185, 129, 0.1); padding: 6px 12px; border-radius: 8px;">100% This Month</span>
+                        <input type="month" id="attendance-month" onchange="renderCalendar()" style="width: auto; margin: 0; padding: 8px 12px;">
+                    </div>
+                </div>
                 <div class="calendar-grid" id="calendar-grid"></div>
             </div>
         </div>
@@ -387,12 +498,7 @@
                         <label>Image Scan (Optional)</label>
                         <input type="file" id="ai-image" accept="image/*" style="margin: 0;">
                     </div>
-                    <div>
-                        <label>Query Subject</label>
-                        <select id="ai-subject" style="margin: 0;">
-                            <option>Mathematics</option><option>Science</option><option>Grammar</option><option>General Knowledge</option>
-                        </select>
-                    </div>
+                    <!-- Subject Auto-detected by Quantum AI -->
                 </div>
                 
                 <label>Command Prompt</label>
@@ -450,41 +556,71 @@
             </div>
         </div>
         
-        <!-- 6. BUS RADAR -->
+        <!-- 6. MY TRANSPORT DETAILS -->
         <div id="bus" class="workspace">
-            <div class="card">
-                <div class="card-header">🚌 Route B Radar <input type="date" id="bus-date" onchange="renderBusStats()" style="width: auto; margin: 0; padding: 8px 12px;"></div>
-                <div style="width: 100%; height: 300px; border-radius: 16px; overflow: hidden; border: 1px solid var(--border-color); margin-bottom: 20px;">
-                    <iframe src="https://maps.google.com/maps?q=Mirzapur,Uttar%20Pradesh&t=&z=13&ie=UTF8&iwloc=&output=embed" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            <div class="grid-2" style="margin-bottom: 25px;">
+                <div class="card" style="margin: 0; border: 2px solid var(--info); background: rgba(59, 130, 246, 0.05);">
+                    <div class="card-header" style="color: var(--info); border-bottom-color: var(--info);">🚌 My Bus Details</div>
+                    <div class="list-row" style="margin-bottom: 15px;"><span style="color: var(--text-muted); font-size: 13px; font-weight: 800; text-transform: uppercase;">Bus Number Plate</span> <strong style="font-size: 18px; color: var(--text-main);">UP63 T 1234</strong></div>
+                    <div class="list-row" style="margin-bottom: 15px;"><span style="color: var(--text-muted); font-size: 13px; font-weight: 800; text-transform: uppercase;">Assigned Route</span> <strong style="font-size: 15px; color: var(--text-main);">Civil Lines (Route A)</strong></div>
+                    <div class="list-row"><span style="color: var(--text-muted); font-size: 13px; font-weight: 800; text-transform: uppercase;">My Stop</span> <strong style="font-size: 15px; color: var(--text-main);">Civil Lines Chauraha</strong></div>
                 </div>
-                <div class="grid-2">
-                    <div class="stat-box" style="background: rgba(59, 130, 246, 0.1); border-color: var(--info);">
-                        <h4 style="color: var(--info);">🌅 Morning</h4>
-                        <p style="font-size: 14px; font-weight:800; margin-bottom: 5px;">Avg: <strong id="morn-avg" style="font-size:18px;">38</strong> km/h</p>
+                
+                <div class="card" style="margin: 0;">
+                    <div class="card-header">👨‍✈️ Crew Details</div>
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px dashed var(--border-color);">
+                        <div class="avatar" style="width: 50px; height: 50px; font-size: 20px;">R</div>
+                        <div><strong style="font-size: 16px; color: var(--text-main); display: block;">Raju Driver</strong><span style="font-size: 12px; color: var(--text-muted); font-weight: 700;">Bus Driver | 📞 +91 9876543210</span></div>
                     </div>
-                    <div class="stat-box" style="background: rgba(16, 185, 129, 0.1); border-color: var(--success);">
-                        <h4 style="color: var(--success);">🌇 Afternoon</h4>
-                        <p style="font-size: 14px; font-weight:800; margin-bottom: 5px;">Avg: <strong id="aft-avg" style="font-size:18px;">35</strong> km/h</p>
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <div class="avatar" style="width: 50px; height: 50px; font-size: 20px; background: var(--warning); color: #000;">S</div>
+                        <div><strong style="font-size: 16px; color: var(--text-main); display: block;">Suresh Conductor</strong><span style="font-size: 12px; color: var(--text-muted); font-weight: 700;">Bus Conductor | 📞 +91 8765432109</span></div>
                     </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">📍 Live Bus Radar <span class="status-badge" style="background: rgba(16, 185, 129, 0.1); color: var(--success); border: none;">GPS Active</span></div>
+                <div style="width: 100%; height: 350px; border-radius: 16px; overflow: hidden; border: 2px solid var(--border-color);">
+                    <iframe src="https://maps.google.com/maps?q=Mirzapur,Uttar%20Pradesh&t=&z=13&ie=UTF8&iwloc=&output=embed" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
                 </div>
             </div>
         </div>
         
         <!-- 7. FEES -->
         <div id="fees" class="workspace">
-            <div class="card">
-                <div class="card-header">💳 Fee Dues</div>
+            <div class="grid-2">
+                <div class="stat-box" style="border-left: 4px solid var(--success); padding: 25px;">
+                    <h4 style="color: var(--success);">Current Month Status</h4>
+                    <h2 style="color: var(--text-main);" id="current-month-fee-status">UNPAID</h2>
+                </div>
+                <div class="stat-box" style="border-left: 4px solid var(--danger); padding: 25px;">
+                    <h4 style="color: var(--danger);">Total Overdue</h4>
+                    <h2 style="color: var(--danger);" id="fee-total-text-top">₹5,300</h2>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 25px;">
+                <div class="card-header">💳 Monthly Fee Breakdown</div>
                 <table class="data-table">
-                    <thead><tr><th>Fee Head</th><th>Amount</th><th>Status</th></tr></thead>
-                    <tbody id="fee-table-body"></tbody>
+                    <thead><tr><th>Month & Details</th><th>Tuition Fee</th><th>Transport Fee</th><th>Total Due</th><th>Status</th></tr></thead>
+                    <tbody id="fee-table-body">
+                        <tr>
+                            <td data-label="Month"><strong>Current Month</strong></td>
+                            <td data-label="Tuition">₹4,500</td>
+                            <td data-label="Transport">₹800</td>
+                            <td data-label="Total"><strong style="font-size: 16px;">₹5,300</strong></td>
+                            <td data-label="Status"><span class="status-badge" style="background: rgba(239, 68, 68, 0.1); color: var(--danger); border: none;">Pending</span></td>
+                        </tr>
+                    </tbody>
                 </table>
-                <div style="padding-top: 20px; border-top: 1px dashed var(--border-color); margin-top: 20px; text-align: center;">
-                    <h3 id="fee-total-text" style="font-size: 24px; font-weight: 900; margin-bottom: 15px;">Total Due: ₹0</h3>
-                    <button id="pay-fee-btn" onclick="payFees()" class="btn btn-success">Pay Securely (UPI)</button>
+                <div style="padding-top: 20px; border-top: 1px dashed var(--border-color); margin-top: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+                    <h3 id="fee-total-text" style="font-size: 20px; font-weight: 900; margin: 0;">Total Payable: ₹5,300</h3>
+                    <button id="pay-fee-btn" onclick="payFees()" class="btn btn-success" style="width: auto; padding: 12px 30px;">Pay Securely (UPI)</button>
                 </div>
             </div>
             <div class="card">
-                <div class="card-header">Payment History</div>
+                <div class="card-header">🧾 Payment History</div>
                 <ul id="fee-history" style="list-style: none;"></ul>
             </div>
         </div>
@@ -511,9 +647,16 @@
         <div id="grievance" class="workspace">
             <div class="card" style="border: 2px solid var(--danger); background: rgba(239, 68, 68, 0.05);">
                 <div class="card-header" style="color: var(--danger); border-bottom-color: var(--danger);">🕵️ Secret Grievance Box</div>
-                <p style="color: var(--text-main); margin-bottom: 20px; font-size: 14px; line-height: 1.5; font-weight: 600;">Your identity is completely hidden. Messages go directly to the Vice Principal.</p>
-                <textarea id="student-grievance" rows="5" placeholder="Report bullying or concerns secretly..." style="border-color: var(--danger);"></textarea>
-                <button onclick="sendGrievance()" class="btn btn-danger">🚨 Send to VP</button>
+                <p style="color: var(--text-main); margin-bottom: 20px; font-size: 14px; line-height: 1.5; font-weight: 600;">Your identity is completely hidden. Select whom you want to report this issue to.</p>
+                
+                <label>Send Report To</label>
+                <select id="grievance-target" style="border-color: var(--danger);">
+                    <option value="VP">Vice Principal (Discipline/Infrastructure)</option>
+                    <option value="Principal">Principal (Academics/Severe Issues)</option>
+                </select>
+
+                <textarea id="student-grievance" rows="4" placeholder="Report bullying or concerns secretly..." style="border-color: var(--danger);"></textarea>
+                <button onclick="sendGrievance()" class="btn btn-danger">🚨 Submit Secret Report</button>
                 
                 <h4 style="margin-top: 30px; margin-bottom: 15px; color: var(--text-main); font-size: 16px; font-weight: 800;">My Reports Status</h4>
                 <div id="my-grievance-list"></div>
@@ -570,9 +713,14 @@
         <div id="focus" class="workspace">
             <div class="card" style="text-align: center; padding: 50px 20px;">
                 <h3 style="font-size: 28px; font-weight: 900; margin-bottom: 10px;">⏳ Focus Room</h3>
-                <p style="color: var(--text-muted); margin-bottom: 30px; font-weight: 700;">25-min uninterrupted study session = <strong style="color:var(--warning);">20 XP!</strong></p>
+                <p style="color: var(--text-muted); margin-bottom: 20px; font-weight: 700;">Uninterrupted study session earns you XP! Set your focus time below.</p>
                 
-                <div style="font-size: 80px; font-weight: 900; color: var(--text-main); margin-bottom: 40px; letter-spacing: 2px;" id="timer-display">25:00</div>
+                <div style="display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 30px;">
+                    <input type="number" id="focus-input-mins" value="25" min="1" max="120" style="width: 80px; text-align: center; font-size: 20px; font-weight: 900; padding: 10px; margin: 0; border: 2px solid var(--info); color: var(--info); background: transparent;">
+                    <span style="font-size: 18px; font-weight: 800; color: var(--text-muted);">Minutes</span>
+                </div>
+
+                <div style="font-size: 80px; font-weight: 900; color: var(--text-main); margin-bottom: 40px; letter-spacing: 2px; font-variant-numeric: tabular-nums;" id="timer-display">25:00</div>
                 
                 <div class="grid-2" style="max-width: 400px; margin: 0 auto;">
                     <button onclick="startTimer()" class="btn btn-success">▶ Start</button>
@@ -649,24 +797,163 @@
         }
 
         window.onload = function() {
+            // Welcome Popup
+            setTimeout(() => {
+                let name = loggedInUser.split(' ')[0];
+                showToast(`Welcome Back, ${name}! 🎓`, "Your dashboard is fully synced and ready.", "linear-gradient(135deg, #0ea5e9, #3b82f6)");
+                
+                // Show Global Banner if new notification exists (Mock Logic)
+                let banner = document.getElementById("global-notification-banner");
+                if(banner && !sessionStorage.getItem("bannerDismissed")) {
+                    banner.style.display = "flex";
+                }
+            }, 1000);
+
             setInterval(checkLiveNotifications, 2000); 
             loadMyMarks(); setInterval(loadMyMarks, 3000); 
             checkLiveQuiz(); setInterval(checkLiveQuiz, 2000);
             loadMyGrievances(); setInterval(loadMyGrievances, 3000); 
             loadNcertSubjects(); loadNotices(); checkVoiceNotice();
             setInterval(loadNotices, 3000); setInterval(checkVoiceNotice, 3000);
-            loadTasks(); loadStudentChats(); renderHomeworkHistory(); renderLeaveHistory();
+            loadTasks(); renderHomeworkHistory(); renderLeaveHistory();
             renderFeesTable(); renderAIHistory(); renderCalendar(); generateBadges();
             setInterval(renderCalendar, 3000); checkPerformanceAI();
             checkDisciplineAlerts(); setInterval(checkDisciplineAlerts, 2000);
             checkDefaulterLock(); setInterval(checkDefaulterLock, 2000); 
+            
+            // New Full Chat
+            loadFullChats(); setInterval(loadFullChats, 3000);
             
             document.body.classList.add("dark-mode");
             localStorage.setItem("darkMode", "true");
             let themeBtn = document.querySelector(".theme-toggle");
             if(themeBtn) themeBtn.innerText = "🔱";
             updateXP();
+            
+            // Render Dynamic Charts
+            renderDynamicCharts();
+            
+            // Start Live Attendance Checker
+            checkTodayAttendance();
+            setInterval(checkTodayAttendance, 3000);
         };
+
+        // --- CHECK TODAY'S LIVE ATTENDANCE STATUS ---
+        function checkTodayAttendance() {
+            let attendanceDB = JSON.parse(localStorage.getItem("attendanceDB")) || [];
+            let todayStr = new Date().toISOString().split('T')[0];
+            let firstName = loggedInUser.split(' ')[0]; // Jaise 'Adarsh'
+            
+            let todayRecord = attendanceDB.find(r => r.date === todayStr && r.student === firstName);
+            let statusBadge = document.getElementById("att-status-badge");
+            let statusContainer = document.getElementById("today-att-status");
+            
+            if(!statusBadge) return;
+
+            if(todayRecord) {
+                if(todayRecord.status === "present") {
+                    statusBadge.innerHTML = "🟢 Marked Present";
+                    statusBadge.style.color = "var(--success)";
+                    statusContainer.style.borderColor = "var(--success)";
+                    statusContainer.style.background = "rgba(16, 185, 129, 0.05)";
+                } else if(todayRecord.status === "absent") {
+                    statusBadge.innerHTML = "🔴 Marked Absent";
+                    statusBadge.style.color = "var(--danger)";
+                    statusContainer.style.borderColor = "var(--danger)";
+                    statusContainer.style.background = "rgba(239, 68, 68, 0.05)";
+                } else if(todayRecord.status === "halfday") {
+                    statusBadge.innerHTML = "🟠 Half-Day";
+                    statusBadge.style.color = "var(--warning)";
+                    statusContainer.style.borderColor = "var(--warning)";
+                    statusContainer.style.background = "rgba(245, 158, 11, 0.05)";
+                }
+            } else {
+                statusBadge.innerHTML = "⏳ Awaiting Teacher";
+                statusBadge.style.color = "var(--text-muted)";
+                statusContainer.style.borderColor = "var(--border-color)";
+                statusContainer.style.background = "rgba(148, 163, 184, 0.1)";
+            }
+        }
+
+        // --- NEW CHAT SYSTEM LOGIC ---
+        let currentChatTeacher = "S.K. Mishra";
+        function switchChatUser(name, role) {
+            currentChatTeacher = name;
+            document.getElementById("chat-active-name").innerText = name;
+            document.getElementById("chat-active-avatar").innerText = name.charAt(0);
+            document.getElementById("chat-active-avatar").style.background = name === "Anjali Mam" ? "var(--danger)" : "var(--accent-color)";
+            document.getElementById("chat-active-status").innerText = name === "S.K. Mishra" ? "Online" : "Last seen 2h ago";
+            loadFullChats();
+        }
+
+        function loadFullChats() {
+            let chatBox = document.getElementById("full-chat-box"); if(!chatBox) return;
+            let chats = JSON.parse(localStorage.getItem("schoolChatDB_" + currentChatTeacher)) || [];
+            
+            // Default mock message if empty
+            if(chats.length === 0 && currentChatTeacher === "S.K. Mishra") {
+                chats = [{ sender: "Teacher", text: "Hello Adarsh, have you completed the Number System worksheet?", time: "10:30 AM" }];
+            }
+
+            chatBox.innerHTML = '<div style="text-align:center; margin-bottom: 10px;"><span style="background: rgba(0,0,0,0.1); color: var(--text-muted); padding: 5px 12px; border-radius: 12px; font-size: 11px; font-weight:800;">Today</span></div>';
+            
+            chats.forEach(c => {
+                let isMe = c.sender === "Student";
+                let bg = isMe ? "linear-gradient(135deg, #0ea5e9, #3b82f6)" : "rgba(0,0,0,0.2)";
+                let color = isMe ? "#fff" : "var(--text-main)";
+                let align = isMe ? "flex-end" : "flex-start";
+                let ticks = isMe ? `<span style="color:#6ee7b7; margin-left:8px; font-size:14px;">✓✓</span>` : ''; // Seen ticks
+                
+                chatBox.innerHTML += `
+                <div style="align-self: ${align}; background: ${bg}; color: ${color}; padding: 14px 18px; border-radius: ${isMe ? '20px 20px 0 20px' : '20px 20px 20px 0'}; max-width: 80%; box-shadow: var(--shadow-sm); font-size:14px; font-weight:600; line-height:1.5;">
+                    ${c.text}
+                    <div style="font-size:10px; opacity:0.8; text-align:right; margin-top:5px; font-weight:800;">${c.time} ${ticks}</div>
+                </div>`;
+            });
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function sendFullChat() {
+            let input = document.getElementById("full-chat-input");
+            if(input.value.trim() !== "") {
+                let chats = JSON.parse(localStorage.getItem("schoolChatDB_" + currentChatTeacher)) || [];
+                // If it's the first message, keep the mock one
+                if(chats.length === 0 && currentChatTeacher === "S.K. Mishra") chats.push({ sender: "Teacher", text: "Hello Adarsh, have you completed the Number System worksheet?", time: "10:30 AM" });
+                
+                chats.push({ sender: "Student", text: escapeHTML(input.value), time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) });
+                localStorage.setItem("schoolChatDB_" + currentChatTeacher, JSON.stringify(chats)); 
+                input.value = ""; 
+                loadFullChats();
+            }
+        }
+        
+        // Disable old chat function so it doesn't conflict
+        function loadStudentChats() {} 
+        function sendStudentChat() {}
+
+        // --- DYNAMIC CHARTS ---
+        function renderDynamicCharts() {
+            Chart.defaults.color = '#94a3b8';
+            Chart.defaults.font.family = "'Segoe UI', sans-serif";
+            
+            let attCtx = document.getElementById('attendanceChart');
+            if(attCtx) {
+                new Chart(attCtx.getContext('2d'), { 
+                    type: 'doughnut', 
+                    data: { labels: ['Present', 'Absent'], datasets: [{ data: [185, 15], backgroundColor: ['#10b981', '#ef4444'], borderWidth: 0, hoverOffset: 4 }] }, 
+                    options: { responsive: true, maintainAspectRatio: false, cutout: '70%', plugins: { legend: { position: 'bottom', labels: {font:{weight:'bold', size:13}} } } } 
+                });
+            }
+            
+            let exmCtx = document.getElementById('examChart');
+            if(exmCtx) {
+                new Chart(exmCtx.getContext('2d'), { 
+                    type: 'bar', 
+                    data: { labels: ['Math', 'Sci', 'Comp', 'Eng', 'Hin'], datasets: [{ label: 'Term 1 Marks', data: [90, 87, 95, 82, 88], backgroundColor: '#3b82f6', borderRadius: 6 }] }, 
+                    options: { responsive: true, maintainAspectRatio: false, scales: { y: { max: 100, grid:{color:'rgba(255,255,255,0.05)'} }, x: {grid:{display:false}} }, plugins:{legend:{display:false}} } 
+                });
+            }
+        }
 
         function showToast(title, message, color) {
             let container = document.getElementById("toast-container");
@@ -709,8 +996,23 @@
                 let todayStyle = (i === new Date().getDate() && !monthInput && new Date().getMonth() === dateObj.getMonth()) ? 'border: 2px solid var(--accent-color);' : 'border: 1px solid transparent;';
                 
                 html += `<div style="padding:12px 5px; border-radius:10px; font-size:15px; font-weight:800; background:${bg}; color:${col}; ${todayStyle}">${i}</div>`;
+                
+                // Track percentage
+                if(statusClass === "present") currentP++;
+                if(statusClass === "absent") currentA++;
             }
             grid.innerHTML = html;
+            
+            // Calculate and display dynamic percentage
+            let totalTracked = currentP + currentA;
+            if(totalTracked > 0) {
+                let pct = Math.round((currentP / totalTracked) * 100);
+                document.getElementById("monthly-att-pct").innerText = `${pct}% This Month`;
+                document.getElementById("monthly-att-pct").style.color = pct >= 75 ? "var(--success)" : "var(--danger)";
+                document.getElementById("monthly-att-pct").style.background = pct >= 75 ? "rgba(16, 185, 129, 0.1)" : "rgba(239, 68, 68, 0.1)";
+            } else {
+                document.getElementById("monthly-att-pct").innerText = "No Data";
+            }
         }
 
         function renderBusStats() {
@@ -989,13 +1291,37 @@
 
         let timerInterval; let timeLeft = 25 * 60; let isTimerRunning = false;
         function startTimer() {
-            if(isTimerRunning) return; isTimerRunning = true;
+            if(isTimerRunning) return; 
+            
+            // Read custom minutes if user changed it
+            let inputMins = document.getElementById("focus-input-mins").value;
+            if(timeLeft === 25 * 60 && inputMins) {
+                timeLeft = parseInt(inputMins) * 60;
+            }
+            
+            isTimerRunning = true;
             timerInterval = setInterval(() => {
-                if(timeLeft <= 0) { clearInterval(timerInterval); isTimerRunning = false; showToast("🎉 Focus Complete!", "+20 XP added.", "var(--success)"); let xp = parseInt(localStorage.getItem("studentXP") || 450); localStorage.setItem("studentXP", xp + 20); updateXP(); resetTimer(); return; }
-                timeLeft--; document.getElementById("timer-display").innerText = `${Math.floor(timeLeft / 60).toString().padStart(2, '0')}:${(timeLeft % 60).toString().padStart(2, '0')}`;
+                if(timeLeft <= 0) { 
+                    clearInterval(timerInterval); isTimerRunning = false; 
+                    showToast("🎉 Focus Complete!", "Massive XP added to your profile.", "var(--success)"); 
+                    let xp = parseInt(localStorage.getItem("studentXP") || 450); localStorage.setItem("studentXP", xp + 50); updateXP(); 
+                    resetTimer(); return; 
+                }
+                timeLeft--; 
+                document.getElementById("timer-display").innerText = `${Math.floor(timeLeft / 60).toString().padStart(2, '0')}:${(timeLeft % 60).toString().padStart(2, '0')}`;
             }, 1000);
         }
-        function resetTimer() { clearInterval(timerInterval); isTimerRunning = false; timeLeft = 25 * 60; document.getElementById("timer-display").innerText = "25:00"; }
+        function resetTimer() { 
+            clearInterval(timerInterval); isTimerRunning = false; 
+            let inputMins = document.getElementById("focus-input-mins").value || 25;
+            timeLeft = parseInt(inputMins) * 60; 
+            document.getElementById("timer-display").innerText = `${inputMins.padStart(2, '0')}:00`; 
+        }
+        
+        // Input Listener for Timer
+        document.getElementById("focus-input-mins").addEventListener('input', function() {
+            if(!isTimerRunning) resetTimer();
+        });
 
         setTimeout(() => {
             if(document.getElementById('attendanceChart')){
@@ -1025,10 +1351,19 @@
         setInterval(() => document.getElementById("global-sos-screen").style.display = (localStorage.getItem("emergencySOS") === "true") ? "flex" : "none", 1000);
 
         function sendGrievance() {
-            let text = document.getElementById("student-grievance").value; if(!text) return showToast("Error", "Type issue!", "var(--danger)");
+            let text = document.getElementById("student-grievance").value; 
+            let target = document.getElementById("grievance-target").value;
+            if(!text) return showToast("Error", "Type issue!", "var(--danger)");
+            
             let grev = JSON.parse(localStorage.getItem("grievanceLog")) || [];
-            grev.push({ id: Date.now(), text: text, status: "Pending", by: loggedInUser }); localStorage.setItem("grievanceLog", JSON.stringify(grev));
-            showToast("✅ Sent to VP", "Identity Hidden.", "var(--danger)"); document.getElementById("student-grievance").value = ""; loadMyGrievances(); 
+            // Target formatting
+            let finalMsg = `[To ${target}]: ` + text;
+            
+            grev.push({ id: Date.now(), text: finalMsg, status: "Pending", by: loggedInUser }); 
+            localStorage.setItem("grievanceLog", JSON.stringify(grev));
+            
+            showToast(`✅ Sent to ${target}`, "Identity Hidden. Alert sent.", "var(--success)"); 
+            document.getElementById("student-grievance").value = ""; loadMyGrievances(); 
         }
 
         function loadMyGrievances() {
@@ -1079,6 +1414,45 @@
                 }
             });
         }
+        // --- CHECK TODAY'S LIVE ATTENDANCE STATUS ---
+        function checkTodayAttendance() {
+            let attendanceDB = JSON.parse(localStorage.getItem("attendanceDB")) || [];
+            let todayStr = new Date().toISOString().split('T')[0];
+            let firstName = loggedInUser.split(' ')[0];
+            
+            let todayRecord = attendanceDB.find(r => r.date === todayStr && r.student === firstName);
+            let statusBadge = document.getElementById("att-status-badge");
+            let statusContainer = document.getElementById("today-att-status");
+            
+            if(!statusBadge) return;
+
+            if(todayRecord) {
+                if(todayRecord.status === "present") {
+                    statusBadge.innerHTML = "🟢 Marked Present";
+                    statusBadge.style.color = "var(--success)";
+                    statusContainer.style.borderColor = "var(--success)";
+                    statusContainer.style.background = "rgba(16, 185, 129, 0.05)";
+                } else if(todayRecord.status === "absent") {
+                    statusBadge.innerHTML = "🔴 Marked Absent";
+                    statusBadge.style.color = "var(--danger)";
+                    statusContainer.style.borderColor = "var(--danger)";
+                    statusContainer.style.background = "rgba(239, 68, 68, 0.05)";
+                } else if(todayRecord.status === "halfday") {
+                    statusBadge.innerHTML = "🟠 Half-Day";
+                    statusBadge.style.color = "var(--warning)";
+                    statusContainer.style.borderColor = "var(--warning)";
+                    statusContainer.style.background = "rgba(245, 158, 11, 0.05)";
+                }
+            } else {
+                statusBadge.innerHTML = "⏳ Awaiting Teacher";
+                statusBadge.style.color = "var(--text-muted)";
+                statusContainer.style.borderColor = "var(--border-color)";
+                statusContainer.style.background = "rgba(148, 163, 184, 0.1)";
+            }
+        }
+        
+        // Add this to your existing window.onload function:
+        // checkTodayAttendance(); setInterval(checkTodayAttendance, 3000);
     </script>
 </body>
 </html>
