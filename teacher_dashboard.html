@@ -936,8 +936,8 @@
             
             responseBox.style.display = "flex"; 
             responseBox.innerHTML = "> Initiating connection to AI Neural Core...\n> Processing request parameters...";
-            responseBox.classList.remove('active'); // Terminal text color
-            aiOrb.classList.add('thinking'); // Pulse animation
+            responseBox.classList.remove('active'); 
+            aiOrb.classList.add('thinking'); 
             
             try {
                 let base64Data = null; let mimeType = null;
@@ -946,26 +946,26 @@
                     base64Data = await new Promise((resolve) => { const reader = new FileReader(); reader.onloadend = () => resolve(reader.result.split(',')[1]); reader.readAsDataURL(file); });
                 }
 
-                // Simulate processing delay for effect
                 setTimeout(() => { responseBox.innerHTML += "\n> Analyzing structure..."; }, 800);
 
                 const response = await fetch('/api/gemini', { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ message: `As a teacher, answer this: ${text}`, imageBase64: base64Data, mimeType: mimeType }) });
-                if (!response.ok) throw new Error("API Failed");
                 const data = await response.json();
                 
                 if(data.candidates && data.candidates[0]) {
                     const aiAnswer = data.candidates[0].content.parts[0].text.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-                    
-                    // Success State
                     aiOrb.classList.remove('thinking');
-                    responseBox.classList.add('active'); // Switch to friendly bubble UI
+                    responseBox.classList.add('active'); 
                     responseBox.innerHTML = "💡 <strong>AI Analysis Complete:</strong><br><br>" + aiAnswer;
                     document.getElementById('teacher-ai-input').value = ""; if(fileInput) fileInput.value = "";
+                } else if (data.error) {
+                    throw new Error(data.error.message || "Invalid API Key");
+                } else {
+                    throw new Error("API Error");
                 }
             } catch (error) { 
                 aiOrb.classList.remove('thinking');
                 responseBox.style.color = "var(--danger)"; 
-                responseBox.innerHTML = `> [ERR_CONNECTION_REFUSED] AI Core offline.`; 
+                responseBox.innerHTML = `> [ERROR]: ${error.message}`; 
             }
         }
 
