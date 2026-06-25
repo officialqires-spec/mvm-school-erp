@@ -701,7 +701,6 @@
                 setTimeout(() => { responseBox.innerHTML += "\n> Analyzing route efficiency..."; }, 800);
 
                 const response = await fetch('/api/gemini', { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ message: `Act as a school transport manager. Answer this: ${text}` }) });
-                if (!response.ok) throw new Error("API Failed");
                 const data = await response.json();
                 
                 if(data.candidates && data.candidates[0]) {
@@ -709,11 +708,15 @@
                     responseBox.classList.add('active');
                     responseBox.innerHTML = "💡 <strong>Fleet AI Analysis:</strong><br><br>" + data.candidates[0].content.parts[0].text.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
                     document.getElementById('ai-head-input').value = "";
+                } else if (data.error) {
+                    throw new Error(data.error.message || "Invalid API Key");
+                } else {
+                    throw new Error("API Error");
                 }
             } catch (e) {
                 orb.classList.remove('thinking');
                 responseBox.style.color = "var(--danger)";
-                responseBox.innerHTML = "> [ERR_CONNECTION_REFUSED] Fleet Core Offline.";
+                responseBox.innerHTML = `> [ERROR]: ${e.message}`;
             }
         }
 
@@ -733,7 +736,6 @@
                 setTimeout(() => { responseBox.innerHTML += "\n> Fetching mechanic databases and translation matrices..."; }, 800);
 
                 const response = await fetch('/api/gemini', { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ message: `Act as a supportive, easy-to-understand assistant for a school bus driver. Answer this: ${text}` }) });
-                if (!response.ok) throw new Error("API Failed");
                 const data = await response.json();
                 
                 if(data.candidates && data.candidates[0]) {
@@ -741,11 +743,15 @@
                     responseBox.classList.add('active'); 
                     responseBox.innerHTML = "💡 <strong>Support AI Advice:</strong><br><br>" + data.candidates[0].content.parts[0].text.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
                     document.getElementById('ai-staff-input').value = "";
+                } else if (data.error) {
+                    throw new Error(data.error.message || "Invalid API Key");
+                } else {
+                    throw new Error("API Error");
                 }
             } catch (e) {
                 orb.classList.remove('thinking');
                 responseBox.style.color = "var(--danger)";
-                responseBox.innerHTML = "> [ERR_CONNECTION_REFUSED] Support Core Offline.";
+                responseBox.innerHTML = `> [ERROR]: ${e.message}`;
             }
         }
 
