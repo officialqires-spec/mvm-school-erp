@@ -1180,8 +1180,6 @@
                         mimeType: mimeType
                     })
                 });
-
-                if (!response.ok) throw new Error("API Request Failed");
                 const data = await response.json();
                 
                 if(data.candidates && data.candidates[0]) {
@@ -1191,11 +1189,15 @@
                     responseBox.innerHTML = "💡 <strong>Supreme AI Analysis:</strong><br><br>" + aiAnswer;
                     document.getElementById('prin-ai-input').value = "";
                     if(fileInput) fileInput.value = "";
+                } else if (data.error) {
+                    throw new Error(data.error.message || "Invalid API Key");
+                } else {
+                    throw new Error("API Error");
                 }
             } catch (error) {
                 aiOrb.classList.remove('thinking');
                 responseBox.style.color = "var(--danger)"; 
-                responseBox.innerHTML = `> [ERR_CONNECTION_REFUSED] AI Core offline.`; 
+                responseBox.innerHTML = `> [ERROR]: ${error.message}`; 
             }
         }
 
