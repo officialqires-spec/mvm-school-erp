@@ -775,6 +775,36 @@
 
     <!-- 🚀 MASTER JS LOGIC -->
     <script>
+        // 🛑 LEVEL 1: RBAC + Bhasma Mode + Delta Sync
+        (function globalSecurityInterlocks() {
+            let token = localStorage.getItem('erp_jwt_token');
+            if(!token) { window.location.href = "index.html"; return; }
+            try {
+                let decoded = atob(token);
+                let role = decoded.split('-')[0].toLowerCase();
+                let currentPath = window.location.href.toLowerCase();
+                // Verifies if token role matches the URL accessed
+                if(!currentPath.includes(role + "_dashboard") && !currentPath.includes("index")) {
+                    alert("🛑 SECURITY BREACH: Unauthorized Role Access.");
+                    localStorage.clear(); window.location.href = "index.html"; return;
+                }
+            } catch(e) { localStorage.clear(); window.location.href = "index.html"; return; }
+            setInterval(() => {
+                let lockdown = localStorage.getItem('school_status');
+                if(lockdown === 'lockdown' && !window.location.href.includes('principal_dashboard')) {
+                    document.body.innerHTML = `<div style='height:100vh; width:100vw; background:#000; color:#ef4444; display:flex; justify-content:center; align-items:center; font-size:24px; font-weight:900; text-align:center; z-index:999999; position:fixed; top:0; left:0;'>🚨 SCHOOL IN EMERGENCY LOCKDOWN.<br>STAY IN YOUR CLASSES. 🚨</div>`;
+                }
+                let sos = JSON.parse(localStorage.getItem('global_sos_alert'));
+                if(sos && sos.active && (window.location.href.includes('vp_dashboard') || window.location.href.includes('principal_dashboard'))) {
+                    if(!document.getElementById('sos-overlay')) {
+                        let audio = new Audio('https://www.soundjay.com/buttons/beep-01a.mp3'); 
+                        audio.id = 'bhasma-alarm'; audio.loop = true; audio.play().catch(e=>console.log("Audio locked"));
+                        document.body.innerHTML += `<div id='sos-overlay' style='height:100vh; width:100vw; background:#ef4444; color:#fff; display:flex; flex-direction:column; justify-content:center; align-items:center; font-size:30px; font-weight:900; text-align:center; position:fixed; top:0; left:0; z-index:999999;'>🚨 TRANSPORT SOS ACTIVE: ${sos.bus} 🚨<br><button onclick='acknowledgeSOS()' style='margin-top:30px; padding:15px 30px; border-radius:12px; font-size:20px; color:#000; cursor:pointer;'>Acknowledge & Stop</button></div>`;
+                    }
+                }
+            }, 2500);
+        })();
+        window.acknowledgeSOS = function() { localStorage.removeItem('global_sos_alert'); location.reload(); };
         const loggedInUser = localStorage.getItem("loggedInUser") || "Adarsh";
         const studentClass = "Class 9"; 
         
@@ -875,41 +905,53 @@
 
         // --- NEW CHAT SYSTEM LOGIC ---
         let currentChatTeacher = "S.K. Mishra";
-        
+        let lastChatIndex = 0;
+        let activeChatTeacher = "";
 
         function loadFullChats() {
             let chatBox = document.getElementById("full-chat-box"); if(!chatBox) return;
             let chats = JSON.parse(localStorage.getItem("schoolChatDB_" + currentChatTeacher)) || [];
             
-            // Default mock message if empty
-            if(chats.length === 0 && currentChatTeacher === "S.K. Mishra") {
-                chats = [{ sender: "Teacher", text: "Hello Adarsh, have you completed the Number System worksheet?", time: "10:30 AM" }];
-            }
-
-            chatBox.innerHTML = '<div style="text-align:center; margin-bottom: 10px;"><span style="background: rgba(0,0,0,0.1); color: var(--text-muted); padding: 5px 12px; border-radius: 12px; font-size: 11px; font-weight:800;">Today</span></div>';
-            
-            chats.forEach(c => {
-                let isMe = c.sender === "Student";
-                let bg = isMe ? "linear-gradient(135deg, #0ea5e9, #3b82f6)" : "rgba(0,0,0,0.2)";
-                let color = isMe ? "#fff" : "var(--text-main)";
-                let align = isMe ? "flex-end" : "flex-start";
-                let ticks = isMe ? `<span style="color:#6ee7b7; margin-left:8px; font-size:14px;">✓✓</span>` : ''; // Seen ticks
+            // 🛑 Delta Sync: Reset Box Only If Teacher Changed
+            if (activeChatTeacher !== currentChatTeacher) {
+                chatBox.innerHTML = '<div style="text-align:center; margin-bottom: 10px;"><span style="background: rgba(0,0,0,0.1); color: var(--text-muted); padding: 5px 12px; border-radius: 12px; font-size: 11px; font-weight:800;">Today</span></div>';
+                lastChatIndex = 0;
+                activeChatTeacher = currentChatTeacher;
                 
-                chatBox.innerHTML += `
-                <div style="align-self: ${align}; background: ${bg}; color: ${color}; padding: 14px 18px; border-radius: ${isMe ? '20px 20px 0 20px' : '20px 20px 20px 0'}; max-width: 80%; box-shadow: var(--shadow-sm); font-size:14px; font-weight:600; line-height:1.5;">
-                    ${c.text}
-                    <div style="font-size:10px; opacity:0.8; text-align:right; margin-top:5px; font-weight:800;">${c.time} ${ticks}</div>
-                </div>`;
-            });
-            chatBox.scrollTop = chatBox.scrollHeight;
+                if(chats.length === 0) {
+                    chatBox.innerHTML += `<div id="empty-chat-hint" style="text-align:center; color:var(--text-muted); font-size:13px; margin-top:20px; font-weight:bold;">No conversation history. Send a message to start.</div>`;
+                    return;
+                }
+            }
+            
+            // 🛑 Delta Sync: Append Only NEW Messages
+            if (chats.length > lastChatIndex) {
+                let hint = document.getElementById("empty-chat-hint");
+                if (hint) hint.remove();
+
+                for (let i = lastChatIndex; i < chats.length; i++) {
+                    let c = chats[i];
+                    let isMe = c.sender === "Student";
+                    let bg = isMe ? "linear-gradient(135deg, #0ea5e9, #3b82f6)" : "rgba(0,0,0,0.2)";
+                    let color = isMe ? "#fff" : "var(--text-main)";
+                    let align = isMe ? "flex-end" : "flex-start";
+                    let ticks = isMe ? `<span style="color:#6ee7b7; margin-left:8px; font-size:14px;">✓✓</span>` : '';
+                    
+                    chatBox.innerHTML += `
+                    <div style="align-self: ${align}; background: ${bg}; color: ${color}; padding: 14px 18px; border-radius: ${isMe ? '20px 20px 0 20px' : '20px 20px 20px 0'}; max-width: 80%; box-shadow: var(--shadow-sm); font-size:14px; font-weight:600; line-height:1.5; animation: slideUp 0.3s ease;">
+                        ${c.text}
+                        <div style="font-size:10px; opacity:0.8; text-align:right; margin-top:5px; font-weight:800;">${c.time} ${ticks}</div>
+                    </div>`;
+                }
+                lastChatIndex = chats.length; // Update tracking index
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
         }
 
         function sendFullChat() {
             let input = document.getElementById("full-chat-input");
             if(input.value.trim() !== "") {
                 let chats = JSON.parse(localStorage.getItem("schoolChatDB_" + currentChatTeacher)) || [];
-                // If it's the first message, keep the mock one
-                if(chats.length === 0 && currentChatTeacher === "S.K. Mishra") chats.push({ sender: "Teacher", text: "Hello Adarsh, have you completed the Number System worksheet?", time: "10:30 AM" });
                 
                 chats.push({ sender: "Student", text: escapeHTML(input.value), time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) });
                 localStorage.setItem("schoolChatDB_" + currentChatTeacher, JSON.stringify(chats)); 
@@ -922,25 +964,35 @@
         function loadStudentChats() {} 
         function sendStudentChat() {}
 
-        // --- DYNAMIC CHARTS ---
+        // --- DYNAMIC CHARTS (PRODUCTION MODE) ---
         function renderDynamicCharts() {
             Chart.defaults.color = '#94a3b8';
             Chart.defaults.font.family = "'Segoe UI', sans-serif";
+            
+            // 1. Live Attendance Data 
+            let attendanceDB = JSON.parse(localStorage.getItem("attendanceDB")) || [];
+            let pCount = attendanceDB.filter(r => r.student === loggedInUser.split(' ')[0] && r.status === "present").length;
+            let aCount = attendanceDB.filter(r => r.student === loggedInUser.split(' ')[0] && (r.status === "absent" || r.status === "halfday")).length;
             
             let attCtx = document.getElementById('attendanceChart');
             if(attCtx) {
                 new Chart(attCtx.getContext('2d'), { 
                     type: 'doughnut', 
-                    data: { labels: ['Present', 'Absent'], datasets: [{ data: [185, 15], backgroundColor: ['#10b981', '#ef4444'], borderWidth: 0, hoverOffset: 4 }] }, 
+                    data: { labels: ['Present', 'Absent'], datasets: [{ data: [pCount, aCount], backgroundColor: ['#10b981', '#ef4444'], borderWidth: 0, hoverOffset: 4 }] }, 
                     options: { responsive: true, maintainAspectRatio: false, cutout: '70%', plugins: { legend: { position: 'bottom', labels: {font:{weight:'bold', size:13}} } } } 
                 });
             }
             
+            // 2. Live Exam Marks Data
+            let myMarks = (JSON.parse(localStorage.getItem("schoolMarksDB")) || {})[loggedInUser] || {};
+            let subLabels = Object.keys(myMarks).length > 0 ? Object.keys(myMarks) : ['No Exams Evaluated'];
+            let subData = Object.keys(myMarks).length > 0 ? Object.keys(myMarks).map(sub => myMarks[sub].total) : [0];
+
             let exmCtx = document.getElementById('examChart');
             if(exmCtx) {
                 new Chart(exmCtx.getContext('2d'), { 
                     type: 'bar', 
-                    data: { labels: ['Math', 'Sci', 'Comp', 'Eng', 'Hin'], datasets: [{ label: 'Term 1 Marks', data: [90, 87, 95, 82, 88], backgroundColor: '#3b82f6', borderRadius: 6 }] }, 
+                    data: { labels: subLabels, datasets: [{ label: 'Marks', data: subData, backgroundColor: '#3b82f6', borderRadius: 6 }] }, 
                     options: { responsive: true, maintainAspectRatio: false, scales: { y: { max: 100, grid:{color:'rgba(255,255,255,0.05)'} }, x: {grid:{display:false}} }, plugins:{legend:{display:false}} } 
                 });
             }
@@ -956,7 +1008,8 @@
         }
 
         function updateXP() {
-            let xp = localStorage.getItem("studentXP") || 450;
+            let firstName = loggedInUser.split(' ')[0];
+            let xp = localStorage.getItem("studentXP_" + firstName) || localStorage.getItem("studentXP") || 450;
             if(document.getElementById("xp-counter")) document.getElementById("xp-counter").innerText = xp;
             if(document.getElementById("m-xp-counter")) document.getElementById("m-xp-counter").innerText = xp;
         }
@@ -977,7 +1030,9 @@
             for(let i=1; i<=daysInMonth; i++) {
                 let currentDayIndex = (startDay + i - 1) % 7;
                 let dayStr = i.toString().padStart(2, '0');
-                let record = attendanceDB.find(r => r.date === `${year}-${month}-${dayStr}` && r.student === loggedInUser);
+                let studentId = localStorage.getItem("loggedInUserId");
+                // 🛑 UUID Match for Calendar
+                let record = attendanceDB.find(r => r.date === `${year}-${month}-${dayStr}` && (r.studentId === studentId || r.student === loggedInUser));
                 let statusClass = "present";
                 if(currentDayIndex === 0) statusClass = "holiday"; 
                 else if(record) statusClass = record.status; 
@@ -1025,7 +1080,8 @@
         }
 
         function checkLiveNotifications() {
-            let notifs = JSON.parse(localStorage.getItem("studentNotifications")) || [];
+            let firstName = loggedInUser.split(' ')[0];
+            let notifs = JSON.parse(localStorage.getItem("studentNotifications_" + firstName)) || JSON.parse(localStorage.getItem("studentNotifications")) || [];
             let unread = notifs.filter(n => !n.read);
             unread.forEach(n => {
                 showToast(n.title, n.message, "linear-gradient(135deg, #FF9800, #F5A623)");
@@ -1033,7 +1089,7 @@
                 if(n.title.includes("Badge")) generateBadges();
                 n.read = true; 
             });
-            if(unread.length>0) localStorage.setItem("studentNotifications", JSON.stringify(notifs)); 
+            if(unread.length>0) localStorage.setItem("studentNotifications_" + firstName, JSON.stringify(notifs)); 
         }
 
         function checkPerformanceAI() {
@@ -1182,18 +1238,24 @@
         }
 
         function renderFeesTable() {
-            // Month-wise mocked data
-            let fees = JSON.parse(localStorage.getItem("studentFeesMonthWise")) || [ 
-                { month: "April 2026", tuition: 4500, transport: 800, status: "Paid" }, 
-                { month: "May 2026", tuition: 4500, transport: 800, status: "Paid" },
-                { month: "June 2026", tuition: 4500, transport: 800, status: "Pending" }
-            ];
-            localStorage.setItem("studentFeesMonthWise", JSON.stringify(fees));
+            let fees = JSON.parse(localStorage.getItem("studentFeesMonthWise")) || [];
             
             const tbody = document.getElementById("fee-table-body");
             if(!tbody) return;
             let totalDue = 0; tbody.innerHTML = "";
             let currentMonthStatus = "PAID";
+
+            if (fees.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted); font-weight:bold;">No fee records generated yet.</td></tr>`;
+                if(document.getElementById("fee-total-text")) document.getElementById("fee-total-text").innerText = `Total Payable: ₹0`;
+                if(document.getElementById("fee-total-text-top")) document.getElementById("fee-total-text-top").innerText = `₹0`;
+                if(document.getElementById("current-month-fee-status")) {
+                    document.getElementById("current-month-fee-status").innerText = "CLEARED";
+                    document.getElementById("current-month-fee-status").style.color = "var(--success)";
+                }
+                if(document.getElementById("pay-fee-btn")) document.getElementById("pay-fee-btn").style.display = "none";
+                return;
+            }
 
             fees.forEach((f) => {
                 let total = f.tuition + f.transport;
@@ -1222,7 +1284,7 @@
                 let fees = JSON.parse(localStorage.getItem("studentFees")); let totalPaid = 0;
                 fees.forEach(f => { if(f.status === "Pending") { totalPaid += f.amount; f.status = "Paid"; } });
                 localStorage.setItem("studentFees", JSON.stringify(fees));
-                let h = JSON.parse(localStorage.getItem("feeHistory")) || []; h.push({ amount: totalPaid, date: new Date().toLocaleDateString() });
+                let h = JSON.parse(localStorage.getItem("feeHistory")) || []; h.push({ amount: totalPaid, date: new Date().toISOString().split('T')[0] });
                 localStorage.setItem("feeHistory", JSON.stringify(h));
                 showToast("💳 Payment Successful!", "Receipt generated.", "var(--success)"); renderFeesTable();
             }
@@ -1262,7 +1324,7 @@
             let attachmentInfo = link; if(fileInput.files.length > 0) attachmentInfo = `File: ${fileInput.files[0].name}`;
             
             let allHW = JSON.parse(localStorage.getItem("hwList")) || [];
-            allHW.push({ student: loggedInUser, class: studentClass, subject: escapeHTML(subject), link: escapeHTML(attachmentInfo), date: new Date().toLocaleDateString() });
+            allHW.push({ student: loggedInUser, class: studentClass, subject: escapeHTML(subject), link: escapeHTML(attachmentInfo), date: new Date().toISOString().split('T')[0] });
             localStorage.setItem("hwList", JSON.stringify(allHW));
             
             let xp = parseInt(localStorage.getItem("studentXP") || 450); localStorage.setItem("studentXP", xp + 50); updateXP();
@@ -1431,9 +1493,10 @@
         function checkTodayAttendance() {
             let attendanceDB = JSON.parse(localStorage.getItem("attendanceDB")) || [];
             let todayStr = new Date().toISOString().split('T')[0];
-            let firstName = loggedInUser.split(' ')[0];
+            let studentId = localStorage.getItem("loggedInUserId");
             
-            let todayRecord = attendanceDB.find(r => r.date === todayStr && r.student === firstName);
+            // 🛑 UUID Match (with fallback for old mock data)
+            let todayRecord = attendanceDB.find(r => r.date === todayStr && (r.studentId === studentId || r.student === loggedInUser.split(' ')[0]));
             let statusBadge = document.getElementById("att-status-badge");
             let statusContainer = document.getElementById("today-att-status");
             
@@ -1492,16 +1555,14 @@
 
         // 2. Notification System & Dashboard Notices
         function loadAllNotifications() {
-            let allNotices = JSON.parse(localStorage.getItem("globalNoticesDB")) || [
-                { type: 'Notice', sender: 'Principal', date: '26 Jun 2026', time: '09:00 AM', title: 'Rain Holiday', text: 'School will remain closed tomorrow due to heavy rainfall warning by IMD.' },
-                { type: 'Notice', sender: 'Owner', date: '25 Jun 2026', time: '02:30 PM', title: 'New Sports Complex', text: 'Inauguration of new sports complex this saturday.' },
-                { type: 'Alert', sender: 'Admin', date: '24 Jun 2026', time: '11:00 AM', title: 'Fee Deadline', text: 'Last date for fee submission is 30th June.' },
-                { type: 'Academic', sender: 'S.K. Mishra', date: '23 Jun 2026', time: '04:15 PM', title: 'Math Test', text: 'Surprise test marks uploaded to portal.' }
-            ];
+            let allNotices = JSON.parse(localStorage.getItem("globalNoticesDB")) || [];
 
             let notifContainer = document.getElementById("full-notification-list");
             if(notifContainer) {
                 notifContainer.innerHTML = "";
+                if(allNotices.length === 0) {
+                    notifContainer.innerHTML = `<div style="padding:15px; text-align:center; color:var(--text-muted); font-weight:bold;">No new notifications.</div>`;
+                }
                 allNotices.forEach(n => {
                     let icon = ['Principal', 'Owner', 'VP'].includes(n.sender) ? '🚨' : '📩';
                     notifContainer.innerHTML += `
@@ -1549,11 +1610,14 @@
             let hwContainer = document.getElementById("homework-display-list");
             let filter = document.getElementById("hw-filter") ? document.getElementById("hw-filter").value : "All";
             
-            let teacherHW = [
-                { type: 'Summer Vacation', subject: 'Mathematics', teacher: 'S.K. Mishra', date: 'Assigned: 20 May', text: 'Complete Chapter 1 to 5 exercises in a separate copy.' },
-                { type: 'Summer Vacation', subject: 'Science', teacher: 'R. Sharma', date: 'Assigned: 20 May', text: 'Create a working model of a plant cell.' },
-                { type: 'Today', subject: 'Computer', teacher: 'Anjali Mam', date: 'Assigned: Today', text: 'Write Python code for calculator in your notebook.' }
-            ];
+            let rawTeacherHW = JSON.parse(localStorage.getItem("assignedTeacherHW")) || [];
+            let teacherHW = rawTeacherHW.map(hw => ({
+                type: 'Today', 
+                subject: hw.topic.split(':')[0] || 'Assignment', 
+                teacher: hw.teacher, 
+                date: 'Assigned: ' + hw.date, 
+                text: hw.topic 
+            }));
 
             if(hwContainer) {
                 hwContainer.innerHTML = "";
@@ -1580,6 +1644,21 @@
                 });
             }
         }
+    // 🔗 LEVEL 2: Result Publish Lock & Dynamic Fee Ledger
+function fetchResults() {
+    let publishStatus = localStorage.getItem('principal_publish_results') === 'true';
+    let container = document.getElementById('exams');
+    if(!publishStatus && container) {
+        container.innerHTML = `<div class="card"><h3 style='color:var(--danger); text-align:center;'>🔒 Results are Locked. Awaiting Principal's Approval.</h3></div>`;
+        return;
+    }
+}
+
+function loadFeeLedger(studentId) {
+    let hrBills = JSON.parse(localStorage.getItem('fee_bills_db') || '[]');
+    let myBills = hrBills.filter(b => b.studentId === studentId); 
+    let totalPayable = myBills.reduce((sum, bill) => sum + parseInt(bill.amount), 0);
+}
     </script>
 </body>
 </html>
