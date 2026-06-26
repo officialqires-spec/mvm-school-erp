@@ -488,13 +488,58 @@
         </div>
 
         <!-- PLACEHOLDERS -->
-        <div id="attendance" class="workspace"><div class="card"><div class="card-header">📍 Geo-Location Tracker</div><p style="font-size: 14px; color: var(--text-muted); font-weight:600;">GPS Perimeter Active. All staff checking in securely.</p></div></div>
-        <div id="leave" class="workspace"><div class="card"><div class="card-header">📅 Leave Approvals</div><p style="font-size: 14px; color: var(--text-muted); font-weight:600;">No pending leaves right now.</p></div></div>
+        <div id="attendance" class="workspace">
+            <div class="card">
+                <div class="card-header">📍 Staff App Check-ins (Today)</div>
+                <p style="font-size: 14px; color: var(--text-muted); font-weight:600; margin-bottom: 20px;">Live attendance synced from Teacher/Staff apps.</p>
+                <div id="hr-live-attendance-list"></div>
+            </div>
+        </div>
+        
+        <div id="leave" class="workspace">
+            <div class="card" style="border: 2px solid var(--warning);">
+                <div class="card-header" style="color: var(--warning); border-bottom-color: var(--warning);">📅 Staff Leave Approvals</div>
+                <p style="font-size: 13px; color: var(--text-main); margin-bottom: 20px; font-weight:600;">Leaves approved here will automatically trigger Principal notification and VP Proxy generation.</p>
+                <div id="hr-leave-req-list">
+                    <p style="color:var(--text-muted); font-size:13px; text-align:center;">No pending leave requests.</p>
+                </div>
+            </div>
+        </div>
         <div id="recruitment" class="workspace"><div class="card"><div class="card-header">🎯 Post Vacancy</div><p style="font-size: 14px; color: var(--text-muted); font-weight:600;">Manage external hiring pipeline and interviews.</p></div></div>
     </div>
 
     <!-- 🚀 MASTER HR LOGIC -->
     <script>
+        // 🛑 LEVEL 1: RBAC + Bhasma Mode + Delta Sync
+        (function globalSecurityInterlocks() {
+            let token = localStorage.getItem('erp_jwt_token');
+            if(!token) { window.location.href = "index.html"; return; }
+            try {
+                let decoded = atob(token);
+                let role = decoded.split('-')[0].toLowerCase();
+                let currentPath = window.location.href.toLowerCase();
+                // Verifies if token role matches the URL accessed
+                if(!currentPath.includes(role + "_dashboard") && !currentPath.includes("index")) {
+                    alert("🛑 SECURITY BREACH: Unauthorized Role Access.");
+                    localStorage.clear(); window.location.href = "index.html"; return;
+                }
+            } catch(e) { localStorage.clear(); window.location.href = "index.html"; return; }
+            setInterval(() => {
+                let lockdown = localStorage.getItem('school_status');
+                if(lockdown === 'lockdown' && !window.location.href.includes('principal_dashboard')) {
+                    document.body.innerHTML = `<div style='height:100vh; width:100vw; background:#000; color:#ef4444; display:flex; justify-content:center; align-items:center; font-size:24px; font-weight:900; text-align:center; z-index:999999; position:fixed; top:0; left:0;'>🚨 SCHOOL IN EMERGENCY LOCKDOWN.<br>STAY IN YOUR CLASSES. 🚨</div>`;
+                }
+                let sos = JSON.parse(localStorage.getItem('global_sos_alert'));
+                if(sos && sos.active && (window.location.href.includes('vp_dashboard') || window.location.href.includes('principal_dashboard'))) {
+                    if(!document.getElementById('sos-overlay')) {
+                        let audio = new Audio('https://www.soundjay.com/buttons/beep-01a.mp3'); 
+                        audio.id = 'bhasma-alarm'; audio.loop = true; audio.play().catch(e=>console.log("Audio locked"));
+                        document.body.innerHTML += `<div id='sos-overlay' style='height:100vh; width:100vw; background:#ef4444; color:#fff; display:flex; flex-direction:column; justify-content:center; align-items:center; font-size:30px; font-weight:900; text-align:center; position:fixed; top:0; left:0; z-index:999999;'>🚨 TRANSPORT SOS ACTIVE: ${sos.bus} 🚨<br><button onclick='acknowledgeSOS()' style='margin-top:30px; padding:15px 30px; border-radius:12px; font-size:20px; color:#000; cursor:pointer;'>Acknowledge & Stop</button></div>`;
+                    }
+                }
+            }, 2500);
+        })();
+        window.acknowledgeSOS = function() { localStorage.removeItem('global_sos_alert'); location.reload(); };
         // --- CUSTOM TOAST NOTIFICATION ---
         function showToast(title, message, color) {
             let container = document.getElementById("toast-container");
@@ -830,7 +875,99 @@
             card.querySelector('.btn').style.display = "none";
             showToast('Ticket Closed 🛠️', 'Staff has been notified.', 'var(--success)');
         }
-        function disbursePayroll() { showToast('Payroll Disbursed 🏦', 'Salaries, PF & TDS processed automatically.', 'var(--success)'); }
+        // 🛑 LEVEL 1.5 FIX: Real Staff Leave Approval System
+        function renderHRLeaves() {
+            let leaves = JSON.parse(localStorage.getItem("staffLeaveDB")) || [];
+            let container = document.getElementById("hr-leave-req-list");
+            if(!container) return;
+            
+            let pendingLeaves = leaves.filter(l => l.status === "Pending");
+            if(pendingLeaves.length === 0) {
+                container.innerHTML = `<p style="color:var(--text-muted); font-size:13px; text-align:center; font-weight:bold;">No pending staff leave requests.</p>`;
+                return;
+            }
+            
+            container.innerHTML = "";
+            pendingLeaves.forEach((lv) => {
+                // Find real index in the global array
+                let realIndex = leaves.findIndex(l => l.date === lv.date && l.reason === lv.reason);
+                container.innerHTML += `
+                <div class="list-card" style="border-left: 4px solid var(--warning);">
+                    <div class="list-row"><div class="list-title">Staff ID Request</div><div class="status-badge" style="background: rgba(245, 158, 11, 0.1); color: var(--warning); border: none;">Pending</div></div>
+                    <div class="list-subtitle" style="margin-top:5px; color:var(--text-main);"><strong>Dates:</strong> ${lv.start} to ${lv.end}</div>
+                    <div class="list-subtitle" style="margin-top:5px;"><strong>Reason:</strong> ${lv.reason}</div>
+                    <div class="grid-2" style="margin-top: 15px;">
+                        <button class="btn btn-success btn-small" onclick="actionStaffLeave(${realIndex}, 'Approved')">Approve Leave</button>
+                        <button class="btn btn-danger btn-small" onclick="actionStaffLeave(${realIndex}, 'Rejected')">Reject</button>
+                    </div>
+                </div>`;
+            });
+        }
+
+        function actionStaffLeave(index, status) {
+            let leaves = JSON.parse(localStorage.getItem("staffLeaveDB")) || [];
+            leaves[index].status = status;
+            localStorage.setItem("staffLeaveDB", JSON.stringify(leaves));
+            let color = status === "Approved" ? "var(--success)" : "var(--danger)";
+            showToast(`Leave ${status}`, "Teacher/Staff dashboard updated.", color);
+            renderHRLeaves();
+        }
+
+        // Attach to Tab Switcher (Auto-Load)
+        let oldSwitchTab = switchTab;
+        switchTab = function(tabId, element) {
+            oldSwitchTab(tabId, element);
+            if(tabId === 'leave') renderHRLeaves();
+        };
+
+        // 🛑 LEVEL 1.5 FIX: Smart Payroll Engine (Reads real KYC Salary)
+        function disbursePayroll() { 
+            let staffAttendance = JSON.parse(localStorage.getItem('staff_attendance_db') || '[]');
+            let advances = JSON.parse(localStorage.getItem('staff_advances_db') || '[]');
+            let masterStaff = JSON.parse(localStorage.getItem('hrStaffDB') || '[]');
+            let payroll = [];
+            
+            let uniqueStaff = [...new Set(staffAttendance.map(a => a.staffId))];
+            
+            if(uniqueStaff.length === 0 && masterStaff.length > 0) {
+                showToast('Warning', 'No attendance data found. Generating Base Payroll from KYC.', 'var(--warning)');
+                uniqueStaff = masterStaff.map(s => s.id);
+            }
+            
+            uniqueStaff.forEach(staffId => {
+                // Find actual staff profile from KYC Database
+                let staffProfile = masterStaff.find(s => s.id === staffId);
+                let actualMonthlySalary = staffProfile ? parseInt(staffProfile.salary) : 0;
+                
+                let presentDays = staffAttendance.filter(a => a.staffId === staffId && a.status === 'P').length;
+                
+                // Smart Calc: If no attendance logic exists yet, assume full 30 days present, else per day cut
+                let finalBaseSalary = actualMonthlySalary; 
+                if(staffAttendance.length > 0) {
+                    let perDaySalary = actualMonthlySalary / 30;
+                    finalBaseSalary = Math.round(presentDays * perDaySalary);
+                }
+                
+                let staffAdvance = advances.find(a => a.staffId === staffId && a.status === 'Approved');
+                let deduction = staffAdvance ? parseInt(staffAdvance.amount) : 0;
+                
+                payroll.push({ 
+                    staffId: staffId, 
+                    staffName: staffProfile ? staffProfile.name : "Unknown",
+                    baseSalary: finalBaseSalary, 
+                    deduction: deduction, 
+                    netPay: (finalBaseSalary - deduction), 
+                    date: new Date().toISOString().split('T')[0] 
+                });
+                
+                if(staffAdvance) staffAdvance.status = 'Deducted';
+            });
+            
+            localStorage.setItem('payroll_history_db', JSON.stringify(payroll));
+            localStorage.setItem('staff_advances_db', JSON.stringify(advances));
+            
+            showToast('Payroll Disbursed 🏦', 'Auto-calculated based on KYC Salaries & Attendance.', 'var(--success)'); 
+        }
     </script>
 </body>
 </html>
