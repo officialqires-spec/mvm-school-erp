@@ -709,33 +709,31 @@
             </div>
         </div>
 
-        <!-- 5. SMART PROXY -->
+        <!-- 🛑 PHASE 3 FIX: Smart Proxy System (Connected to HR Staff DB & Attendance) -->
         <div id="proxy" class="workspace">
             <div class="card">
-                <div class="card-header">🔄 AI Teacher Substitution</div>
+                <div class="card-header">🔄 AI Teacher Substitution & Proxy</div>
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px; font-weight: 600;">Automatically detects teachers who have NOT punched in today.</p>
                 <div class="grid-3" style="align-items: end;">
                     <div>
-                        <label>Absent Class</label>
+                        <label>Absent Teacher's Class</label>
                         <select id="proxy-absent">
-                            <option>Class 9 - Science (Period 3)</option>
-                            <option>Class 7 - Math (Period 1)</option>
+                            <option value="">-- Auto-fetching Absentees... --</option>
                         </select>
                     </div>
                     <div>
-                        <label>Free Teacher</label>
+                        <label>Available Substitute</label>
                         <select id="proxy-free">
-                            <option value="Gupta Sir (Hindi)">Gupta Sir (Hindi) - Free</option>
-                            <option value="Anjali Mam (Computer)">Anjali Mam (Computer) - Free</option>
-                            <option value="S.K. Mishra (Science)">S.K. Mishra (Science) - Free</option>
+                            <option value="">-- Auto-fetching Free Staff... --</option>
                         </select>
                     </div>
                     <div style="display:flex; gap:10px;">
-                        <button onclick="aiSmartSuggest()" class="btn btn-warning">🤖 Match</button>
-                        <button onclick="assignProxy()" class="btn">Assign</button>
+                        <button onclick="aiSmartSuggest()" class="btn btn-warning" style="color:#000;">🤖 AI Match</button>
+                        <button onclick="assignProxy()" class="btn btn-success">✅ Assign Duty</button>
                     </div>
                 </div>
                 
-                <h4 style="margin-top: 30px; margin-bottom: 15px; color: var(--text-muted); text-transform:uppercase;">Today's Assigned Proxies</h4>
+                <h4 style="margin-top: 30px; margin-bottom: 15px; color: var(--text-main); font-weight: 800; text-transform:uppercase;">Today's Live Proxies</h4>
                 <div id="proxy-list-container"></div>
             </div>
         </div>
@@ -904,6 +902,36 @@
 
     <!-- 🚀 MASTER VP LOGIC -->
     <script>
+        // 🛑 LEVEL 1: RBAC + Bhasma Mode + Delta Sync
+        (function globalSecurityInterlocks() {
+            let token = localStorage.getItem('erp_jwt_token');
+            if(!token) { window.location.href = "index.html"; return; }
+            try {
+                let decoded = atob(token);
+                let role = decoded.split('-')[0].toLowerCase();
+                let currentPath = window.location.href.toLowerCase();
+                // Verifies if token role matches the URL accessed
+                if(!currentPath.includes(role + "_dashboard") && !currentPath.includes("index")) {
+                    alert("🛑 SECURITY BREACH: Unauthorized Role Access.");
+                    localStorage.clear(); window.location.href = "index.html"; return;
+                }
+            } catch(e) { localStorage.clear(); window.location.href = "index.html"; return; }
+            setInterval(() => {
+                let lockdown = localStorage.getItem('school_status');
+                if(lockdown === 'lockdown' && !window.location.href.includes('principal_dashboard')) {
+                    document.body.innerHTML = `<div style='height:100vh; width:100vw; background:#000; color:#ef4444; display:flex; justify-content:center; align-items:center; font-size:24px; font-weight:900; text-align:center; z-index:999999; position:fixed; top:0; left:0;'>🚨 SCHOOL IN EMERGENCY LOCKDOWN.<br>STAY IN YOUR CLASSES. 🚨</div>`;
+                }
+                let sos = JSON.parse(localStorage.getItem('global_sos_alert'));
+                if(sos && sos.active && (window.location.href.includes('vp_dashboard') || window.location.href.includes('principal_dashboard'))) {
+                    if(!document.getElementById('sos-overlay')) {
+                        let audio = new Audio('https://www.soundjay.com/buttons/beep-01a.mp3'); 
+                        audio.id = 'bhasma-alarm'; audio.loop = true; audio.play().catch(e=>console.log("Audio locked"));
+                        document.body.innerHTML += `<div id='sos-overlay' style='height:100vh; width:100vw; background:#ef4444; color:#fff; display:flex; flex-direction:column; justify-content:center; align-items:center; font-size:30px; font-weight:900; text-align:center; position:fixed; top:0; left:0; z-index:999999;'>🚨 TRANSPORT SOS ACTIVE: ${sos.bus} 🚨<br><button onclick='acknowledgeSOS()' style='margin-top:30px; padding:15px 30px; border-radius:12px; font-size:20px; color:#000; cursor:pointer;'>Acknowledge & Stop</button></div>`;
+                    }
+                }
+            }, 2500);
+        })();
+        window.acknowledgeSOS = function() { localStorage.removeItem('global_sos_alert'); location.reload(); };
         // --- CUSTOM TOAST NOTIFICATION ---
         function showUniversalToast(title, message, color) {
             let container = document.getElementById("universal-toast-container");
@@ -1025,50 +1053,105 @@
             checkSOSState();
         }
 
-        // --- SMART AI PROXY LOGIC ---
+        // 🛑 PHASE 3 FIX: Smart AI Proxy Logic (Auto-Detects Absentees)
+        function generateProxyDropdowns() {
+            let masterStaff = JSON.parse(localStorage.getItem('hrStaffDB') || '[]');
+            let attendanceDB = JSON.parse(localStorage.getItem('staff_attendance_db') || '[]');
+            let classMapping = JSON.parse(localStorage.getItem('teacher_class_mapping') || '{}');
+            let today = new Date().toISOString().split('T')[0];
+
+            let absentDropdown = document.getElementById("proxy-absent");
+            let freeDropdown = document.getElementById("proxy-free");
+            if(!absentDropdown || !freeDropdown) return;
+
+            let absentOptions = '<option value="">-- Select Absent Teacher\'s Class --</option>';
+            let freeOptions = '<option value="">-- Select Available Substitute --</option>';
+            
+            let absenteesCount = 0;
+
+            masterStaff.forEach(staff => {
+                if(staff.dept !== "Teacher") return; // Only scan teachers
+                
+                let hasPunched = attendanceDB.find(a => a.staffId === staff.id && a.date === today);
+                let mappingInfo = classMapping[staff.id];
+                let classDetails = mappingInfo ? `${mappingInfo.class} (${mappingInfo.subject})` : "Unassigned Class";
+                
+                if(!hasPunched) {
+                    // Teacher is absent today
+                    absentOptions += `<option value="${classDetails} [Was assigned to ${staff.name}]">${classDetails} [Was assigned to ${staff.name}]</option>`;
+                    absenteesCount++;
+                } else {
+                    // Teacher is present and available
+                    freeOptions += `<option value="${staff.name} (${mappingInfo ? mappingInfo.subject : 'General'})">${staff.name} (${mappingInfo ? mappingInfo.subject : 'General'})</option>`;
+                }
+            });
+
+            if(absenteesCount === 0) absentOptions = '<option value="">All Teachers Present Today ✅</option>';
+            
+            absentDropdown.innerHTML = absentOptions;
+            freeDropdown.innerHTML = freeOptions;
+        }
+
         function aiSmartSuggest() {
             let absentClass = document.getElementById("proxy-absent").value;
             let freeTeacherSelect = document.getElementById("proxy-free");
             
-            if(absentClass.includes("Science")) freeTeacherSelect.value = "S.K. Mishra (Science)";
-            else if(absentClass.includes("Math")) freeTeacherSelect.value = "Rahul Sir (Math)";
-            else if(absentClass.includes("English")) freeTeacherSelect.value = "Gupta Sir (Hindi)"; 
+            if(!absentClass) return showUniversalToast("Error", "Select an absent class first.", "var(--danger)");
             
-            showUniversalToast("🤖 AI Match", "Best available teacher selected.", "var(--warning)");
+            // AI Matching Logic based on subjects
+            let matchFound = false;
+            for(let i=0; i<freeTeacherSelect.options.length; i++) {
+                let opt = freeTeacherSelect.options[i].value;
+                if(absentClass.toLowerCase().includes("science") && opt.toLowerCase().includes("science")) { freeTeacherSelect.value = opt; matchFound = true; break; }
+                if(absentClass.toLowerCase().includes("math") && opt.toLowerCase().includes("math")) { freeTeacherSelect.value = opt; matchFound = true; break; }
+            }
+            
+            if(matchFound) showUniversalToast("🤖 AI Match", "Best subject-specific teacher selected.", "var(--success)");
+            else {
+                freeTeacherSelect.selectedIndex = 1; // Pick any available
+                showUniversalToast("🤖 AI Match", "No subject match. Random free teacher selected.", "var(--warning)");
+            }
         }
 
         function assignProxy() {
             let absentClass = document.getElementById("proxy-absent").value; 
             let freeTeacher = document.getElementById("proxy-free").value;
-            let proxyLog = JSON.parse(localStorage.getItem("proxyLog")) || [];
             
-            proxyLog.push({ absentClass, freeTeacher, status: "Assigned", time: new Date().toLocaleTimeString() });
+            if(!absentClass || !freeTeacher) return showUniversalToast("Error", "Select both Absent Class and Free Teacher.", "var(--danger)");
+            
+            let proxyLog = JSON.parse(localStorage.getItem("proxyLog")) || [];
+            proxyLog.push({ absentClass: absentClass, freeTeacher: freeTeacher, status: "Assigned", time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) });
             localStorage.setItem("proxyLog", JSON.stringify(proxyLog));
             
-            showUniversalToast("✅ Duty Assigned", `${freeTeacher} sent to ${absentClass}.`, "var(--success)"); 
+            showUniversalToast("✅ Duty Assigned", `${freeTeacher} sent to cover the class.`, "var(--success)"); 
             loadProxies();
+            
+            // Clear selections
+            document.getElementById("proxy-absent").value = "";
+            document.getElementById("proxy-free").value = "";
         }
 
         function loadProxies() {
+            generateProxyDropdowns(); // Ensure dropdowns are fresh
             let proxyLog = JSON.parse(localStorage.getItem("proxyLog")) || [];
             let container = document.getElementById("proxy-list-container"); 
             container.innerHTML = "";
             
             if(proxyLog.length === 0) { 
-                container.innerHTML = "<p style='color:var(--text-muted);'>No proxies assigned today.</p>"; 
+                container.innerHTML = "<p style='color:var(--text-muted); font-weight:700;'>No proxies assigned today.</p>"; 
             } else {
                 proxyLog.slice().reverse().forEach(p => {
                     container.innerHTML += `
-                    <div class="list-card" style="border-left: 4px solid var(--info);">
+                    <div class="list-card" style="border-left: 4px solid var(--info); position:relative;">
                         <div class="list-row">
-                            <div class="list-title">${p.absentClass}</div>
-                            <div class="status-badge" style="color:var(--success); border-color:var(--success);">${p.status}</div>
+                            <div class="list-title text-truncate-2" style="max-width:70%;">${p.absentClass}</div>
+                            <div class="status-badge" style="background:rgba(16, 185, 129, 0.1); color:var(--success); border:none;">${p.status}</div>
                         </div>
-                        <div class="list-subtitle" style="margin-top:5px;">Proxy: <strong style="color:var(--text-main);">${p.freeTeacher}</strong> | Time: ${p.time}</div>
+                        <div class="list-subtitle" style="margin-top:8px;">Covered By: <strong style="color:var(--text-main); font-size:14px;">${p.freeTeacher}</strong> <span style="float:right; font-size:11px;">${p.time}</span></div>
                     </div>`;
                 });
             }
-            document.getElementById("proxy-count-dash").innerText = proxyLog.length + " / 3";
+            document.getElementById("proxy-count-dash").innerText = proxyLog.length + " Proxies";
         }
 
         // --- DISCIPLINE LOG LOGIC ---
@@ -1079,7 +1162,7 @@
             if(!name) return showUniversalToast("Error", "Select a student.", "var(--danger)");
             
             let discLog = JSON.parse(localStorage.getItem("disciplineLog")) || [];
-            discLog.push({ name, reason, date: new Date().toLocaleDateString() });
+            discLog.push({ name, reason, date: new Date().toISOString().split('T')[0] });
             localStorage.setItem("disciplineLog", JSON.stringify(discLog));
             
             document.getElementById("disc-name").value = "";
@@ -1499,6 +1582,24 @@
                 }
             } catch(err) { }
         });
+    // 🔗 LEVEL 2: VP Interlocks
+function assignProxy(absentTeacherId, proxyTeacherId, classId, timeSlot) {
+    let proxies = JSON.parse(localStorage.getItem('proxy_db') || '[]');
+    proxies.push({ for: absentTeacherId, by: proxyTeacherId, class: classId, time: timeSlot, status: 'Active' });
+    localStorage.setItem('proxy_db', JSON.stringify(proxies));
+    showUniversalToast("Proxy Assigned", `Duty shifted to ${proxyTeacherId} at ${timeSlot}`, "var(--success)");
+}
+
+function resolveDisciplineAction(studentId, actionText) {
+    let disciplineLogs = JSON.parse(localStorage.getItem('disciplineLog') || '[]');
+    let log = disciplineLogs.find(l => l.studentId === studentId);
+    if(log) {
+        log.vpAction = actionText;
+        log.status = "Resolved";
+        localStorage.setItem('disciplineLog', JSON.stringify(disciplineLogs));
+        showUniversalToast("Discipline Action Recorded", "Teacher Dashboard updated.", "var(--danger)");
+    }
+}
     </script>
 </body>
 </html>
