@@ -111,6 +111,22 @@
         .list-subtitle { font-size: 13px; color: var(--text-muted); font-weight: 600; line-height: 1.4; }
         .status-badge { padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 900; text-transform: uppercase; border: 1px solid currentColor; }
 
+        /* 🕒 Modern Timeline for Teacher Timetable */
+        .timeline-container { padding: 10px 0; margin-left: 10px; }
+        .timeline-item { position: relative; padding-left: 30px; margin-bottom: 25px; }
+        .timeline-item:last-child { margin-bottom: 0; }
+        .timeline-item::before { content: ''; position: absolute; left: 7px; top: 0; bottom: -35px; width: 2px; background: var(--border-color); }
+        .timeline-item:last-child::before { display: none; }
+        .timeline-dot { position: absolute; left: 0; top: 4px; width: 16px; height: 16px; border-radius: 50%; background: var(--card-bg); border: 3px solid var(--accent-color); box-shadow: 0 0 10px rgba(13, 148, 136, 0.4); z-index: 2; }
+        .timeline-dot.active { border-color: var(--success); background: var(--success); box-shadow: 0 0 15px rgba(16, 185, 129, 0.5); }
+        .timeline-dot.break { border-color: var(--warning); border-style: dashed; }
+        .timeline-time { font-size: 12px; font-weight: 900; color: var(--text-muted); margin-bottom: 6px; display: block; letter-spacing: 0.5px; }
+        .timeline-content { background: rgba(0,0,0,0.02); border: 1px solid var(--border-color); padding: 15px; border-radius: 12px; transition: var(--transition); }
+        .dark-mode .timeline-content { background: rgba(255,255,255,0.02); }
+        .timeline-content:hover { transform: translateX(5px); border-color: var(--accent-color); background: rgba(13, 148, 136, 0.05); }
+        .timeline-title { font-size: 15px; font-weight: 800; color: var(--text-main); display: flex; justify-content: space-between; align-items: center; }
+        .timeline-room { font-size: 11px; background: var(--accent-color); color: #fff; padding: 4px 8px; border-radius: 6px; font-weight: 900; text-transform: uppercase; }
+
         /* Form Elements */
         input[type="text"], input[type="number"], input[type="date"], select, textarea { width: 100%; background: rgba(0,0,0,0.03); color: var(--text-main); border: 1px solid var(--border-color); padding: 14px 16px; border-radius: 12px; font-size: 15px; margin-bottom: 15px; outline: none; transition: var(--transition); font-weight: 600; }
         .dark-mode input, .dark-mode select, .dark-mode textarea { background: rgba(255,255,255,0.02); }
@@ -154,7 +170,9 @@
 
         /* Mobile Fixes for Tables & Layouts */
         @media (max-width: 768px) {
-            .grid-3 { grid-template-columns: 1fr; }
+            .grid-2, .grid-3 { grid-template-columns: 1fr; gap: 10px; }
+            .chat-mobile-fix { flex-direction: column !important; height: 85vh !important; }
+            .chat-sidebar { width: 100% !important; height: 40%; border-right: none !important; border-bottom: 1px solid var(--border-color); }
             .data-table thead { display: none; }
             .data-table tbody tr { display: block; background: var(--bg-color); margin-bottom: 15px; border-radius: 14px; border: 1px solid var(--border-color); padding: 15px; box-shadow: var(--shadow-sm); }
             .data-table tbody td { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px dashed var(--border-color); font-size: 14px; font-weight: 700; flex-wrap: wrap; gap: 10px;}
@@ -162,6 +180,15 @@
             .data-table tbody td::before { content: attr(data-label); font-weight: 800; color: var(--text-muted); font-size: 12px; text-transform: uppercase; width: 100%; display: block; margin-bottom: 5px; }
             .hide-on-mobile { display: none !important; }
         }
+        /* Chat Tabs & Syllabus Checkboxes */
+        .chat-tabs { display: flex; border-bottom: 1px solid var(--border-color); margin-bottom: 15px; }
+        .chat-tab { flex-grow: 1; text-align: center; padding: 10px; font-size: 13px; font-weight: 800; color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent; transition: 0.3s; }
+        .chat-tab.active { color: var(--info); border-bottom-color: var(--info); }
+        .syllabus-item { display: flex; align-items: center; justify-content: space-between; padding: 12px; background: rgba(0,0,0,0.02); border: 1px solid var(--border-color); border-radius: 10px; margin-bottom: 8px; }
+        .syllabus-item.completed { background: rgba(16, 185, 129, 0.05); border-color: var(--success); }
+        .syllabus-item.completed span { text-decoration: line-through; color: var(--text-muted); }
+        .text-truncate-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-size: 13px; color: var(--text-muted); line-height: 1.4; }
+
         @media (min-width: 769px) {
             body { flex-direction: row; }
             .mobile-header { display: none !important; }
@@ -230,10 +257,11 @@
         <div class="nav-menu">
             <div class="section-title">Core Operations</div>
             <div class="nav-item active" onclick="switchTab('dashboard', this)">📊 Teaching Dashboard</div>
-            <div class="nav-item" onclick="switchTab('attendance', this)">✅ Quick Attendance</div>
-            <div class="nav-item" onclick="switchTab('homework', this)">📝 Homework Check</div>
-            <div class="nav-item" onclick="switchTab('marks', this)">📈 Marks Entry System</div>
-            <div class="nav-item" onclick="switchTab('chat', this)">👦 Student Chat</div>
+            <div class="nav-item" id="nav-notifications" onclick="switchTab('notifications', this)">🔔 Notifications</div>
+            <div class="nav-item" id="nav-attendance" onclick="switchTab('attendance', this)">✅ Quick Attendance</div>
+            <div class="nav-item" onclick="switchTab('homework', this)">📝 Manage Homework</div>
+            <div class="nav-item" id="nav-marks" onclick="switchTab('marks', this)">📈 Marks Entry System</div>
+            <div class="nav-item" onclick="switchTab('chat', this)">💬 Student Chat</div>
 
             <div class="section-title">Academics & Tools</div>
             <div class="nav-item" onclick="switchTab('syllabus-tracker', this)">📚 Syllabus Tracker</div>
@@ -242,13 +270,14 @@
             <div class="nav-item" onclick="switchTab('tests', this)">📅 Schedule Tests</div>
 
             <div class="section-title">Broadcast & Rewards</div>
-            <div class="nav-item" onclick="switchTab('broadcasts', this)">📢 Broadcast & Voice</div>
-            <div class="nav-item" onclick="switchTab('quiz-rewards', this)">⚡ Flash Quiz & Rewards</div>
+            <div class="nav-item" onclick="switchTab('broadcasts', this)">📢 Broadcast Notice</div>
+            <div class="nav-item" onclick="switchTab('quiz-rewards', this)">⚡ Flash Quiz Tracker</div>
             
             <div class="section-title">Management Logs</div>
             <div class="nav-item" onclick="switchTab('risk-predictor', this)">⚠️ AI Risk Predictor</div>
             <div class="nav-item" onclick="switchTab('proxy-duties', this)">🚨 Proxy & Duties</div>
-            <div class="nav-item" onclick="switchTab('leaves', this)">✈️ Leave Approvals</div>
+            <div class="nav-item" id="nav-leaves" onclick="switchTab('leaves', this)">✈️ Student Leaves</div>
+            <div class="nav-item" onclick="switchTab('teacher-leave', this)">🌴 Apply Leave</div>
             <div class="nav-item" onclick="switchTab('vp-reports', this)">📢 Report to VP</div>
             
             <div class="nav-item logout-btn" style="color: var(--danger); margin-top: 15px;" onclick="logout()">🚪 Secure Logout</div>
@@ -258,91 +287,156 @@
     <div class="main-content">
         
         <div id="dashboard" class="workspace active">
-            <div class="grid-3" style="margin-bottom: 25px;">
-                <div class="stat-box primary"><h4>Today's Classes</h4><h2>04</h2></div>
-                <div class="stat-box"><h4>Pending Copies</h4><h2 id="dash-hw-count" style="color: var(--warning);">0</h2></div>
-                <div class="stat-box"><h4>Pending Leaves</h4><h2 id="dash-leave-count" style="color: var(--danger);">0</h2></div>
+            <div class="card" style="border: 2px solid var(--info); background: rgba(59, 130, 246, 0.05); margin-bottom: 25px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h3 style="color: var(--text-main); margin-bottom: 5px;">📍 Daily Staff Attendance</h3>
+                        <p style="font-size: 13px; color: var(--text-muted); font-weight: 600;" id="my-attendance-status">Status: Pending Check-in</p>
+                    </div>
+                    <button class="btn" id="punch-in-btn" style="width: auto; padding: 12px 30px; background: var(--info);" onclick="markSelfAttendance()">👆 Punch-In Now</button>
+                </div>
             </div>
+
+            <div class="card" style="background: linear-gradient(135deg, var(--sidebar-bg) 0%, rgba(13, 148, 136, 0.1) 100%);">
+                <div style="display: flex; gap: 15px; align-items: center;">
+                    <div class="avatar" style="width: 60px; height: 60px; font-size: 24px;">S</div>
+                    <div>
+                        <h2 style="font-size: 20px; font-weight: 900; margin-bottom: 5px;">S.K. Mishra</h2>
+                        <span class="status-badge" style="background: var(--info); color: #fff; border: none; font-size: 12px;">Class Teacher: 10 - B</span>
+                        <span class="status-badge" style="background: var(--warning); color: #000; border: none; font-size: 12px; margin-left: 5px;">Main Subject: Science</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-header">📅 My Schedule Today</div>
+                    <div class="timeline-container">
+                        <div class="timeline-item">
+                            <div class="timeline-dot active"></div>
+                            <span class="timeline-time">08:00 AM - 08:45 AM</span>
+                            <div class="timeline-content">
+                                <div class="timeline-title">Class 10-B (Science) <span class="timeline-room">R-201</span></div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <span class="timeline-time">09:00 AM - 09:45 AM</span>
+                            <div class="timeline-content">
+                                <div class="timeline-title">Class 9-A (Science) <span class="timeline-room" style="background: var(--info);">R-105</span></div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot break"></div>
+                            <span class="timeline-time">10:00 AM - 10:30 AM</span>
+                            <div class="timeline-content" style="border-style: dashed;">
+                                <div class="timeline-title" style="color: var(--warning);">Break Time ☕</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <span class="timeline-time">10:30 AM - 11:15 AM</span>
+                            <div class="timeline-content">
+                                <div class="timeline-title">Class 10-B (Lab) <span class="timeline-room" style="background: var(--success);">Lab 1</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">📢 Official Notices</div>
+                    <div id="t-dash-notices">
+                        <p style="color: var(--text-muted); font-size: 13px;">Loading notices...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="notifications" class="workspace">
             <div class="card">
-                <div class="card-header">Welcome back, S.K. Mishra!</div>
-                <p style="color: var(--text-muted); font-size: 14px;">Select an option from the sidebar to manage your classes, check homework, or use AI tools.</p>
+                <div class="card-header">🔔 Notification Center <span class="status-badge" style="background: var(--info); color: #fff; border: none;">Last 30 Days</span></div>
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px; font-weight: bold;">Auto-deletes after 30 days. Includes messages from VP, Principal, HR, Admin, Owner & Homework Submissions.</p>
+                <div id="t-full-notifications" style="display: flex; flex-direction: column; gap: 12px;"></div>
             </div>
         </div>
 
         <div id="attendance" class="workspace">
-            <div class="card">
-                <div class="card-header">
-                    ✅ Detailed Attendance (Today)
+            <div class="card" style="border: 2px solid var(--success); background: rgba(16, 185, 129, 0.05);">
+                <div class="card-header" style="color: var(--success); border-bottom-color: var(--success);">
+    ✅ Class Attendance
+    <select id="t-class-selector" onchange="renderAttendance(this.value)" style="width: auto; padding: 5px; font-size: 12px; margin: 0; background:transparent; border:1px solid var(--success); color:var(--text-main);">
+        <option value="">-- Select Class --</option>
+        <option value="10-A">10-A</option>
+        <option value="10-B">10-B</option>
+    </select>
                     <div style="display:flex; gap:10px;">
                         <button class="btn btn-success btn-small" onclick="markAll('present')">All Present</button>
                         <button class="btn btn-danger btn-small" onclick="markAll('absent')">All Absent</button>
                     </div>
                 </div>
-                
-                <div style="display: flex; gap: 15px; margin-bottom: 20px;">
-                    <select id="att-class"><option>Class 10 - B</option><option>Class 9 - A</option></select>
-                    <button class="btn btn-outline" style="width:auto; padding: 0 20px;">Fetch Roster</button>
-                </div>
+                <p style="color: var(--text-main); font-size: 13px; margin-bottom: 20px; font-weight: 600;">You are authorized to take attendance only for your assigned class.</p>
                 
                 <table class="data-table">
                     <tbody id="attendance-roster">
-                        <tr>
-                            <td data-label="Student"><strong>Adarsh Patel</strong><br><span style="font-size:12px; color:var(--text-muted);">Roll: 24</span></td>
-                            <td data-label="Status">
-                                <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                                    <label style="color: var(--success);"><input type="radio" name="a1" class="present-radio" checked> Present</label>
-                                    <label style="color: var(--warning);"><input type="radio" name="a1" class="halfday-radio"> Half-Day</label>
-                                    <label style="color: var(--danger);"><input type="radio" name="a1" class="absent-radio"> Absent</label>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td data-label="Student"><strong>Rahul Kumar</strong><br><span style="font-size:12px; color:var(--text-muted);">Roll: 25</span></td>
-                            <td data-label="Status">
-                                <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                                    <label style="color: var(--success);"><input type="radio" name="a2" class="present-radio" checked> Present</label>
-                                    <label style="color: var(--warning);"><input type="radio" name="a2" class="halfday-radio"> Half-Day</label>
-                                    <label style="color: var(--danger);"><input type="radio" name="a2" class="absent-radio"> Absent</label>
-                                </div>
-                            </td>
-                        </tr>
+                        <!-- Filled by JS -->
                     </tbody>
                 </table>
-                <button class="btn" style="margin-top: 15px;" onclick="submitAttendance()">Submit & Sync to ERP</button>
+                <button class="btn btn-success" style="margin-top: 15px;" onclick="submitAttendance()">Submit & Sync to ERP</button>
             </div>
         </div>
 
         <div id="homework" class="workspace">
+            <div class="card" style="border: 2px solid var(--accent-color);">
+                <div class="card-header" style="color: var(--accent-color); border-bottom-color: var(--accent-color);">📝 Assign New Homework Topic</div>
+                <div class="grid-2">
+                    <select id="hw-new-class"><option>Class 10 - B</option><option>Class 9 - A</option></select>
+                    <input type="date" id="hw-new-date">
+                </div>
+                <input type="text" id="hw-new-topic" placeholder="e.g. Chapter 4: Carbon Compounds - Ex 4.1">
+                <button class="btn" onclick="assignHWTopic()">Publish Topic to Students</button>
+            </div>
+
             <div class="card">
-                <div class="card-header">📝 Evaluate Submissions</div>
+                <div class="card-header">📂 Active Homework Topics</div>
+                <div id="active-hw-topics" style="display: grid; grid-template-columns: 1fr; gap: 10px;">
+                    <!-- Filled by JS -->
+                </div>
+            </div>
+
+            <div class="card" id="hw-eval-section" style="display: none;">
+                <div class="card-header" id="hw-eval-header">Evaluating Submissions</div>
                 <table class="data-table">
-                    <thead><tr><th>Student</th><th>Topic</th><th>Attachment</th><th>Action</th></tr></thead>
-                    <tbody id="hw-eval-table">
-                        </tbody>
+                    <thead><tr><th>Student Details</th><th>Attachment</th><th>Action</th></tr></thead>
+                    <tbody id="hw-eval-table"></tbody>
                 </table>
             </div>
         </div>
 
         <div id="marks" class="workspace">
             <div class="card">
-                <div class="card-header">📈 Subject-Wise Marks Entry</div>
+                <div class="card-header">📈 Marks Entry System</div>
+                <p style="color: var(--danger); font-size: 13px; margin-bottom: 20px; font-weight: bold;">Restricted: As Class Teacher, only you can finalize marks for Class 10-B.</p>
+                
                 <div class="grid-3" style="margin-bottom: 20px;">
-                    <select><option>Class 10 - B</option><option>Class 9 - A</option></select>
-                    <select><option>PA 1</option><option>Half Yearly</option><option>PA 2</option><option>Annual</option></select>
-                    <select id="marks-subject"><option>Science</option><option>Mathematics</option><option>English</option></select>
+                    <select disabled style="background: rgba(0,0,0,0.05); cursor: not-allowed;"><option>Class 10 - B (Locked)</option></select>
+                    <select id="marks-term">
+                        <option>PA 1</option><option>Half Yearly</option><option>PA 2</option><option>Annual</option>
+                        <option value="sat_test">Saturday Test (Weekly)</option>
+                    </select>
+                    <select id="marks-subject"><option>Science</option><option>Mathematics</option><option>English</option><option>Hindi</option><option>Computer</option></select>
                 </div>
                 
                 <table class="data-table">
                     <thead><tr><th>Student Name</th><th>Theory (80)</th><th>Internal (20)</th><th>Total</th></tr></thead>
-                    <tbody>
+                    <tbody id="marks-entry-tbody">
                         <tr>
-                            <td data-label="Student"><strong>Adarsh Patel</strong></td>
+                            <td data-label="Student"><strong>Adarsh Patel</strong> <br><span style="font-size:11px; color:var(--text-muted);">Roll: 24</span></td>
                             <td data-label="Theory"><input type="number" id="th1" oninput="calcTotal(1)" placeholder="00" style="width:100%; margin:0;"></td>
                             <td data-label="Internal"><input type="number" id="in1" oninput="calcTotal(1)" placeholder="00" style="width:100%; margin:0;"></td>
                             <td data-label="Total"><strong id="tot1" style="font-size: 20px; color:var(--text-main);">0</strong></td>
                         </tr>
                         <tr>
-                            <td data-label="Student"><strong>Rahul Kumar</strong></td>
+                            <td data-label="Student"><strong>Rahul Kumar</strong> <br><span style="font-size:11px; color:var(--text-muted);">Roll: 25</span></td>
                             <td data-label="Theory"><input type="number" id="th2" oninput="calcTotal(2)" placeholder="00" style="width:100%; margin:0;"></td>
                             <td data-label="Internal"><input type="number" id="in2" oninput="calcTotal(2)" placeholder="00" style="width:100%; margin:0;"></td>
                             <td data-label="Total"><strong id="tot2" style="font-size: 20px; color:var(--text-main);">0</strong></td>
@@ -354,56 +448,72 @@
                     <button class="btn" onclick="publishMarks()">Save & Publish Marks</button>
                     <button class="btn btn-outline" onclick="generateReportCard()">📄 Preview Report Card</button>
                 </div>
+                <!-- Modal Box Reused in JS -->
+            </div>
+        </div>
 
-                <div id="report-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:10000; justify-content:center; align-items:center; backdrop-filter:blur(5px);">
-                    <div style="background:var(--card-bg); width:90%; max-width:800px; padding:30px; border-radius:20px; border:1px solid var(--border-color); max-height:90vh; overflow-y:auto;">
-                        <div style="text-align:center; border-bottom:2px solid var(--border-color); padding-bottom:15px; margin-bottom:20px;">
-                            <h2 style="font-size:28px; color:var(--text-main); font-weight:900;">MVM PUBLIC SCHOOL</h2>
-                            <h3 style="color:var(--text-muted);">Auto-Generated Term 1 Report Card</h3>
+        <!-- WHATSAPP STYLE CHAT -->
+        <div id="chat" class="workspace">
+            <div class="card chat-mobile-fix" style="padding: 0; display: flex; height: 75vh; border: 1px solid var(--border-color); overflow: hidden; border-radius: 20px;">
+                <!-- Chat Sidebar (Contacts) -->
+                <div class="chat-sidebar" style="width: 320px; border-right: 1px solid var(--border-color); display: flex; flex-direction: column; background: rgba(0,0,0,0.02);">
+                    <div style="padding: 20px; border-bottom: 1px solid var(--border-color); background: var(--card-bg);">
+                        <h3 style="font-size: 18px; font-weight: 900; color: var(--text-main); margin-bottom: 15px;">💬 Direct Chat</h3>
+                        <div class="chat-tabs">
+                            <div class="chat-tab active" onclick="switchChatTab('myclass', this)">My Class (10-B)</div>
+                            <div class="chat-tab" onclick="switchChatTab('others', this)">Other Students</div>
                         </div>
-                        <div id="report-content"></div>
-                        <div style="display:flex; justify-content:flex-end; gap:15px; margin-top:25px;">
-                            <button onclick="document.getElementById('report-modal').style.display='none'" class="btn btn-danger" style="width:auto;">Close</button>
-                            <button onclick="window.print()" class="btn" style="width:auto;">🖨️ Print Report</button>
+                        <input type="text" placeholder="Search Students..." style="margin: 0; padding: 10px 15px; border-radius: 20px; font-size: 13px;">
+                    </div>
+                    <div id="chat-contact-list" style="overflow-y: auto; flex-grow: 1; padding: 10px;">
+                        <!-- JS Loaded -->
+                    </div>
+                </div>
+
+                <!-- Chat Area -->
+                <div style="flex-grow: 1; display: flex; flex-direction: column; background: var(--bg-color); position: relative;">
+                    <div style="padding: 15px 25px; border-bottom: 1px solid var(--border-color); background: var(--card-bg); display: flex; align-items: center; gap: 15px; z-index: 10;">
+                        <div class="avatar" style="width: 42px; height: 42px; font-size: 18px;" id="chat-active-avatar">A</div>
+                        <div>
+                            <strong style="font-size:16px; color:var(--text-main); display:block;" id="chat-active-name">Adarsh Patel</strong>
+                            <span style="font-size:12px; color:var(--success); font-weight:800;" id="chat-active-status">Roll: 24 | Class: 10-B</span>
                         </div>
+                    </div>
+                    
+                    <div id="full-chat-box" style="flex-grow: 1; padding: 25px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px;"></div>
+                    
+                    <div style="padding: 15px 25px; background: var(--card-bg); border-top: 1px solid var(--border-color); display: flex; gap: 15px; align-items: center; z-index: 10;">
+                        <input type="text" id="full-chat-input" placeholder="Type a message..." style="margin: 0; flex-grow: 1; border-radius: 25px; border: 1px solid var(--border-color); background: var(--bg-color); padding: 15px 20px;">
+                        <button onclick="sendFullChat()" class="btn" style="width: 50px; height: 50px; border-radius: 50%; padding: 0; background: var(--info); box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);">▶</button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div id="chat" class="workspace">
-            <div class="card" style="border: 2px solid var(--info); background: rgba(56, 189, 248, 0.05);">
-                <div class="card-header" style="color: var(--info); border-bottom-color: var(--info);">👦 Direct Student Queries</div>
-                <div style="background: rgba(56, 189, 248, 0.1); padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid rgba(56, 189, 248, 0.2);">
-                    <strong style="color: var(--info);">Adarsh Patel</strong><br>
-                    <span style="color: var(--text-muted); font-size: 13px;">Class 10 - B (Roll: 24)</span>
-                </div>
-                <div id="teacher-student-chat-box" style="padding: 20px; border: 1px solid rgba(56, 189, 248, 0.2); border-radius: 12px; height: 350px; overflow-y: auto; background: var(--bg-color); margin-bottom: 15px;"></div>
-                <div style="display: flex; gap: 10px;">
-                    <input type="text" id="teacher-student-chat-input" placeholder="Reply to student..." style="margin: 0; flex-grow: 1;">
-                    <button onclick="sendTeacherStudentChat()" class="btn" style="width: auto; padding: 0 30px; background: var(--info);">Send ▶</button>
-                </div>
-            </div>
-        </div>
+        
 
         <div id="syllabus-tracker" class="workspace">
             <div class="card" style="border: 2px solid var(--info); background: rgba(56, 189, 248, 0.05);">
-                <div class="card-header" style="color: var(--info); border-bottom-color: var(--info);">📈 Update Syllabus Progress</div>
-                <p style="font-size: 13px; color: var(--text-main); margin-bottom: 25px; font-weight:600;">This will live-sync with the VP's Master Dashboard.</p>
+                <div class="card-header" style="color: var(--info); border-bottom-color: var(--info);">📈 Smart Syllabus Tracker</div>
+                <p style="font-size: 13px; color: var(--text-main); margin-bottom: 20px; font-weight:600;">Add chapters and mark them completed. VP Dashboard will auto-calculate percentage.</p>
                 
-                <label>Class 10 - Mathematics</label>
-                <div style="display: flex; align-items: center; gap: 15px; margin-top: 10px;">
-                    <input type="range" id="syllabus-slider-math" min="0" max="100" value="45" style="flex-grow: 1;" oninput="document.getElementById('syllabus-val-math').innerText = this.value + '%'">
-                    <span id="syllabus-val-math" style="font-size: 22px; font-weight: 900; color: var(--info);">45%</span>
+                <div style="display:flex; gap:10px; margin-bottom: 20px;">
+                    <select id="syl-class" style="width:auto; margin:0;"><option>Class 10 - Science</option><option>Class 9 - Science</option></select>
+                    <input type="text" id="syl-chapter" placeholder="Chapter Name (e.g. Carbon Compounds)" style="margin:0; flex-grow:1;">
+                    <button class="btn btn-info" style="width:auto;" onclick="addChapter()">+ Add</button>
                 </div>
 
-                <label style="margin-top: 25px;">Class 9 - Science</label>
-                <div style="display: flex; align-items: center; gap: 15px; margin-top: 10px;">
-                    <input type="range" id="syllabus-slider-sci" min="0" max="100" value="30" style="flex-grow: 1;" oninput="document.getElementById('syllabus-val-sci').innerText = this.value + '%'">
-                    <span id="syllabus-val-sci" style="font-size: 22px; font-weight: 900; color: var(--info);">30%</span>
+                <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <h4 style="font-size: 14px; font-weight: 800;">Course Completion:</h4>
+                    <span id="syl-progress-text" style="font-size: 20px; font-weight: 900; color: var(--success);">0%</span>
+                </div>
+                <div style="width: 100%; height: 8px; background: rgba(0,0,0,0.1); border-radius: 4px; margin-bottom: 20px; overflow: hidden;">
+                    <div id="syl-progress-bar" style="width: 0%; height: 100%; background: var(--success); transition: 0.5s;"></div>
                 </div>
 
-                <button onclick="updateSyllabus()" class="btn" style="margin-top: 35px; background: var(--info);">🔄 Sync Progress to VP</button>
+                <div id="syl-chapter-list">
+                    <!-- Checkboxes added dynamically -->
+                </div>
             </div>
         </div>
 
@@ -448,16 +558,16 @@
         </div>
 
         <div id="broadcasts" class="workspace">
-            <div class="grid-2">
+            <div class="grid-1"> <!-- Up/Down Layout -->
                 <div class="card">
-                    <div class="card-header">📢 Broadcast Notice</div>
-                    <textarea id="notice-input" rows="4" placeholder="Type notice here..."></textarea>
-                    <button onclick="sendBroadcast()" class="btn">Send Notice</button>
+                    <div class="card-header">📢 Broadcast Text Notice</div>
+                    <textarea id="notice-input" rows="4" placeholder="Type official notice here..."></textarea>
+                    <button onclick="sendBroadcast()" class="btn">Send Notice to All Students</button>
                 </div>
-                <div class="card" style="display:flex; flex-direction: column; justify-content:center; align-items:center; text-align:center;">
-                    <div class="card-header" style="width: 100%;">🔊 Voice Broadcast</div>
+                <div class="card" style="display:flex; flex-direction: column; justify-content:center; align-items:center; text-align:center; background: rgba(239, 68, 68, 0.05); border: 2px solid var(--danger);">
+                    <div class="card-header" style="width: 100%; color: var(--danger); border-bottom-color: var(--danger);">🔊 Urgent Voice Broadcast</div>
                     <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">Send a quick audio note to all students in your class.</p>
-                    <button id="mic-btn" onclick="toggleRecording()" class="btn btn-danger" style="height: 100px; font-size: 18px; border-radius: 50px;">🎤 Start Recording</button>
+                    <button id="mic-btn" onclick="toggleRecording()" class="btn btn-danger" style="height: 80px; width: 80px; font-size: 24px; border-radius: 50%; box-shadow: 0 10px 25px rgba(239, 68, 68, 0.4);">🎤</button>
                 </div>
             </div>
         </div>
@@ -465,99 +575,65 @@
         <div id="quiz-rewards" class="workspace">
             <div class="card" style="border: 2px solid #8b5cf6; background: rgba(139, 92, 246, 0.05);">
                 <div class="card-header" style="color: #8b5cf6; border-bottom-color: #8b5cf6;">⚡ Live Flash Quiz Broadcaster</div>
+                <input type="text" id="quiz-q" placeholder="Q: What is the powerhouse of the cell?">
                 <div class="grid-2">
-                    <input type="text" id="quiz-q" placeholder="Q: What is the powerhouse of the cell?">
-                    <div style="display: flex; gap: 10px;">
-                        <input type="text" id="quiz-opt1" placeholder="Opt A">
-                        <input type="text" id="quiz-opt2" placeholder="Opt B">
-                    </div>
+                    <input type="text" id="quiz-opt1" placeholder="Option A">
+                    <input type="text" id="quiz-opt2" placeholder="Option B">
+                    <input type="text" id="quiz-opt3" placeholder="Option C">
+                    <input type="text" id="quiz-opt4" placeholder="Option D">
                 </div>
-                <div style="display: flex; gap: 15px; align-items: center;">
-                    <select id="quiz-ans" style="margin: 0; max-width: 200px;"><option value="1">A is Correct</option><option value="2">B is Correct</option></select>
+                <div style="display: flex; gap: 15px; align-items: center; margin-top: 10px;">
+                    <select id="quiz-ans" style="margin: 0; max-width: 200px;">
+                        <option value="1">A is Correct</option><option value="2">B is Correct</option>
+                        <option value="3">C is Correct</option><option value="4">D is Correct</option>
+                    </select>
                     <button onclick="broadcastQuiz()" class="btn" style="background: #8b5cf6; margin: 0;">🚀 Push Flash Quiz to Students</button>
-                </div>
-            </div>
-
-            <div class="card" style="border: 2px solid #6366f1; background: rgba(99, 102, 241, 0.05);">
-                <div class="card-header" style="color: #6366f1; border-bottom-color: #6366f1;">
-                    📊 Live Quiz Results & Leaderboard
-                    <div style="display:flex; gap:10px;">
-                        <button onclick="loadQuizResults()" class="btn btn-small" style="background: #3b82f6;">🔄 Refresh</button>
-                        <button onclick="clearQuizResults()" class="btn btn-danger btn-small">🗑️ End</button>
-                    </div>
-                </div>
-                <div class="grid-2">
-                    <div style="background: var(--bg-color); padding: 15px; border-radius: 12px; border: 1px solid var(--border-color);">
-                        <h4 style="margin-bottom: 10px; font-size: 13px; color: var(--text-muted); text-transform:uppercase;">Voting Stats</h4>
-                        <div style="margin-bottom: 15px;">
-                            <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 5px;"><strong id="stat-opt1-text">Option A</strong><span id="stat-opt1-count">0 Votes</span></div>
-                            <div style="width: 100%; height: 8px; background: rgba(0,0,0,0.1); border-radius: 4px; overflow: hidden;"><div id="stat-opt1-bar" style="width: 0%; height: 100%; background: #8b5cf6; transition: 0.5s;"></div></div>
-                        </div>
-                        <div>
-                            <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 5px;"><strong id="stat-opt2-text">Option B</strong><span id="stat-opt2-count">0 Votes</span></div>
-                            <div style="width: 100%; height: 8px; background: rgba(0,0,0,0.1); border-radius: 4px; overflow: hidden;"><div id="stat-opt2-bar" style="width: 0%; height: 100%; background: #f59e0b; transition: 0.5s;"></div></div>
-                        </div>
-                    </div>
-                    <div style="background: var(--bg-color); padding: 15px; border-radius: 12px; border: 1px solid var(--border-color); max-height: 150px; overflow-y: auto;">
-                        <h4 style="margin-bottom: 10px; font-size: 13px; color: var(--text-muted); text-transform:uppercase;">Live Student Answers</h4>
-                        <ul id="live-quiz-responses" style="list-style: none; font-size: 13px; line-height:2;">
-                            <li style="color: var(--text-muted);">Waiting for students to answer...</li>
-                        </ul>
-                    </div>
                 </div>
             </div>
 
             <div class="card" style="border: 2px solid var(--warning); background: rgba(245, 158, 11, 0.05);">
                 <div class="card-header" style="color: var(--warning); border-bottom-color: var(--warning);">⭐ Award XP & Badges</div>
                 <select id="reward-student"><option value="Adarsh Patel">Adarsh Patel</option><option value="Rahul Kumar">Rahul Kumar</option></select>
-                
-                <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                    <select id="reward-xp" style="margin: 0;">
-                        <option value="50">+50 XP (Good Answer)</option>
-                        <option value="100">+100 XP (Excellent HW)</option>
-                        <option value="500">+500 XP (Student of Month)</option>
-                    </select>
-                    <button onclick="awardXP()" class="btn btn-small" style="background: var(--warning); color: #000;">🎁 Give</button>
+                <div class="grid-2">
+                    <div style="display: flex; gap: 10px;">
+                        <select id="reward-xp" style="margin: 0;"><option value="50">+50 XP</option><option value="100">+100 XP</option></select>
+                        <button onclick="awardXP()" class="btn btn-small" style="background: var(--warning); color: #000;">🎁 Give</button>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <select id="reward-badge" style="margin: 0;"><option value="Math Wizard">Math Wizard 💡</option><option value="Top Scorer">Top Scorer 📈</option></select>
+                        <button onclick="awardBadge()" class="btn btn-small" style="background: #FFD700; color: #000;">🏅 Give</button>
+                    </div>
                 </div>
+            </div>
 
-                <div style="display: flex; gap: 10px;">
-                    <select id="reward-badge" style="margin: 0;">
-                        <option value="Math Wizard">Math Wizard 💡</option>
-                        <option value="Homework Hero">Homework Hero 🏆</option>
-                        <option value="Top Scorer">Top Scorer 📈</option>
-                    </select>
-                    <button onclick="awardBadge()" class="btn btn-small" style="background: #FFD700; color: #000;">🏅 Give</button>
+            <div class="card" style="border: 2px solid #6366f1; background: rgba(99, 102, 241, 0.05);">
+                <div class="card-header" style="color: #6366f1; border-bottom-color: #6366f1;">
+                    📊 Live Quiz Results & Leaderboard
+                    <div style="display:flex; gap:10px;"><button onclick="loadQuizResults()" class="btn btn-small" style="background: #3b82f6;">🔄</button><button onclick="clearQuizResults()" class="btn btn-danger btn-small">🗑️ End</button></div>
+                </div>
+                <div style="background: var(--bg-color); padding: 15px; border-radius: 12px; border: 1px solid var(--border-color); max-height: 250px; overflow-y: auto;">
+                    <h4 style="margin-bottom: 10px; font-size: 13px; color: var(--text-muted); text-transform:uppercase;">Live Student Answers</h4>
+                    <ul id="live-quiz-responses" style="list-style: none; font-size: 14px; line-height:2.5;"><li style="color: var(--text-muted);">Waiting for students to answer...</li></ul>
                 </div>
             </div>
         </div>
 
         <div id="risk-predictor" class="workspace">
-            <div class="card" style="border: 2px solid var(--danger); background: rgba(239, 68, 68, 0.05);">
-                <div class="card-header" style="color: var(--danger); border-bottom-color: var(--danger);">
-                    ⚠️ AI Dropout & Risk Predictor
-                </div>
-                <p style="font-size: 14px; margin-bottom: 20px; color: var(--text-main);">Analyze your class for students with falling grades, high absenteeism, or pending tasks.</p>
-                <button onclick="predictRiskAI()" class="btn btn-danger" style="margin-bottom: 20px;">Scan Class Health</button>
+            <div class="card" style="border: 2px solid var(--danger); background: rgba(239, 68, 68, 0.05); text-align: center; padding: 40px 20px;">
+                <div style="font-size: 50px; margin-bottom: 15px;">🧿</div>
+                <h2 style="color: var(--danger); font-weight: 900; margin-bottom: 10px;">AI Dropout & Risk Predictor</h2>
+                <p style="font-size: 14px; margin-bottom: 30px; color: var(--text-main); max-width: 500px; margin-left: auto; margin-right: auto;">Deep scan class parameters including grade drops, absenteeism, and pending tasks to predict academic risk.</p>
                 
-                <div id="risk-output" style="font-weight: 600; color: var(--danger); font-size: 15px; line-height: 1.6; background: var(--bg-color); padding: 20px; border-radius: 12px; border: 1px solid var(--danger);">
-                    System standby. Click the button above to run scan.
-                </div>
-            </div>
-        </div>
-
-        <div id="tests" class="workspace">
-            <div class="card" style="border: 2px solid var(--info);">
-                <div class="card-header" style="color: var(--info); border-bottom-color: var(--info);">📅 Schedule Saturday Test</div>
-                <p style="font-size: 14px; margin-bottom: 20px; color: var(--text-main);">Update the syllabus for the upcoming weekly test. Students will be notified.</p>
-                <input type="text" id="test-input" placeholder="e.g., Science - Carbon Compounds">
-                <button onclick="scheduleTest()" class="btn" style="background: var(--info);">Update Syllabus & Notify</button>
+                <button onclick="predictRiskAI()" class="btn btn-danger" style="max-width: 300px; margin: 0 auto; box-shadow: 0 10px 25px rgba(239, 68, 68, 0.4);">Initiate Deep Scan</button>
+                
+                <div id="risk-output" style="margin-top: 30px; display: none; text-align: left; font-weight: 600; color: var(--danger); font-size: 15px; line-height: 1.6; background: var(--bg-color); padding: 20px; border-radius: 12px; border: 1px solid var(--danger);"></div>
             </div>
         </div>
 
         <div id="proxy-duties" class="workspace">
             <div class="card" style="border: 2px solid var(--warning); background: rgba(245, 158, 11, 0.05);">
                 <div class="card-header" style="color: var(--warning); border-bottom-color: var(--warning);">🚨 Proxy & Duty Alerts</div>
-                <p style="font-size: 13px; color: var(--text-main); margin-bottom: 15px; font-weight:600;">Duties assigned by Vice Principal.</p>
+                <p style="font-size: 13px; color: var(--text-main); margin-bottom: 15px; font-weight:600;">Duties assigned by Vice Principal. System alerts you automatically.</p>
                 <div id="teacher-proxy-list">
                     <p style="color: var(--text-muted); font-weight:600;">No new proxy duties assigned today.</p>
                 </div>
@@ -566,12 +642,29 @@
 
         <div id="leaves" class="workspace">
             <div class="card">
-                <div class="card-header">✈️ Short Leave Approvals (<= 2 Days)</div>
+                <div class="card-header">✈️ My Class Leaves (10-B)</div>
+                <p style="color: var(--danger); font-size: 13px; margin-bottom: 20px; font-weight: bold;">Only Class Teachers can approve leaves for their assigned class.</p>
                 <table class="data-table">
                     <thead><tr><th>Student</th><th>Dates & Duration</th><th>Reason</th><th>Action</th></tr></thead>
-                    <tbody id="leave-eval-table">
-                        </tbody>
+                    <tbody id="leave-eval-table"></tbody>
                 </table>
+            </div>
+        </div>
+
+        <div id="teacher-leave" class="workspace">
+            <div class="card">
+                <div class="card-header">🌴 Apply for Leave (Staff)</div>
+                <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 20px; font-weight: bold;">Your request will be sent directly to the Principal, VP, and HR dashboards.</p>
+                <div class="grid-2">
+                    <div><label>From Date</label><input type="date" id="t-leave-start"></div>
+                    <div><label>To Date</label><input type="date" id="t-leave-end"></div>
+                </div>
+                <label>Reason for Leave</label>
+                <textarea id="t-leave-reason" rows="3" placeholder="Explain your reason..."></textarea>
+                <button onclick="applyTeacherLeave()" class="btn">Send Official Leave Request</button>
+                
+                <h4 style="margin-top: 30px; margin-bottom: 10px; font-size: 14px; font-weight: 800;">My Leave History</h4>
+                <div id="t-leave-history-list" style="font-size: 13px; font-weight: 600; color: var(--text-muted);">No leaves requested.</div>
             </div>
         </div>
 
@@ -579,28 +672,14 @@
             <div class="grid-1">
                 <div class="card" style="border: 2px solid var(--danger); background: rgba(239, 68, 68, 0.05);">
                     <div class="card-header" style="color: var(--danger); border-bottom-color: var(--danger);">⚖️ Report Indiscipline to VP</div>
-                    <p style="color: var(--text-main); font-size: 13px; margin-bottom: 20px; font-weight:600;">Logs into VP's master record and alerts the student.</p>
-                    
                     <div class="grid-2">
-                        <select id="t-disc-name">
-                            <option value="">-- Select Offending Student --</option>
-                            <option value="Adarsh">Adarsh Patel</option>
-                            <option value="Rahul Kumar">Rahul Kumar</option>
-                        </select>
-                        <select id="t-disc-reason">
-                            <option value="Late Comer">Late Comer</option>
-                            <option value="Improper Uniform">Improper Uniform</option>
-                            <option value="Class Disturbance">Class Disturbance</option>
-                            <option value="Using Mobile Phone">Using Mobile Phone</option>
-                        </select>
+                        <select id="t-disc-name"><option value="">-- Select Offending Student --</option><option value="Adarsh">Adarsh Patel</option><option value="Rahul Kumar">Rahul Kumar</option></select>
+                        <select id="t-disc-reason"><option value="Late Comer">Late Comer</option><option value="Class Disturbance">Class Disturbance</option></select>
                     </div>
                     <button onclick="reportDiscipline()" class="btn btn-danger">Send Discipline Report</button>
                 </div>
-
                 <div class="card" style="border: 2px solid var(--warning); background: rgba(245, 158, 11, 0.05);">
                     <div class="card-header" style="color: var(--warning); border-bottom-color: var(--warning);">📦 Lab / Inventory Request</div>
-                    <p style="color: var(--text-main); font-size: 13px; margin-bottom: 20px; font-weight:600;">Request new equipment or report broken items.</p>
-                    
                     <div class="grid-2">
                         <input type="text" id="t-inv-item" placeholder="Equipment Name (e.g. Microscope)">
                         <textarea id="t-inv-reason" rows="1" placeholder="Reason (e.g. 2 broken in Lab 2)"></textarea>
@@ -608,18 +687,40 @@
                     <button onclick="requestInventory()" class="btn btn-warning" style="color:#000;">Submit Request to VP</button>
                 </div>
             </div>
-            
-            <div class="card">
-                <div class="card-header">🕒 My Recent Reports & Requests</div>
-                <ul id="t-reports-history" style="list-style: none;">
-                    <li style="color:var(--text-muted); font-weight:600;">No recent reports.</li>
-                </ul>
-            </div>
         </div>
-
     </div>
 
     <script>
+        // 🛑 LEVEL 1: RBAC + Bhasma Mode + Delta Sync
+        (function globalSecurityInterlocks() {
+            let token = localStorage.getItem('erp_jwt_token');
+            if(!token) { window.location.href = "index.html"; return; }
+            try {
+                let decoded = atob(token);
+                let role = decoded.split('-')[0].toLowerCase();
+                let currentPath = window.location.href.toLowerCase();
+                // Verifies if token role matches the URL accessed
+                if(!currentPath.includes(role + "_dashboard") && !currentPath.includes("index")) {
+                    alert("🛑 SECURITY BREACH: Unauthorized Role Access.");
+                    localStorage.clear(); window.location.href = "index.html"; return;
+                }
+            } catch(e) { localStorage.clear(); window.location.href = "index.html"; return; }
+            setInterval(() => {
+                let lockdown = localStorage.getItem('school_status');
+                if(lockdown === 'lockdown' && !window.location.href.includes('principal_dashboard')) {
+                    document.body.innerHTML = `<div style='height:100vh; width:100vw; background:#000; color:#ef4444; display:flex; justify-content:center; align-items:center; font-size:24px; font-weight:900; text-align:center; z-index:999999; position:fixed; top:0; left:0;'>🚨 SCHOOL IN EMERGENCY LOCKDOWN.<br>STAY IN YOUR CLASSES. 🚨</div>`;
+                }
+                let sos = JSON.parse(localStorage.getItem('global_sos_alert'));
+                if(sos && sos.active && (window.location.href.includes('vp_dashboard') || window.location.href.includes('principal_dashboard'))) {
+                    if(!document.getElementById('sos-overlay')) {
+                        let audio = new Audio('https://www.soundjay.com/buttons/beep-01a.mp3'); 
+                        audio.id = 'bhasma-alarm'; audio.loop = true; audio.play().catch(e=>console.log("Audio locked"));
+                        document.body.innerHTML += `<div id='sos-overlay' style='height:100vh; width:100vw; background:#ef4444; color:#fff; display:flex; flex-direction:column; justify-content:center; align-items:center; font-size:30px; font-weight:900; text-align:center; position:fixed; top:0; left:0; z-index:999999;'>🚨 TRANSPORT SOS ACTIVE: ${sos.bus} 🚨<br><button onclick='acknowledgeSOS()' style='margin-top:30px; padding:15px 30px; border-radius:12px; font-size:20px; color:#000; cursor:pointer;'>Acknowledge & Stop</button></div>`;
+                    }
+                }
+            }, 2500);
+        })();
+        window.acknowledgeSOS = function() { localStorage.removeItem('global_sos_alert'); location.reload(); };
         // --- CUSTOM TOAST NOTIFICATION ---
         function showToast(title, message, color) {
             let container = document.getElementById("toast-container");
@@ -630,10 +731,53 @@
             setTimeout(() => { toast.style.animation = "fadeOutToast 0.4s ease forwards"; setTimeout(() => toast.remove(), 400); }, 3500);
         }
 
+        // 🛑 PHASE 3 FIX: Self Attendance Engine (Syncs with HR & VP)
+        function markSelfAttendance() {
+            let staffId = localStorage.getItem('loggedInUserId') || "T-101"; // Fallback ID for S.K. Mishra
+            let staffName = localStorage.getItem('loggedInUser') || "S.K. Mishra";
+            
+            let today = new Date().toISOString().split('T')[0];
+            let time = new Date().toLocaleTimeString();
+            let attDB = JSON.parse(localStorage.getItem('staff_attendance_db') || '[]');
+            
+            let alreadyPunched = attDB.find(a => a.staffId === staffId && a.date === today);
+            
+            if(alreadyPunched) {
+                showToast("Already Checked-in", "You have already marked your attendance.", "var(--warning)");
+                return;
+            }
+
+            // Save to Global DB for HR (Payroll) and VP (Proxy)
+            attDB.push({ staffId: staffId, name: staffName, date: today, time: time, status: "P" });
+            localStorage.setItem('staff_attendance_db', JSON.stringify(attDB));
+            
+            showToast("✅ Attendance Marked", `Punched in at ${time}. Have a great day!`, "var(--success)");
+            checkMyAttendance(); // Update UI
+        }
+
+        function checkMyAttendance() {
+            let staffId = localStorage.getItem('loggedInUserId') || "T-101";
+            let today = new Date().toISOString().split('T')[0];
+            let attDB = JSON.parse(localStorage.getItem('staff_attendance_db') || '[]');
+            
+            let alreadyPunched = attDB.find(a => a.staffId === staffId && a.date === today);
+            let statusText = document.getElementById('my-attendance-status');
+            let btn = document.getElementById('punch-in-btn');
+            
+            if(alreadyPunched && statusText && btn) {
+                statusText.innerHTML = `<span style="color:var(--success);">✅ Checked In at ${alreadyPunched.time}</span>`;
+                btn.innerText = "Checked In";
+                btn.style.background = "var(--success)";
+                btn.disabled = true;
+                btn.style.opacity = "0.7";
+                btn.style.cursor = "not-allowed";
+            }
+        }
+
         const loggedInUser = localStorage.getItem("loggedInUser") || "S.K. Mishra";
         
         // Setup Avatars & Profile Modal Data
-        document.getElementById("profile-name-large") ? document.getElementById("profile-name-large").innerText = loggedInUser : null;
+        // Profile Name handled via modal ID directly
         document.getElementById("mobile-avatar").innerText = loggedInUser.charAt(0);
         document.getElementById("desktop-avatar").innerText = loggedInUser.charAt(0);
         document.getElementById("modal-avatar").innerText = loggedInUser.charAt(0);
@@ -649,16 +793,22 @@
             }
         }
 
-        // --- INITIALIZATION ---
+        // --- PRODUCTION INITIALIZATION ---
+        // Production me ye list NeonDB/Render se aayegi. Abhi strict interlinking ke liye dynamic local variable hai.
+        const classRoster = JSON.parse(localStorage.getItem("system_class_roster")) || [];
+
         window.onload = function() {
+            checkMyAttendance(); // 🛑 Auto-checks Punch-in status
             document.body.classList.add("dark-mode");
             localStorage.setItem("darkMode", "true");
             let themeBtn = document.querySelector(".theme-toggle");
             if(themeBtn) themeBtn.innerText = "📿";
 
+            buildDynamicRosters(); 
             refreshDashStats();
             loadHomeworks();
             loadLeaves();
+            loadAllTeacherNotices();
             
             setInterval(loadQuizResults, 2000);
             setInterval(checkTeacherNotifications, 2500);
@@ -674,7 +824,69 @@
             }
             loadMyProxies(); setInterval(loadMyProxies, 3000); 
             loadTeacherReports(); setInterval(loadTeacherReports, 3000); 
+            renderActiveHomeworks(); // FIX: Homeworks load on startup
         };
+
+        function buildDynamicRosters(filteredList = classRoster) {
+            let attTbody = document.getElementById("attendance-roster");
+            if(attTbody) {
+                attTbody.innerHTML = "";
+                filteredList.forEach((student, i) => {
+                    let stuName = typeof student === 'string' ? student : student.name;
+                    let stuId = typeof student === 'string' ? `MOCK-${i}` : student.id;
+                    let isLeave = student.forcedStatus === 'L';
+                    let leaveTag = isLeave ? `<span style="color:var(--danger); font-size:11px; display:block;">(ON APPROVED LEAVE)</span>` : "";
+
+                    attTbody.innerHTML += `<tr data-stuid="${stuId}" data-stuname="${stuName}">
+                        <td data-label="Student"><strong>${stuName}</strong> ${leaveTag}</td>
+                        <td data-label="Status" style="display:flex; gap:10px;">
+                            <label style="color:var(--success); font-size:14px; ${isLeave?'opacity:0.3':''}"><input type="radio" name="att_${i}" class="present-radio" value="present" ${!isLeave?'checked':''} ${isLeave?'disabled':''} style="width:auto; margin:0;"> P</label>
+                            <label style="color:var(--warning); font-size:14px; ${isLeave?'opacity:0.3':''}"><input type="radio" name="att_${i}" class="halfday-radio" value="halfday" ${isLeave?'disabled':''} style="width:auto; margin:0;"> H</label>
+                            <label style="color:var(--danger); font-size:14px;"><input type="radio" name="att_${i}" class="absent-radio" value="absent" ${isLeave?'checked disabled':''} style="width:auto; margin:0;"> A</label>
+                        </td>
+                    </tr>`;
+                });
+            }
+
+            let marksTbody = document.getElementById("marks-entry-tbody");
+            if(marksTbody) {
+                marksTbody.innerHTML = "";
+                filteredList.forEach((student, i) => {
+                    let stuName = typeof student === 'string' ? student : student.name;
+                    let stuId = typeof student === 'string' ? `MOCK-${i}` : student.id;
+                    marksTbody.innerHTML += `<tr data-stuid="${stuId}" data-stuname="${stuName}">
+                        <td data-label="Student"><strong>${stuName}</strong></td>
+                        <td data-label="Theory"><input type="number" id="th_${i}" oninput="calcTotal('${i}')" placeholder="00" style="width:100%; margin:0;"></td>
+                        <td data-label="Internal"><input type="number" id="in_${i}" oninput="calcTotal('${i}')" placeholder="00" style="width:100%; margin:0;"></td>
+                        <td data-label="Total"><strong id="tot_${i}" style="font-size: 20px; color:var(--text-main);">0</strong></td>
+                    </tr>`;
+                });
+            }
+
+            let xpSelect = document.getElementById("reward-student");
+            let discSelect = document.getElementById("t-disc-name");
+            if(xpSelect) xpSelect.innerHTML = filteredList.map(s => { let n = typeof s==='string'?s:s.name; return `<option value="${n}">${n}</option>`; }).join('');
+            if(discSelect) discSelect.innerHTML = `<option value="">-- Select Student --</option>` + filteredList.map(s => { let n = typeof s==='string'?s:s.name; return `<option value="${n}">${n}</option>`; }).join('');
+        }
+
+        function loadAllTeacherNotices() {
+            let allNotices = JSON.parse(localStorage.getItem("globalNoticesDB")) || []; 
+            let notifContainer = document.getElementById("t-full-notifications");
+            if(notifContainer) {
+                notifContainer.innerHTML = "";
+                if(allNotices.length === 0) {
+                    notifContainer.innerHTML = `<div style="padding:15px; color:var(--text-muted); font-weight:bold; font-size:13px;">No new notices in the system.</div>`;
+                    return;
+                }
+                allNotices.forEach(n => {
+                    notifContainer.innerHTML += `
+                    <div style="background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 14px; padding: 15px; margin-bottom: 10px;">
+                        <h4 style="font-size: 14px; color: var(--text-main); margin-bottom: 5px;">${n.title}</h4>
+                        <p style="font-size: 13px; color: var(--text-muted);">${n.text}</p>
+                    </div>`;
+                });
+            }
+        }
 
         function toggleDarkMode() {
             document.body.classList.toggle("dark-mode");
@@ -710,6 +922,89 @@
                 localStorage.removeItem("loggedInUser"); window.location.href = "index.html";
             }
         }
+
+        // --- MISSING FUNCTIONS FIX (SYLLABUS & LEAVES) ---
+        function addChapter() {
+            let chName = document.getElementById("syl-chapter").value;
+            let chClass = document.getElementById("syl-class").value;
+            if(!chName) return showToast("Error", "Chapter name required", "var(--danger)");
+            
+            let sylDB = JSON.parse(localStorage.getItem("syllabusDB")) || [];
+            sylDB.push({ class: chClass, name: chName, completed: false });
+            localStorage.setItem("syllabusDB", JSON.stringify(sylDB));
+            
+            document.getElementById("syl-chapter").value = "";
+            showToast("Added", "Chapter added to syllabus", "var(--success)");
+            renderSyllabus();
+        }
+
+        function renderSyllabus() {
+            let sylDB = JSON.parse(localStorage.getItem("syllabusDB")) || [];
+            let list = document.getElementById("syl-chapter-list");
+            if(!list) return;
+            list.innerHTML = "";
+            
+            let total = sylDB.length;
+            let completed = 0;
+            
+            sylDB.forEach((ch, idx) => {
+                if(ch.completed) completed++;
+                list.innerHTML += `
+                <div class="syllabus-item ${ch.completed ? 'completed' : ''}">
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <input type="checkbox" ${ch.completed ? 'checked' : ''} onchange="toggleSyllabus(${idx})" style="width:18px; height:18px; margin:0; accent-color:var(--success);">
+                        <span style="font-size:14px; font-weight:700; color:var(--text-main);">${ch.name} <br><small style="color:var(--text-muted); font-size:11px;">${ch.class}</small></span>
+                    </div>
+                </div>`;
+            });
+            
+            let pct = total === 0 ? 0 : Math.round((completed / total) * 100);
+            if(document.getElementById("syl-progress-text")) document.getElementById("syl-progress-text").innerText = pct + "%";
+            if(document.getElementById("syl-progress-bar")) document.getElementById("syl-progress-bar").style.width = pct + "%";
+        }
+
+        function toggleSyllabus(idx) {
+            let sylDB = JSON.parse(localStorage.getItem("syllabusDB")) || [];
+            sylDB[idx].completed = !sylDB[idx].completed;
+            localStorage.setItem("syllabusDB", JSON.stringify(sylDB));
+            renderSyllabus();
+        }
+        
+        function applyTeacherLeave() {
+            let start = document.getElementById("t-leave-start").value;
+            let end = document.getElementById("t-leave-end").value;
+            let reason = document.getElementById("t-leave-reason").value;
+            if(!start || !end || !reason) return showToast("Error", "Fill all details", "var(--danger)");
+            
+            let leaves = JSON.parse(localStorage.getItem("staffLeaveDB")) || [];
+            leaves.push({ start: start, end: end, reason: reason, status: "Pending", date: new Date().toISOString().split('T')[0] });
+            localStorage.setItem("staffLeaveDB", JSON.stringify(leaves));
+            
+            document.getElementById("t-leave-reason").value = "";
+            showToast("Sent", "Leave sent to VP/Principal", "var(--success)");
+            renderTeacherLeaves();
+        }
+
+        function renderTeacherLeaves() {
+            let leaves = JSON.parse(localStorage.getItem("staffLeaveDB")) || [];
+            let list = document.getElementById("t-leave-history-list");
+            if(!list) return;
+            if(leaves.length === 0) return list.innerHTML = "No leaves requested.";
+            list.innerHTML = "";
+            leaves.slice().reverse().forEach(lv => {
+                let color = lv.status === "Pending" ? "var(--warning)" : "var(--success)";
+                list.innerHTML += `<div style="padding:10px; border-bottom:1px dashed var(--border-color); margin-bottom:10px;">
+                    <strong>${lv.start} to ${lv.end}</strong> <span style="float:right; color:${color}; font-weight:900; text-transform:uppercase; font-size:11px; border:1px solid ${color}; padding:2px 6px; border-radius:4px;">${lv.status}</span>
+                    <div style="font-weight:normal; margin-top:5px; color:var(--text-main);">${lv.reason}</div>
+                </div>`;
+            });
+        }
+        
+        // Render lists when page loads
+        window.addEventListener('load', function() {
+            renderSyllabus();
+            renderTeacherLeaves();
+        });
 
         // --- ECOSYSTEM LOGIC ---
         function sendBroadcast() {
@@ -761,14 +1056,19 @@
             hwList[realIndex].link += " (✅ Checked)"; 
             localStorage.setItem("hwList", JSON.stringify(hwList));
             
-            let currentXP = parseInt(localStorage.getItem("studentXP") || 450);
-            localStorage.setItem("studentXP", currentXP + 50); 
+            let stName = hwList[realIndex].student || "Student";
+            let firstName = stName.split(' ')[0];
             
-            let notifs = JSON.parse(localStorage.getItem("studentNotifications")) || [];
+            let xpKey = "studentXP_" + firstName;
+            let currentXP = parseInt(localStorage.getItem(xpKey) || localStorage.getItem("studentXP") || 450);
+            localStorage.setItem(xpKey, currentXP + 50); 
+            
+            let notifKey = "studentNotifications_" + firstName;
+            let notifs = JSON.parse(localStorage.getItem(notifKey)) || JSON.parse(localStorage.getItem("studentNotifications")) || [];
             notifs.push({ id: Date.now(), title: "Homework Approved! 📝", message: `S.K. Mishra Sir checked your homework. +50 XP Added!`, read: false });
-            localStorage.setItem("studentNotifications", JSON.stringify(notifs));
+            localStorage.setItem(notifKey, JSON.stringify(notifs));
 
-            showToast("✅ Homework Approved", "Student received +50 XP.", "var(--success)");
+            showToast("✅ Homework Approved", `${stName} received +50 XP.`, "var(--success)");
             loadHomeworks(); refreshDashStats();
         }
 
@@ -821,63 +1121,68 @@
         function submitAttendance() {
             let todayStr = new Date().toISOString().split('T')[0]; 
             let attendanceDB = JSON.parse(localStorage.getItem("attendanceDB")) || [];
-            let roster = [ { name: "Adarsh Patel", radioGroup: "a1" }, { name: "Rahul Kumar", radioGroup: "a2" } ];
+            let rows = document.querySelectorAll("#attendance-roster tr");
             
-            roster.forEach(student => {
-                let radios = document.getElementsByName(student.radioGroup);
+            rows.forEach((row, i) => {
+                let stuId = row.getAttribute("data-stuid");
+                let stuName = row.getAttribute("data-stuname");
+                let radios = document.getElementsByName(`att_${i}`);
+                if(radios.length === 0) return;
+                
                 let status = "present"; 
                 if (radios[1].checked) status = "halfday";
                 if (radios[2].checked) status = "absent";
                 
-                attendanceDB = attendanceDB.filter(r => !(r.date === todayStr && r.student === student.name.split(' ')[0])); // clean mock
-                attendanceDB.push({ date: todayStr, student: student.name.split(' ')[0], status: status });
+                // Old record remove (Uses exact UUID instead of just name)
+                attendanceDB = attendanceDB.filter(r => !(r.date === todayStr && (r.studentId === stuId || r.student === stuName))); 
+                attendanceDB.push({ date: todayStr, studentId: stuId, student: stuName.split(' ')[0], status: status });
             });
             
             localStorage.setItem("attendanceDB", JSON.stringify(attendanceDB));
-            showToast("✅ Attendance Synced", "Records sent to Admin & Parent App.", "var(--success)");
+            showToast("✅ Attendance Synced", "Records securely saved to ERP.", "var(--success)");
         }
 
         // --- MARKS ENTRY ---
         function calcTotal(id) {
-            let theory = parseInt(document.getElementById(`th${id}`).value) || 0;
-            let internal = parseInt(document.getElementById(`in${id}`).value) || 0;
-            if(theory > 80) { showToast("Limit Error", "Theory max 80!", "var(--danger)"); document.getElementById(`th${id}`).value = 80; theory = 80; }
-            if(internal > 20) { showToast("Limit Error", "Internal max 20!", "var(--danger)"); document.getElementById(`in${id}`).value = 20; internal = 20; }
-            
+            let theory = parseInt(document.getElementById(`th_${id}`).value) || 0;
+            let internal = parseInt(document.getElementById(`in_${id}`).value) || 0;
+            if(theory > 80) { theory = 80; document.getElementById(`th_${id}`).value = 80; }
+            if(internal > 20) { internal = 20; document.getElementById(`in_${id}`).value = 20; }
             let total = theory + internal;
             let color = total >= 33 ? "var(--success)" : "var(--danger)"; 
-            document.getElementById(`tot${id}`).innerHTML = `<span style="color: ${color};">${total}</span>`;
+            document.getElementById(`tot_${id}`).innerHTML = `<span style="color: ${color};">${total}</span>`;
         }
 
         function publishMarks() {
             let subject = document.getElementById("marks-subject").value || "Science";
-            let adarshTh = parseInt(document.getElementById("th1").value) || 0; let adarshIn = parseInt(document.getElementById("in1").value) || 0;
-            let rahulTh = parseInt(document.getElementById("th2").value) || 0; let rahulIn = parseInt(document.getElementById("in2").value) || 0;
             let marksDB = JSON.parse(localStorage.getItem("schoolMarksDB")) || {};
             
-            if(!marksDB["Adarsh"]) marksDB["Adarsh"] = {};
-            if(!marksDB["Rahul Kumar"]) marksDB["Rahul Kumar"] = {};
-            marksDB["Adarsh"][subject] = { theory: adarshTh, internal: adarshIn, total: adarshTh + adarshIn };
-            marksDB["Rahul Kumar"][subject] = { theory: rahulTh, internal: rahulIn, total: rahulTh + rahulIn };
+            classRoster.forEach((student, i) => {
+                let th = parseInt(document.getElementById(`th_${i}`).value) || 0;
+                let int = parseInt(document.getElementById(`in_${i}`).value) || 0;
+                if(!marksDB[student.split(' ')[0]]) marksDB[student.split(' ')[0]] = {};
+                marksDB[student.split(' ')[0]][subject] = { theory: th, internal: int, total: th + int };
+            });
 
             localStorage.setItem("schoolMarksDB", JSON.stringify(marksDB)); 
-            showToast("✅ Marks Published", `${subject} results sent to students.`, "var(--success)");
+            showToast("✅ Marks Published", `Results updated dynamically.`, "var(--success)");
         }
 
         function generateReportCard() {
-            let t1 = parseInt(document.getElementById("th1").value) || 0; let i1 = parseInt(document.getElementById("in1").value) || 0;
-            let t2 = parseInt(document.getElementById("th2").value) || 0; let i2 = parseInt(document.getElementById("in2").value) || 0;
+            // Nayi dynamic IDs (th_0, in_0 pehle student ke liye demo purpose se)
+            let t1 = parseInt(document.getElementById("th_0").value) || 0; let i1 = parseInt(document.getElementById("in_0").value) || 0;
+            let t2 = parseInt(document.getElementById("th_1").value) || 0; let i2 = parseInt(document.getElementById("in_1").value) || 0;
             let total1 = t1 + i1; let total2 = t2 + i2;
             let getGrade = (m) => m>=90?'A1':m>=80?'A2':m>=70?'B1':m>=60?'B2':m>=50?'C1':m>=40?'C2':m>=33?'D':'E (Fail)';
             let percent = (((total1 + total2) / 200) * 100).toFixed(1);
 
             let html = `
-                <h4 style="color:var(--text-main);">Student: Adarsh Patel | Roll No: 24 | Class: 10-B</h4><br>
-                <table style="width:100%; border-collapse:collapse; text-align:left; border:1px solid var(--border-color); color:var(--text-main);">
+                <h4 style="color:var(--text-main);">Preview: Adarsh Patel | Roll: 24 | 10-B</h4><br>
+                <table style="width:100%; border-collapse:collapse; text-align:left; border:1px solid var(--border-color); color:var(--text-main); font-size:14px;">
                     <tr style="background:rgba(0,0,0,0.05);">
                         <th style="padding:10px; border:1px solid var(--border-color);">Subject</th>
-                        <th style="padding:10px; border:1px solid var(--border-color);">Theory</th>
-                        <th style="padding:10px; border:1px solid var(--border-color);">Internal</th>
+                        <th style="padding:10px; border:1px solid var(--border-color);">Th</th>
+                        <th style="padding:10px; border:1px solid var(--border-color);">Int</th>
                         <th style="padding:10px; border:1px solid var(--border-color);">Total</th>
                         <th style="padding:10px; border:1px solid var(--border-color);">Grade</th>
                     </tr>
@@ -889,7 +1194,7 @@
                         <td style="padding:10px; border:1px solid var(--border-color); color:${total1>=33?'var(--success)':'var(--danger)'};"><b>${getGrade(total1)}</b></td>
                     </tr>
                     <tr>
-                        <td style="padding:10px; border:1px solid var(--border-color);">Mathematics</td>
+                        <td style="padding:10px; border:1px solid var(--border-color);">Maths (Demo)</td>
                         <td style="padding:10px; border:1px solid var(--border-color);">${t2}/80</td>
                         <td style="padding:10px; border:1px solid var(--border-color);">${i2}/20</td>
                         <td style="padding:10px; border:1px solid var(--border-color);"><b>${total2}/100</b></td>
@@ -898,30 +1203,76 @@
                 </table>
                 <h3 style="margin-top:20px; color:${percent>=33?'var(--success)':'var(--danger)'};">Overall Percentage: ${percent}%</h3>
             `;
+            
+            // Missing Modal Auto-Generator
+            let modal = document.getElementById("report-modal");
+            if(!modal) {
+                modal = document.createElement("div");
+                modal.id = "report-modal";
+                modal.style.cssText = "position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:100000; display:flex; justify-content:center; align-items:center; backdrop-filter:blur(5px);";
+                modal.innerHTML = `
+                    <div style="background:var(--card-bg); padding:30px; border-radius:16px; width:90%; max-width:500px; position:relative; box-shadow:0 20px 50px rgba(0,0,0,0.5); border:1px solid var(--border-color);">
+                        <button onclick="document.getElementById('report-modal').style.display='none'" style="position:absolute; right:15px; top:15px; background:var(--danger); color:white; border:none; width:30px; height:30px; border-radius:50%; cursor:pointer; font-weight:bold;">X</button>
+                        <div id="report-content"></div>
+                        <button onclick="window.print()" class="btn" style="margin-top:20px; background:var(--info);">🖨️ Print Report</button>
+                    </div>`;
+                document.body.appendChild(modal);
+            }
+            
             document.getElementById("report-content").innerHTML = html;
-            document.getElementById("report-modal").style.display = "flex";
+            modal.style.display = "flex";
         }
 
-        // --- STUDENT CHAT LOGIC ---
-        function loadTeacherStudentChats() {
-            let chatBox = document.getElementById("teacher-student-chat-box"); if(!chatBox) return;
-            let chats = JSON.parse(localStorage.getItem("schoolChatDB")) || []; 
-            chatBox.innerHTML = "";
-            chats.forEach(c => {
-                let align = c.sender === "Teacher" ? "right" : "left";
-                let bg = c.sender === "Teacher" ? "var(--info)" : "rgba(0,0,0,0.2)";
-                let color = c.sender === "Teacher" ? "#fff" : "var(--text-main)";
-                let border = c.sender === "Teacher" ? "none" : "1px solid var(--border-color)";
-                chatBox.innerHTML += `<div style="background: ${bg}; color: ${color}; border: ${border}; padding: 12px 18px; border-radius: 16px; width: fit-content; max-width: 85%; margin-bottom: 12px; margin-left: ${align === 'right' ? 'auto' : '0'}; font-size:14px; font-weight:700;"><strong>${c.sender === "Teacher" ? "You" : "Adarsh"}:</strong><br>${c.text}<br><span style="font-size:10px; opacity:0.7; float:right; margin-top:5px;">${c.time}</span></div>`;
-            });
-            chatBox.scrollTop = chatBox.scrollHeight;
+        // --- STUDENT CHAT LOGIC (SYNCED WITH STUDENT APP) ---
+        function switchChatTab(tabName, element) {
+            document.querySelectorAll('.chat-tab').forEach(t => t.classList.remove('active'));
+            element.classList.add('active');
+            showToast("Tab Switched", `Now viewing ${tabName === 'myclass' ? 'Class 10-B' : 'Other Students'}`, "var(--info)");
         }
-        function sendTeacherStudentChat() {
-            let input = document.getElementById("teacher-student-chat-input");
+
+        let lastTeacherChatIndex = 0;
+        function loadTeacherStudentChats() {
+            let chatBox = document.getElementById("full-chat-box"); 
+            if(!chatBox) return;
+            
+            let chatKey = "schoolChatDB_S.K. Mishra"; 
+            let chats = JSON.parse(localStorage.getItem(chatKey)) || []; 
+            
+            if (lastTeacherChatIndex === 0) {
+                chatBox.innerHTML = '<div style="text-align:center; margin-bottom: 10px;"><span style="background: rgba(0,0,0,0.1); color: var(--text-muted); padding: 5px 12px; border-radius: 12px; font-size: 11px; font-weight:800;">Today</span></div>';
+            }
+            
+            if (chats.length > lastTeacherChatIndex) {
+                for (let i = lastTeacherChatIndex; i < chats.length; i++) {
+                    let c = chats[i];
+                    let isMe = c.sender === "Teacher";
+                    let align = isMe ? "flex-end" : "flex-start";
+                    let bg = isMe ? "var(--info)" : "rgba(0,0,0,0.2)";
+                    let color = isMe ? "#fff" : "var(--text-main)";
+                    let border = isMe ? "none" : "1px solid var(--border-color)";
+                    let ticks = isMe ? `<span style="color:#6ee7b7; margin-left:8px; font-size:14px;">✓✓</span>` : '';
+                    
+                    chatBox.innerHTML += `
+                    <div style="align-self: ${align}; background: ${bg}; color: ${color}; border: ${border}; padding: 14px 18px; border-radius: ${isMe ? '20px 20px 0 20px' : '20px 20px 20px 0'}; max-width: 80%; box-shadow: var(--shadow-sm); font-size:14px; font-weight:600; line-height:1.5; animation: slideUp 0.3s ease;">
+                        ${c.text}
+                        <div style="font-size:10px; opacity:0.8; text-align:right; margin-top:5px; font-weight:800;">${c.time} ${ticks}</div>
+                    </div>`;
+                }
+                lastTeacherChatIndex = chats.length;
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
+        }
+
+        function sendFullChat() {
+            let input = document.getElementById("full-chat-input");
             if(input.value.trim() !== "") {
-                let chats = JSON.parse(localStorage.getItem("schoolChatDB")) || [];
+                let chatKey = "schoolChatDB_S.K. Mishra";
+                let chats = JSON.parse(localStorage.getItem(chatKey)) || [];
+                
                 chats.push({ sender: "Teacher", text: input.value, time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) });
-                localStorage.setItem("schoolChatDB", JSON.stringify(chats)); input.value = ""; loadTeacherStudentChats();
+                localStorage.setItem(chatKey, JSON.stringify(chats)); 
+                input.value = ""; 
+                loadTeacherStudentChats();
             }
         }
 
@@ -992,7 +1343,7 @@
             let name = document.getElementById("t-disc-name").value; let reason = document.getElementById("t-disc-reason").value;
             if(!name) return showToast("Error", "Select offending student.", "var(--danger)");
             let discLog = JSON.parse(localStorage.getItem("disciplineLog")) || [];
-            discLog.push({ name: name, reason: reason, date: new Date().toLocaleDateString(), reportedBy: "S.K. Mishra (Teacher)" });
+            discLog.push({ name: name, reason: reason, date: new Date().toISOString().split('T')[0], reportedBy: "S.K. Mishra (Teacher)" });
             localStorage.setItem("disciplineLog", JSON.stringify(discLog)); 
             showToast("✅ Reported", "VP and Student notified.", "var(--danger)");
             document.getElementById("t-disc-name").value = ""; loadTeacherReports();
@@ -1001,7 +1352,7 @@
             let item = document.getElementById("t-inv-item").value; let reason = document.getElementById("t-inv-reason").value;
             if(!item || !reason) return showToast("Error", "Fill all fields.", "var(--danger)");
             let invLog = JSON.parse(localStorage.getItem("inventoryRequests")) || [];
-            invLog.push({ item: item, reason: reason, teacher: "S.K. Mishra", status: "Pending", date: new Date().toLocaleDateString() });
+            invLog.push({ item: item, reason: reason, teacher: "S.K. Mishra", status: "Pending", date: new Date().toISOString().split('T')[0] });
             localStorage.setItem("inventoryRequests", JSON.stringify(invLog)); 
             showToast("✅ Sent", "Inventory request sent to VP.", "var(--warning)");
             document.getElementById("t-inv-item").value = ""; document.getElementById("t-inv-reason").value = ""; loadTeacherReports();
@@ -1038,11 +1389,19 @@
 
         // --- ECOSYSTEM REWARDS ---
         function awardXP() {
-            let points = parseInt(document.getElementById("reward-xp").value); let student = document.getElementById("reward-student").value;
-            let currentXP = parseInt(localStorage.getItem("studentXP") || 450); localStorage.setItem("studentXP", currentXP + points); 
-            let notifs = JSON.parse(localStorage.getItem("studentNotifications")) || [];
+            let points = parseInt(document.getElementById("reward-xp").value); 
+            let student = document.getElementById("reward-student").value;
+            let firstName = student.split(' ')[0];
+            
+            let xpKey = "studentXP_" + firstName;
+            let currentXP = parseInt(localStorage.getItem(xpKey) || localStorage.getItem("studentXP") || 450); 
+            localStorage.setItem(xpKey, currentXP + points); 
+            
+            let notifKey = "studentNotifications_" + firstName;
+            let notifs = JSON.parse(localStorage.getItem(notifKey)) || JSON.parse(localStorage.getItem("studentNotifications")) || [];
             notifs.push({ id: Date.now(), title: "XP Awarded! ⭐", message: `🎉 S.K. Mishra Sir awarded you ${points} XP!`, read: false });
-            localStorage.setItem("studentNotifications", JSON.stringify(notifs));
+            localStorage.setItem(notifKey, JSON.stringify(notifs));
+            
             showToast("✅ XP Awarded", `${points} XP given to ${student}.`, "var(--warning)");
         }
         function awardBadge() {
@@ -1147,6 +1506,67 @@
                 localStorage.setItem("teacherNotifs", JSON.stringify(notifs)); 
             }
         }
+        function assignHWTopic() {
+            let hwClass = document.getElementById("hw-new-class").value;
+            let hwDate = document.getElementById("hw-new-date").value;
+            let hwTopic = document.getElementById("hw-new-topic").value;
+            
+            if(!hwDate || !hwTopic) return showToast("Error", "Fill Date and Topic!", "var(--danger)");
+            
+            let assignedHW = JSON.parse(localStorage.getItem("assignedTeacherHW")) || [];
+            assignedHW.push({ id: "HW-" + Date.now(), class: hwClass, date: hwDate, topic: hwTopic, teacher: "S.K. Mishra" });
+            localStorage.setItem("assignedTeacherHW", JSON.stringify(assignedHW));
+            
+            showToast("✅ Published", "Homework pushed to students.", "var(--success)");
+            document.getElementById("hw-new-topic").value = "";
+            renderActiveHomeworks();
+        }
+
+        function renderActiveHomeworks() {
+            let assignedHW = JSON.parse(localStorage.getItem("assignedTeacherHW")) || [];
+            let container = document.getElementById("active-hw-topics");
+            if(!container) return;
+            container.innerHTML = "";
+            if(assignedHW.length === 0) {
+                container.innerHTML = "<p style='color:var(--text-muted); font-size:13px; font-weight:600;'>No active homeworks.</p>";
+            } else {
+                assignedHW.slice().reverse().forEach(hw => {
+                    let hwId = hw.id || (hw.topic + hw.date); 
+                    container.innerHTML += `<div class="list-card" style="border-left: 4px solid var(--accent-color); position:relative;">
+                        <button onclick="window.deleteHomework('${hwId}')" style="position:absolute; right:15px; top:15px; background:none; border:none; color:var(--danger); cursor:pointer; font-size:16px;">🗑️</button>
+                        <strong style="color:var(--text-main); font-size:14px; padding-right:25px; display:block;">${hw.topic}</strong>
+                        <div style="font-size:12px; color:var(--text-muted); margin-top:5px; font-weight:700;">${hw.class} | Due: ${hw.date}</div>
+                    </div>`;
+                });
+            }
+        }
+        
+        // Ensure it runs on load by adding this to window.onload:
+        // renderActiveHomeworks();
+    // 🔗 LEVEL 2: Teacher Functions
+window.deleteHomework = function(hwId) {
+    let hw = JSON.parse(localStorage.getItem("assignedTeacherHW")) || [];
+    hw = hw.filter(h => h.id !== hwId);
+    localStorage.setItem("assignedTeacherHW", JSON.stringify(hw));
+    renderActiveHomeworks(); 
+};
+
+function renderAttendance(selectedClass) {
+    if(!selectedClass) return;
+    let allStudents = JSON.parse(localStorage.getItem('system_class_roster') || '[]');
+    let students = allStudents.filter(s => s.class === selectedClass);
+    if(students.length === 0) students = classRoster; // Mock data fallback
+
+    let approvedLeaves = JSON.parse(localStorage.getItem('leaveRequests') || '[]');
+    let today = new Date().toISOString().split('T')[0];
+    
+    students.forEach(stu => {
+        let isOnLeave = approvedLeaves.find(l => (l.studentId === stu.id || l.student === (stu.name || stu)) && l.status.includes('Approved') && l.dates.includes(today));
+        stu.forcedStatus = isOnLeave ? 'L' : null;
+    });
+    
+    buildDynamicRosters(students); // Rebuilds the table locking the absent buttons
+}
     </script>
 </body>
 </html>
