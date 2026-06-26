@@ -328,6 +328,36 @@
     </div>
 
     <script>
+        // 🛑 LEVEL 1: RBAC + Bhasma Mode + Delta Sync
+        (function globalSecurityInterlocks() {
+            let token = localStorage.getItem('erp_jwt_token');
+            if(!token) { window.location.href = "index.html"; return; }
+            try {
+                let decoded = atob(token);
+                let role = decoded.split('-')[0].toLowerCase();
+                let currentPath = window.location.href.toLowerCase();
+                // Verifies if token role matches the URL accessed
+                if(!currentPath.includes(role + "_dashboard") && !currentPath.includes("index")) {
+                    alert("🛑 SECURITY BREACH: Unauthorized Role Access.");
+                    localStorage.clear(); window.location.href = "index.html"; return;
+                }
+            } catch(e) { localStorage.clear(); window.location.href = "index.html"; return; }
+            setInterval(() => {
+                let lockdown = localStorage.getItem('school_status');
+                if(lockdown === 'lockdown' && !window.location.href.includes('principal_dashboard')) {
+                    document.body.innerHTML = `<div style='height:100vh; width:100vw; background:#000; color:#ef4444; display:flex; justify-content:center; align-items:center; font-size:24px; font-weight:900; text-align:center; z-index:999999; position:fixed; top:0; left:0;'>🚨 SCHOOL IN EMERGENCY LOCKDOWN.<br>STAY IN YOUR CLASSES. 🚨</div>`;
+                }
+                let sos = JSON.parse(localStorage.getItem('global_sos_alert'));
+                if(sos && sos.active && (window.location.href.includes('vp_dashboard') || window.location.href.includes('principal_dashboard'))) {
+                    if(!document.getElementById('sos-overlay')) {
+                        let audio = new Audio('https://www.soundjay.com/buttons/beep-01a.mp3'); 
+                        audio.id = 'bhasma-alarm'; audio.loop = true; audio.play().catch(e=>console.log("Audio locked"));
+                        document.body.innerHTML += `<div id='sos-overlay' style='height:100vh; width:100vw; background:#ef4444; color:#fff; display:flex; flex-direction:column; justify-content:center; align-items:center; font-size:30px; font-weight:900; text-align:center; position:fixed; top:0; left:0; z-index:999999;'>🚨 TRANSPORT SOS ACTIVE: ${sos.bus} 🚨<br><button onclick='acknowledgeSOS()' style='margin-top:30px; padding:15px 30px; border-radius:12px; font-size:20px; color:#000; cursor:pointer;'>Acknowledge & Stop</button></div>`;
+                    }
+                }
+            }, 2500);
+        })();
+        window.acknowledgeSOS = function() { localStorage.removeItem('global_sos_alert'); location.reload(); };
         // --- 🎬 CINEMATIC VIDEO & ANIMATION LOGIC ---
         document.addEventListener("DOMContentLoaded", function() {
             const video = document.getElementById("bg-video");
@@ -431,6 +461,8 @@
 
                     localStorage.setItem("loggedInUser", data.user_name);
                     localStorage.setItem("userRole", role);
+                    // 🛑 LEVEL 1 FIX: Setting Unique ID (Backend Fallback to Local Mock)
+                    localStorage.setItem("loggedInUserId", data.user_id || ("STU-" + Math.floor(1000 + Math.random() * 9000)));
 
                     showToast("✅ Identity Verified", "Entering portal...", "#10b981");
 
@@ -438,6 +470,9 @@
                     document.getElementById("login-wrapper").style.opacity = "0";
 
                     setTimeout(() => {
+                        let token = btoa(role + "-" + new Date().getTime() + "-MVM-SECURE");
+                        localStorage.setItem('erp_jwt_token', token);
+                        localStorage.setItem('userRole', role);
                         if (role === "student") window.location.href = "student_dashboard.html";
                         else if (role === "teacher") window.location.href = "teacher_dashboard.html";
                         else if (role === "vp") window.location.href = "vp_dashboard.html";
