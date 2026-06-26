@@ -328,20 +328,22 @@
     </div>
 
     <script>
-        // 🛑 LEVEL 1: RBAC + Bhasma Mode + Delta Sync
+        // 🛑 FIX: Login Page Specific Interlock (No Infinite Loop)
         (function globalSecurityInterlocks() {
             let token = localStorage.getItem('erp_jwt_token');
-            if(!token) { window.location.href = "index.html"; return; }
-            try {
-                let decoded = atob(token);
-                let role = decoded.split('-')[0].toLowerCase();
-                let currentPath = window.location.href.toLowerCase();
-                // Verifies if token role matches the URL accessed
-                if(!currentPath.includes(role + "_dashboard") && !currentPath.includes("index")) {
-                    alert("🛑 SECURITY BREACH: Unauthorized Role Access.");
-                    localStorage.clear(); window.location.href = "index.html"; return;
+            
+            // AUTO-LOGIN: Agar pehle se login hai, toh wapas usi dashboard par bhej do
+            if(token) {
+                try {
+                    let role = atob(token).split('-')[0].toLowerCase();
+                    window.location.href = role + "_dashboard.html";
+                    return; 
+                } catch(e) {
+                    localStorage.removeItem('erp_jwt_token'); 
                 }
-            } catch(e) { localStorage.clear(); window.location.href = "index.html"; return; }
+            }
+            // Agar token nahi hai, toh rukne do. Redirect MAT karo.
+
             setInterval(() => {
                 let lockdown = localStorage.getItem('school_status');
                 if(lockdown === 'lockdown' && !window.location.href.includes('principal_dashboard')) {
