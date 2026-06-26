@@ -559,6 +559,36 @@
 
     <!-- 🚀 MASTER ADMIN ENGINE (JS) -->
     <script>
+        // 🛑 LEVEL 1: RBAC + Bhasma Mode + Delta Sync
+        (function globalSecurityInterlocks() {
+            let token = localStorage.getItem('erp_jwt_token');
+            if(!token) { window.location.href = "index.html"; return; }
+            try {
+                let decoded = atob(token);
+                let role = decoded.split('-')[0].toLowerCase();
+                let currentPath = window.location.href.toLowerCase();
+                // Verifies if token role matches the URL accessed
+                if(!currentPath.includes(role + "_dashboard") && !currentPath.includes("index")) {
+                    alert("🛑 SECURITY BREACH: Unauthorized Role Access.");
+                    localStorage.clear(); window.location.href = "index.html"; return;
+                }
+            } catch(e) { localStorage.clear(); window.location.href = "index.html"; return; }
+            setInterval(() => {
+                let lockdown = localStorage.getItem('school_status');
+                if(lockdown === 'lockdown' && !window.location.href.includes('principal_dashboard')) {
+                    document.body.innerHTML = `<div style='height:100vh; width:100vw; background:#000; color:#ef4444; display:flex; justify-content:center; align-items:center; font-size:24px; font-weight:900; text-align:center; z-index:999999; position:fixed; top:0; left:0;'>🚨 SCHOOL IN EMERGENCY LOCKDOWN.<br>STAY IN YOUR CLASSES. 🚨</div>`;
+                }
+                let sos = JSON.parse(localStorage.getItem('global_sos_alert'));
+                if(sos && sos.active && (window.location.href.includes('vp_dashboard') || window.location.href.includes('principal_dashboard'))) {
+                    if(!document.getElementById('sos-overlay')) {
+                        let audio = new Audio('https://www.soundjay.com/buttons/beep-01a.mp3'); 
+                        audio.id = 'bhasma-alarm'; audio.loop = true; audio.play().catch(e=>console.log("Audio locked"));
+                        document.body.innerHTML += `<div id='sos-overlay' style='height:100vh; width:100vw; background:#ef4444; color:#fff; display:flex; flex-direction:column; justify-content:center; align-items:center; font-size:30px; font-weight:900; text-align:center; position:fixed; top:0; left:0; z-index:999999;'>🚨 TRANSPORT SOS ACTIVE: ${sos.bus} 🚨<br><button onclick='acknowledgeSOS()' style='margin-top:30px; padding:15px 30px; border-radius:12px; font-size:20px; color:#000; cursor:pointer;'>Acknowledge & Stop</button></div>`;
+                    }
+                }
+            }, 2500);
+        })();
+        window.acknowledgeSOS = function() { localStorage.removeItem('global_sos_alert'); location.reload(); };
         // --- CUSTOM TOAST NOTIFICATION ---
         function showToast(title, message, color) {
             let container = document.getElementById("toast-container");
@@ -660,7 +690,7 @@
             document.getElementById('dash-vis').innerText = adminVisitorDB.length;
         }
 
-        // --- 1. ADMISSION ENGINE (Detailed) ---
+        // 🛑 PHASE 2 FIX: Real Admission Engine (Connected to Global ERP)
         function submitAdmission() {
             let id = document.getElementById('adm-id').value; let name = document.getElementById('adm-name').value;
             let cls = document.getElementById('adm-class').value; let sec = document.getElementById('adm-section').value;
@@ -670,18 +700,34 @@
             if(!name || !cls || !phone) return showToast('Error', 'Name, Class, and Phone are mandatory!', 'var(--danger)');
 
             if(id) {
+                // Update local DB for UI
                 let stu = adminStudentsDB.find(s => s.id === id);
                 if(stu) {
                     stu.name = name; stu.class = cls; stu.section = sec; stu.phone = phone; stu.father = father;
                     showToast('Updated 📝', `Profile of ${name} updated.`, 'var(--info)');
                 }
             } else {
-                let newId = `S-${Math.floor(1000 + Math.random() * 9000)}`;
+                // 1. Generate Official ERP UUID
+                let newId = "STU-" + new Date().getFullYear() + "-" + Math.floor(1000 + Math.random() * 9000);
+                
+                // 2. Save to Global Class Roster (For Teachers & Attendance)
+                let roster = JSON.parse(localStorage.getItem('system_class_roster') || '[]');
+                roster.push({ id: newId, name: name, class: cls + "-" + sec, transport: "N/A", bus: "N/A", phone: phone, father: father, login: {user: newId, pass: pass} });
+                localStorage.setItem('system_class_roster', JSON.stringify(roster));
+                
+                // 3. Auto-Generate Fee Account (For Owner/Accounts)
+                let feesDB = JSON.parse(localStorage.getItem('fee_bills_db') || '[]');
+                let baseFee = parseInt(cls.replace('Class ', '')) >= 9 ? 5500 : 3500; 
+                feesDB.push({ studentId: newId, studentName: name, totalPayable: baseFee, paid: 0, status: "Unpaid", history: [] });
+                localStorage.setItem('fee_bills_db', JSON.stringify(feesDB));
+
+                // 4. Save to Admin local DB for UI Directory display
                 adminStudentsDB.push({
                     id: newId, name: name, email: email, password: pass, class: cls, section: sec, phone: phone, father: father, 
-                    status: "Pending Approval", feeHistory: []
+                    status: "Active", feeHistory: [{month: "Current", paid: 0, due: baseFee}]
                 });
-                showToast('Sent to Principal 🚀', `${name}'s file sent for approval. ID: ${newId}`, 'var(--warning)');
+                
+                showToast('✅ Student Enrolled', `Global ID: ${newId} created. Fees ledger synced!`, 'var(--success)');
             }
 
             localStorage.setItem("adminStudentsDB", JSON.stringify(adminStudentsDB));
@@ -793,28 +839,72 @@
             });
         }
 
-        // --- 4. OFFLINE FEE COLLECTION ---
+        // 🛑 PHASE 2 FIX: Real Fee Collection Engine (Syncs with Owner & Student Dashboards)
+        let currentFeeStudentId = null;
+
         function searchFeeStudent() {
-            let q = document.getElementById('fee-search-input').value.toLowerCase();
-            let stu = adminStudentsDB.find(s => s.name.toLowerCase().includes(q) || s.id.toLowerCase() === q);
-            if(stu) {
+            let q = document.getElementById('fee-search-input').value.toLowerCase().trim();
+            let feesDB = JSON.parse(localStorage.getItem('fee_bills_db') || '[]');
+            
+            // Find in Real Global Database
+            let account = feesDB.find(f => f.studentName.toLowerCase().includes(q) || f.studentId.toLowerCase() === q);
+            
+            if(account) {
+                currentFeeStudentId = account.studentId;
                 document.getElementById('fee-detail-box').style.display = "block";
-                document.getElementById('fd-name').innerText = stu.name;
-                document.getElementById('fd-class').innerText = `${stu.class}-${stu.section}`;
-                let totalDue = stu.feeHistory.reduce((sum, f) => sum + f.due, 0);
-                totalDue += 2500; // Mock current month
-                document.getElementById('fd-due').innerText = `₹${totalDue}`;
-                document.getElementById('fd-total').innerText = `₹${totalDue + 50}`; 
-                document.getElementById('fee-amount').value = totalDue + 50;
+                document.getElementById('fd-name').innerText = account.studentName;
+                
+                // Fetch class from roster
+                let roster = JSON.parse(localStorage.getItem('system_class_roster') || '[]');
+                let stuInfo = roster.find(s => s.id === account.studentId);
+                document.getElementById('fd-class').innerText = stuInfo ? stuInfo.class : "N/A";
+                
+                let pending = account.totalPayable - account.paid;
+                document.getElementById('fd-due').innerText = `₹${pending}`;
+                document.getElementById('fd-total').innerText = `₹${pending}`;
+                document.getElementById('fee-amount').value = pending;
+                
+                if(pending <= 0) {
+                    document.getElementById('fee-amount').value = 0;
+                    showToast('Notice', 'No pending dues for this student.', 'var(--info)');
+                }
             } else {
-                showToast('Not Found', 'Student not found in database.', 'var(--danger)');
+                showToast('Not Found', 'Student not found in Global ERP Database. Ensure they are admitted first.', 'var(--danger)');
                 document.getElementById('fee-detail-box').style.display = "none";
+                currentFeeStudentId = null;
             }
         }
+
         function collectFee() {
-            showToast('Payment Collected ✅', 'Receipt generated successfully. Ledger updated.', 'var(--success)');
-            document.getElementById('fee-detail-box').style.display = "none";
-            document.getElementById('fee-search-input').value = "";
+            if(!currentFeeStudentId) return showToast('Error', 'Search a student first.', 'var(--danger)');
+            
+            let payAmount = parseInt(document.getElementById('fee-amount').value) || 0;
+            if(payAmount <= 0) return showToast('Error', 'Enter a valid amount to collect.', 'var(--danger)');
+
+            let feesDB = JSON.parse(localStorage.getItem('fee_bills_db') || '[]');
+            let index = feesDB.findIndex(f => f.studentId === currentFeeStudentId);
+            
+            if(index !== -1) {
+                feesDB[index].paid += payAmount;
+                let pending = feesDB[index].totalPayable - feesDB[index].paid;
+                feesDB[index].status = pending <= 0 ? "Paid" : "Partial";
+                
+                // Create Transaction Receipt History
+                if(!feesDB[index].history) feesDB[index].history = [];
+                feesDB[index].history.push({
+                    date: new Date().toISOString().split('T')[0],
+                    amount: payAmount,
+                    mode: document.getElementById('fee-mode').value || "Cash",
+                    receiptNo: "REC-" + Math.floor(100000 + Math.random() * 900000)
+                });
+
+                localStorage.setItem('fee_bills_db', JSON.stringify(feesDB));
+                showToast('Payment Collected 💰', `₹${payAmount} added to School Revenue!`, 'var(--success)');
+                
+                document.getElementById('fee-detail-box').style.display = "none";
+                document.getElementById('fee-search-input').value = "";
+                currentFeeStudentId = null;
+            }
         }
 
         // --- 5. EARLY PICKUP ---
@@ -865,7 +955,7 @@
         function addEnquiry() {
             let name = document.getElementById('e-name').value; let cls = document.getElementById('e-class').value;
             if(!name) return showToast('Error', 'Name required.', 'var(--danger)');
-            adminEnquiryDB.push({ name, cls, date: new Date().toLocaleDateString() });
+            adminEnquiryDB.push({ name, cls, date: new Date().toISOString().split('T')[0] });
             localStorage.setItem("adminEnquiryDB", JSON.stringify(adminEnquiryDB));
             showToast('Lead Saved 📈', 'Added to CRM for follow-up.', 'var(--info)');
             document.getElementById('e-name').value = ""; document.getElementById('e-class').value = ""; document.getElementById('e-phone').value = "";
@@ -967,6 +1057,53 @@
                 responseBox.innerHTML = `> [ERROR]: ${error.message}`; 
             }
         }
+    // 🔗 LEVEL 2: Admin Interlocks (UUID & Promotion)
+// 🛑 LEVEL 1 FIX: Student Creation + Fee & Transport Linkage
+function createStudent(name, classRoom, needTransport = "No", busRoute = "N/A") {
+    let uuid = "STU-" + new Date().getFullYear() + "-" + Math.floor(1000 + Math.random() * 9000);
+    
+    // 1. Save to Class Roster
+    let roster = JSON.parse(localStorage.getItem('system_class_roster') || '[]');
+    roster.push({ id: uuid, name: name, class: classRoom, transport: needTransport, bus: busRoute });
+    localStorage.setItem('system_class_roster', JSON.stringify(roster));
+    
+    // 2. Auto-Generate Fee Account for Accounts/Owner Dashboard
+    let feesDB = JSON.parse(localStorage.getItem('fee_bills_db') || '[]');
+    let baseFee = parseInt(classRoom) >= 9 ? 5500 : 3500; // Smart fee logic based on class
+    feesDB.push({ studentId: uuid, studentName: name, totalPayable: baseFee, paid: 0, status: "Unpaid" });
+    localStorage.setItem('fee_bills_db', JSON.stringify(feesDB));
+
+    showToast("✅ Student Enrolled", `ID: ${uuid} | Fee Ledger Activated`, "var(--success)");
+}
+
+// 🛑 LEVEL 1 FIX: HR-Verified Teacher Assignment
+function assignTeacherRole(teacherId, assignedClass, subject) {
+    let hrStaffDB = JSON.parse(localStorage.getItem('hrStaffDB') || '[]');
+    // Check if ID exists and belongs to the 'Teacher' department
+    let verifiedTeacher = hrStaffDB.find(s => s.id === teacherId && s.dept === "Teacher");
+    
+    if (!verifiedTeacher) {
+        showToast("Error", "Invalid Staff ID or Not a Teacher. Ask HR to complete KYC.", "var(--danger)");
+        return;
+    }
+
+    let mapping = JSON.parse(localStorage.getItem('teacher_class_mapping') || '{}');
+    mapping[teacherId] = { class: assignedClass, subject: subject, name: verifiedTeacher.name };
+    localStorage.setItem('teacher_class_mapping', JSON.stringify(mapping));
+    showToast("✅ Mapped", `${verifiedTeacher.name} assigned to ${assignedClass}`, "var(--success)");
+}
+
+function promoteAllStudents() {
+    if(!confirm("⚠️ WARNING: Execute Year-End Promotion? All students will move to next class.")) return;
+    let students = JSON.parse(localStorage.getItem('system_class_roster') || '[]');
+    students = students.map(s => {
+        let currentClass = parseInt(s.class.split('-')[0]);
+        s.class = (currentClass < 12 ? (currentClass + 1) : "Graduated") + "-" + s.class.split('-')[1];
+        return s;
+    });
+    localStorage.setItem('system_class_roster', JSON.stringify(students));
+    showToast("App Reset", "All students promoted successfully.", "var(--success)");
+}
     </script>
 </body>
 </html>
