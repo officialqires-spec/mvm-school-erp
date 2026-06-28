@@ -699,7 +699,7 @@
 
         function logoutHR() {
             if(confirm("Securely Logout of HR Portal?")) {
-                localStorage.removeItem("loggedInUser");
+                localStorage.removeItem("loggedInUser"); localStorage.removeItem("userRole"); localStorage.removeItem("loggedInUserRole"); localStorage.removeItem("loggedInUserId"); localStorage.removeItem("erp_jwt_token");
                 window.location.href = "index.html";
             }
         }
