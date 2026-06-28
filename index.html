@@ -273,10 +273,10 @@
     </div>
 
     <!-- 🔱 MAHADEV VIDEO BACKGROUND -->
-    <!-- Muted & playsinline for mobile. Removed "loop" so it stops at the last frame -->
-    <video id="bg-video" autoplay muted playsinline disablePictureInPicture preload="auto">
-        <source src="YouCut_20260623_145148990.mp4" type="video/mp4">
-    </video>
+<!-- Muted & playsinline for mobile. Removed "loop" so it stops at the last frame -->
+<video id="bg-video" autoplay="autoplay" muted="muted" playsinline="true" webkit-playsinline="true" disablePictureInPicture preload="auto">
+    <source src="YouCut_20260623_145148990.mp4" type="video/mp4">
+</video>
     
     <!-- Cosmic Fade Overlay -->
     <div class="video-overlay" id="video-overlay"></div>
@@ -390,8 +390,13 @@
             // 1. Wait for video to naturally end (Last Frame Freeze)
             video.addEventListener('ended', revealLoginUI);
 
-            // 2. Play promise handling (Browsers blocking autoplay)
-            let playPromise = video.play();
+            // 🛑 WebView Ke Liye Forcibly Mute Aur Playsinline Apply Kiya
+video.muted = true;
+video.setAttribute('playsinline', 'true');
+video.setAttribute('webkit-playsinline', 'true');
+
+// 2. Play promise handling (Browsers blocking autoplay)
+let playPromise = video.play();
             if (playPromise !== undefined) {
                 playPromise.catch(error => {
                     // Agar browser auto-play roke (battery saver wagera me), toh direct UI khol do
