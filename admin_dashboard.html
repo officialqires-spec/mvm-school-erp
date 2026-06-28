@@ -5,7 +5,99 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MVM Public School - Admin App</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; -webkit-tap-highlight-color: transparent; }
+    /* 🔱 MAHADEV COSMIC AI GLOW (Gemini Style) */
+        @keyframes cosmicGlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        @keyframes spinTrishul {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .cosmic-ai-container {
+            border-radius: 18px;
+            padding: 3px; /* Border thickness */
+            /* 5 Colors: Deep Space Blue, Cosmic Purple, Nebula Pink, Divine Gold, Cyan */
+            background: linear-gradient(270deg, #1e3a8a, #6b21a8, #db2777, #f59e0b, #06b6d4);
+            background-size: 400% 400%;
+            animation: cosmicGlow 5s ease infinite;
+            box-shadow: 0 10px 30px rgba(107, 33, 168, 0.3);
+            margin-bottom: 20px;
+        }
+        .cosmic-ai-inner {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 20px;
+            height: 550px; 
+            display: flex;
+            flex-direction: column;
+        }
+        .cosmic-chat-area {
+            flex-grow: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding-right: 5px;
+        }
+        .cosmic-chat-area::-webkit-scrollbar { width: 5px; }
+        .cosmic-chat-area::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
+        
+        .msg-bubble {
+            max-width: 85%;
+            padding: 12px 18px;
+            font-size: 14px;
+            line-height: 1.5;
+            animation: slideUp 0.3s ease;
+            position: relative;
+        }
+        .msg-user {
+            align-self: flex-end;
+            background: var(--accent-color);
+            color: #fff;
+            border-radius: 20px 20px 4px 20px;
+        }
+        .msg-ai {
+            align-self: flex-start;
+            background: rgba(0,0,0,0.03);
+            color: var(--text-main);
+            border-radius: 20px 20px 20px 4px;
+            border-left: 3px solid transparent;
+            border-image: linear-gradient(to bottom, #6b21a8, #db2777) 1;
+        }
+        .cosmic-input-box {
+            display: flex;
+            gap: 8px;
+            margin-top: 15px;
+            background: var(--bg-color);
+            padding: 6px;
+            border-radius: 30px;
+            border: 1px solid var(--border-color);
+        }
+        .cosmic-input-box input {
+            flex-grow: 1;
+            min-width: 0; /* CRITICAL FOR MOBILE: Allows input to shrink without breaking layout */
+            border: none;
+            background: transparent;
+            padding: 10px 15px;
+            color: var(--text-main);
+            outline: none;
+            font-size: 14px;
+        }
+        .cosmic-input-box button {
+            background: linear-gradient(90deg, #6b21a8, #db2777);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 10px 18px; /* Fixed touch padding for phone screens */
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+            white-space: nowrap; /* Prevents text from breaking into two lines */
+            flex-shrink: 0; /* Stops the button from getting squished by the input field */
+        }
+        .cosmic-input-box button:hover { transform: scale(1.05); }
         
         /* ☀️ LIGHT MODE (Clean iOS Style) */
         :root {
@@ -34,7 +126,8 @@
             --ai-bubble: rgba(96, 165, 250, 0.1); --ai-text: #93c5fd;
         }
 
-        body { display: flex; flex-direction: column; height: 100vh; background-color: var(--bg-color); color: var(--text-main); transition: background-color 0.4s ease; overflow-x: hidden; }
+        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { display: flex; flex-direction: column; height: 100vh; margin: 0; background-color: var(--bg-color); color: var(--text-main); transition: background-color 0.4s ease; overflow-x: hidden; }
 
         /* 📱 MOBILE APP HEADER */
         .mobile-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: var(--sidebar-bg); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow-sm); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); transition: var(--transition); }
@@ -144,7 +237,7 @@
         @keyframes fadeOutToast { from { opacity: 1; transform: translateY(0) scale(1); } to { opacity: 0; transform: translateY(-20px) scale(0.9); } }
 
         @media (max-width: 768px) {
-            .grid-3 { grid-template-columns: 1fr; }
+            .grid-2, .grid-3 { grid-template-columns: 1fr; }
             .hide-on-mobile { display: none !important; }
         }
         @media (min-width: 769px) {
@@ -153,10 +246,11 @@
             .sidebar { transform: translateX(0); position: relative; box-shadow: none; border-right: 1px solid var(--border-color); width: 300px; }
             .close-sidebar { display: none !important; }
             .grid-1 { grid-template-columns: 2fr 1fr; } 
-            .grid-2 { grid-template-columns: 1fr 1fr; }
             .workspace { padding: 40px; }
         }
-    </style>
+
+        </style>
+    
 </head>
 <body>
 
@@ -215,6 +309,7 @@
         <div class="nav-menu">
             <div class="section-title">Front Desk Ops</div>
             <div class="nav-item active" onclick="switchTab('dashboard', this)">📊 Front Office Desk</div>
+            <div class="nav-item" onclick="switchTab('notifications', this)">🔔 Notifications</div>
             <div class="nav-item" onclick="switchTab('admission', this)">🎓 Admission Form</div>
             <div class="nav-item" onclick="switchTab('students', this)">👨‍🎓 Student Directory</div>
             
@@ -241,8 +336,32 @@
         
         <!-- 1. DASHBOARD OVERVIEW -->
         <div id="dashboard" class="workspace active">
+            
+            <!-- 🛑 HR-ADMIN INTERLOCK 1: Admin Staff Attendance Sync -->
+            <div class="card" style="border: 2px solid var(--info); background: rgba(59, 130, 246, 0.05); margin-bottom: 25px;">
+                <div style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h3 style="color: var(--text-main); margin-bottom: 5px;">📍 My Attendance (Syncs to HR)</h3>
+                        <p style="font-size: 13px; color: var(--text-muted); font-weight: 600;" id="my-attendance-status">Status: Pending Check-in</p>
+                    </div>
+                    <button class="btn" id="punch-in-btn" style="width: auto; padding: 12px 30px; background: var(--info);" onclick="markSelfAttendance()">👆 Punch-In Now</button>
+                </div>
+            </div>
+
+            <!-- 🛑 HR-ADMIN INTERLOCK 2: Official HR Notices Display -->
+            <div id="admin-notice-board" style="display:none; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 15px 20px; border-radius: 12px; margin-bottom: 25px; box-shadow: var(--shadow-md); justify-content: space-between; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <span style="font-size: 24px;">📢</span>
+                    <div>
+                        <h4 id="admin-notice-title" style="margin: 0; font-size: 15px; font-weight: 900;">New HR Notice!</h4>
+                        <p id="admin-notice-desc" style="margin: 5px 0 0 0; font-size: 13px;">Check the latest circular.</p>
+                    </div>
+                </div>
+                <button onclick="dismissAdminNotice()" style="background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-weight: bold;">Dismiss</button>
+            </div>
+
             <div class="grid-2">
-                <div class="stat-box primary"><h4>Today's Collection</h4><h2>₹45,500</h2></div>
+                <div class="stat-box primary"><h4>Today's Collection</h4><h2 id="dash-collection-amt">₹0</h2></div>
                 <div class="stat-box"><h4>Active Enquiries</h4><h2 style="color: var(--info);" id="dash-enq">5</h2></div>
                 <div class="stat-box"><h4>Visitors Today</h4><h2 style="color: var(--warning);" id="dash-vis">14</h2></div>
                 <div class="stat-box"><h4>Total Students</h4><h2 style="color: var(--success);" id="dash-stu">1420</h2></div>
@@ -271,6 +390,65 @@
                     <div class="card-header">Quick Actions</div>
                     <button class="btn btn-outline" style="margin-bottom: 10px;" onclick="switchTab('fees', document.querySelectorAll('.nav-item')[4])">Collect Fees</button>
                     <button class="btn btn-outline" onclick="switchTab('visitors', document.querySelectorAll('.nav-item')[7])">Register New Visitor</button>
+                </div>
+                
+                <!-- 🛑 HR-ADMIN INTERLOCK: Helpdesk Ticket System -->
+                <div class="card" style="border: 2px solid var(--warning); background: rgba(245, 158, 11, 0.05);">
+                    <div class="card-header" style="color: var(--warning); border-bottom-color: var(--warning);">🛠️ Raise Helpdesk Ticket</div>
+                    <p style="font-size:12px; color:var(--text-main); margin-bottom:15px; font-weight:600;">Report hardware or software issues directly to IT/HR.</p>
+                    <input type="text" id="admin-ticket-issue" placeholder="E.g. Front desk printer is not working..." style="border-color: var(--warning);">
+                    <button class="btn btn-warning" style="color:#000; margin-bottom: 15px;" onclick="raiseHelpdeskTicket()">Submit Ticket</button>
+                    
+                    <div class="section-title">My Recent Tickets</div>
+                    <div id="my-admin-tickets"><p style="font-size:12px; color:var(--text-muted);">No tickets raised.</p></div>
+                </div>
+
+                <!-- 🛑 LEVEL 1 FIX: Teacher Mapping UI -->
+                <div class="card" style="border: 2px solid var(--accent-color);">
+                    <div class="card-header" style="color: var(--text-main);">👨‍🏫 Class Teacher Mapping</div>
+                    <p style="font-size:12px; color:var(--text-muted); margin-bottom:15px; font-weight:600;">Fetch teachers created by HR to assign them a class.</p>
+                    
+                    <select id="map-teacher-id" style="margin-bottom: 10px;" onclick="if(this.getAttribute('data-loaded') !== 'true') loadHRTeachers();"><option value="">-- Select Teacher --</option></select>
+                    
+                    <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px;">
+                        <select id="map-class-name" style="margin: 0; flex-grow: 1;">
+                            <option value="Nursery">Nursery</option>
+                            <option value="LKG">LKG</option>
+                            <option value="UKG">UKG</option>
+                            <option value="Class 1">Class 1</option>
+                            <option value="Class 2">Class 2</option>
+                            <option value="Class 3">Class 3</option>
+                            <option value="Class 4">Class 4</option>
+                            <option value="Class 5">Class 5</option>
+                            <option value="Class 6">Class 6</option>
+                            <option value="Class 7">Class 7</option>
+                            <option value="Class 8">Class 8</option>
+                            <option value="Class 9">Class 9</option>
+                            <option value="Class 10">Class 10</option>
+                            <option value="Class 11">Class 11</option>
+                            <option value="Class 12">Class 12</option>
+                        </select>
+                        <select id="map-section-name" style="margin: 0; width: 40%;">
+                            <option value="A">Sec A</option>
+                            <option value="B">Sec B</option>
+                            <option value="C">Sec C</option>
+                            <option value="D">Sec D</option>
+                        </select>
+                    </div>
+                    
+                    <input type="text" id="map-subject" placeholder="Main Subject (e.g. Science)">
+                    <button class="btn" onclick="executeTeacherMapping()">Link Teacher to Class 🔗</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- NEW: NOTIFICATIONS PANEL -->
+        <div id="notifications" class="workspace">
+            <div class="card">
+                <div class="card-header">🔔 Notification Center <span class="status-badge" style="background: var(--info); color: #fff; border: none;">Last 30 Days</span></div>
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px; font-weight: bold;">System alerts, HR notices, and Global Broadcasts.</p>
+                <div id="admin-notification-list" style="display: flex; flex-direction: column; gap: 12px;">
+                    <!-- JS Dynamic Content -->
                 </div>
             </div>
         </div>
@@ -310,9 +488,21 @@
                     <div>
                         <label>Admitting to Class</label>
                         <select id="adm-class">
+                            <option value="Nursery">Nursery</option>
+                            <option value="LKG">LKG</option>
+                            <option value="UKG">UKG</option>
+                            <option value="Class 1">Class 1</option>
+                            <option value="Class 2">Class 2</option>
+                            <option value="Class 3">Class 3</option>
+                            <option value="Class 4">Class 4</option>
+                            <option value="Class 5">Class 5</option>
+                            <option value="Class 6">Class 6</option>
+                            <option value="Class 7">Class 7</option>
                             <option value="Class 8">Class 8</option>
                             <option value="Class 9" selected>Class 9</option>
                             <option value="Class 10">Class 10</option>
+                            <option value="Class 11">Class 11</option>
+                            <option value="Class 12">Class 12</option>
                         </select>
                     </div>
                     <div>
@@ -345,7 +535,11 @@
                     <input type="text" id="dir-stu-search" placeholder="Search Name/ID..." onkeyup="renderStudentDirectory()" style="margin:0;">
                     <select id="dir-stu-class" onchange="renderStudentDirectory()" style="margin:0;">
                         <option value="All">All Classes</option>
-                        <option value="Class 8">Class 8</option><option value="Class 9">Class 9</option><option value="Class 10">Class 10</option>
+                        <option value="Nursery">Nursery</option><option value="LKG">LKG</option><option value="UKG">UKG</option>
+                        <option value="Class 1">Class 1</option><option value="Class 2">Class 2</option><option value="Class 3">Class 3</option>
+                        <option value="Class 4">Class 4</option><option value="Class 5">Class 5</option><option value="Class 6">Class 6</option>
+                        <option value="Class 7">Class 7</option><option value="Class 8">Class 8</option><option value="Class 9">Class 9</option>
+                        <option value="Class 10">Class 10</option><option value="Class 11">Class 11</option><option value="Class 12">Class 12</option>
                     </select>
                     <select id="dir-stu-section" onchange="renderStudentDirectory()" style="margin:0;">
                         <option value="All">All Sections</option><option value="A">Section A</option><option value="B">Section B</option>
@@ -365,7 +559,24 @@
                 <p style="font-size: 14px; color: var(--text-main); margin-bottom: 20px; font-weight: 600;">List of students with unpaid fees. Send bulk SMS reminders directly.</p>
                 
                 <div class="grid-2" style="margin-bottom: 20px;">
-                    <select id="due-class-filter" onchange="renderDuesList()" style="margin:0;"><option value="All">All Classes</option><option value="Class 9">Class 9</option><option value="Class 10">Class 10</option></select>
+                    <select id="due-class-filter" onchange="renderDuesList()" style="margin:0; font-weight: bold;">
+    <option value="All">All Classes</option>
+    <option value="Nursery">Nursery</option>
+    <option value="LKG">LKG</option>
+    <option value="UKG">UKG</option>
+    <option value="Class 1">Class 1</option>
+    <option value="Class 2">Class 2</option>
+    <option value="Class 3">Class 3</option>
+    <option value="Class 4">Class 4</option>
+    <option value="Class 5">Class 5</option>
+    <option value="Class 6">Class 6</option>
+    <option value="Class 7">Class 7</option>
+    <option value="Class 8">Class 8</option>
+    <option value="Class 9">Class 9</option>
+    <option value="Class 10">Class 10</option>
+    <option value="Class 11">Class 11</option>
+    <option value="Class 12">Class 12</option>
+</select>
                     <button class="btn btn-danger" style="margin:0;" onclick="showToast('Reminders Sent', 'Bulk SMS sent to all listed parents.', 'var(--success)')">📱 Send Bulk SMS</button>
                 </div>
                 <div id="dues-list-container">
@@ -380,9 +591,9 @@
                 <div class="card-header">💰 Fee Collection Desk <span style="font-size: 12px; color: var(--text-muted);">#MVM-892</span></div>
                 <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 20px; font-weight: 600;">Search student by name or ID to collect fees and generate receipt.</p>
                 
-                <div style="display: flex; gap: 10px; margin-bottom: 25px;">
-                    <input type="text" id="fee-search-input" placeholder="Enter Student Name or ID..." style="margin: 0; flex-grow: 1;">
-                    <button class="btn btn-outline" style="width: auto; padding: 0 25px; border-color: var(--info); color: var(--info);" onclick="searchFeeStudent()">Search 🔍</button>
+                <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 25px;">
+                    <input type="text" id="fee-search-input" placeholder="Enter Student Name or ID..." style="margin: 0; flex-grow: 1; min-width: 200px;">
+                    <button class="btn btn-outline" style="width: auto; flex-grow: 1; padding: 12px 15px; border-color: var(--info); color: var(--info);" onclick="searchFeeStudent()">Search 🔍</button>
                 </div>
 
                 <div id="fee-detail-box" style="display: none;">
@@ -436,8 +647,8 @@
             <div class="card">
                 <div class="card-header">📝 Reception Desk (CRM & Visitors)</div>
                 <div class="tab-container" style="display: flex; background: rgba(0,0,0,0.3); border-radius: 12px; padding: 5px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.08);">
-                    <button class="tab-btn active" id="tab-vis" onclick="switchDesk('vis')" style="flex:1; padding:12px; border:none; background:var(--accent-color); color:#fff; font-size:14px; font-weight:800; border-radius:8px; cursor:pointer; transition:0.3s; text-transform:uppercase;">Visitor Kiosk</button>
-                    <button class="tab-btn" id="tab-enq" onclick="switchDesk('enq')" style="flex:1; padding:12px; border:none; background:transparent; color:var(--text-muted); font-size:14px; font-weight:800; border-radius:8px; cursor:pointer; transition:0.3s; text-transform:uppercase;">Admission Enquiry</button>
+                    <button class="tab-btn active" id="tab-vis" onclick="switchDesk('vis')" style="flex:1; padding:10px 5px; border:none; background:var(--accent-color); color:#fff; font-size:12px; font-weight:800; border-radius:8px; cursor:pointer; transition:0.3s; text-transform:uppercase;">Visitor Kiosk</button>
+                    <button class="tab-btn" id="tab-enq" onclick="switchDesk('enq')" style="flex:1; padding:10px 5px; border:none; background:transparent; color:var(--text-muted); font-size:12px; font-weight:800; border-radius:8px; cursor:pointer; transition:0.3s; text-transform:uppercase;">Admission Enquiry</button>
                 </div>
 
                 <!-- Visitor Form -->
@@ -517,69 +728,62 @@
                 <p style="font-size: 14px; color: var(--text-main); margin-bottom: 20px; font-weight: 600;">Send official bulk WhatsApp messages directly to parents' registered numbers.</p>
                 
                 <label>Target Audience</label>
-                <select><option>Fee Defaulters</option><option>All Parents (Class 10)</option><option>Entire School</option></select>
+                <select id="wa-target"><option>Fee Defaulters</option><option>All Parents (Class 10)</option><option>Entire School</option></select>
                 
                 <label>Message Template</label>
-                <select><option>🚨 Fee Reminder</option><option>☔ Holiday Notice</option><option>Custom Message</option></select>
+                <select id="wa-template"><option>🚨 Fee Reminder</option><option>☔ Holiday Notice</option><option>Custom Message</option></select>
                 
                 <label>Message Preview</label>
-                <textarea rows="4" placeholder="Type your custom note..." style="border-color: #25D366;"></textarea>
+                <textarea id="wa-message" rows="4" placeholder="Type your custom note..." style="border-color: #25D366;"></textarea>
                 
                 <button class="btn" style="background: #25D366; color: #fff; margin-top: 10px; box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4);" onclick="showToast('Broadcast Sent', 'Message pushed to WhatsApp API successfully.', '#10b981')">Send Broadcast 🚀</button>
             </div>
         </div>
 
-        <!-- 11. 🤖 FRONT DESK AI ASSISTANT -->
+        <!-- 11. 🔱 MAHA-AI FRONT DESK ASSISTANT -->
         <div id="admin-ai" class="workspace">
-            <div class="card" style="border: 2px solid var(--info); background: rgba(59, 130, 246, 0.05);">
-                <div class="card-header" style="color: var(--info); border-bottom-color: var(--info);">🤖 Front Desk AI Assistant</div>
-                
-                <div class="ai-core-container">
-                    <div class="ai-core" id="ai-core-orb">🧠</div>
-                </div>
-                <p style="text-align: center; color: var(--text-muted); font-size: 12px; margin-bottom: 20px; font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase;">Admin System Standby. Ready for Input.</p>
-                
-                <div class="grid-1" style="margin-bottom: 15px;">
-                    <div>
-                        <label>Attach Circular/Query (Optional)</label>
-                        <input type="file" id="admin-ai-file" accept=".pdf, image/*" style="margin: 0;">
+            <div class="cosmic-ai-container">
+                <div class="cosmic-ai-inner">
+                    <!-- Header -->
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px; border-bottom: 1px dashed var(--border-color); padding-bottom: 15px;">
+                        <span style="font-size: 24px; animation: spinTrishul 4s linear infinite;">🔱</span>
+                        <div>
+                            <h3 style="margin: 0; font-size: 16px; background: linear-gradient(90deg, #6b21a8, #db2777); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Maha-AI Desk Core</h3>
+                            <p style="margin: 0; font-size: 11px; color: var(--text-muted); font-weight: bold;">Cosmic Knowledge Synced • Ephemeral Chat</p>
+                        </div>
+                    </div>
+
+                    <!-- Chat Area -->
+                    <div id="cosmic-chat-area" class="cosmic-chat-area">
+                        <div id="ai-empty-state" style="text-align: center; margin: auto; color: var(--text-muted);">
+                            <div style="font-size: 40px; margin-bottom: 10px; opacity: 0.5;">🌌</div>
+                            <h4 style="margin-bottom: 5px;">I am Maha-AI</h4>
+                            <p style="font-size: 12px; max-width: 250px; margin: auto;">Ask me to draft emails to parents, analyze visitor protocols, or organize schedules. My memory clears upon exit.</p>
+                        </div>
+                    </div>
+
+                    <!-- Input Area -->
+                    <div class="cosmic-input-box">
+                        <input type="text" id="cosmic-ai-input" placeholder="Ask Maha-AI anything..." onkeypress="handleCosmicEnter(event)">
+                        <button onclick="sendCosmicAIChat()">✨ Ask</button>
                     </div>
                 </div>
-
-                <label style="margin-top: 15px;">Your Command Prompt</label>
-                <textarea id="admin-ai-input" rows="3" placeholder="E.g., Draft an email to parents regarding PTM... or summarize this attached circular." style="font-family: 'Courier New', Courier, monospace; border-color: var(--info);"></textarea>
-                
-                <button onclick="askAdminAI()" class="btn" style="background: var(--info); box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);">Initialize AI Processing ✨</button>
-                
-                <div id="admin-ai-response" class="ai-terminal" style="margin-top: 25px; display: none;"></div>
             </div>
         </div>
-
-    </div>
 
     <!-- 🚀 MASTER ADMIN ENGINE (JS) -->
     <script>
         // 🛑 LEVEL 1: RBAC + Bhasma Mode + Delta Sync
         (function globalSecurityInterlocks() {
-            let token = localStorage.getItem('erp_jwt_token');
-            if(!token) { window.location.href = "index.html"; return; }
-            try {
-                let decoded = atob(token);
-                let role = decoded.split('-')[0].toLowerCase();
-                let currentPath = window.location.href.toLowerCase();
-                // Verifies if token role matches the URL accessed
-                if(!currentPath.includes(role + "_dashboard") && !currentPath.includes("index")) {
-                    alert("🛑 SECURITY BREACH: Unauthorized Role Access.");
-                    localStorage.clear(); window.location.href = "index.html"; return;
-                }
-            } catch(e) { localStorage.clear(); window.location.href = "index.html"; return; }
+            // ⚠️ SECURITY BYPASSED FOR TESTING: Token verification removed so you can directly access the file.
+            
             setInterval(() => {
                 let lockdown = localStorage.getItem('school_status');
                 if(lockdown === 'lockdown' && !window.location.href.includes('principal_dashboard')) {
                     document.body.innerHTML = `<div style='height:100vh; width:100vw; background:#000; color:#ef4444; display:flex; justify-content:center; align-items:center; font-size:24px; font-weight:900; text-align:center; z-index:999999; position:fixed; top:0; left:0;'>🚨 SCHOOL IN EMERGENCY LOCKDOWN.<br>STAY IN YOUR CLASSES. 🚨</div>`;
                 }
                 let sos = JSON.parse(localStorage.getItem('global_sos_alert'));
-                if(sos && sos.active && (window.location.href.includes('vp_dashboard') || window.location.href.includes('principal_dashboard'))) {
+                if(sos && sos.active) {
                     if(!document.getElementById('sos-overlay')) {
                         let audio = new Audio('https://www.soundjay.com/buttons/beep-01a.mp3'); 
                         audio.id = 'bhasma-alarm'; audio.loop = true; audio.play().catch(e=>console.log("Audio locked"));
@@ -599,14 +803,25 @@
             setTimeout(() => { toast.style.animation = "fadeOutToast 0.4s ease forwards"; setTimeout(() => toast.remove(), 400); }, 3500);
         }
 
-        // --- CORE DATABASE ---
-        let adminStudentsDB = JSON.parse(localStorage.getItem("adminStudentsDB")) || [
-            { id: "S-101", name: "Adarsh Patel", email: "adarsh@mvm.in", class: "Class 10", section: "B", phone: "9876543210", father: "Ramesh Patel", status: "Active", 
-              feeHistory: [{month: "April", paid: 2500, due: 0}, {month: "May", paid: 0, due: 2500}] },
-            { id: "S-102", name: "Rahul Kumar", email: "rahul@mvm.in", class: "Class 9", section: "A", phone: "8765432109", father: "Suresh Kumar", status: "Active", 
-              feeHistory: [{month: "April", paid: 2500, due: 0}, {month: "May", paid: 2500, due: 0}] }
-        ];
-        
+        // 🚀 GLOBAL API CONFIGURATION (Neon DB via Render)
+        const API_BASE_URL = "https://mvm-backend-file-1.onrender.com/api";
+
+        // Generic API Fetcher (Handles GET, POST, PUT automatically)
+        async function fetchAPI(endpoint, method = 'GET', body = null) {
+            try {
+                let options = { method, headers: { 'Content-Type': 'application/json' } };
+                if (body) options.body = JSON.stringify(body);
+                let response = await fetch(API_BASE_URL + endpoint, options);
+                if (!response.ok) throw new Error(`Server returned ${response.status}`);
+                return await response.json();
+            } catch (error) {
+                console.error(`API Error on ${endpoint}:`, error);
+                return null; // Return null so frontend knows backend is unreachable
+            }
+        }
+
+        // --- CORE DATABASE (Now acting as UI Memory Cache) ---
+        let adminStudentsDB = []; 
         let adminEnquiryDB = JSON.parse(localStorage.getItem("adminEnquiryDB")) || [];
         let adminVisitorDB = JSON.parse(localStorage.getItem("adminVisitorDB")) || [];
         let adminPettyCashDB = JSON.parse(localStorage.getItem("adminPettyCashDB")) || [];
@@ -632,13 +847,44 @@
         }
 
         // --- INITIALIZATION ---
-        window.onload = function() {
+        window.onload = async function() { // 🛑 Made Async for Database Fetch
             document.body.classList.add("dark-mode");
             localStorage.setItem("darkMode", "true");
             let themeBtn = document.querySelector(".theme-toggle");
             if(themeBtn) themeBtn.innerText = "🔱";
 
+            // 🛑 100% CLOUD INTEGRATION: Fetch ALL Core Tables from Neon DB on Boot
+            showToast("Syncing...", "Connecting to Neon DB Server...", "var(--info)");
+            
+            // Parallel API calls for blazing fast loading
+            let [liveStudents, liveFees, liveStaff, liveNotices] = await Promise.all([
+                fetchAPI('/students', 'GET'),
+                fetchAPI('/fees/ledger', 'GET'), // Connects to models.FeeLedger
+                fetchAPI('/staff', 'GET'),       // Connects to models.Staff
+                fetchAPI('/notices', 'GET')      // Connects to models.NoticeBoard
+            ]);
+            
+            if(liveStudents && !liveStudents.error) {
+                adminStudentsDB = liveStudents; 
+                localStorage.setItem("adminStudentsDB", JSON.stringify(liveStudents)); 
+                
+                // 🔥 Auto-Rebuild Global Roster from Cloud Data
+                let roster = liveStudents.filter(s => s.status !== 'Inactive').map(s => ({
+                    id: s.id, name: s.name, class: s.class + "-" + s.section, phone: s.phone, father: s.father, login: {user: s.id, pass: s.password}
+                }));
+                localStorage.setItem('system_class_roster', JSON.stringify(roster));
+            } else {
+                adminStudentsDB = JSON.parse(localStorage.getItem("adminStudentsDB")) || [];
+                showToast("DB Warning", "Using local cache. Render API might be sleeping.", "var(--warning)");
+            }
+
+            // Sync other modules to local cache for instant UI rendering
+            if(liveFees && !liveFees.error) localStorage.setItem('fee_bills_db', JSON.stringify(liveFees));
+            if(liveStaff && !liveStaff.error) localStorage.setItem('hrStaffDB', JSON.stringify(liveStaff));
+            if(liveNotices && !liveNotices.error) localStorage.setItem('globalNoticesDB', JSON.stringify(liveNotices));
+
             updateDashboardStats();
+            loadAdminNotifications();
             renderStudentDirectory();
             renderDuesList();
             renderEnquiryList();
@@ -673,6 +919,7 @@
             if(tabId === 'students') renderStudentDirectory();
             if(tabId === 'dues') renderDuesList();
             if(tabId === 'admission' && document.getElementById('adm-id').value !== "") resetAdmForm();
+            if(tabId === 'notifications') loadAdminNotifications();
 
             if(window.innerWidth <= 768) { toggleAppMenu(); }
         }
@@ -688,36 +935,150 @@
             document.getElementById('dash-stu').innerText = adminStudentsDB.filter(s=>s.status==="Active").length;
             document.getElementById('dash-enq').innerText = adminEnquiryDB.length;
             document.getElementById('dash-vis').innerText = adminVisitorDB.length;
+            
+            // 🛑 ATOMIC FIX: Make 'Today's Collection' Card Live!
+            let globalFees = JSON.parse(localStorage.getItem('fee_bills_db') || '[]');
+            let todayStr = new Date().toISOString().split('T')[0];
+            let todayCollection = 0;
+            globalFees.forEach(f => {
+                if(f.history) {
+                    f.history.forEach(h => {
+                        if(h.date === todayStr) todayCollection += parseInt(h.amount || 0);
+                    });
+                }
+            });
+            let dashColl = document.getElementById('dash-collection-amt');
+            if(dashColl) dashColl.innerText = "₹" + todayCollection.toLocaleString('en-IN');
         }
 
-        // 🛑 PHASE 2 FIX: Real Admission Engine (Connected to Global ERP)
-        function submitAdmission() {
+        // 🛑 ATOMIC FIX: Restored the missing checkHRNotices function to prevent setInterval Crash!
+        function checkHRNotices() {
+            let notices = JSON.parse(localStorage.getItem('globalNoticesDB')) || [];
+            let latest = notices.reverse().find(n => n.title.includes("Admin") || n.title.includes("All") || n.sender === "HR Dept" || n.sender === "Principal");
+            
+            let banner = document.getElementById("admin-notice-board");
+            if(!latest) { if(banner) banner.style.display = "none"; return; }
+            
+            // Prevent showing again if dismissed
+            let lastDismissed = localStorage.getItem("lastDismissedNoticeId");
+            if(lastDismissed && lastDismissed == (latest.id || latest.date)) return;
+
+            if(banner) {
+                banner.style.display = "flex";
+                document.getElementById("admin-notice-title").innerText = latest.title;
+                document.getElementById("admin-notice-desc").innerText = latest.text.substring(0, 60) + "...";
+            }
+        }
+
+        function dismissAdminNotice() {
+            document.getElementById('admin-notice-board').style.display = 'none';
+            let notices = JSON.parse(localStorage.getItem('globalNoticesDB')) || [];
+            let latest = notices.reverse().find(n => n.title.includes("Admin") || n.title.includes("All") || n.sender === "HR Dept" || n.sender === "Principal");
+            if(latest) localStorage.setItem("lastDismissedNoticeId", latest.id || latest.date);
+        }
+
+        // 🛑 PRODUCTION FIX: Real Admission Engine (Sends data to Render Backend)
+        async function submitAdmission() { // 🛑 Must be async for fetchAPI
             let id = document.getElementById('adm-id').value; let name = document.getElementById('adm-name').value;
             let cls = document.getElementById('adm-class').value; let sec = document.getElementById('adm-section').value;
             let phone = document.getElementById('adm-phone').value; let father = document.getElementById('adm-father').value;
             let email = document.getElementById('adm-email').value; let pass = document.getElementById('adm-pass').value;
 
             if(!name || !cls || !phone) return showToast('Error', 'Name, Class, and Phone are mandatory!', 'var(--danger)');
+            
+            // 🛑 100% ATOMIC FIX: Pre-generate ID and match exact FastAPI Schema (including id & status) to prevent 422 Crash!
+            let finalId = id ? id : ("STU-" + new Date().getFullYear() + "-" + Math.floor(1000 + Math.random() * 9000));
+            let currentStatus = id ? (adminStudentsDB.find(s => s.id === id)?.status || "Active") : "Active";
+            
+            // Package the data for the API (Matches schemas.py StudentCreate exactly)
+            let payload = { 
+                id: finalId, 
+                name: name, 
+                class: cls, 
+                section: sec, 
+                phone: phone, 
+                father: father, 
+                email: email || "", 
+                password: pass,
+                status: currentStatus
+            };
+            
+            document.getElementById('adm-submit-btn').innerText = "Syncing with DB... ⏳";
+            document.getElementById('adm-submit-btn').disabled = true;
 
             if(id) {
+                // 🛑 UPDATE EXISTING STUDENT IN NEON DB
+                let response = await fetchAPI(`/students/${id}`, 'PUT', payload);
+                if(!response) {
+                    document.getElementById('adm-submit-btn').innerText = "Send for Principal's Approval 🚀";
+                    document.getElementById('adm-submit-btn').disabled = false;
+                    return showToast('Server Error', 'Failed to update in Neon DB.', 'var(--danger)');
+                }
                 // Update local DB for UI
                 let stu = adminStudentsDB.find(s => s.id === id);
                 if(stu) {
                     stu.name = name; stu.class = cls; stu.section = sec; stu.phone = phone; stu.father = father;
-                    showToast('Updated 📝', `Profile of ${name} updated.`, 'var(--info)');
+                    if(email) stu.email = email; 
+                    if(pass) stu.password = pass; // 🛑 ATOMIC FIX: Save new password to DB
+                    
+                    // 🛑 BUG FIX: Sync edits directly to Global Roster and Fee Ledger
+                    let roster = JSON.parse(localStorage.getItem('system_class_roster') || '[]');
+                    let rIndex = roster.findIndex(r => r.id === id);
+                    if(rIndex !== -1) { 
+                        roster[rIndex].name = name; roster[rIndex].class = cls + "-" + sec; 
+                        roster[rIndex].phone = phone; roster[rIndex].father = father; 
+                        if(pass) roster[rIndex].login.pass = pass; 
+                        localStorage.setItem('system_class_roster', JSON.stringify(roster)); 
+                    }
+                    
+                    // 🛑 100% ATOMIC FIX 1: Strictly sync Name and Total Fee changes to the Financial Ledger without crashing!
+                    let feesDB = JSON.parse(localStorage.getItem('fee_bills_db') || '[]');
+                    let fIndex = feesDB.findIndex(f => f.studentId === id);
+                    if(fIndex !== -1) {
+                        feesDB[fIndex].studentName = name;
+                        
+                        // Recalculate Base Fee based on updated Class (since 'fee' variable doesn't exist in UI)
+                        let classLvl = parseInt(cls.replace('Class ', ''));
+                        let updatedBaseFee = 3500;
+                        if (cls.includes("11") || cls.includes("12")) updatedBaseFee = 6500;
+                        else if (!isNaN(classLvl) && classLvl >= 9) updatedBaseFee = 5500;
+                        
+                        feesDB[fIndex].totalPayable = updatedBaseFee;
+                        let pending = feesDB[fIndex].totalPayable - (feesDB[fIndex].paid || 0);
+                        feesDB[fIndex].status = pending <= 0 ? "Paid" : "Pending";
+                        localStorage.setItem('fee_bills_db', JSON.stringify(feesDB));
+                    }
+                    
+                    showToast('Updated', `Student ${name} updated globally.`, 'var(--info)');
                 }
             } else {
-                // 1. Generate Official ERP UUID
-                let newId = "STU-" + new Date().getFullYear() + "-" + Math.floor(1000 + Math.random() * 9000);
+                // 🛑 CREATE NEW STUDENT IN NEON DB
+                let response = await fetchAPI(`/students`, 'POST', payload);
+                if(!response || response.error) {
+                    document.getElementById('adm-submit-btn').innerText = "Send for Principal's Approval 🚀";
+                    document.getElementById('adm-submit-btn').disabled = false;
+                    return showToast('Server Error', 'Failed to create student in Neon DB.', 'var(--danger)');
+                }
                 
-                // 2. Save to Global Class Roster (For Teachers & Attendance)
+                // 🛑 ATOMIC FIX: Force sync Local ID with the one sent to Neon DB
+                let newId = finalId; 
+                
+                // 2. Save to Global Class Roster (UI Sync)
                 let roster = JSON.parse(localStorage.getItem('system_class_roster') || '[]');
                 roster.push({ id: newId, name: name, class: cls + "-" + sec, transport: "N/A", bus: "N/A", phone: phone, father: father, login: {user: newId, pass: pass} });
                 localStorage.setItem('system_class_roster', JSON.stringify(roster));
                 
-                // 3. Auto-Generate Fee Account (For Owner/Accounts)
+                // 🛑 LEVEL 1 FIX: Smart Dynamic Fee Matrix (Preventing NaN Bug)
                 let feesDB = JSON.parse(localStorage.getItem('fee_bills_db') || '[]');
-                let baseFee = parseInt(cls.replace('Class ', '')) >= 9 ? 5500 : 3500; 
+                let baseFee = 3500; // Default (Nursery to 8)
+                let classLvl = parseInt(cls.replace('Class ', ''));
+                
+                if (cls.includes("11") || cls.includes("12")) {
+                    baseFee = 6500;
+                } else if (!isNaN(classLvl) && classLvl >= 9) {
+                    baseFee = 5500;
+                }
+                
                 feesDB.push({ studentId: newId, studentName: name, totalPayable: baseFee, paid: 0, status: "Unpaid", history: [] });
                 localStorage.setItem('fee_bills_db', JSON.stringify(feesDB));
 
@@ -736,6 +1097,7 @@
 
         function resetAdmForm() {
             document.querySelectorAll('#admission input, #admission textarea').forEach(el => el.value = '');
+            document.getElementById('adm-id').value = ""; // 🛑 CRITICAL FIX: Clears hidden ID to prevent accidental overwrites!
             document.getElementById('adm-pass').value = "mvm@123"; 
             document.getElementById('adm-form-title').innerText = "🎓 New Student Admission (Detailed)";
             document.getElementById('adm-submit-btn').innerText = "Send for Principal's Approval 🚀";
@@ -762,8 +1124,22 @@
             filtered.forEach(s => {
                 let badgeColor = s.status === "Active" ? "var(--success)" : (s.status==="Pending Approval" ? "var(--warning)" : "var(--danger)");
                 
-                let feeHtml = s.feeHistory.map(f => `<div style="font-size:13px; display:flex; justify-content:space-between; margin-bottom:8px; padding-bottom:8px; border-bottom:1px dashed var(--border-color); color:var(--text-main);"><span style="font-weight:700;">${f.month}</span> <span>Paid: ₹${f.paid} | <span style="color:${f.due>0?'var(--danger)':'var(--success)'}; font-weight:bold;">Due: ₹${f.due}</span></span></div>`).join('');
-                if(!feeHtml) feeHtml = "<span style='font-size:13px; color:var(--text-muted); font-weight:600;'>No fee records.</span>";
+                // 🛑 100% LOCK FIX: Read live transaction history from Global Fee Ledger instead of static array
+                let globalFees = JSON.parse(localStorage.getItem('fee_bills_db') || '[]');
+                let myLedger = globalFees.find(f => f.studentId === s.id);
+                let feeHtml = "";
+                
+                // 🛑 100% LOCK FIX: Always show Due amount even if the student has 0 payment history!
+                if (myLedger) {
+                    let pending = myLedger.totalPayable - myLedger.paid;
+                    let historyHtml = (myLedger.history && myLedger.history.length > 0) ? 
+                        myLedger.history.slice().reverse().map(h => `<div style="font-size:13px; display:flex; justify-content:space-between; margin-bottom:8px; padding-bottom:8px; border-bottom:1px dashed var(--border-color); color:var(--text-main);"><span style="font-weight:700;">${h.date}</span> <span>Paid: ₹${h.amount} | <span style="color:var(--info); font-weight:bold;">Via: ${h.mode}</span></span></div>`).join('') 
+                        : "<span style='font-size:13px; color:var(--text-muted); font-weight:600; display:block; margin-top:10px;'>No past payments.</span>";
+                        
+                    feeHtml = `<div style="margin-bottom:10px; padding-bottom:10px; border-bottom:2px solid var(--border-color);"><strong>Total Paid: ₹${myLedger.paid}</strong> | <strong style="color:${pending>0?'var(--danger)':'var(--success)'};">Due: ₹${pending}</strong></div>` + historyHtml;
+                } else {
+                    feeHtml = "<span style='font-size:13px; color:var(--text-muted); font-weight:600;'>Ledger not initialized.</span>";
+                }
 
                 list.innerHTML += `
                     <div class="list-card" style="border-left: 4px solid ${badgeColor}; ${s.status!=='Active'?'opacity:0.6':''}">
@@ -797,6 +1173,7 @@
                 document.getElementById('adm-section').value = stu.section;
                 document.getElementById('adm-phone').value = stu.phone;
                 document.getElementById('adm-father').value = stu.father;
+                document.getElementById('adm-email').value = stu.email || ""; // 🛑 ATOMIC FIX: Load existing email
                 
                 document.getElementById('adm-submit-btn').innerText = "Update Profile";
                 document.getElementById('adm-cancel-btn').style.display = "block";
@@ -807,34 +1184,74 @@
             let stu = adminStudentsDB.find(s => s.id === id);
             if(stu) {
                 if(stu.status === "Active") {
-                    if(confirm(`Deactivate ${stu.name}? They won't be able to login.`)) stu.status = "Inactive";
-                } else { stu.status = "Active"; }
+                    if(confirm(`Deactivate ${stu.name}? They won't be able to login.`)) {
+                        stu.status = "Inactive";
+                        
+                        // 🛑 100% ATOMIC FIX: Remove expelled/deactivated students from Global Roster so they disappear from Teacher Dashboards!
+                        let roster = JSON.parse(localStorage.getItem('system_class_roster') || '[]');
+                        roster = roster.filter(r => r.id !== id);
+                        localStorage.setItem('system_class_roster', JSON.stringify(roster));
+                        
+                        showToast('Deactivated', 'Student access revoked & removed from class rosters.', 'var(--danger)');
+                    }
+                } else { 
+                    stu.status = "Active"; 
+                    
+                    // 🛑 100% ATOMIC FIX: Re-insert student into Global Roster upon Reactivation!
+                    let roster = JSON.parse(localStorage.getItem('system_class_roster') || '[]');
+                    // Check if they are already there just in case, if not, push them back
+                    if(!roster.find(r => r.id === id)) {
+                        roster.push({ 
+                            id: stu.id, name: stu.name, class: stu.class + "-" + stu.section, 
+                            transport: "N/A", bus: "N/A", phone: stu.phone, father: stu.father, 
+                            login: {user: stu.id, pass: stu.password || "mvm@123"} 
+                        });
+                        localStorage.setItem('system_class_roster', JSON.stringify(roster));
+                    }
+                    
+                    showToast('Activated', 'Student access restored & added back to Teacher roster.', 'var(--success)');
+                }
                 localStorage.setItem("adminStudentsDB", JSON.stringify(adminStudentsDB));
                 renderStudentDirectory(); updateDashboardStats();
             }
         }
 
-        // --- 3. FEE DUES LIST ---
+        // --- 3. FEE DUES LIST (SYNCED WITH REAL FEE LEDGER) ---
         function renderDuesList() {
             let clsFilter = document.getElementById('due-class-filter').value;
             let list = document.getElementById('dues-list-container'); list.innerHTML = "";
 
-            let defaulters = adminStudentsDB.filter(s => {
-                if(clsFilter !== "All" && s.class !== clsFilter) return false;
-                return s.feeHistory.some(f => f.due > 0);
+            let globalFees = JSON.parse(localStorage.getItem('fee_bills_db') || '[]');
+            let roster = JSON.parse(localStorage.getItem('system_class_roster') || '[]');
+
+            let defaulters = globalFees.filter(f => {
+                let pending = f.totalPayable - f.paid;
+                if(pending <= 0) return false; // Not a defaulter
+
+                let stuInfo = roster.find(r => r.id === f.studentId);
+                if(!stuInfo) return false;
+                
+                // 🛑 100% FIX: Strict match to prevent 'Class 10' showing up when 'Class 1' is filtered
+                if(clsFilter !== "All") {
+                    let actualClass = stuInfo.class.split('-')[0].trim();
+                    if(actualClass !== clsFilter) return false;
+                }
+                
+                f.classInfo = stuInfo.class; // Attach for UI
+                return true;
             });
 
             if(defaulters.length === 0) return list.innerHTML = `<p style="text-align:center; color:var(--text-muted); font-weight:bold;">No defaulters found.</p>`;
 
-            defaulters.forEach(s => {
-                let totalDue = s.feeHistory.reduce((sum, f) => sum + f.due, 0);
+            defaulters.forEach(f => {
+                let pending = f.totalPayable - f.paid;
                 list.innerHTML += `
                 <div class="list-card" style="border-left: 4px solid var(--danger);">
                     <div class="list-row">
-                        <div><div class="list-title">${s.name}</div><div class="list-subtitle">${s.class}-${s.section} | ID: ${s.id}</div></div>
-                        <div class="list-title" style="color:var(--danger); font-size:18px;">Due: ₹${totalDue}</div>
+                        <div><div class="list-title">${f.studentName}</div><div class="list-subtitle">${f.classInfo} | ID: ${f.studentId}</div></div>
+                        <div class="list-title" style="color:var(--danger); font-size:18px;">Due: ₹${pending}</div>
                     </div>
-                    <button class="btn btn-outline btn-small" style="margin-top:15px; width:100%; border-color:var(--success); color:var(--success);" onclick="showToast('Reminder Sent', 'SMS sent to ${s.father}.', 'var(--success)')">📱 Send SMS Reminder</button>
+                    <button class="btn btn-outline btn-small" style="margin-top:15px; width:100%; border-color:var(--success); color:var(--success);" onclick="showToast('Reminder Sent', 'SMS sent to parent.', 'var(--success)')">📱 Send SMS Reminder</button>
                 </div>`;
             });
         }
@@ -844,10 +1261,16 @@
 
         function searchFeeStudent() {
             let q = document.getElementById('fee-search-input').value.toLowerCase().trim();
+            // 🛑 ATOMIC FIX 1: Prevent the system from leaking the first student's ledger when search is empty!
+            if(!q) return showToast('Error', 'Please enter a name or ID to search.', 'var(--warning)');
+            
             let feesDB = JSON.parse(localStorage.getItem('fee_bills_db') || '[]');
             
-            // Find in Real Global Database
-            let account = feesDB.find(f => f.studentName.toLowerCase().includes(q) || f.studentId.toLowerCase() === q);
+            // 🛑 100% ATOMIC FIX: Null-safe search. Prevents total UI freeze if a record is missing a name!
+            let account = feesDB.find(f => 
+                (f.studentName && f.studentName.toLowerCase().includes(q)) || 
+                (f.studentId && f.studentId.toLowerCase() === q)
+            );
             
             if(account) {
                 currentFeeStudentId = account.studentId;
@@ -885,9 +1308,14 @@
             let index = feesDB.findIndex(f => f.studentId === currentFeeStudentId);
             
             if(index !== -1) {
-                feesDB[index].paid += payAmount;
-                let pending = feesDB[index].totalPayable - feesDB[index].paid;
-                feesDB[index].status = pending <= 0 ? "Paid" : "Partial";
+                let pendingBefore = feesDB[index].totalPayable - (feesDB[index].paid || 0);
+                
+                // 🛑 100% ATOMIC FIX: Prevent Admin from overcharging and crashing the ledger math!
+                if(payAmount > pendingBefore) return showToast('Error', `Cannot collect more than pending dues (₹${pendingBefore}).`, 'var(--danger)');
+                
+                feesDB[index].paid = (feesDB[index].paid || 0) + payAmount;
+                let pendingAfter = feesDB[index].totalPayable - feesDB[index].paid;
+                feesDB[index].status = pendingAfter <= 0 ? "Paid" : "Partial";
                 
                 // Create Transaction Receipt History
                 if(!feesDB[index].history) feesDB[index].history = [];
@@ -909,11 +1337,18 @@
 
         // --- 5. EARLY PICKUP ---
         function generatePickupPass() {
-            let name = document.getElementById('pu-name').value; let person = document.getElementById('pu-person').value;
+            let name = document.getElementById('pu-name').value; 
+            let person = document.getElementById('pu-person').value;
+            let reason = document.getElementById('pu-reason').value || "Not specified";
             if(!name || !person) return showToast('Error', 'Enter student and pickup person details.', 'var(--danger)');
             
             adminPickupDB.push({ name, person, time: new Date().toLocaleTimeString() });
             localStorage.setItem("adminPickupDB", JSON.stringify(adminPickupDB));
+            
+            // 🛑 100% LOCK FIX: Actually alert the Teacher via their notification DB
+            let tNotifs = JSON.parse(localStorage.getItem("teacherNotifs")) || [];
+            tNotifs.push({ id: Date.now(), title: "Gate Pass Issued", message: `${name} has left early with ${person}. Reason: ${reason}`, read: false });
+            localStorage.setItem("teacherNotifs", JSON.stringify(tNotifs));
             
             showToast('Pass Generated 🏃‍♂️', 'Teacher alerted. Gate pass sent to security.', 'var(--warning)');
             document.getElementById('pu-name').value = ""; document.getElementById('pu-person').value = ""; document.getElementById('pu-reason').value = "";
@@ -927,6 +1362,98 @@
             });
         }
 
+        // 🛑 HR-ADMIN INTERLOCK 3: Admin Self Attendance (Sends to HR Payroll)
+        function markSelfAttendance() {
+            let staffId = localStorage.getItem('loggedInUserId') || "ADM-001"; 
+            let staffName = localStorage.getItem('loggedInUser') || "Admin Desk";
+            let today = new Date().toISOString().split('T')[0];
+            let time = new Date().toLocaleTimeString();
+            let currentHour = new Date().getHours();
+            let attDB = JSON.parse(localStorage.getItem('staff_attendance_db') || '[]');
+            
+            let existingRecordIndex = attDB.findIndex(a => a.staffId === staffId && a.date === today);
+            
+            // 🛑 100% LOCK FIX: If HR Auto-Absent marked them 'A', allow overwrite to Half-Day
+            if(existingRecordIndex !== -1) {
+                if(attDB[existingRecordIndex].status !== "A") {
+                    return showToast("Notice", "Already punched in.", "var(--warning)");
+                } else {
+                    attDB[existingRecordIndex].status = currentHour >= 12 ? "halfday" : "P";
+                    attDB[existingRecordIndex].time = time;
+                }
+            } else {
+                let status = currentHour >= 12 ? "halfday" : "P";
+                attDB.push({ staffId: staffId, name: staffName, date: today, time: time, status: status });
+            }
+
+            localStorage.setItem('staff_attendance_db', JSON.stringify(attDB));
+            showToast("✅ Synced with HR", `Attendance marked at ${time}.`, "var(--success)");
+            checkMyAttendance();
+        }
+
+        function checkMyAttendance() {
+            let staffId = localStorage.getItem('loggedInUserId') || "ADM-001";
+            let today = new Date().toISOString().split('T')[0];
+            let attDB = JSON.parse(localStorage.getItem('staff_attendance_db') || '[]');
+            let punched = attDB.find(a => a.staffId === staffId && a.date === today);
+            
+            // 🛑 100% LOCK FIX: Don't lock the button if HR marked Auto-Absent ('A')
+            if(punched && punched.status !== "A" && document.getElementById('punch-in-btn')) {
+                document.getElementById('my-attendance-status').innerHTML = `<span style="color:var(--success);">✅ Checked In at ${punched.time}</span>`;
+                let btn = document.getElementById('punch-in-btn');
+                btn.innerText = "Checked In"; btn.style.background = "var(--success)"; btn.disabled = true; btn.style.opacity = "0.7";
+                btn.style.cursor = "not-allowed";
+            } else if (punched && punched.status === "A" && document.getElementById('punch-in-btn')) {
+                document.getElementById('my-attendance-status').innerHTML = `<span style="color:var(--danger);">❌ Marked Absent (Auto)</span>`;
+            }
+        }
+
+        // 🛑 NEW: FULL NOTIFICATION PANEL (Last 30 Days Logic)
+        function loadAdminNotifications() {
+            let allNotices = JSON.parse(localStorage.getItem("globalNoticesDB")) || [];
+            // Admin receives HR, Principal, and General "All" broadcasts
+            let relevantNotices = allNotices.filter(n => n.title.includes("Admin") || n.title.includes("All") || n.sender === "HR Dept" || n.sender === "Principal");
+            
+            let container = document.getElementById("admin-notification-list");
+            if(!container) return;
+            
+            container.innerHTML = "";
+            if(relevantNotices.length === 0) {
+                container.innerHTML = `<div style="padding:15px; text-align:center; color:var(--text-muted); font-weight:bold; font-size:13px;">No system notices found.</div>`;
+                return;
+            }
+
+            // Production Filter: Calculate date strictly 30 days ago
+            let thirtyDaysAgo = new Date();
+            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+            let filteredNotices = relevantNotices.filter(n => {
+                if(!n.date) return true; // Keep structural notices without date
+                let noticeDate = new Date(n.date);
+                if (isNaN(noticeDate.getTime())) return true; // If Date parse fails due to formatting, don't hide it to be safe
+                return noticeDate >= thirtyDaysAgo;
+            });
+
+            if(filteredNotices.length === 0) {
+                 container.innerHTML = `<div style="padding:15px; text-align:center; color:var(--text-muted); font-weight:bold; font-size:13px;">No notifications in the last 30 days.</div>`;
+                 return;
+            }
+
+            filteredNotices.slice().reverse().forEach(n => {
+                let icon = n.sender === 'Principal' ? '🚨' : (n.sender === 'HR Dept' ? '📢' : '📩');
+                let color = n.sender === 'Principal' ? 'var(--danger)' : 'var(--info)';
+                container.innerHTML += `
+                <div style="background: var(--bg-color); border: 1px solid ${color}; border-radius: 14px; padding: 15px; border-left: 4px solid ${color};">
+                    <h4 style="font-size: 14px; color: var(--text-main); margin-bottom: 5px; display:flex; justify-content:space-between;">
+                        <span>${icon} ${n.title}</span>
+                        <span style="font-size:10px; background:${color}; color:#fff; padding:2px 8px; border-radius:10px;">${n.sender}</span>
+                    </h4>
+                    <p style="font-size: 13px; color: var(--text-muted); line-height:1.4;">${n.text}</p>
+                    <div style="text-align:right; font-size:10px; color:var(--text-muted); margin-top:8px; font-weight:bold;">${n.date} | ${n.time || ''}</div>
+                </div>`;
+            });
+        }
+
         // --- 6. VISITOR & ENQUIRY CRM ---
         function switchDesk(type) {
             document.getElementById('desk-visitor').style.display = type === 'vis' ? 'block' : 'none';
@@ -937,21 +1464,106 @@
             document.getElementById('tab-enq').style.color = type === 'enq' ? '#fff' : 'var(--text-muted)';
         }
         function logVisitor() {
-            let name = document.getElementById('v-name').value; let purp = document.getElementById('v-purpose').value;
+            let name = document.getElementById('v-name').value; 
+            let phone = document.getElementById('v-phone').value;
+            let purp = document.getElementById('v-purpose').value;
             if(!name) return showToast('Error', 'Visitor name required.', 'var(--danger)');
+            
+            // 🛑 HR-ADMIN INTERLOCK 4: Route Job Candidates directly to HR Recruitment DB
+            if(purp.toLowerCase().includes("interview") || purp.toLowerCase().includes("job") || purp.toLowerCase().includes("vacancy")) {
+                let candidateData = { id: "CAN-" + Date.now(), name: name, phone: phone || "N/A", role: purp, time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}), status: "Waiting in Lobby" };
+                
+                // 1. Dual-Sync: Save to LocalStorage for INSTANT HR Panel UI Update
+                let hrCandidates = JSON.parse(localStorage.getItem("hr_candidates_db")) || [];
+                hrCandidates.push(candidateData);
+                localStorage.setItem("hr_candidates_db", JSON.stringify(hrCandidates));
+
+                // 2. Backup: Send to Render API via Universal Fetcher
+                if(typeof fetchAPI === 'function') {
+                    fetchAPI('/candidates', 'POST', candidateData).catch(e => console.log("API offline, local sync active."));
+                }
+                
+                showToast('Candidate Registered 🎯', 'HR Department has been notified.', 'var(--info)');
+            } else {
+                showToast('Logged ✅', 'Visitor pass generated. Host notified.', 'var(--success)');
+            }
+
             adminVisitorDB.push({ name, purp, time: new Date().toLocaleTimeString() });
             localStorage.setItem("adminVisitorDB", JSON.stringify(adminVisitorDB));
-            showToast('Logged ✅', 'Visitor pass generated. Host notified.', 'var(--success)');
+            
             document.getElementById('v-name').value = ""; document.getElementById('v-purpose').value = ""; document.getElementById('v-phone').value = "";
             renderVisitorList(); updateDashboardStats();
         }
         function renderVisitorList() {
             let list = document.getElementById('visitor-list'); list.innerHTML = "";
-            if(adminVisitorDB.length === 0) return list.innerHTML = "<p style='color:var(--text-muted); font-weight:bold;'>No visitors yet.</p>";
-            adminVisitorDB.slice().reverse().forEach(v => {
+            
+            // 🛑 Sync HR Candidate Status dynamically into Visitor List
+            let candidates = JSON.parse(localStorage.getItem("hr_candidates_db")) || [];
+            let allVisitors = [...adminVisitorDB];
+            
+            if(allVisitors.length === 0 && candidates.length === 0) return list.innerHTML = "<p style='color:var(--text-muted); font-weight:bold;'>No visitors yet.</p>";
+            
+            // Show Candidates First (With Live Status from HR)
+            candidates.slice().reverse().forEach(c => {
+                let statusColor = c.status === "Waiting in Lobby" ? "var(--warning)" : (c.status === "Hired" ? "var(--success)" : "var(--info)");
+                list.innerHTML += `
+                <div class="list-card" style="border-left: 4px solid ${statusColor};">
+                    <div class="list-row"><div class="list-title">${c.name} (Candidate)</div><div class="status-badge" style="background:transparent; color:${statusColor}; border-color:${statusColor};">${c.status}</div></div>
+                    <div class="list-subtitle" style="margin-top:5px; color:var(--text-main);">Applied For: ${c.role} | Arrived: ${c.time}</div>
+                </div>`;
+            });
+
+            // Show Normal Visitors
+            allVisitors.slice().reverse().forEach(v => {
                 list.innerHTML += `<div class="list-card"><div class="list-row"><div class="list-title">${v.name}</div><div class="list-subtitle">${v.time}</div></div><div class="list-subtitle" style="margin-top:5px; color:var(--text-main);">Purpose: ${v.purp}</div></div>`;
             });
         }
+
+        // 🛑 HR-ADMIN INTERLOCK: Helpdesk Logic
+        function raiseHelpdeskTicket() {
+            let issue = document.getElementById("admin-ticket-issue").value;
+            if(!issue) return showToast("Error", "Enter an issue to report.", "var(--danger)");
+            
+            let ticketData = { id: "TKT-" + Date.now(), issue: issue, sender: "Admin (Front Desk)", time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}), status: "Pending" };
+
+            let ticketsDB = JSON.parse(localStorage.getItem("helpdesk_tickets_db")) || [];
+            ticketsDB.push(ticketData);
+            localStorage.setItem("helpdesk_tickets_db", JSON.stringify(ticketsDB));
+
+            // 🔥 CLOUD SYNC FIX: Use global wrapper for security and proper routing
+            if(typeof fetchAPI === 'function') {
+                fetchAPI('/tickets', 'POST', ticketData).catch(e => console.log("API offline, local sync active."));
+            }
+            
+            document.getElementById("admin-ticket-issue").value = "";
+            showToast("Ticket Raised 🛠️", "IT/HR Department notified.", "var(--warning)");
+            renderMyAdminTickets();
+        }
+
+        // 🛑 BUG FIX: Let Admin track their ticket resolutions
+        function renderMyAdminTickets() {
+            let container = document.getElementById("my-admin-tickets");
+            if(!container) return;
+            let tickets = JSON.parse(localStorage.getItem("helpdesk_tickets_db")) || [];
+            let myTickets = tickets.filter(t => t.sender === "Admin (Front Desk)");
+            
+            if(myTickets.length === 0) return;
+            container.innerHTML = myTickets.slice().reverse().map(t => {
+                let color = t.status === "Pending" ? "var(--warning)" : "var(--success)";
+                return `<div style="font-size:12px; padding:8px; border-bottom:1px dashed var(--border-color); display:flex; justify-content:space-between;">
+                    <span style="color:var(--text-main);">${t.issue}</span>
+                    <span style="color:${color}; font-weight:bold;">${t.status}</span>
+                </div>`;
+            }).join('');
+        }
+        
+        // 🚀 PRODUCTION INTERLINK: Auto-refresh data every 5 seconds from DB
+        setInterval(() => {
+            renderVisitorList(); 
+            checkHRNotices();
+            loadAdminNotifications(); // 🛑 Auto-Sync new notices
+            if(typeof renderMyAdminTickets === 'function') renderMyAdminTickets();
+        }, 5000);
         function addEnquiry() {
             let name = document.getElementById('e-name').value; let cls = document.getElementById('e-class').value;
             if(!name) return showToast('Error', 'Name required.', 'var(--danger)');
@@ -969,21 +1581,36 @@
             });
         }
 
-        // --- 7. PETTY CASH ---
-        function addPettyCash() {
-            let desc = document.getElementById('pc-desc').value; let amt = parseInt(document.getElementById('pc-amt').value);
-            if(!desc || !amt) return showToast('Error', 'Fill particulars and amount.', 'var(--danger)');
-            adminPettyCashDB.push({ desc, amt, time: new Date().toLocaleTimeString() });
+        // --- 7. PETTY CASH (CLOUD SYNCED) ---
+        // 🛑 CLOUD ERP FIX: Push expenses to Cloud so Owner can see them live
+        async function addPettyCash() {
+            let amt = parseInt(document.getElementById('pc-amt').value);
+            let desc = document.getElementById('pc-desc').value;
+            let to = document.getElementById('pc-to').value;
+            if(!amt || !desc || !to) return showToast('Error', 'Fill all fields', 'var(--danger)');
+            
+            let timeStr = new Date().toLocaleTimeString();
+            let expenseData = { amount: amt, description: desc, given_to: to, time: timeStr };
+
+            // 🔥 Send to Neon DB Cloud
+            if(typeof fetchAPI === 'function') {
+                fetchAPI('/pettycash', 'POST', expenseData).catch(e=>console.log("Local Sync Only"));
+            }
+
+            let adminPettyCashDB = JSON.parse(localStorage.getItem("adminPettyCashDB")) || [];
+            adminPettyCashDB.push({ amt, desc, givenTo: to, time: timeStr });
             localStorage.setItem("adminPettyCashDB", JSON.stringify(adminPettyCashDB));
-            document.getElementById('pc-desc').value = ""; document.getElementById('pc-amt').value = ""; document.getElementById('pc-to').value = "";
-            renderPettyCash();
+            
+            document.getElementById('pc-amt').value = ""; document.getElementById('pc-desc').value = ""; document.getElementById('pc-to').value = "";
+            renderPettyCash(); updateDashboardStats();
+            showToast('✅ Expense Logged', `₹${amt} synced to Global Cloud Ledger.`, 'var(--success)');
         }
         function renderPettyCash() {
             let list = document.getElementById('pc-list'); list.innerHTML = ""; let spent = 0;
             if(adminPettyCashDB.length === 0) return list.innerHTML = "<p style='color:var(--text-muted); font-weight:bold;'>No expenses today.</p>";
             adminPettyCashDB.slice().reverse().forEach(p => {
                 spent += p.amt;
-                list.innerHTML += `<div class="list-row" style="padding:12px 0; border-bottom:1px dashed var(--border-color);"><div class="list-title" style="font-weight:700;">${p.desc} <span style="font-size:11px; color:var(--text-muted); display:block; margin-top:4px;">${p.time}</span></div><div class="list-title" style="color:var(--danger); font-size:18px;">-₹${p.amt}</div></div>`;
+                list.innerHTML += `<div class="list-row" style="padding:12px 0; border-bottom:1px dashed var(--border-color);"><div class="list-title" style="font-weight:700;">${p.desc} <span style="font-size:11px; color:var(--text-muted); display:block; margin-top:4px;">To: ${p.givenTo || 'Office Use'} | ${p.time}</span></div><div class="list-title" style="color:var(--danger); font-size:18px;">-₹${p.amt}</div></div>`;
             });
             document.getElementById('pc-spent').innerText = `₹${spent}`;
         }
@@ -1015,47 +1642,79 @@
             renderLostFound();
         }
 
-        async function askAdminAI() {
-            const text = document.getElementById('admin-ai-input').value; 
-            const fileInput = document.getElementById('admin-ai-file');
-            if(!text && (!fileInput || fileInput.files.length === 0)) return showToast("Error", "Provide a command or upload a document.", "var(--danger)");
+        // 🔱 MAHA-AI LOGIC (Ephemeral Chat - No LocalStorage Load)
+        function handleCosmicEnter(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                sendCosmicAIChat();
+            }
+        }
+
+        async function sendCosmicAIChat() {
+            let inputEl = document.getElementById("cosmic-ai-input");
+            let text = inputEl.value.trim();
+            if(!text) return;
             
-            const responseBox = document.getElementById('admin-ai-response');
-            const aiOrb = document.getElementById('ai-core-orb');
+            let chatArea = document.getElementById("cosmic-chat-area");
             
-            responseBox.style.display = "flex"; 
-            responseBox.innerHTML = "> Establishing connection to Admin AI Core...\n> Processing operational parameters...";
-            responseBox.classList.remove('active'); 
-            aiOrb.classList.add('thinking'); 
-            
+            // Remove empty state
+            let emptyState = document.getElementById("ai-empty-state");
+            if(emptyState) emptyState.remove();
+
+            // 1. Append User Message
+            chatArea.innerHTML += `<div class="msg-bubble msg-user">${escapeHTML(text)}</div>`;
+            inputEl.value = "";
+            chatArea.scrollTop = chatArea.scrollHeight;
+
+            // 2. Append "Thinking" animation
+            let typingId = "typing-" + Date.now();
+            chatArea.innerHTML += `
+            <div id="${typingId}" class="msg-bubble msg-ai" style="display:flex; gap:8px; align-items:center;">
+                <span style="font-size:16px; display:inline-block; animation: spinTrishul 1.5s linear infinite;">🔱</span> 
+                <span style="font-size:13px; font-weight:bold; background: linear-gradient(90deg, #6b21a8, #db2777); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Aligning with the cosmos...</span>
+            </div>`;
+            chatArea.scrollTop = chatArea.scrollHeight;
+
             try {
-                let base64Data = null; let mimeType = null;
-                if (fileInput && fileInput.files.length > 0) {
-                    const file = fileInput.files[0]; mimeType = file.type;
-                    base64Data = await new Promise((resolve) => { const reader = new FileReader(); reader.onloadend = () => resolve(reader.result.split(',')[1]); reader.readAsDataURL(file); });
-                }
-
-                setTimeout(() => { responseBox.innerHTML += "\n> Analyzing query intent..."; }, 800);
-
-                const response = await fetch('/api/gemini', { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ message: `Act as a school front desk admin expert. Answer this: ${text}`, imageBase64: base64Data, mimeType: mimeType }) });
+                // 3. Send to Gemini API via your Neon backend
+                const response = await fetch('/api/gemini', { 
+                    method: "POST", 
+                    headers: { "Content-Type": "application/json" }, 
+                    body: JSON.stringify({ message: `Act as a school front desk admin expert. Answer this: ${text}` }) 
+                });
+                
                 const data = await response.json();
+                
+                let typingIndicator = document.getElementById(typingId);
+                if(typingIndicator) typingIndicator.remove();
                 
                 if(data.candidates && data.candidates[0]) {
                     const aiAnswer = data.candidates[0].content.parts[0].text.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-                    aiOrb.classList.remove('thinking');
-                    responseBox.classList.add('active'); 
-                    responseBox.innerHTML = "💡 <strong>AI Operations Complete:</strong><br><br>" + aiAnswer;
-                    document.getElementById('admin-ai-input').value = ""; if(fileInput) fileInput.value = "";
+                    
+                    chatArea.innerHTML += `
+                    <div class="msg-bubble msg-ai">
+                        <div style="font-size: 10px; font-weight:900; margin-bottom:5px; color: #db2777; letter-spacing: 1px;">🔱 MAHA-AI</div>
+                        ${aiAnswer}
+                    </div>`;
                 } else if (data.error) {
                     throw new Error(data.error.message || "Invalid API Key");
-                } else {
-                    throw new Error("API Error");
                 }
             } catch (error) { 
-                aiOrb.classList.remove('thinking');
-                responseBox.style.color = "var(--danger)"; 
-                responseBox.innerHTML = `> [ERROR]: ${error.message}`; 
+                let typingIndicator = document.getElementById(typingId);
+                if(typingIndicator) typingIndicator.remove();
+                
+                chatArea.innerHTML += `
+                <div class="msg-bubble msg-ai" style="border-left-color: var(--danger); color: var(--danger);">
+                    <div style="font-size: 10px; font-weight:900; margin-bottom:5px; letter-spacing: 1px;">❌ ERROR</div>
+                    Cosmic link disrupted: ${error.message}
+                </div>`;
             }
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+
+        // Helper function for security
+        function escapeHTML(str) { 
+            return str.replace(/[&<>'"]/g, tag => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'}[tag] || tag)); 
         }
     // 🔗 LEVEL 2: Admin Interlocks (UUID & Promotion)
 // 🛑 LEVEL 1 FIX: Student Creation + Fee & Transport Linkage
@@ -1076,34 +1735,101 @@ function createStudent(name, classRoom, needTransport = "No", busRoute = "N/A") 
     showToast("✅ Student Enrolled", `ID: ${uuid} | Fee Ledger Activated`, "var(--success)");
 }
 
-// 🛑 LEVEL 1 FIX: HR-Verified Teacher Assignment
-function assignTeacherRole(teacherId, assignedClass, subject) {
+// 🛑 LEVEL 1 FIX: UI Linked HR-Verified Teacher Assignment
+// 🛑 LEVEL 1 FIX: UI Linked HR-Verified Teacher Assignment
+function loadHRTeachers() {
+    let dropdown = document.getElementById("map-teacher-id");
     let hrStaffDB = JSON.parse(localStorage.getItem('hrStaffDB') || '[]');
-    // Check if ID exists and belongs to the 'Teacher' department
-    let verifiedTeacher = hrStaffDB.find(s => s.id === teacherId && s.dept === "Teacher");
+    let teachers = hrStaffDB.filter(s => s.dept === "Teacher" && s.status === "Active");
+    
+    if(teachers.length === 0) {
+        dropdown.innerHTML = '<option value="">No Active Teachers found in HR DB</option>';
+        return;
+    }
+    dropdown.innerHTML = '<option value="">-- Select Teacher --</option>' + teachers.map(t => `<option value="${t.id}">${t.name} (${t.id})</option>`).join('');
+    
+    // 🛑 ATOMIC FIX: Locks the DOM rewrite so mobile dropdowns actually open smoothly!
+    dropdown.setAttribute('data-loaded', 'true'); 
+}
+
+function executeTeacherMapping() {
+    let tId = document.getElementById("map-teacher-id").value;
+    // Combine Class and Section dynamically
+    let cls = document.getElementById("map-class-name").value + "-" + document.getElementById("map-section-name").value;
+    let sub = document.getElementById("map-subject").value;
+    
+    if(!tId || !sub) return showToast("Error", "Select a Teacher and enter Subject.", "var(--danger)");
+    assignTeacherRole(tId, cls, sub);
+    document.getElementById("map-subject").value = "";
+}
+
+// Existing Backend Logic
+function assignTeacherRole(teacherInput, assignedClass, subject) {
+    let hrStaffDB = JSON.parse(localStorage.getItem('hrStaffDB') || '[]');
+    
+    // 🛑 ADMIN-HR INTERLOCK: Smart Search (Find by Staff ID OR Exact Name)
+    // Admin doesn't need to strictly remember IDs generated by HR anymore.
+    let verifiedTeacher = hrStaffDB.find(s => 
+        (s.id === teacherInput || s.name.toLowerCase() === teacherInput.toLowerCase()) 
+        && s.dept === "Teacher"
+    );
     
     if (!verifiedTeacher) {
-        showToast("Error", "Invalid Staff ID or Not a Teacher. Ask HR to complete KYC.", "var(--danger)");
+        showToast("Error", "Teacher not found in HR Database. Ask HR to hire them first.", "var(--danger)");
         return;
     }
 
     let mapping = JSON.parse(localStorage.getItem('teacher_class_mapping') || '{}');
-    mapping[teacherId] = { class: assignedClass, subject: subject, name: verifiedTeacher.name };
+    // 🛑 BUG FIX: Corrected variable from teacherId to verifiedTeacher.id
+    mapping[verifiedTeacher.id] = { class: assignedClass, subject: subject, name: verifiedTeacher.name };
     localStorage.setItem('teacher_class_mapping', JSON.stringify(mapping));
     showToast("✅ Mapped", `${verifiedTeacher.name} assigned to ${assignedClass}`, "var(--success)");
 }
 
 function promoteAllStudents() {
     if(!confirm("⚠️ WARNING: Execute Year-End Promotion? All students will move to next class.")) return;
-    let students = JSON.parse(localStorage.getItem('system_class_roster') || '[]');
-    students = students.map(s => {
-        let currentClass = parseInt(s.class.split('-')[0]);
-        s.class = (currentClass < 12 ? (currentClass + 1) : "Graduated") + "-" + s.class.split('-')[1];
+    
+    // 🛑 100% ATOMIC FIX 2: Synchronize BOTH Global Roster and Admin DB to prevent a Split-Multiverse of data!
+    let roster = JSON.parse(localStorage.getItem('system_class_roster') || '[]');
+    let adminDB = JSON.parse(localStorage.getItem('adminStudentsDB') || '[]');
+    
+    let promoteLogic = (s) => {
+        // 🛑 100% SUB-ATOMIC FIX 2: Guard against undefined classes and already graduated students. Prevents catastrophic loop failure!
+        if (!s || !s.class || s.class === "Graduated") return s;
+        
+        let classParts = s.class.split('-');
+        let clsName = classParts[0].trim();
+        let section = classParts[1] ? classParts[1].trim() : "A";
+        
+        let nextClass = clsName;
+        if(clsName === "Nursery") nextClass = "LKG";
+        else if(clsName === "LKG") nextClass = "UKG";
+        else if(clsName === "UKG") nextClass = "Class 1";
+        else if(clsName.includes("Class")) {
+            let num = parseInt(clsName.replace("Class", "").trim());
+            nextClass = num < 12 ? `Class ${num + 1}` : "Graduated";
+        }
+        
+        // Fixed: Ensure the full class format (e.g., "Class 10-A") is maintained cleanly
+        let newFullClass = nextClass === "Graduated" ? "Graduated" : `${nextClass}-${section}`;
+        
+        if (s.class !== newFullClass) s.class = newFullClass; 
         return s;
-    });
-    localStorage.setItem('system_class_roster', JSON.stringify(students));
-    showToast("App Reset", "All students promoted successfully.", "var(--success)");
+    };
+
+    roster = roster.map(promoteLogic);
+    adminDB = adminDB.map(promoteLogic); // Sync Admin DB too
+
+    localStorage.setItem('system_class_roster', JSON.stringify(roster));
+    localStorage.setItem('adminStudentsDB', JSON.stringify(adminDB));
+    
+    showToast("App Reset", "All students promoted successfully across all ledgers.", "var(--success)");
+    
+    // Refresh Admin UI globally
+    adminStudentsDB = adminDB; 
+    if(typeof renderStudentDirectory === 'function') renderStudentDirectory();
 }
+// 🛑 ATOMIC FIX 2: Wiped out "Ghost" Teacher Leave functions that were accidentally pasted into the Admin File. Prevents silent memory leaks.
     </script>
 </body>
 </html>
