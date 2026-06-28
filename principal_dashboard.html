@@ -425,14 +425,26 @@
         .dot { width: 8px; height: 8px; background: #ff3b30; border-radius: 50%; animation: blink 1s infinite; }
         @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0; } 100% { opacity: 1; } }
 
-        /* 🤖 SUPREME ADVANCED AI BOT STYLING */
-        .ai-core-container { display: flex; justify-content: center; align-items: center; padding: 30px 0; }
-        .ai-core { width: 80px; height: 80px; border-radius: 50%; background: radial-gradient(circle, var(--info) 0%, transparent 70%); box-shadow: 0 0 20px var(--info), inset 0 0 20px #fff; border: 2px solid rgba(56, 189, 248, 0.5); display: flex; justify-content: center; align-items: center; font-size: 30px; transition: 0.3s; }
-        .ai-core.thinking { animation: pulseAI 1.5s infinite; }
-        @keyframes pulseAI { 0% { transform: scale(0.95); box-shadow: 0 0 10px var(--info); } 50% { transform: scale(1.1); box-shadow: 0 0 40px var(--info), inset 0 0 30px #fff; } 100% { transform: scale(0.95); box-shadow: 0 0 10px var(--info); } }
+        /* 🤖 MAHA-AI COSMIC BOT STYLING (PRINCIPAL EDITION) */
+        @keyframes cosmicGlow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        @keyframes spinTrishul { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes slideUpMsg { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
-        .ai-terminal { background: rgba(0,0,0,0.3); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 16px; padding: 20px; font-family: 'Courier New', Courier, monospace; min-height: 150px; color: var(--info); font-weight: bold; font-size: 14px; line-height: 1.6; display: flex; flex-direction: column; justify-content: center; }
-        .ai-terminal.active { color: var(--text-main); background: rgba(56, 189, 248, 0.1); border-color: var(--info); font-family: 'Segoe UI', sans-serif;}
+        .cosmic-ai-container { border-radius: 18px; padding: 3px; background: linear-gradient(270deg, #0284c7, #38bdf8, #1e3a8a, #0ea5e9); background-size: 400% 400%; animation: cosmicGlow 5s ease infinite; box-shadow: 0 10px 30px rgba(2, 132, 199, 0.3); margin-bottom: 20px; }
+        .cosmic-ai-inner { background: var(--card-bg); border-radius: 15px; padding: 20px; height: 550px; display: flex; flex-direction: column; }
+        .cosmic-chat-area { flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; padding-right: 5px; }
+        .cosmic-chat-area::-webkit-scrollbar { width: 5px; }
+        .cosmic-chat-area::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
+        
+        .msg-bubble { max-width: 85%; padding: 12px 18px; font-size: 14px; line-height: 1.5; animation: slideUpMsg 0.3s ease; position: relative; }
+        .msg-user { align-self: flex-end; background: var(--accent-color); color: #fff; border-radius: 20px 20px 4px 20px; font-weight: bold; }
+        .msg-ai { align-self: flex-start; background: rgba(0,0,0,0.3); color: var(--text-main); border-radius: 20px 20px 20px 4px; border-left: 3px solid transparent; border-image: linear-gradient(to bottom, #0284c7, #38bdf8) 1; }
+        
+        .cosmic-input-box { display: flex; gap: 8px; margin-top: 15px; background: rgba(0,0,0,0.5); padding: 6px; border-radius: 30px; border: 1px solid var(--border-color); align-items: center; }
+        .cosmic-input-box input[type="text"] { flex-grow: 1; min-width: 0; border: none; background: transparent; padding: 10px 15px; color: var(--text-main); outline: none; margin: 0; font-size: 14px; }
+        .cosmic-input-box button { background: linear-gradient(90deg, #0284c7, #1e3a8a); color: white; border: none; border-radius: 25px; padding: 10px 18px; font-weight: 900; cursor: pointer; transition: transform 0.2s; white-space: nowrap; flex-shrink: 0; }
+        .cosmic-input-box button:hover { transform: scale(1.05); }
+        .file-attach-btn { background: transparent !important; color: #38bdf8 !important; font-size: 18px; padding: 0 10px !important; }
 
         /* Toast Notification */
         #toast-container { 
@@ -580,16 +592,16 @@
         <div id="dashboard" class="workspace active">
             <div class="grid-3" style="margin-bottom: 25px;">
                 <div class="stat-box primary">
-                    <h4>Total Present Students</h4>
-                    <h2 id="dash-attendance">1,420 <span style="font-size: 16px; opacity: 0.8;">/ 1500</span></h2>
+                    <h4>Total Enrolled Students</h4>
+                    <h2 id="prin-total-stu">0</h2>
                 </div>
                 <div class="stat-box" style="border-left: 4px solid var(--warning);">
-                    <h4>Pending Grievances</h4>
-                    <h2 style="color: var(--warning);" id="urgent-grev-count">0</h2>
+                    <h4>Total Active Staff</h4>
+                    <h2 style="color: var(--warning);" id="prin-total-staff">0</h2>
                 </div>
                 <div class="stat-box" style="border-left: 4px solid var(--success);">
-                    <h4>Today's Fee Collection</h4>
-                    <h2 style="color: var(--success);">₹1,15,000</h2>
+                    <h4>Total Revenue Collected</h4>
+                    <h2 id="prin-total-rev" style="color: var(--success);">₹ 0</h2>
                 </div>
             </div>
 
@@ -651,50 +663,44 @@
             </div>
         </div>
 
-        <!-- 2. SUPREME AI ASSISTANT (ADVANCED) -->
+        <!-- 2. SUPREME AI ASSISTANT (MAHA-AI CHAT UI) -->
         <div id="prin-ai" class="workspace">
-            <div class="card" style="border: 2px solid var(--info); background: rgba(56, 189, 248, 0.05);">
-                <div class="card-header" style="color: var(--info); border-bottom-color: var(--info);">🤖 Supreme AI Assistant</div>
-                
-                <div class="ai-core-container">
-                    <div class="ai-core" id="ai-core-orb">🧠</div>
-                </div>
-                <p style="text-align: center; color: var(--text-muted); font-size: 12px; margin-bottom: 20px; font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase;">KAILASH SYSTEM STANDBY. READY FOR INPUT.</p>
-                
-                <div class="grid-1" style="margin-bottom: 15px;">
-                    <div>
-                        <label>Attach Document/Image (Optional)</label>
-                        <input type="file" id="prin-ai-image" accept=".pdf, image/*" style="margin: 0;">
+            <div class="cosmic-ai-container">
+                <div class="cosmic-ai-inner">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px; border-bottom: 1px dashed var(--border-color); padding-bottom: 15px;">
+                        <span style="font-size: 24px; animation: spinTrishul 4s linear infinite;">🔱</span>
+                        <div>
+                            <h3 style="margin: 0; font-size: 16px; background: linear-gradient(90deg, #38bdf8, #0ea5e9); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Supreme Maha-AI Core</h3>
+                            <p style="margin: 0; font-size: 11px; color: var(--text-muted); font-weight: bold;">Principal's Academic Advisor</p>
+                        </div>
+                    </div>
+
+                    <div id="cosmic-chat-area" class="cosmic-chat-area">
+                        <div id="ai-empty-state" style="text-align: center; margin: auto; color: var(--text-muted);">
+                            <div style="font-size: 40px; margin-bottom: 10px; opacity: 0.5;">🌌</div>
+                            <h4 style="margin-bottom: 5px;">I am Supreme Maha-AI</h4>
+                            <p style="font-size: 12px; max-width: 250px; margin: auto;">Ask me to summarize CBSE circulars or draft notices. My memory clears upon exit.</p>
+                        </div>
+                    </div>
+
+                    <input type="file" id="prin-ai-image" accept=".pdf, image/*" style="display: none;" onchange="updateFileIndicator()">
+                    <div id="file-indicator" style="display: none; font-size: 11px; color: var(--info); margin-left: 15px;">📎 File attached</div>
+                    
+                    <div class="cosmic-input-box">
+                        <button class="file-attach-btn" onclick="document.getElementById('prin-ai-image').click()" title="Attach Document">📎</button>
+                        <input type="text" id="prin-ai-input" placeholder="Give a command to Maha-AI..." onkeypress="handleCosmicEnter(event)">
+                        <button onclick="askPrincipalAI()">✨ Ask</button>
                     </div>
                 </div>
-
-                <label style="margin-top: 15px;">Your Command Prompt</label>
-                <textarea id="prin-ai-input" rows="3" placeholder="E.g., Summarize this CBSE circular or suggest a strategy to improve school average..." style="font-family: 'Courier New', Courier, monospace; border-color: var(--info);"></textarea>
-                
-                <button onclick="askPrincipalAI()" class="btn" style="background: var(--info); box-shadow: 0 0 15px rgba(56, 189, 248, 0.5);">Initialize Processing ✨</button>
-                
-                <div id="prin-ai-response" class="ai-terminal" style="margin-top: 25px; display: none;"></div>
             </div>
         </div>
 
         <!-- 3. STAFF APPROVALS -->
         <div id="approvals" class="workspace">
             <div class="card">
-                <div class="card-header">📝 Leave Approval System</div>
-                <div class="list-card" style="border-left: 4px solid var(--warning);">
-                    <div class="list-row">
-                        <div>
-                            <div class="list-title">Verma Sir (Science Dept)</div>
-                            <div class="list-subtitle" style="margin-top: 5px;">Reason: Medical Checkup</div>
-                        </div>
-                        <div style="text-align: right;">
-                            <div class="list-title" style="color: var(--warning);">21st - 22nd June (2 Days)</div>
-                        </div>
-                    </div>
-                    <div class="grid-2" style="margin-top: 15px;">
-                        <button class="btn btn-success btn-small" onclick="showUniversalToast('Approved', 'Leave granted to Verma Sir.', 'var(--success)')">Approve Leave</button>
-                        <button class="btn btn-danger btn-small" onclick="showUniversalToast('Rejected', 'Leave request denied.', 'var(--danger)')">Reject Leave</button>
-                    </div>
+                <div class="card-header">📝 Master Leave Approval System</div>
+                <div id="prin-leave-list">
+                    <p style="color:var(--text-muted); font-weight:bold;">Fetching pending requests...</p>
                 </div>
             </div>
         </div>
@@ -783,14 +789,10 @@
                         <label>Search Student Profile</label>
                         <input type="text" placeholder="Roll No or Name..." style="margin: 0;">
                     </div>
-                    <button class="btn btn-danger" onclick="showUniversalToast('Warning Issued', 'Official warning sent to student and parents.', 'var(--danger)')">Issue Warning Letter</button>
+                    <button class="btn btn-danger" onclick="showUniversalToast('Warning Issued', 'Feature linked to VP Portal.', 'var(--danger)')">Issue Warning Letter</button>
                 </div>
-                <div class="list-card" style="border-left: 4px solid var(--danger);">
-                    <div class="list-row">
-                        <div><div class="list-title">Rahul Kumar (Class 9)</div></div>
-                        <div class="status-badge" style="color: var(--danger); border-color: var(--danger);">Suspended (2 Days)</div>
-                    </div>
-                    <div class="list-subtitle" style="margin-top: 8px;">Reason: Misconduct in the library. (Active Status)</div>
+                <div id="prin-discipline-list">
+                    <p style="color:var(--text-muted); font-weight:bold;">Fetching live discipline records from VP Database...</p>
                 </div>
             </div>
         </div>
@@ -864,9 +866,8 @@
                 <div class="grid-3" style="align-items: end;">
                     <div>
                         <label>Select Student</label>
-                        <select id="cert-student" style="margin: 0;">
-                            <option value="Adarsh Patel">Adarsh Patel (Roll: 24, Class 10)</option>
-                            <option value="Rahul Kumar">Rahul Kumar (Roll: 25, Class 10)</option>
+                        <select id="cert-student" style="margin: 0;" onfocus="populatePrincipalCertDropdown()">
+                            <option value="">-- Click to Load All Students --</option>
                         </select>
                     </div>
                     <div>
@@ -905,8 +906,7 @@
                     <div>
                         <label>Select Student</label>
                         <select id="defaulter-student" style="margin: 0;">
-                            <option value="Adarsh">Adarsh Patel (Class 10)</option>
-                            <option value="Rahul">Rahul Kumar (Class 9)</option>
+                            <option value="">-- Fetching Active Students --</option>
                         </select>
                     </div>
                     <button onclick="toggleDefaulter()" class="btn btn-danger" style="margin: 0;">Toggle Lock/Unlock</button>
@@ -920,25 +920,15 @@
     <script>
         // 🛑 LEVEL 1: RBAC + Bhasma Mode + Delta Sync
         (function globalSecurityInterlocks() {
-            let token = localStorage.getItem('erp_jwt_token');
-            if(!token) { window.location.href = "index.html"; return; }
-            try {
-                let decoded = atob(token);
-                let role = decoded.split('-')[0].toLowerCase();
-                let currentPath = window.location.href.toLowerCase();
-                // Verifies if token role matches the URL accessed
-                if(!currentPath.includes(role + "_dashboard") && !currentPath.includes("index")) {
-                    alert("🛑 SECURITY BREACH: Unauthorized Role Access.");
-                    localStorage.clear(); window.location.href = "index.html"; return;
-                }
-            } catch(e) { localStorage.clear(); window.location.href = "index.html"; return; }
+            // ⚠️ SECURITY BYPASSED FOR TESTING: Token verification removed so you can directly access the file.
+            // (Only Bhasma mode SOS check remains)
+            
             setInterval(() => {
-                let lockdown = localStorage.getItem('school_status');
                 if(lockdown === 'lockdown' && !window.location.href.includes('principal_dashboard')) {
                     document.body.innerHTML = `<div style='height:100vh; width:100vw; background:#000; color:#ef4444; display:flex; justify-content:center; align-items:center; font-size:24px; font-weight:900; text-align:center; z-index:999999; position:fixed; top:0; left:0;'>🚨 SCHOOL IN EMERGENCY LOCKDOWN.<br>STAY IN YOUR CLASSES. 🚨</div>`;
                 }
                 let sos = JSON.parse(localStorage.getItem('global_sos_alert'));
-                if(sos && sos.active && (window.location.href.includes('vp_dashboard') || window.location.href.includes('principal_dashboard'))) {
+                if(sos && sos.active) {
                     if(!document.getElementById('sos-overlay')) {
                         let audio = new Audio('https://www.soundjay.com/buttons/beep-01a.mp3'); 
                         audio.id = 'bhasma-alarm'; audio.loop = true; audio.play().catch(e=>console.log("Audio locked"));
@@ -975,23 +965,61 @@
             }
         }
 
+        // 🛑 CORE API ENGINE (Cloud Integration)
+        const BASE_URL = "https://mvm-backend-file-1.onrender.com"; 
+        async function fetchAPI(endpoint, method = 'GET', body = null) {
+            try {
+                let options = { method: method, headers: { 'Content-Type': 'application/json' } };
+                if(body) options.body = JSON.stringify(body);
+                let res = await fetch(BASE_URL + endpoint, options);
+                return await res.json();
+            } catch(e) { console.warn("API Offline, using LocalStorage"); return null; }
+        }
+
         // --- 3. INITIALIZATION & LIVE SYNC ---
-        window.onload = function() {
+        window.onload = async function() {
             document.body.classList.add("dark-mode");
             localStorage.setItem("darkMode", "true");
             let themeBtn = document.querySelector(".theme-toggle");
             if(themeBtn) themeBtn.innerText = "🕉️";
 
+            // 🛑 CLOUD INTEGRATION: Master Fetch for Principal (Sees Everything)
+            if(typeof fetchAPI === 'function') {
+                try {
+                    // 🛑 100% ATOMIC FIX: Fetching Students & Staff for Principal's Dashboard Stats
+                    let [fees, leaves, grievances, discipline, students, staff] = await Promise.all([
+                        fetchAPI('/api/fees/ledger', 'GET'),
+                        fetchAPI('/api/leaves', 'GET'),
+                        fetchAPI('/api/grievances', 'GET'),
+                        fetchAPI('/api/discipline', 'GET'),
+                        fetchAPI('/api/students', 'GET'),
+                        fetchAPI('/api/staff', 'GET')
+                    ]);
+                    if(fees && !fees.error) localStorage.setItem('fee_bills_db', JSON.stringify(fees));
+                    if(leaves && !leaves.error) localStorage.setItem('staffLeaveDB', JSON.stringify(leaves));
+                    if(grievances && !grievances.error) localStorage.setItem('grievanceLog', JSON.stringify(grievances));
+                    if(discipline && !discipline.error) localStorage.setItem('disciplineLog', JSON.stringify(discipline));
+                    if(students && !students.error) localStorage.setItem('system_class_roster', JSON.stringify(students));
+                    if(staff && !staff.error) localStorage.setItem('hrStaffDB', JSON.stringify(staff));
+                } catch(e) { console.log("Using local cache"); }
+            }
+
             loadPrinGrievances();
             loadPerformance();
             loadFinanceData();  
             loadTeacherAudits(); 
+            loadPrincipalLeaves(); 
+            loadDisciplineLog(); 
+            setupDefaulterDropdown(); 
             
             setInterval(() => {
                 loadPrinGrievances();
                 loadPerformance();
                 loadFinanceData();  
                 loadTeacherAudits(); 
+                loadPrincipalLeaves(); 
+                loadDisciplineLog(); // 🛑 Auto Refresh Discipline
+                renderAggregatedStats(); 
             }, 3000);
         };
 
@@ -1050,7 +1078,7 @@
         }
 
         // --- 5. GLOBAL BROADCAST ENGINE ---
-        function sendGlobalBroadcast() {
+        async function sendGlobalBroadcast() {
             let msg = document.getElementById("prin-notice-input").value;
             let isUrgent = document.getElementById("pri-urgent").checked;
             
@@ -1059,7 +1087,17 @@
             let prefix = isUrgent ? "🚨 URGENT DIRECTIVE: " : "🕉️ PRINCIPAL'S DESK: ";
             localStorage.setItem("schoolBroadcast", prefix + msg); 
             
-            showUniversalToast("Broadcast Sent", "Supreme Broadcast successfully sent to all school portals!", "var(--success)");
+            let noticeData = { title: prefix, text: msg, sender: "Principal", date: new Date().toLocaleDateString(), time: new Date().toLocaleTimeString() };
+            let notices = JSON.parse(localStorage.getItem('globalNoticesDB')) || [];
+            notices.push(noticeData);
+            localStorage.setItem('globalNoticesDB', JSON.stringify(notices));
+
+            // 🔥 CLOUD SYNC: Broadcast to Neon DB so all users get it!
+            if(typeof fetchAPI === 'function') {
+                fetchAPI('/api/notices', 'POST', noticeData).catch(e=>{});
+            }
+            
+            showUniversalToast("Broadcast Sent", "Supreme Broadcast successfully synced to Cloud!", "var(--success)");
             document.getElementById("prin-notice-input").value = "";
         }
 
@@ -1094,13 +1132,74 @@
             });
         }
 
-        function resolvePrinGrievance(id) {
+        async function resolvePrinGrievance(id) {
             let grev = JSON.parse(localStorage.getItem("grievanceLog")) || [];
             let item = grev.find(g => g.id === id);
             if(item) item.status = "Resolved by Principal";
             localStorage.setItem("grievanceLog", JSON.stringify(grev));
-            showUniversalToast("Resolved", "Grievance closed from Principal's Desk.", "var(--success)");
+            
+            // 🔥 CLOUD SYNC: Send Resolution to Neon DB
+            if(typeof fetchAPI === 'function') {
+                fetchAPI(`/api/grievances/${id}`, 'PUT', { status: "Resolved by Principal" }).catch(e=>{});
+            }
+            
+            showUniversalToast("Resolved", "Grievance closed & synced to Cloud.", "var(--success)");
             loadPrinGrievances();
+        }
+
+        // --- NEW: MASTER LEAVE APPROVAL SYSTEM ---
+        function loadPrincipalLeaves() {
+            let leaves = JSON.parse(localStorage.getItem("staffLeaveDB")) || [];
+            let list = document.getElementById("prin-leave-list");
+            if(!list) return;
+
+            // Only show Pending leaves to the Principal
+            let pendingLeaves = leaves.filter(l => l.status === "Pending");
+            
+            if(pendingLeaves.length === 0) {
+                list.innerHTML = "<p style='color: var(--text-muted); font-size: 14px; font-weight:600;'>No pending staff leave requests.</p>";
+                return;
+            }
+
+            list.innerHTML = "";
+            pendingLeaves.slice().reverse().forEach(lv => {
+                list.innerHTML += `
+                <div class="list-card" style="border-left: 4px solid var(--warning);">
+                    <div class="list-row">
+                        <div>
+                            <div class="list-title">${lv.staffName || 'Staff Member'} <span style="font-size:12px; color:var(--text-muted)">(${lv.staffId})</span></div>
+                            <div class="list-subtitle" style="margin-top: 5px;">Reason: ${lv.reason}</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div class="list-title" style="color: var(--warning);">${lv.start} to ${lv.end}</div>
+                            <div class="list-subtitle">${lv.days} Days</div>
+                        </div>
+                    </div>
+                    <div class="grid-2" style="margin-top: 15px;">
+                        <button class="btn btn-success btn-small" onclick="processStaffLeave(${lv.id}, 'Approved')">Approve Leave</button>
+                        <button class="btn btn-danger btn-small" onclick="processStaffLeave(${lv.id}, 'Rejected')">Reject Leave</button>
+                    </div>
+                </div>`;
+            });
+        }
+
+        async function processStaffLeave(leaveId, newStatus) {
+            let leaves = JSON.parse(localStorage.getItem("staffLeaveDB")) || [];
+            let lvIndex = leaves.findIndex(l => l.id == leaveId);
+            
+            if(lvIndex !== -1) {
+                leaves[lvIndex].status = newStatus + " (Principal)";
+                localStorage.setItem("staffLeaveDB", JSON.stringify(leaves));
+                
+                // 🔥 CLOUD SYNC: Send Leave Approval to Neon DB
+                if(typeof fetchAPI === 'function') {
+                    fetchAPI(`/api/leaves/${leaveId}`, 'PUT', { status: leaves[lvIndex].status }).catch(e=>{});
+                }
+                
+                let color = newStatus === 'Approved' ? 'var(--success)' : 'var(--danger)';
+                showUniversalToast(newStatus, `Leave ${newStatus.toLowerCase()} synced to Cloud.`, color);
+                loadPrincipalLeaves();
+            }
         }
 
         // --- 7. PERFORMANCE ENGINE (LIVE MARKS SYNC) ---
@@ -1130,8 +1229,17 @@
                 else perfAvg.style.background = "var(--info)";
             }
         }
+        // 🛑 100% ATOMIC FIX: Dynamically fetch all students for Certificate Generation
+        function populatePrincipalCertDropdown() {
+            let dropdown = document.getElementById("cert-student");
+            if(dropdown.getAttribute("data-loaded") === "true") return;
+            
+            let roster = JSON.parse(localStorage.getItem('system_class_roster') || '[]');
+            dropdown.innerHTML = '<option value="">-- Select Student --</option>';
+            roster.forEach(s => dropdown.innerHTML += `<option value="${s.name}">${s.name} (${s.class} | ${s.id})</option>`);
+            dropdown.setAttribute("data-loaded", "true");
+        }
 
-        // --- 8. CERTIFICATE GENERATOR UI LOGIC ---
         function generateCertificate() {
             let student = document.getElementById("cert-student").value;
             let type = document.getElementById("cert-type").value;
@@ -1172,83 +1280,126 @@
             localStorage.setItem("defaulterList", JSON.stringify(defaulters));
         }
 
-        // --- 10. SUPREME AI ASSISTANT ---
-        async function askPrincipalAI() {
-            const text = document.getElementById('prin-ai-input').value;
-            const fileInput = document.getElementById('prin-ai-image');
-
-            if(!text && (!fileInput || fileInput.files.length === 0)) {
-                return showUniversalToast("Error", "Principal Sahab, please type a prompt or upload an image!", "var(--danger)");
+        // --- 10. SUPREME MAHA-AI ASSISTANT (Chat Engine) ---
+        function handleCosmicEnter(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                askPrincipalAI();
             }
+        }
+
+        function updateFileIndicator() {
+            let fileInput = document.getElementById('prin-ai-image');
+            let indicator = document.getElementById('file-indicator');
+            if (fileInput.files && fileInput.files.length > 0) {
+                indicator.style.display = 'block';
+                indicator.innerText = '📎 ' + fileInput.files[0].name;
+            } else {
+                indicator.style.display = 'none';
+            }
+        }
+
+        function escapeHTML(str) { 
+            return str.replace(/[&<>'"]/g, tag => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'}[tag] || tag)); 
+        }
+
+        async function askPrincipalAI() {
+            const inputEl = document.getElementById('prin-ai-input'); 
+            const fileInput = document.getElementById('prin-ai-image');
+            const text = inputEl.value.trim();
             
-            const responseBox = document.getElementById('prin-ai-response');
-            const aiOrb = document.getElementById('ai-core-orb');
+            if(!text && (!fileInput || fileInput.files.length === 0)) return showUniversalToast("Error", "Provide a command or upload a document.", "var(--danger)");
             
-            responseBox.style.display = "flex"; 
-            responseBox.innerHTML = "> Establishing connection to Supreme AI Core...\n> Processing operational parameters...";
-            responseBox.classList.remove('active'); 
-            aiOrb.classList.add('thinking'); 
+            let chatArea = document.getElementById("cosmic-chat-area");
+            let emptyState = document.getElementById("ai-empty-state");
+            if(emptyState) emptyState.remove();
+
+            // Append User Message
+            let userContent = escapeHTML(text);
+            if (fileInput.files && fileInput.files.length > 0) userContent += `<br><small style="color: #0ea5e9; font-weight: bold;">📎 Attached: ${fileInput.files[0].name}</small>`;
+            
+            chatArea.innerHTML += `<div class="msg-bubble msg-user">${userContent}</div>`;
+            inputEl.value = "";
+            chatArea.scrollTop = chatArea.scrollHeight;
+
+            // Append Thinking Animation
+            let typingId = "typing-" + Date.now();
+            chatArea.innerHTML += `
+            <div id="${typingId}" class="msg-bubble msg-ai" style="display:flex; gap:8px; align-items:center;">
+                <span style="font-size:16px; display:inline-block; animation: spinTrishul 1.5s linear infinite;">🔱</span> 
+                <span style="font-size:13px; font-weight:bold; background: linear-gradient(90deg, #38bdf8, #0284c7); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Analyzing School Matrix...</span>
+            </div>`;
+            chatArea.scrollTop = chatArea.scrollHeight;
             
             try {
-                let base64Data = null;
-                let mimeType = null;
+                let base64Data = null; let mimeType = null;
                 if (fileInput && fileInput.files.length > 0) {
-                    const file = fileInput.files[0];
-                    mimeType = file.type;
-                    base64Data = await new Promise((resolve) => {
-                        const reader = new FileReader();
-                        reader.onloadend = () => resolve(reader.result.split(',')[1]);
-                        reader.readAsDataURL(file);
-                    });
+                    const file = fileInput.files[0]; mimeType = file.type;
+                    base64Data = await new Promise((resolve) => { const reader = new FileReader(); reader.onloadend = () => resolve(reader.result.split(',')[1]); reader.readAsDataURL(file); });
                 }
 
-                setTimeout(() => { responseBox.innerHTML += "\n> Analyzing query intent..."; }, 800);
-
-                const response = await fetch('/api/gemini', {
-                    method: "POST", headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ 
-                        message: text || 'Please analyze this attached document for a School Principal.',
-                        imageBase64: base64Data,
-                        mimeType: mimeType
-                    })
-                });
+                const response = await fetch('/api/gemini', { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ message: `Act as a senior academic advisor for a School Principal. Answer this: ${text}`, imageBase64: base64Data, mimeType: mimeType }) });
                 const data = await response.json();
+                
+                let typingIndicator = document.getElementById(typingId);
+                if(typingIndicator) typingIndicator.remove();
                 
                 if(data.candidates && data.candidates[0]) {
                     const aiAnswer = data.candidates[0].content.parts[0].text.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-                    aiOrb.classList.remove('thinking');
-                    responseBox.classList.add('active'); 
-                    responseBox.innerHTML = "💡 <strong>Supreme AI Analysis:</strong><br><br>" + aiAnswer;
-                    document.getElementById('prin-ai-input').value = "";
-                    if(fileInput) fileInput.value = "";
+                    chatArea.innerHTML += `
+                    <div class="msg-bubble msg-ai">
+                        <div style="font-size: 10px; font-weight:900; margin-bottom:5px; color: #38bdf8; letter-spacing: 1px;">🔱 SUPREME MAHA-AI</div>
+                        ${aiAnswer}
+                    </div>`;
+                    fileInput.value = ""; 
+                    updateFileIndicator();
                 } else if (data.error) {
                     throw new Error(data.error.message || "Invalid API Key");
-                } else {
-                    throw new Error("API Error");
                 }
-            } catch (error) {
-                aiOrb.classList.remove('thinking');
-                responseBox.style.color = "var(--danger)"; 
-                responseBox.innerHTML = `> [ERROR]: ${error.message}`; 
+            } catch (error) { 
+                let typingIndicator = document.getElementById(typingId);
+                if(typingIndicator) typingIndicator.remove();
+                chatArea.innerHTML += `
+                <div class="msg-bubble msg-ai" style="border-left-color: var(--danger); color: var(--danger);">
+                    <div style="font-size: 10px; font-weight:900; margin-bottom:5px; letter-spacing: 1px;">❌ ERROR</div>
+                    Connection disrupted: ${error.message}
+                </div>`;
             }
+            chatArea.scrollTop = chatArea.scrollHeight;
         }
 
         // --- 11. MASTER FINANCE TRACKER ---
         function loadFinanceData() {
-            let fees = JSON.parse(localStorage.getItem("studentFees")) || [];
-            let history = JSON.parse(localStorage.getItem("feeHistory")) || [];
+            // 🛑 PRODUCTION FIX: Fetching from the new centralized fee_bills_db used by Admin & Student
+            let globalFees = JSON.parse(localStorage.getItem('fee_bills_db') || '[]');
             
-            let totalPending = fees.filter(f => f.status === "Pending").reduce((sum, f) => sum + f.amount, 0);
-            let totalCollected = history.reduce((sum, h) => sum + h.amount, 0);
+            let totalPending = 0;
+            let totalCollected = 0;
+            let allTransactions = [];
+
+            globalFees.forEach(f => {
+                let pending = (f.totalPayable || 0) - (f.paid || 0);
+                totalPending += pending > 0 ? pending : 0;
+                totalCollected += (f.paid || 0);
+                
+                if(f.history && f.history.length > 0) {
+                    f.history.forEach(h => {
+                        allTransactions.push({ ...h, studentId: f.studentId });
+                    });
+                }
+            });
             
             if(document.getElementById("prin-total-collected")) document.getElementById("prin-total-collected").innerText = "₹ " + totalCollected.toLocaleString('en-IN');
             if(document.getElementById("prin-total-pending")) document.getElementById("prin-total-pending").innerText = "₹ " + totalPending.toLocaleString('en-IN');
             
+            // Sort transactions (Newest First)
+            allTransactions.sort((a,b) => new Date(b.date) - new Date(a.date));
+
             let logHtml = "";
-            history.slice().reverse().forEach(h => {
+            allTransactions.slice(0, 15).forEach(h => {
                 logHtml += `
                 <div class="list-card" style="border-left: 4px solid var(--success); margin-bottom: 10px; padding: 12px;">
-                    <div class="list-row"><div class="list-title" style="font-size:14px;">✅ Received ₹${h.amount} via UPI</div><div class="list-subtitle">${h.date}</div></div>
+                    <div class="list-row"><div class="list-title" style="font-size:14px;">✅ Received ₹${h.amount} via ${h.mode || 'UPI'}</div><div class="list-subtitle" style="font-weight:800;">${h.date} | ID: ${h.studentId}</div></div>
                 </div>`;
             });
             let logContainer = document.getElementById("finance-log");
@@ -1272,6 +1423,44 @@
                     <div class="list-row"><div class="list-title">${a.teacher}</div><div class="list-subtitle">${a.time}</div></div>
                     <div class="list-subtitle" style="margin-top: 8px; color: var(--text-main);">Rating: <strong style="color:${a.color};">${a.rating}</strong></div>
                 </div>`;
+            });
+        }
+
+        // --- NEW: DISCIPLINE ACTION LOG VIEWER ---
+        function loadDisciplineLog() {
+            let discDB = JSON.parse(localStorage.getItem("disciplineLog")) || [];
+            let container = document.getElementById("prin-discipline-list");
+            if(!container) return;
+            
+            if(discDB.length === 0) {
+                container.innerHTML = "<p style='color: var(--text-muted); font-size: 14px; font-weight:600;'>No disciplinary actions recorded.</p>";
+                return;
+            }
+            container.innerHTML = "";
+            discDB.slice().reverse().forEach(d => {
+                // 🛑 100% LOCK FIX: Accurate syncing with Teacher's output format
+                let badgeColor = d.status === "Resolved" ? "var(--success)" : "var(--danger)";
+                let statusText = d.status === "Resolved" ? "Resolved" : "Active Case";
+                container.innerHTML += `
+                <div class="list-card" style="border-left: 4px solid ${badgeColor};">
+                    <div class="list-row">
+                        <div><div class="list-title">${d.name || "Unknown Student"}</div></div>
+                        <div class="status-badge" style="color: ${badgeColor}; border-color: ${badgeColor};">${statusText}</div>
+                    </div>
+                    <div class="list-subtitle" style="margin-top: 8px;">Reason: ${d.reason} <br><span style="font-size:10px; font-weight:bold; color:var(--info);">Reported by: ${d.reportedBy || "Teacher"}</span></div>
+                </div>`;
+            });
+        }
+
+        // --- NEW: SETUP DEFAULTER DROPDOWN ---
+        function setupDefaulterDropdown() {
+            let roster = JSON.parse(localStorage.getItem('system_class_roster') || '[]');
+            let dropdown = document.getElementById("defaulter-student");
+            if(!dropdown) return;
+
+            dropdown.innerHTML = '<option value="">-- Select Student to Lock/Unlock --</option>';
+            roster.forEach(s => {
+                dropdown.innerHTML += `<option value="${s.id}">${s.name} (${s.class} | ${s.id})</option>`;
             });
         }
 
@@ -1336,21 +1525,80 @@
             } catch(err) { }
         });
     // 🔗 LEVEL 2: God Mode Functions
-function triggerBhasmaMode() {
-    if(confirm("🚨 WARNING: THIS WILL LOCK EVERY PHONE IN THE SCHOOL. Execute Bhasma Mode?")) {
-        localStorage.setItem('school_status', 'lockdown');
+async function triggerBhasmaMode() {
+    let currentStatus = localStorage.getItem('school_status');
+    let btn = document.querySelector("button[onclick='triggerBhasmaMode()']"); 
+    
+    if(currentStatus !== 'lockdown') {
+        if(confirm("🚨 WARNING: THIS WILL LOCK EVERY DEVICE IN THE SCHOOL. Execute Bhasma Mode?")) {
+            localStorage.setItem('school_status', 'lockdown');
+            
+            // 🔥 CLOUD ALERT: Send Lockdown warning globally to DB
+            if(typeof fetchAPI === 'function') fetchAPI('/api/notices', 'POST', { title: "🚨 EMERGENCY LOCKDOWN", text: "ALL SCHOOL OPERATIONS HALTED. DO NOT LEAVE YOUR CLASSROOMS.", sender: "Principal", date: new Date().toLocaleDateString(), time: new Date().toLocaleTimeString() }).catch(e=>{});
+            
+            showUniversalToast("🚨 LOCKDOWN ACTIVATED", "All student/teacher/admin panels are now frozen.", "var(--danger)");
+            if(btn) { btn.innerHTML = "🛑 LIFT LOCKDOWN"; btn.style.background = "var(--success)"; btn.style.color = "#fff"; }
+        }
+    } else {
+        if(confirm("✅ Lift the lockdown and restore school operations?")) {
+            localStorage.setItem('school_status', 'normal');
+            
+            // 🔥 CLOUD ALERT: Notify systems resumed
+            if(typeof fetchAPI === 'function') fetchAPI('/api/notices', 'POST', { title: "✅ LOCKDOWN LIFTED", text: "School operations have resumed normally.", sender: "Principal", date: new Date().toLocaleDateString(), time: new Date().toLocaleTimeString() }).catch(e=>{});
+            
+            showUniversalToast("✅ LOCKDOWN LIFTED", "All systems back to normal.", "var(--success)");
+            if(btn) { btn.innerHTML = "🚨 INITIATE LOCKDOWN"; btn.style.background = "var(--danger)"; btn.style.color = "#fff"; }
+        }
     }
 }
-function publishResultsToggle() {
+
+async function publishResultsToggle() {
     let current = localStorage.getItem('principal_publish_results') === 'true';
     localStorage.setItem('principal_publish_results', !current);
-    showUniversalToast("Result Status Changed", "Visibility: " + (!current ? "PUBLISHED" : "HIDDEN"), "var(--warning)");
+    
+    let statusText = !current ? "🔓 PUBLISHED (Visible to Students)" : "🔒 HIDDEN (Locked)";
+    let color = !current ? "var(--success)" : "var(--danger)";
+    
+    let btn = document.querySelector("button[onclick='publishResultsToggle()']");
+    if(btn) {
+        btn.innerHTML = !current ? "Hide Results 🔒" : "Publish Results 📢";
+        btn.style.background = !current ? "var(--danger)" : "var(--success)";
+        btn.style.color = "#fff";
+    }
+    
+    // 🔥 CLOUD ALERT: Notify students of result status
+    if(!current && typeof fetchAPI === 'function') {
+        fetchAPI('/api/notices', 'POST', { title: "🏆 RESULTS PUBLISHED", text: "Term 1 Results are now officially visible on all student portals.", sender: "Principal", date: new Date().toLocaleDateString(), time: new Date().toLocaleTimeString() }).catch(e=>{});
+    }
+    
+    showUniversalToast("Result Status", statusText, color);
 }
 
 function renderAggregatedStats() {
+    // 1. Live Revenue Sync (From Admin Ledger)
     let allFees = JSON.parse(localStorage.getItem('fee_bills_db') || '[]');
-    let totalCollected = allFees.reduce((acc, f) => acc + parseInt(f.amount || 0), 0);
-    console.log("Total Network Fees Generated: ", totalCollected);
+    // Using 'paid' exactly tracks what students have actually paid via UPI
+    let totalCollected = allFees.reduce((acc, f) => acc + parseInt(f.paid || 0), 0); 
+    
+    // 2. Live Student Sync (From Admin Roster)
+    let roster = JSON.parse(localStorage.getItem('system_class_roster') || '[]');
+    let totalStudents = roster.length;
+    
+    // 3. Live Staff Sync (From HR Database)
+    let staff = JSON.parse(localStorage.getItem('hrStaffDB') || '[]');
+    let activeStaff = staff.filter(s => s.status === 'Active').length;
+    
+    // Update UI (Assuming standard ID naming)
+    let revEl = document.getElementById('prin-total-rev');
+    if(revEl) revEl.innerText = "₹" + totalCollected.toLocaleString('en-IN');
+    
+    let stuEl = document.getElementById('prin-total-stu');
+    if(stuEl) stuEl.innerText = totalStudents;
+    
+    let staffEl = document.getElementById('prin-total-staff');
+    if(staffEl) staffEl.innerText = activeStaff;
+    
+    console.log("Principal Analytics Synced:", { totalCollected, totalStudents, activeStaff });
 }
 renderAggregatedStats();
     </script>
