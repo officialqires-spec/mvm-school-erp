@@ -1095,7 +1095,7 @@
 
         function logout() {
             if(confirm("Securely Logout?")) {
-                localStorage.removeItem("loggedInUser"); window.location.href = "index.html";
+                localStorage.removeItem("loggedInUser"); localStorage.removeItem("userRole"); localStorage.removeItem("loggedInUserRole"); localStorage.removeItem("loggedInUserId"); localStorage.removeItem("erp_jwt_token"); window.location.href = "index.html";
             }
         }
 
