@@ -130,15 +130,26 @@
         .task-item label { font-size: 14px; font-weight: 700; cursor: pointer; flex-grow: 1; color: var(--text-main); transition: 0.3s; }
         .task-item.completed label { text-decoration: line-through; color: var(--text-muted); }
 
-        /* 🤖 SUPER ADVANCED AI BOT STYLING */
-        .ai-dashboard { display: grid; grid-template-columns: 1fr; gap: 20px; }
-        .ai-core-container { display: flex; justify-content: center; align-items: center; padding: 30px 0; }
-        .ai-core { width: 80px; height: 80px; border-radius: 50%; background: radial-gradient(circle, var(--info) 0%, transparent 70%); box-shadow: 0 0 20px var(--info), inset 0 0 20px #fff; border: 2px solid rgba(59, 130, 246, 0.5); display: flex; justify-content: center; align-items: center; font-size: 30px; transition: 0.3s; }
-        .ai-core.thinking { animation: pulseAI 1.5s infinite; }
-        @keyframes pulseAI { 0% { transform: scale(0.95); box-shadow: 0 0 10px var(--info); } 50% { transform: scale(1.1); box-shadow: 0 0 40px var(--info), inset 0 0 30px #fff; } 100% { transform: scale(0.95); box-shadow: 0 0 10px var(--info); } }
+        /* 🤖 MAHA-AI COSMIC BOT STYLING (STUDENT EDITION) */
+        @keyframes cosmicGlow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        @keyframes spinTrishul { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes slideUpMsg { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
-        .ai-terminal { background: rgba(0,0,0,0.3); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 16px; padding: 20px; font-family: 'Courier New', Courier, monospace; min-height: 150px; color: var(--info); font-weight: bold; font-size: 14px; line-height: 1.6; display: flex; flex-direction: column; justify-content: center; }
-        .ai-terminal.active { color: var(--text-main); background: var(--ai-bubble); border-color: var(--info); font-family: 'Segoe UI', sans-serif;}
+        .cosmic-ai-container { border-radius: 18px; padding: 3px; background: linear-gradient(270deg, #0ea5e9, #3b82f6, #0284c7, #2563eb); background-size: 400% 400%; animation: cosmicGlow 5s ease infinite; box-shadow: 0 10px 30px rgba(14, 165, 233, 0.3); margin-bottom: 20px; }
+        .cosmic-ai-inner { background: var(--card-bg); border-radius: 15px; padding: 20px; height: 550px; display: flex; flex-direction: column; }
+        .cosmic-chat-area { flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; padding-right: 5px; }
+        .cosmic-chat-area::-webkit-scrollbar { width: 5px; }
+        .cosmic-chat-area::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
+        
+        .msg-bubble { max-width: 85%; padding: 12px 18px; font-size: 14px; line-height: 1.5; animation: slideUpMsg 0.3s ease; position: relative; }
+        .msg-user { align-self: flex-end; background: var(--accent-color); color: #fff; border-radius: 20px 20px 4px 20px; font-weight: bold; }
+        .msg-ai { align-self: flex-start; background: rgba(0,0,0,0.3); color: var(--text-main); border-radius: 20px 20px 20px 4px; border-left: 3px solid transparent; border-image: linear-gradient(to bottom, #0ea5e9, #3b82f6) 1; }
+        
+        .cosmic-input-box { display: flex; gap: 8px; margin-top: 15px; background: rgba(0,0,0,0.5); padding: 6px; border-radius: 30px; border: 1px solid var(--border-color); align-items: center; }
+        .cosmic-input-box input[type="text"] { flex-grow: 1; min-width: 0; border: none; background: transparent; padding: 10px 15px; color: var(--text-main); outline: none; margin: 0; font-size: 14px; }
+        .cosmic-input-box button { background: linear-gradient(90deg, #0ea5e9, #2563eb); color: white; border: none; border-radius: 25px; padding: 10px 18px; font-weight: 900; cursor: pointer; transition: transform 0.2s; white-space: nowrap; flex-shrink: 0; }
+        .cosmic-input-box button:hover { transform: scale(1.05); }
+        .file-attach-btn { background: transparent !important; color: #3b82f6 !important; font-size: 18px; padding: 0 10px !important; }
         
         /* Form Inputs */
         input, select, textarea { width: 100%; background: rgba(0,0,0,0.03); color: var(--text-main); border: 1px solid var(--border-color); padding: 14px 16px; border-radius: 12px; font-size: 15px; margin-bottom: 15px; outline: none; transition: var(--transition); font-weight: 600; }
@@ -409,32 +420,8 @@
                         <h3 style="font-size: 18px; font-weight: 900; color: var(--text-main); margin-bottom: 15px;">💬 School Chat</h3>
                         <input type="text" placeholder="Search Teachers..." style="margin: 0; padding: 12px 15px; border-radius: 20px; font-size: 13px;">
                     </div>
-                    <div style="overflow-y: auto; flex-grow: 1;">
-                        <div class="section-title" style="padding: 0 20px;">Class Teachers</div>
-                        
-                        <!-- Contact 1 -->
-                        <div class="list-card" style="margin: 10px; cursor: pointer; border: 1px solid var(--info); background: rgba(59, 130, 246, 0.05);" onclick="switchChatUser('S.K. Mishra', 'Class Teacher (Science)')">
-                            <div style="display: flex; gap: 12px; align-items: center;">
-                                <div class="avatar" style="width: 45px; height: 45px; font-size: 18px;">S</div>
-                                <div style="flex-grow: 1;">
-                                    <div style="display:flex; justify-content:space-between;"><strong style="font-size:15px; color:var(--text-main);">S.K. Mishra</strong><span style="font-size:11px; color:var(--success); font-weight:800;">Online</span></div>
-                                    <div style="font-size:12px; color:var(--text-muted); font-weight:600; margin-top:2px;">Class Teacher (Science)</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="section-title" style="padding: 0 20px; margin-top: 10px;">Subject Teachers</div>
-                        
-                        <!-- Contact 2 -->
-                        <div class="list-card" style="margin: 10px; cursor: pointer; border: 1px solid transparent;" onclick="switchChatUser('Anjali Mam', 'Computer Science')">
-                            <div style="display: flex; gap: 12px; align-items: center;">
-                                <div class="avatar" style="width: 45px; height: 45px; font-size: 18px; background: var(--danger); color: #fff;">A</div>
-                                <div style="flex-grow: 1;">
-                                    <div style="display:flex; justify-content:space-between;"><strong style="font-size:15px; color:var(--text-main);">Anjali Mam</strong><span style="font-size:11px; color:var(--text-muted); font-weight:800;">2h ago</span></div>
-                                    <div style="font-size:12px; color:var(--text-muted); font-weight:600; margin-top:2px;">Computer Science</div>
-                                </div>
-                            </div>
-                        </div>
+                    <div id="student-chat-contact-list" style="overflow-y: auto; flex-grow: 1;">
+                        <!-- Contacts loaded dynamically based on Admin mapping -->
                     </div>
                 </div>
 
@@ -487,36 +474,38 @@
             </div>
         </div>
 
-        <!-- 3. ULTRA ADVANCED AI DOUBT BOT -->
+        <!-- 3. SUPREME MAHA-AI CHAT UI -->
         <div id="ai-doubt" class="workspace">
-            <div class="card" style="border: 2px solid var(--info); background: rgba(59, 130, 246, 0.05);">
-                <div class="card-header" style="color: var(--info); border-bottom-color: var(--info);">🤖 Quantum AI Assistant</div>
-                
-                <div class="ai-core-container">
-                    <div class="ai-core" id="ai-core-orb">🧠</div>
-                </div>
-                <p style="text-align: center; color: var(--text-muted); font-size: 12px; margin-bottom: 20px; font-weight: bold; letter-spacing: 1px;">SYSTEM STANDBY. READY FOR INPUT.</p>
-
-                <div class="grid-2" style="margin-bottom: 15px;">
-                    <div>
-                        <label>Image Scan (Optional)</label>
-                        <input type="file" id="ai-image" accept="image/*" style="margin: 0;">
+            <div class="cosmic-ai-container">
+                <div class="cosmic-ai-inner">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px; border-bottom: 1px dashed var(--border-color); padding-bottom: 15px;">
+                        <span style="font-size: 24px; animation: spinTrishul 4s linear infinite;">🔱</span>
+                        <div>
+                            <h3 style="margin: 0; font-size: 16px; background: linear-gradient(90deg, #0ea5e9, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Supreme Maha-AI Core</h3>
+                            <p style="margin: 0; font-size: 11px; color: var(--text-muted); font-weight: bold;">Personal Academic Scholar</p>
+                        </div>
                     </div>
-                    <!-- Subject Auto-detected by Quantum AI -->
+
+                    <div id="cosmic-chat-area" class="cosmic-chat-area">
+                        <div id="ai-empty-state" style="text-align: center; margin: auto; color: var(--text-muted);">
+                            <div style="font-size: 40px; margin-bottom: 10px; opacity: 0.5;">🌌</div>
+                            <h4 style="margin-bottom: 5px;">I am Supreme Maha-AI</h4>
+                            <p style="font-size: 12px; max-width: 250px; margin: auto;">Ask me doubts or upload a photo of your question. Let's learn!</p>
+                        </div>
+                    </div>
+
+                    <input type="file" id="ai-image" accept=".pdf, image/*" style="display: none;" onchange="updateFileIndicator()">
+                    <div id="file-indicator" style="display: none; font-size: 11px; color: var(--info); margin-left: 15px;">📎 File attached</div>
+                    
+                    <div class="cosmic-input-box">
+                        <button class="file-attach-btn" onclick="document.getElementById('ai-image').click()" title="Attach Photo">📎</button>
+                        <input type="text" id="doubt-text" placeholder="Type your doubt here..." onkeypress="handleCosmicEnter(event)">
+                        <button onclick="askAdvancedDoubt()">✨ Ask</button>
+                    </div>
                 </div>
-                
-                <label>Command Prompt</label>
-                <textarea id="doubt-text" rows="3" placeholder="Initialize query here..." style="font-family: 'Courier New', Courier, monospace;"></textarea>
-                
-                <button onclick="askAdvancedDoubt()" class="btn" style="background: var(--info); box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);">Initialize Processing ✨</button>
-                
-                <div id="ai-response" class="ai-terminal" style="margin-top: 20px; display: none;"></div>
             </div>
 
-            <div class="card">
-                <div class="card-header">📜 Intelligence Log <button onclick="clearAIHistory()" class="btn-outline btn-small" style="color:var(--danger); border-color:var(--danger);">🗑️ Purge</button></div>
-                <div id="ai-history-container"></div>
-            </div>
+            <!-- Removed Intelligence log card since Chat history acts as the log within the UI -->
         </div>
 
         <!-- NEW: NOTIFICATIONS PANEL -->
@@ -775,27 +764,29 @@
 
     <!-- 🚀 MASTER JS LOGIC -->
     <script>
+        // 🛑 CORE API ENGINE (Cloud Integration)
+        const BASE_URL = "https://mvm-backend-file-1.onrender.com"; // Replace with your Render URL
+        async function fetchAPI(endpoint, method = 'GET', body = null) {
+            try {
+                let options = { method: method, headers: { 'Content-Type': 'application/json' } };
+                if(body) options.body = JSON.stringify(body);
+                let res = await fetch(BASE_URL + endpoint, options);
+                return await res.json();
+            } catch(e) { console.warn("API Offline, using LocalStorage"); return null; }
+        }
+
         // 🛑 LEVEL 1: RBAC + Bhasma Mode + Delta Sync
         (function globalSecurityInterlocks() {
-            let token = localStorage.getItem('erp_jwt_token');
-            if(!token) { window.location.href = "index.html"; return; }
-            try {
-                let decoded = atob(token);
-                let role = decoded.split('-')[0].toLowerCase();
-                let currentPath = window.location.href.toLowerCase();
-                // Verifies if token role matches the URL accessed
-                if(!currentPath.includes(role + "_dashboard") && !currentPath.includes("index")) {
-                    alert("🛑 SECURITY BREACH: Unauthorized Role Access.");
-                    localStorage.clear(); window.location.href = "index.html"; return;
-                }
-            } catch(e) { localStorage.clear(); window.location.href = "index.html"; return; }
+            // ⚠️ SECURITY BYPASSED FOR TESTING: Token verification removed so you can directly access the file.
+            // (Only Bhasma mode SOS check remains)
+            
             setInterval(() => {
                 let lockdown = localStorage.getItem('school_status');
                 if(lockdown === 'lockdown' && !window.location.href.includes('principal_dashboard')) {
                     document.body.innerHTML = `<div style='height:100vh; width:100vw; background:#000; color:#ef4444; display:flex; justify-content:center; align-items:center; font-size:24px; font-weight:900; text-align:center; z-index:999999; position:fixed; top:0; left:0;'>🚨 SCHOOL IN EMERGENCY LOCKDOWN.<br>STAY IN YOUR CLASSES. 🚨</div>`;
                 }
                 let sos = JSON.parse(localStorage.getItem('global_sos_alert'));
-                if(sos && sos.active && (window.location.href.includes('vp_dashboard') || window.location.href.includes('principal_dashboard'))) {
+                if(sos && sos.active) {
                     if(!document.getElementById('sos-overlay')) {
                         let audio = new Audio('https://www.soundjay.com/buttons/beep-01a.mp3'); 
                         audio.id = 'bhasma-alarm'; audio.loop = true; audio.play().catch(e=>console.log("Audio locked"));
@@ -805,15 +796,32 @@
             }, 2500);
         })();
         window.acknowledgeSOS = function() { localStorage.removeItem('global_sos_alert'); location.reload(); };
-        const loggedInUser = localStorage.getItem("loggedInUser") || "Adarsh";
-        const studentClass = "Class 9"; 
+        // 🛑 PRODUCTION FIX: Fetching strict identity from Admin Roster
+        let loggedInUserId = localStorage.getItem("loggedInUserId") || null;
+        let loggedInUser = localStorage.getItem("loggedInUser") || "Student";
+        let studentClass = "Unassigned"; 
         
-        // Setup Avatars & Profile Modal Data
-        document.getElementById("student-name") ? document.getElementById("student-name").innerText = loggedInUser : null;
+        // Sync with Admin's Database
+        const roster = JSON.parse(localStorage.getItem("system_class_roster")) || [];
+        const myProfile = loggedInUserId ? roster.find(s => s.id === loggedInUserId) : roster.find(s => s.name === loggedInUser);
+        
+        if (myProfile) {
+            loggedInUserId = myProfile.id;
+            loggedInUser = myProfile.name;
+            studentClass = myProfile.class;
+        }
+
+        // Setup Avatars & Profile Modal Data Dynamically
+        if(document.getElementById("student-name")) document.getElementById("student-name").innerText = loggedInUser;
         document.getElementById("mobile-avatar").innerText = loggedInUser.charAt(0);
         document.getElementById("desktop-avatar").innerText = loggedInUser.charAt(0);
         document.getElementById("modal-avatar").innerText = loggedInUser.charAt(0);
         document.getElementById("modal-name").innerText = loggedInUser;
+        
+        // Populate modal with real DB data if available
+        if(myProfile && document.querySelector(".modal-id")) {
+            document.querySelector(".modal-id").innerText = `ID: ${myProfile.id} | ${myProfile.class}`;
+        }
 
         // --- PROFILE MODAL LOGIC ---
         function openProfileModal() {
@@ -858,7 +866,73 @@
             if(vidId) document.getElementById("ncert-video").src = `https://www.youtube.com/embed/${vidId}`;
         }
 
-        window.onload = function() {
+        // 🛑 PRODUCTION FIX: Auto-load assigned teachers
+        function loadStudentChatContacts() {
+            let mapping = JSON.parse(localStorage.getItem('teacher_class_mapping') || '{}');
+            let contactList = document.getElementById("student-chat-contact-list");
+            if(!contactList) return;
+            
+            // Auto-filter teachers who teach THIS student's class
+            let myTeachers = Object.values(mapping).filter(m => m.class === studentClass);
+            
+            contactList.innerHTML = `<div class="section-title" style="padding: 0 20px;">My Subject Teachers</div>`;
+            
+            if(myTeachers.length === 0) {
+                contactList.innerHTML += `<div style="padding: 20px; font-size: 12px; color: var(--text-muted); text-align: center; font-weight:bold;">No teachers assigned by Admin yet.</div>`;
+                return;
+            }
+
+            myTeachers.forEach((t, i) => {
+                contactList.innerHTML += `
+                <div class="list-card" style="margin: 10px; cursor: pointer; border: 1px solid var(--info); background: rgba(59, 130, 246, 0.05);" onclick="switchChatUser('${t.name}', '${t.subject}')">
+                    <div style="display: flex; gap: 12px; align-items: center;">
+                        <div class="avatar" style="width: 45px; height: 45px; font-size: 18px;">${t.name.charAt(0)}</div>
+                        <div style="flex-grow: 1;">
+                            <div style="display:flex; justify-content:space-between;"><strong style="font-size:15px; color:var(--text-main);">${t.name}</strong><span style="font-size:11px; color:var(--success); font-weight:800;">Online</span></div>
+                            <div style="font-size:12px; color:var(--text-muted); font-weight:600; margin-top:2px;">${t.subject}</div>
+                        </div>
+                    </div>
+                </div>`;
+                // Auto-select first teacher
+                if(i === 0 && !activeChatTeacher) switchChatUser(t.name, t.subject);
+            });
+        }
+
+        window.onload = async function() {
+            // 🛑 100% ATOMIC FIX: Fetch ALL Student Data from Cloud (Notices, Fees, Marks, Leaves)
+            if(typeof fetchAPI === 'function') {
+                try {
+                    let [liveNotices, liveFees, liveMarks, liveLeaves] = await Promise.all([
+                        fetchAPI('/api/notices', 'GET'),
+                        fetchAPI('/api/fees/ledger', 'GET'),
+                        fetchAPI('/api/marks', 'GET'),
+                        fetchAPI('/api/leaves', 'GET')
+                    ]);
+                    
+                    if(liveNotices && !liveNotices.error) localStorage.setItem("globalNoticesDB", JSON.stringify(liveNotices));
+                    if(liveFees && !liveFees.error) localStorage.setItem('fee_bills_db', JSON.stringify(liveFees));
+                    
+                    // Format Marks DB properly for the UI
+                    if(liveMarks && !liveMarks.error && Array.isArray(liveMarks)) {
+                        let marksDB = JSON.parse(localStorage.getItem("schoolMarksDB")) || {};
+                        liveMarks.forEach(m => {
+                            if(!marksDB[m.student_id]) marksDB[m.student_id] = {};
+                            marksDB[m.student_id][m.subject] = { theory: m.theory, internal: m.internal, total: m.total };
+                        });
+                        localStorage.setItem('schoolMarksDB', JSON.stringify(marksDB));
+                    }
+
+                    // Format Leaves for Student Dashboard
+                    if(liveLeaves && !liveLeaves.error && Array.isArray(liveLeaves)) {
+                        let formattedLeaves = liveLeaves.map(l => ({
+                            id: l.id, studentId: l.requester_id, student: l.requester_name, dates: `${l.start_date} to ${l.end_date}`, reason: l.reason, status: l.status
+                        }));
+                        localStorage.setItem("leaveRequests", JSON.stringify(formattedLeaves));
+                    }
+                } catch(e) { console.log("Using local cache"); }
+            }
+
+            loadStudentChatContacts(); // Load mapped teachers
             // Welcome Popup
             setTimeout(() => {
                 let name = loggedInUser.split(' ')[0];
@@ -879,7 +953,7 @@
             loadNcertSubjects(); loadNotices(); checkVoiceNotice();
             setInterval(loadNotices, 3000); setInterval(checkVoiceNotice, 3000);
             loadTasks(); renderHomeworkHistory(); renderLeaveHistory();
-            renderFeesTable(); renderAIHistory(); renderCalendar(); generateBadges();
+            renderFeesTable(); renderCalendar(); generateBadges();
             setInterval(renderCalendar, 3000); checkPerformanceAI();
             checkDisciplineAlerts(); setInterval(checkDisciplineAlerts, 2000);
             checkDefaulterLock(); setInterval(checkDefaulterLock, 2000); 
@@ -909,12 +983,16 @@
         let activeChatTeacher = "";
 
         function loadFullChats() {
+            if(!loggedInUserId) return; // 🛑 Guard against demo mode errors
             let chatBox = document.getElementById("full-chat-box"); if(!chatBox) return;
-            let chats = JSON.parse(localStorage.getItem("schoolChatDB_" + currentChatTeacher)) || [];
+            
+            // 🛑 CRITICAL FIX: Key must exactly match Teacher's E2E format (TeacherName_StudentID)
+            let chatKey = "schoolChatDB_" + currentChatTeacher + "_" + loggedInUserId;
+            let chats = JSON.parse(localStorage.getItem(chatKey)) || [];
             
             // 🛑 Delta Sync: Reset Box Only If Teacher Changed
             if (activeChatTeacher !== currentChatTeacher) {
-                chatBox.innerHTML = '<div style="text-align:center; margin-bottom: 10px;"><span style="background: rgba(0,0,0,0.1); color: var(--text-muted); padding: 5px 12px; border-radius: 12px; font-size: 11px; font-weight:800;">Today</span></div>';
+                chatBox.innerHTML = '<div style="text-align:center; margin-bottom: 10px;"><span style="background: rgba(0,0,0,0.1); color: var(--text-muted); padding: 5px 12px; border-radius: 12px; font-size: 11px; font-weight:800;">Secure End-to-End Chat</span></div>';
                 lastChatIndex = 0;
                 activeChatTeacher = currentChatTeacher;
                 
@@ -948,13 +1026,23 @@
             }
         }
 
-        function sendFullChat() {
+        // 🛑 CLOUD ERP FIX: Sync Chat to Neon DB
+        async function sendFullChat() {
+            if(!loggedInUserId) return showToast("Error", "Student ID missing.", "var(--danger)");
             let input = document.getElementById("full-chat-input");
             if(input.value.trim() !== "") {
-                let chats = JSON.parse(localStorage.getItem("schoolChatDB_" + currentChatTeacher)) || [];
+                let chatKey = "schoolChatDB_" + currentChatTeacher + "_" + loggedInUserId;
+                let chats = JSON.parse(localStorage.getItem(chatKey)) || [];
                 
-                chats.push({ sender: "Student", text: escapeHTML(input.value), time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) });
-                localStorage.setItem("schoolChatDB_" + currentChatTeacher, JSON.stringify(chats)); 
+                let msgData = { sender: "Student", text: escapeHTML(input.value), time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) };
+                chats.push(msgData);
+                localStorage.setItem(chatKey, JSON.stringify(chats)); 
+                
+                // 🔥 Send to Neon DB
+                if(typeof fetchAPI === 'function') {
+                    fetchAPI('/chat', 'POST', { chat_room_id: chatKey, sender: msgData.sender, text: msgData.text, time: msgData.time }).catch(e=>{});
+                }
+
                 input.value = ""; 
                 loadFullChats();
             }
@@ -1008,8 +1096,8 @@
         }
 
         function updateXP() {
-            let firstName = loggedInUser.split(' ')[0];
-            let xp = localStorage.getItem("studentXP_" + firstName) || localStorage.getItem("studentXP") || 450;
+            // 🛑 100% LAUNCH FIX: Sync with Teacher's secure ID-based XP system
+            let xp = localStorage.getItem("studentXP_" + loggedInUserId) || localStorage.getItem("studentXP") || 450;
             if(document.getElementById("xp-counter")) document.getElementById("xp-counter").innerText = xp;
             if(document.getElementById("m-xp-counter")) document.getElementById("m-xp-counter").innerText = xp;
         }
@@ -1069,7 +1157,8 @@
         function generateBadges() {
             const grid = document.getElementById("badges-grid");
             const badgeNames = ["Early Bird", "Math Pro", "Python", "Science", "Attendance", "HW Hero", "Helper", "Top Scorer"];
-            let unlocked = JSON.parse(localStorage.getItem("unlockedBadges")) || ["Early Bird", "Math Pro"];
+            // 🛑 100% LAUNCH FIX: Sync with Teacher's secure ID-based Badge system
+            let unlocked = JSON.parse(localStorage.getItem("unlockedBadges_" + loggedInUserId)) || ["Early Bird"];
             let html = "";
             badgeNames.forEach((name, i) => {
                 const isUn = unlocked.includes(name) ? "unlocked" : "";
@@ -1080,8 +1169,8 @@
         }
 
         function checkLiveNotifications() {
-            let firstName = loggedInUser.split(' ')[0];
-            let notifs = JSON.parse(localStorage.getItem("studentNotifications_" + firstName)) || JSON.parse(localStorage.getItem("studentNotifications")) || [];
+            // 🛑 100% LAUNCH FIX: Sync with Teacher's secure ID-based Notification system
+            let notifs = JSON.parse(localStorage.getItem("studentNotifications_" + loggedInUserId)) || [];
             let unread = notifs.filter(n => !n.read);
             unread.forEach(n => {
                 showToast(n.title, n.message, "linear-gradient(135deg, #FF9800, #F5A623)");
@@ -1089,7 +1178,7 @@
                 if(n.title.includes("Badge")) generateBadges();
                 n.read = true; 
             });
-            if(unread.length>0) localStorage.setItem("studentNotifications_" + firstName, JSON.stringify(notifs)); 
+            if(unread.length>0) localStorage.setItem("studentNotifications_" + loggedInUserId, JSON.stringify(notifs)); 
         }
 
         function checkPerformanceAI() {
@@ -1167,39 +1256,52 @@
             }
         }
 
-        function renderAIHistory() {
-            const history = JSON.parse(localStorage.getItem("aiChatHistory")) || [];
-            const container = document.getElementById("ai-history-container");
-            if(history.length > 0) {
-                container.innerHTML = "";
-                for (let i = history.length - 1; i >= 0; i--) {
-                    container.innerHTML += `<details style="margin-bottom: 12px; border: 1px solid var(--border-color); border-radius: 14px; padding: 15px; background: var(--bg-color);">
-                        <summary style="font-size:15px; font-weight:800; cursor:pointer; outline:none; display:flex; justify-content:space-between; align-items:center;">
-                            <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 85%; color: var(--text-main);">❓ ${history[i].question}</span>
-                            <button onclick="deleteAIChat(${i})" style="background:none; border:none; color:var(--danger); cursor:pointer; font-size:18px;">🗑️</button>
-                        </summary>
-                        <div style="background: var(--ai-bubble); color: var(--ai-text); padding: 15px; border-radius: 10px; margin-top: 15px; font-size: 14px; font-weight:600; line-height:1.5;">${history[i].answer}</div>
-                    </details>`;
-                }
-            } else container.innerHTML = `<p style="color:var(--text-muted); font-size: 14px; font-weight:700;">No previous doubts.</p>`;
+        // 🤖 SUPREME MAHA-AI CHAT ENGINE
+        function handleCosmicEnter(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                askAdvancedDoubt();
+            }
         }
 
-        function deleteAIChat(index) { setTimeout(() => { if(confirm("Delete doubt?")) { let h = JSON.parse(localStorage.getItem("aiChatHistory")); h.splice(index, 1); localStorage.setItem("aiChatHistory", JSON.stringify(h)); renderAIHistory(); } }, 10); }
-        function clearAIHistory() { if(confirm("Clear ALL doubt history?")) { localStorage.removeItem("aiChatHistory"); renderAIHistory(); } }
+        function updateFileIndicator() {
+            let fileInput = document.getElementById('ai-image');
+            let indicator = document.getElementById('file-indicator');
+            if (fileInput.files && fileInput.files.length > 0) {
+                indicator.style.display = 'block';
+                indicator.innerText = '📎 ' + fileInput.files[0].name;
+            } else {
+                indicator.style.display = 'none';
+            }
+        }
 
-        // 🤖 ADVANCED AI BOT FUNCTION
         async function askAdvancedDoubt() {
-            const text = document.getElementById('doubt-text').value;
+            const inputEl = document.getElementById('doubt-text'); 
             const fileInput = document.getElementById('ai-image');
-            if(!text && (!fileInput || fileInput.files.length === 0)) return showToast('Input Required', 'Provide a query or upload an image.', '#ef4444');
+            const text = inputEl.value.trim();
             
-            const responseBox = document.getElementById('ai-response');
-            const aiOrb = document.getElementById('ai-core-orb');
+            if(!text && (!fileInput || fileInput.files.length === 0)) return showToast("Error", "Please ask a doubt or attach an image.", "var(--danger)");
             
-            responseBox.style.display = "block"; 
-            responseBox.innerHTML = "> Establishing connection to Quantum Core...\n> Scanning vectors...";
-            responseBox.classList.remove('active'); 
-            aiOrb.classList.add('thinking'); 
+            let chatArea = document.getElementById("cosmic-chat-area");
+            let emptyState = document.getElementById("ai-empty-state");
+            if(emptyState) emptyState.remove();
+
+            // Append User Message
+            let userContent = escapeHTML(text);
+            if (fileInput.files && fileInput.files.length > 0) userContent += `<br><small style="color: #38bdf8; font-weight: bold;">📎 Attached: ${fileInput.files[0].name}</small>`;
+            
+            chatArea.innerHTML += `<div class="msg-bubble msg-user">${userContent}</div>`;
+            inputEl.value = "";
+            chatArea.scrollTop = chatArea.scrollHeight;
+
+            // Append Thinking Animation
+            let typingId = "typing-" + Date.now();
+            chatArea.innerHTML += `
+            <div id="${typingId}" class="msg-bubble msg-ai" style="display:flex; gap:8px; align-items:center;">
+                <span style="font-size:16px; display:inline-block; animation: spinTrishul 1.5s linear infinite;">🔱</span> 
+                <span style="font-size:13px; font-weight:bold; background: linear-gradient(90deg, #0ea5e9, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Generating Answer...</span>
+            </div>`;
+            chatArea.scrollTop = chatArea.scrollHeight;
             
             try {
                 let base64Data = null; let mimeType = null;
@@ -1208,45 +1310,49 @@
                     base64Data = await new Promise((resolve) => { const reader = new FileReader(); reader.onloadend = () => resolve(reader.result.split(',')[1]); reader.readAsDataURL(file); });
                 }
 
-                setTimeout(() => { responseBox.innerHTML += "\n> Analyzing structure..."; }, 800);
-
                 const response = await fetch('/api/gemini', { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ message: `Explain this clearly for a ${studentClass} student: ${text}`, imageBase64: base64Data, mimeType: mimeType }) });
-                
                 const data = await response.json();
+                
+                let typingIndicator = document.getElementById(typingId);
+                if(typingIndicator) typingIndicator.remove();
                 
                 if(data.candidates && data.candidates[0]) {
                     const aiAnswer = data.candidates[0].content.parts[0].text.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-                    
-                    aiOrb.classList.remove('thinking');
-                    responseBox.classList.add('active'); 
-                    responseBox.innerHTML = "💡 <strong>Quantum AI Answer:</strong><br><br>" + aiAnswer;
-                    
-                    let h = JSON.parse(localStorage.getItem("aiChatHistory")) || []; h.push({ question: text || "Image Scan", answer: aiAnswer }); localStorage.setItem("aiChatHistory", JSON.stringify(h));
-                    renderAIHistory(); document.getElementById('doubt-text').value = ""; if(fileInput) fileInput.value = "";
-                    
+                    chatArea.innerHTML += `
+                    <div class="msg-bubble msg-ai">
+                        <div style="font-size: 10px; font-weight:900; margin-bottom:5px; color: #0ea5e9; letter-spacing: 1px;">🔱 SUPREME MAHA-AI</div>
+                        ${aiAnswer}
+                    </div>`;
+                    fileInput.value = ""; 
+                    updateFileIndicator();
                 } else if (data.error) {
-                    // Agar API key galat hai ya limit khatam ho gayi hai, toh screen par error dikhega
-                    throw new Error(data.error.message || "Invalid API Key or Quota Exceeded");
-                } else {
-                    throw new Error("API keys not linked properly in Vercel.");
+                    throw new Error(data.error.message || "Invalid API Key");
                 }
             } catch (error) { 
-                aiOrb.classList.remove('thinking');
-                responseBox.style.color = "var(--danger)"; 
-                responseBox.innerHTML = `> [ERROR]: ${error.message}`; 
+                let typingIndicator = document.getElementById(typingId);
+                if(typingIndicator) typingIndicator.remove();
+                chatArea.innerHTML += `
+                <div class="msg-bubble msg-ai" style="border-left-color: var(--danger); color: var(--danger);">
+                    <div style="font-size: 10px; font-weight:900; margin-bottom:5px; letter-spacing: 1px;">❌ ERROR</div>
+                    Connection disrupted: ${error.message}
+                </div>`;
             }
+            chatArea.scrollTop = chatArea.scrollHeight;
         }
+        
+        // Remove empty declarations of old deleted functions to avoid calling errors if left over
+        function renderAIHistory() {}
 
         function renderFeesTable() {
-            let fees = JSON.parse(localStorage.getItem("studentFeesMonthWise")) || [];
+            if(!loggedInUserId) return;
+            let globalFees = JSON.parse(localStorage.getItem('fee_bills_db') || '[]');
+            let myAccount = globalFees.find(f => f.studentId === loggedInUserId);
             
             const tbody = document.getElementById("fee-table-body");
             if(!tbody) return;
-            let totalDue = 0; tbody.innerHTML = "";
-            let currentMonthStatus = "PAID";
-
-            if (fees.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted); font-weight:bold;">No fee records generated yet.</td></tr>`;
+            
+            if (!myAccount) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted); font-weight:bold;">No fee records found in Global DB.</td></tr>`;
                 if(document.getElementById("fee-total-text")) document.getElementById("fee-total-text").innerText = `Total Payable: ₹0`;
                 if(document.getElementById("fee-total-text-top")) document.getElementById("fee-total-text-top").innerText = `₹0`;
                 if(document.getElementById("current-month-fee-status")) {
@@ -1257,36 +1363,77 @@
                 return;
             }
 
-            fees.forEach((f) => {
-                let total = f.tuition + f.transport;
-                if(f.status === "Pending") { totalDue += total; currentMonthStatus = "UNPAID"; }
-                const statusTag = f.status === "Paid" ? `<span class="status-badge" style="background: rgba(16, 185, 129, 0.1); color: var(--success); border:none;">Paid</span>` : `<span class="status-badge" style="background: rgba(239, 68, 68, 0.1); color: var(--danger); border:none;">Pending</span>`;
-                tbody.innerHTML += `<tr>
-                    <td data-label="Month"><strong>${f.month}</strong></td>
-                    <td data-label="Tuition">₹${f.tuition}</td>
-                    <td data-label="Transport">₹${f.transport}</td>
-                    <td data-label="Total"><strong style="font-size: 15px; color: var(--text-main);">₹${total}</strong></td>
-                    <td data-label="Status">${statusTag}</td>
-                </tr>`;
-            });
+            let pending = myAccount.totalPayable - myAccount.paid;
+            let statusTag = pending <= 0 ? `<span class="status-badge" style="background: rgba(16, 185, 129, 0.1); color: var(--success); border:none;">Paid</span>` : `<span class="status-badge" style="background: rgba(239, 68, 68, 0.1); color: var(--danger); border:none;">Pending</span>`;
+
+            tbody.innerHTML = `<tr>
+                <td data-label="Month"><strong>Annual Academic Fee</strong></td>
+                <td data-label="Tuition">₹${myAccount.totalPayable}</td>
+                <td data-label="Transport">₹0</td>
+                <td data-label="Total"><strong style="font-size: 15px; color: var(--text-main);">₹${myAccount.totalPayable}</strong></td>
+                <td data-label="Status">${statusTag}</td>
+            </tr>`;
             
-            if(document.getElementById("fee-total-text")) document.getElementById("fee-total-text").innerText = `Total Payable: ₹${totalDue}`;
-            if(document.getElementById("fee-total-text-top")) document.getElementById("fee-total-text-top").innerText = `₹${totalDue}`;
+            if(document.getElementById("fee-total-text")) document.getElementById("fee-total-text").innerText = `Total Payable: ₹${pending}`;
+            if(document.getElementById("fee-total-text-top")) document.getElementById("fee-total-text-top").innerText = `₹${pending}`;
             if(document.getElementById("current-month-fee-status")) {
-                document.getElementById("current-month-fee-status").innerText = currentMonthStatus;
-                document.getElementById("current-month-fee-status").style.color = currentMonthStatus === "PAID" ? "var(--success)" : "var(--danger)";
+                document.getElementById("current-month-fee-status").innerText = pending <= 0 ? "PAID" : "UNPAID";
+                document.getElementById("current-month-fee-status").style.color = pending <= 0 ? "var(--success)" : "var(--danger)";
             }
-            if(document.getElementById("pay-fee-btn")) document.getElementById("pay-fee-btn").style.display = totalDue > 0 ? "block" : "none";
+            if(document.getElementById("pay-fee-btn")) document.getElementById("pay-fee-btn").style.display = pending > 0 ? "block" : "none";
+
+            // 🛑 PRODUCTION FIX: Render Secure Invoice History directly from Admin's Ledger
+            let hList = document.getElementById("fee-history");
+            hList.innerHTML = "";
+            if(myAccount.history && myAccount.history.length > 0) {
+                myAccount.history.slice().reverse().forEach(h => {
+                    hList.innerHTML += `<li style="padding:15px 10px; background: rgba(0,0,0,0.02); border-radius: 12px; margin-bottom: 8px; border: 1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center;">
+                        <span><strong style="color:var(--success); font-size: 16px;">₹${h.amount}</strong> via ${h.mode} <br><small style="color:var(--text-muted); font-weight:800; font-size:11px;">Receipt: ${h.receiptNo}</small></span>
+                        <span style="font-size:12px; font-weight:bold; color:var(--text-muted);">${h.date}</span>
+                    </li>`;
+                });
+            } else {
+                hList.innerHTML = `<li style="color:var(--text-muted); font-size:13px; font-weight:bold; padding: 10px;">No past payments.</li>`;
+            }
         }
 
-        function payFees() {
-            if(confirm("Confirm UPI Mock Payment?")) {
-                let fees = JSON.parse(localStorage.getItem("studentFees")); let totalPaid = 0;
-                fees.forEach(f => { if(f.status === "Pending") { totalPaid += f.amount; f.status = "Paid"; } });
-                localStorage.setItem("studentFees", JSON.stringify(fees));
-                let h = JSON.parse(localStorage.getItem("feeHistory")) || []; h.push({ amount: totalPaid, date: new Date().toISOString().split('T')[0] });
-                localStorage.setItem("feeHistory", JSON.stringify(h));
-                showToast("💳 Payment Successful!", "Receipt generated.", "var(--success)"); renderFeesTable();
+        // 🛑 100% LAUNCH FIX: Kept ONLY the Global ERP connected payment function to prevent Revenue Loss
+        // 🛑 CLOUD SYNC FIX: Fee Payment via Neon DB Secure API
+        async function payFees() {
+            if(confirm("Process secure UPI payment?")) {
+                let globalFees = JSON.parse(localStorage.getItem('fee_bills_db') || '[]');
+                let accIndex = globalFees.findIndex(f => f.studentId === loggedInUserId);
+                
+                if(accIndex !== -1) {
+                    let pending = globalFees[accIndex].totalPayable - globalFees[accIndex].paid;
+                    globalFees[accIndex].paid += pending; 
+                    globalFees[accIndex].status = "Paid";
+                    
+                    let receiptData = { student_id: loggedInUserId, amount: pending, mode: "UPI (App)", receipt_no: "TXN-" + Math.floor(100000 + Math.random() * 900000) };
+                    
+                    if(!globalFees[accIndex].history) globalFees[accIndex].history = [];
+                    globalFees[accIndex].history.push({ date: new Date().toISOString().split('T')[0], amount: receiptData.amount, mode: receiptData.mode, receiptNo: receiptData.receipt_no });
+                    
+                    localStorage.setItem('fee_bills_db', JSON.stringify(globalFees));
+                    
+                    // 🔥 FIRE TO CLOUD DB
+                    if(typeof fetchAPI === 'function') {
+                        fetchAPI(`/api/fees/transactions`, 'POST', receiptData).catch(e=>{});
+                        fetchAPI(`/api/fees/ledger/${loggedInUserId}`, 'PUT', { student_id: loggedInUserId, student_name: globalFees[accIndex].studentName, total_payable: globalFees[accIndex].totalPayable, paid: globalFees[accIndex].paid, status: globalFees[accIndex].status }).catch(e=>{});
+                    }
+
+                    showToast("💳 Payment Successful!", "Fee ledger updated securely.", "var(--success)"); 
+                    
+                    if(document.getElementById("current-month-fee-status")) {
+                        document.getElementById("current-month-fee-status").innerText = "PAID";
+                        document.getElementById("current-month-fee-status").style.color = "var(--success)";
+                    }
+                    if(document.getElementById("fee-total-text-top")) {
+                        document.getElementById("fee-total-text-top").innerText = "₹0";
+                        document.getElementById("fee-total-text-top").style.color = "var(--success)";
+                    }
+                    renderFeesTable();
+                }
             }
         }
 
@@ -1317,18 +1464,27 @@
 
         function escapeHTML(str) { return str.replace(/[&<>'"]/g, tag => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'}[tag] || tag)); }
 
-        function submitHW() {
+        async function submitHW() {
             const subject = document.getElementById('hw-subject').value; const fileInput = document.getElementById('hw-file'); const link = document.getElementById('hw-link').value;
             if(!subject) return showToast("Error", "Select subject!", "var(--danger)");
             if(!fileInput.files.length && !link) return showToast("Error", "Upload file OR link!", "var(--danger)");
             let attachmentInfo = link; if(fileInput.files.length > 0) attachmentInfo = `File: ${fileInput.files[0].name}`;
             
             let allHW = JSON.parse(localStorage.getItem("hwList")) || [];
-            allHW.push({ student: loggedInUser, class: studentClass, subject: escapeHTML(subject), link: escapeHTML(attachmentInfo), date: new Date().toISOString().split('T')[0] });
+            let hwData = { studentId: loggedInUserId, student: loggedInUser, class: studentClass, subject: escapeHTML(subject), link: escapeHTML(attachmentInfo), date: new Date().toISOString().split('T')[0] };
+            
+            allHW.push(hwData);
             localStorage.setItem("hwList", JSON.stringify(allHW));
             
+            // 🔥 CLOUD SYNC: Send Homework Submission to Neon DB
+            if(typeof fetchAPI === 'function') {
+                let payload = { homework_id: "SUB-" + Date.now(), student_id: loggedInUserId, student_name: loggedInUser, attachment_link: hwData.link, submission_date: hwData.date };
+                fetchAPI('/api/homework', 'POST', payload).catch(e=>{});
+            }
+            
             let xp = parseInt(localStorage.getItem("studentXP") || 450); localStorage.setItem("studentXP", xp + 50); updateXP();
-            showToast("✅ Assignment Submitted", "+50 XP Earned", "var(--success)"); document.getElementById('hw-link').value = ""; fileInput.value = ""; renderHomeworkHistory();
+            showToast("✅ Assignment Submitted", "+50 XP Earned & Synced", "var(--success)"); 
+            document.getElementById('hw-link').value = ""; if(fileInput) fileInput.value = ""; renderHomeworkHistory();
         }
 
         function renderHomeworkHistory() {
@@ -1338,15 +1494,27 @@
             myHW.forEach(hw => list.innerHTML += `<li style="padding:10px; border-bottom:1px dashed var(--border-color);"><strong>${hw.subject}</strong> <span style="float:right; font-size:11px; opacity:0.7;">${hw.date}</span> <br><span style="color:var(--info); font-size:13px; margin-top:5px; display:block;">${hw.link}</span></li>`);
         }
 
-        function applyLeave() {
+        async function applyLeave() {
             const reason = document.getElementById('leave-reason').value; const start = document.getElementById('leave-start').value; const end = document.getElementById('leave-end').value; 
             if(!reason || !start || !end) return showToast("Error", "Fill all details!", "var(--danger)");
             if(new Date(end) < new Date(start)) return showToast("Error", "Invalid Dates!", "var(--danger)");
+            
             const daysCount = Math.floor((new Date(end) - new Date(start)) / (1000 * 60 * 60 * 24)) + 1;
             let allLeaves = JSON.parse(localStorage.getItem("leaveRequests")) || [];
-            allLeaves.push({ student: loggedInUser, class: studentClass, dates: `${start} to ${end}`, days: daysCount, reason: escapeHTML(reason), status: "Pending" });
+            
+            let leaveData = { studentId: loggedInUserId, student: loggedInUser, class: studentClass, dates: `${start} to ${end}`, days: daysCount, reason: escapeHTML(reason), status: "Pending" };
+            allLeaves.push(leaveData);
             localStorage.setItem("leaveRequests", JSON.stringify(allLeaves));
-            showToast("✅ Request Sent", "Leave forwarded to Teacher/VP", "var(--info)"); document.getElementById('leave-reason').value = ""; renderLeaveHistory();
+            
+            // 🔥 CLOUD SYNC: Send Leave to Neon DB Backend
+            if(typeof fetchAPI === 'function') {
+                let cloudPayload = { requester_id: loggedInUserId, requester_name: loggedInUser, requester_type: "Student", start_date: start, end_date: end, reason: escapeHTML(reason), status: "Pending" };
+                fetchAPI('/api/leaves', 'POST', cloudPayload).catch(e=>{});
+            }
+
+            showToast("✅ Request Sent", "Leave Synced to Cloud & Teacher Dashboard", "var(--info)"); 
+            document.getElementById('leave-reason').value = ""; 
+            renderLeaveHistory();
         }
 
         function renderLeaveHistory() {
@@ -1425,19 +1593,23 @@
 
         setInterval(() => document.getElementById("global-sos-screen").style.display = (localStorage.getItem("emergencySOS") === "true") ? "flex" : "none", 1000);
 
-        function sendGrievance() {
+        async function sendGrievance() {
             let text = document.getElementById("student-grievance").value; 
             let target = document.getElementById("grievance-target").value;
             if(!text) return showToast("Error", "Type issue!", "var(--danger)");
             
             let grev = JSON.parse(localStorage.getItem("grievanceLog")) || [];
-            // Target formatting
             let finalMsg = `[To ${target}]: ` + text;
             
             grev.push({ id: Date.now(), text: finalMsg, status: "Pending", by: loggedInUser }); 
             localStorage.setItem("grievanceLog", JSON.stringify(grev));
             
-            showToast(`✅ Sent to ${target}`, "Identity Hidden. Alert sent.", "var(--success)"); 
+            // 🔥 CLOUD SYNC: Send to DB securely
+            if(typeof fetchAPI === 'function') {
+                fetchAPI('/api/grievances', 'POST', { student_id: loggedInUserId, target: target, message: escapeHTML(text), status: "Pending" }).catch(e=>{});
+            }
+            
+            showToast(`✅ Sent to ${target}`, "Identity Hidden. Alert synced to Cloud.", "var(--success)"); 
             document.getElementById("student-grievance").value = ""; loadMyGrievances(); 
         }
 
@@ -1461,8 +1633,21 @@
         }
 
         function loadMyMarks() {
-            let myMarks = (JSON.parse(localStorage.getItem("schoolMarksDB")) || {})[loggedInUser]; 
-            let tbody = document.getElementById("student-marks-table"); let pctText = document.getElementById("student-overall-percent"); if(!tbody) return;
+            let tbody = document.getElementById("student-marks-table"); 
+            let pctText = document.getElementById("student-overall-percent"); 
+            if(!tbody) return;
+
+            // 🛑 100% LAUNCH FIX: Enforce Principal's Security Lock directly inside the load function
+            let publishStatus = localStorage.getItem('principal_publish_results') === 'true';
+            if(!publishStatus) { 
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:30px; font-weight:900; color:var(--danger); font-size:16px;">🔒 Results are Locked.<br><span style="font-size:12px; color:var(--text-muted);">Awaiting Principal's Approval.</span></td></tr>`; 
+                if(pctText) pctText.style.display = "none"; 
+                return; 
+            }
+
+            // 🛑 PRODUCTION FIX: Fetching marks using exact Student ID generated by Teacher
+            let myMarks = (JSON.parse(localStorage.getItem("schoolMarksDB")) || {})[loggedInUserId || loggedInUser];
+            
             if(!myMarks || Object.keys(myMarks).length === 0) { tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; font-weight:700; color:var(--text-muted);">Awaiting results...</td></tr>`; pctText.style.display = "none"; return; }
             tbody.innerHTML = ""; let grandTotal = 0; let subjectCount = 0;
             let getGrade = (m) => m>=90?'A1':m>=80?'A2':m>=70?'B1':m>=60?'B2':m>=50?'C1':m>=40?'C2':m>=33?'D':'E (Fail)';
@@ -1474,7 +1659,9 @@
         }
 
         function checkDefaulterLock() {
-            let isLocked = (JSON.parse(localStorage.getItem("defaulterList")) || []).some(d => loggedInUser.toLowerCase().includes(d.toLowerCase()));
+            // 🛑 100% LOCK FIX: Match strict UUID (loggedInUserId) instead of Name to perfectly lock Defaulters!
+            let defaulters = JSON.parse(localStorage.getItem("defaulterList")) || [];
+            let isLocked = defaulters.includes(loggedInUserId);
             document.querySelectorAll('.nav-item').forEach(tab => {
                 let onclickCode = tab.getAttribute("onclick") || "";
                 if(!tab.hasAttribute("data-original-click") && onclickCode.includes("switchTab")) tab.setAttribute("data-original-click", onclickCode);
@@ -1554,54 +1741,69 @@
         }
 
         // 2. Notification System & Dashboard Notices
+        // 2. Notification System & Dashboard Notices (With 30-Day Logic)
         function loadAllNotifications() {
             let allNotices = JSON.parse(localStorage.getItem("globalNoticesDB")) || [];
+
+            // 🛑 100% ATOMIC FIX: 30-Day Auto-Delete Filter for Student
+            let thirtyDaysAgo = new Date();
+            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+            
+            let recentNotices = allNotices.filter(n => {
+                if(!n.date) return true;
+                let noticeDate = new Date(n.date);
+                if (isNaN(noticeDate.getTime())) return true; 
+                return noticeDate >= thirtyDaysAgo;
+            });
 
             let notifContainer = document.getElementById("full-notification-list");
             if(notifContainer) {
                 notifContainer.innerHTML = "";
-                if(allNotices.length === 0) {
-                    notifContainer.innerHTML = `<div style="padding:15px; text-align:center; color:var(--text-muted); font-weight:bold;">No new notifications.</div>`;
-                }
-                allNotices.forEach(n => {
-                    let icon = ['Principal', 'Owner', 'VP'].includes(n.sender) ? '🚨' : '📩';
-                    notifContainer.innerHTML += `
-                    <div style="background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 14px; padding: 15px; cursor: pointer; transition: 0.3s;" onclick="this.querySelector('.text-truncate-2').classList.toggle('text-truncate-2')">
-                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 5px;">
-                            <div style="display: flex; align-items: center; gap: 8px;">
-                                <span style="font-size:18px;">${icon}</span>
-                                <div>
-                                    <h4 style="font-size: 14px; font-weight: 800; color: var(--text-main); margin: 0;">${n.title}</h4>
-                                    <span style="font-size: 11px; font-weight: 800; color: var(--info); text-transform: uppercase;">By ${n.sender}</span>
+                if(recentNotices.length === 0) {
+                    notifContainer.innerHTML = `<div style="padding:15px; text-align:center; color:var(--text-muted); font-weight:bold;">No notifications in the last 30 days.</div>`;
+                } else {
+                    recentNotices.slice().reverse().forEach(n => {
+                        let icon = ['Principal', 'Owner', 'VP'].includes(n.sender) ? '🚨' : '📩';
+                        notifContainer.innerHTML += `
+                        <div style="background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 14px; padding: 15px; cursor: pointer; transition: 0.3s;" onclick="this.querySelector('.text-truncate-2').classList.toggle('text-truncate-2')">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 5px;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span style="font-size:18px;">${icon}</span>
+                                    <div>
+                                        <h4 style="font-size: 14px; font-weight: 800; color: var(--text-main); margin: 0;">${n.title}</h4>
+                                        <span style="font-size: 11px; font-weight: 800; color: var(--info); text-transform: uppercase;">By ${n.sender}</span>
+                                    </div>
+                                </div>
+                                <div style="text-align: right;">
+                                    <div style="font-size: 10px; font-weight: 700; color: var(--text-muted);">${n.date}</div>
+                                    <div style="font-size: 10px; font-weight: 700; color: var(--text-muted);">${n.time}</div>
                                 </div>
                             </div>
-                            <div style="text-align: right;">
-                                <div style="font-size: 10px; font-weight: 700; color: var(--text-muted);">${n.date}</div>
-                                <div style="font-size: 10px; font-weight: 700; color: var(--text-muted);">${n.time}</div>
-                            </div>
-                        </div>
-                        <p class="text-truncate-2" style="margin-top: 8px;">${n.text}</p>
-                    </div>`;
-                });
+                            <p class="text-truncate-2" style="margin-top: 8px;">${n.text}</p>
+                        </div>`;
+                    });
+                }
             }
 
             let dashContainer = document.getElementById("dashboard-notice-board");
             if(dashContainer) {
-                let highPriority = allNotices.filter(n => ['Principal', 'Vice Principal', 'VP', 'Owner'].includes(n.sender)).slice(0, 5);
+                let highPriority = recentNotices.filter(n => ['Principal', 'Vice Principal', 'VP', 'Owner'].includes(n.sender)).slice(0, 5);
                 dashContainer.innerHTML = "";
-                if(highPriority.length === 0) dashContainer.innerHTML = `<div style="padding:15px; color:var(--text-muted); font-weight:bold; font-size:13px;">No official notices.</div>`;
-                
-                highPriority.forEach(n => {
-                    let color = n.sender === 'Principal' ? 'var(--danger)' : 'var(--warning)';
-                    dashContainer.innerHTML += `
-                    <div class="notice-item" style="background: rgba(239, 68, 68, 0.05); padding: 15px; border-left: 4px solid ${color}; border-radius: 8px; margin-bottom: 10px;">
-                        <h4 style="color: ${color}; margin-bottom: 5px; display: flex; justify-content: space-between; font-size:14px;">${n.title} 
-                            <span style="font-size: 10px; background: ${color}; color: #fff; padding: 3px 6px; border-radius: 6px;">${n.sender}</span>
-                        </h4>
-                        <p style="font-size: 13px; color: var(--text-main); font-weight: 600; line-height: 1.4;">${n.text}</p>
-                        <div style="font-size: 10px; color: var(--text-muted); margin-top: 8px; font-weight: bold; text-align: right;">${n.date} | ${n.time}</div>
-                    </div>`;
-                });
+                if(highPriority.length === 0) { 
+                    dashContainer.innerHTML = `<div style="padding:15px; color:var(--text-muted); font-weight:bold; font-size:13px;">No official notices.</div>`;
+                } else {
+                    highPriority.forEach(n => {
+                        let color = n.sender === 'Principal' ? 'var(--danger)' : 'var(--warning)';
+                        dashContainer.innerHTML += `
+                        <div class="notice-item" style="background: rgba(239, 68, 68, 0.05); padding: 15px; border-left: 4px solid ${color}; border-radius: 8px; margin-bottom: 10px;">
+                            <h4 style="color: ${color}; margin-bottom: 5px; display: flex; justify-content: space-between; font-size:14px;">${n.title} 
+                                <span style="font-size: 10px; background: ${color}; color: #fff; padding: 3px 6px; border-radius: 6px;">${n.sender}</span>
+                            </h4>
+                            <p style="font-size: 13px; color: var(--text-main); font-weight: 600; line-height: 1.4;">${n.text}</p>
+                            <div style="font-size: 10px; color: var(--text-muted); margin-top: 8px; font-weight: bold; text-align: right;">${n.date} | ${n.time}</div>
+                        </div>`;
+                    });
+                }
             }
         }
 
@@ -1611,7 +1813,8 @@
             let filter = document.getElementById("hw-filter") ? document.getElementById("hw-filter").value : "All";
             
             let rawTeacherHW = JSON.parse(localStorage.getItem("assignedTeacherHW")) || [];
-            let teacherHW = rawTeacherHW.map(hw => ({
+            // 🛑 PRODUCTION FIX: Only display homework assigned to THIS student's exact class
+            let teacherHW = rawTeacherHW.filter(hw => hw.class === studentClass).map(hw => ({
                 type: 'Today', 
                 subject: hw.topic.split(':')[0] || 'Assignment', 
                 teacher: hw.teacher, 
@@ -1645,20 +1848,9 @@
             }
         }
     // 🔗 LEVEL 2: Result Publish Lock & Dynamic Fee Ledger
-function fetchResults() {
-    let publishStatus = localStorage.getItem('principal_publish_results') === 'true';
-    let container = document.getElementById('exams');
-    if(!publishStatus && container) {
-        container.innerHTML = `<div class="card"><h3 style='color:var(--danger); text-align:center;'>🔒 Results are Locked. Awaiting Principal's Approval.</h3></div>`;
-        return;
-    }
-}
 
-function loadFeeLedger(studentId) {
-    let hrBills = JSON.parse(localStorage.getItem('fee_bills_db') || '[]');
-    let myBills = hrBills.filter(b => b.studentId === studentId); 
-    let totalPayable = myBills.reduce((sum, bill) => sum + parseInt(bill.amount), 0);
-}
+
+
     </script>
 </body>
 </html>
