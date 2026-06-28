@@ -332,11 +332,16 @@
         (function globalSecurityInterlocks() {
             let token = localStorage.getItem('erp_jwt_token');
             
-            // AUTO-LOGIN: Agar pehle se login hai, toh wapas usi dashboard par bhej do
+            // 🔒 AUTO-LOGIN: Agar pehle se login hai, toh wapas usi dashboard par bhej do
             if(token) {
                 try {
                     let role = atob(token).split('-')[0].toLowerCase();
-                    window.location.href = role + "_dashboard.html";
+                    // 🛑 FIX: Redirect drivers and transport heads to the same transport dashboard
+                    if(role === 'driver' || role === 'transport_head' || role === 'transport') {
+                        window.location.href = "transport_dashboard.html";
+                    } else {
+                        window.location.href = role + "_dashboard.html";
+                    }
                     return; 
                 } catch(e) {
                     localStorage.removeItem('erp_jwt_token'); 
@@ -350,7 +355,7 @@
                     document.body.innerHTML = `<div style='height:100vh; width:100vw; background:#000; color:#ef4444; display:flex; justify-content:center; align-items:center; font-size:24px; font-weight:900; text-align:center; z-index:999999; position:fixed; top:0; left:0;'>🚨 SCHOOL IN EMERGENCY LOCKDOWN.<br>STAY IN YOUR CLASSES. 🚨</div>`;
                 }
                 let sos = JSON.parse(localStorage.getItem('global_sos_alert'));
-                if(sos && sos.active && (window.location.href.includes('vp_dashboard') || window.location.href.includes('principal_dashboard'))) {
+                if(sos && sos.active) {
                     if(!document.getElementById('sos-overlay')) {
                         let audio = new Audio('https://www.soundjay.com/buttons/beep-01a.mp3'); 
                         audio.id = 'bhasma-alarm'; audio.loop = true; audio.play().catch(e=>console.log("Audio locked"));
@@ -463,8 +468,14 @@
 
                     localStorage.setItem("loggedInUser", data.user_name);
                     localStorage.setItem("userRole", role);
+                    
+                    // 🔒 TRANSPORT PANEL SYNC: Set role to uppercase DRIVER or HEAD for the transport dashboard logic
+                    if(role === 'driver') localStorage.setItem("loggedInUserRole", "DRIVER");
+                    else if(role === 'transport' || role === 'transport_head') localStorage.setItem("loggedInUserRole", "HEAD");
+                    else localStorage.setItem("loggedInUserRole", role.toUpperCase());
+                    
                     // 🛑 LEVEL 1 FIX: Setting Unique ID (Backend Fallback to Local Mock)
-                    localStorage.setItem("loggedInUserId", data.user_id || ("STU-" + Math.floor(1000 + Math.random() * 9000)));
+                    localStorage.setItem("loggedInUserId", data.user_id || ("ID-" + Math.floor(1000 + Math.random() * 9000)));
 
                     showToast("✅ Identity Verified", "Entering portal...", "#10b981");
 
@@ -474,13 +485,14 @@
                     setTimeout(() => {
                         let token = btoa(role + "-" + new Date().getTime() + "-MVM-SECURE");
                         localStorage.setItem('erp_jwt_token', token);
-                        localStorage.setItem('userRole', role);
+                        
+                        // Routing logic handling all variations
                         if (role === "student") window.location.href = "student_dashboard.html";
                         else if (role === "teacher") window.location.href = "teacher_dashboard.html";
                         else if (role === "vp") window.location.href = "vp_dashboard.html";
                         else if (role === "principal") window.location.href = "principal_dashboard.html";
                         else if (role === "hr") window.location.href = "hr_dashboard.html";
-                        else if (role === "transport") window.location.href = "transport_dashboard.html";
+                        else if (role === "transport" || role === "driver" || role === "transport_head") window.location.href = "transport_dashboard.html";
                         else if (role === "admin") window.location.href = "admin_dashboard.html";
                         else if (role === "owner") window.location.href = "owner_dashboard.html";
                         else window.location.href = "index.html"; 
