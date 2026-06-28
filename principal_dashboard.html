@@ -920,10 +920,22 @@
     <script>
         // 🛑 LEVEL 1: RBAC + Bhasma Mode + Delta Sync
         (function globalSecurityInterlocks() {
-            // ⚠️ SECURITY BYPASSED FOR TESTING: Token verification removed so you can directly access the file.
-            // (Only Bhasma mode SOS check remains)
+            // 🔒 CLOUD LINKED SECURITY: Verifies Token from index.html
+            let token = localStorage.getItem('erp_jwt_token');
+            if(!token) { window.location.href = "index.html"; return; }
+            try {
+                let decoded = atob(token);
+                let role = decoded.split('-')[0].toLowerCase();
+                // Allows both Principal and Owner (for impersonation) to view this page
+                if(role !== 'principal' && role !== 'owner') {
+                    alert("🛑 SECURITY BREACH: Unauthorized Role Access.");
+                    localStorage.clear(); window.location.href = "index.html"; return;
+                }
+            } catch(e) { localStorage.clear(); window.location.href = "index.html"; return; }
             
             setInterval(() => {
+            
+            
                 if(lockdown === 'lockdown' && !window.location.href.includes('principal_dashboard')) {
                     document.body.innerHTML = `<div style='height:100vh; width:100vw; background:#000; color:#ef4444; display:flex; justify-content:center; align-items:center; font-size:24px; font-weight:900; text-align:center; z-index:999999; position:fixed; top:0; left:0;'>🚨 SCHOOL IN EMERGENCY LOCKDOWN.<br>STAY IN YOUR CLASSES. 🚨</div>`;
                 }
