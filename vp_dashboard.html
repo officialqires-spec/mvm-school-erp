@@ -1048,7 +1048,7 @@
 
         function logoutVP() {
             if(confirm("Securely log out of the Vice Principal Portal?")) {
-                localStorage.removeItem("loggedInUser"); 
+                localStorage.removeItem("loggedInUser"); localStorage.removeItem("userRole"); localStorage.removeItem("loggedInUserRole"); localStorage.removeItem("loggedInUserId"); localStorage.removeItem("erp_jwt_token"); 
                 window.location.href = "index.html";
             }
         }
