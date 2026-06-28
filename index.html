@@ -450,18 +450,31 @@ let playPromise = video.play();
             // 👑 MASTER OWNER BACKDOOR (Bypasses Cloud if DB is empty)
             if (portalType === 'staff' && usernameOrEmail === 'owner' && password === 'mvm@123') {
                 showToast("👑 Supreme Access", "Authenticating Master Director...", "#d4af37");
-                
                 localStorage.setItem("loggedInUser", "Board of Directors");
                 localStorage.setItem("userRole", "owner");
                 localStorage.setItem("loggedInUserRole", "OWNER");
                 localStorage.setItem("loggedInUserId", "MVM-OWNER-01");
-                
                 document.getElementById("login-wrapper").style.opacity = "0";
-                
                 setTimeout(() => {
                     let token = btoa("owner-" + new Date().getTime() + "-MVM-SECURE");
                     localStorage.setItem('erp_jwt_token', token);
                     window.location.href = "owner_dashboard.html";
+                }, 1200);
+                return;
+            }
+
+            // 🎓 PRINCIPAL BACKDOOR (Hardcoded Emergency Access)
+            if (portalType === 'staff' && usernameOrEmail === 'principal' && password === 'mvm@123') {
+                showToast("🎓 Executive Access", "Authenticating Principal...", "#10b981");
+                localStorage.setItem("loggedInUser", "Dr. A.K. Singh (Principal)");
+                localStorage.setItem("userRole", "principal");
+                localStorage.setItem("loggedInUserRole", "PRINCIPAL");
+                localStorage.setItem("loggedInUserId", "MVM-PRIN-01");
+                document.getElementById("login-wrapper").style.opacity = "0";
+                setTimeout(() => {
+                    let token = btoa("principal-" + new Date().getTime() + "-MVM-SECURE");
+                    localStorage.setItem('erp_jwt_token', token);
+                    window.location.href = "principal_dashboard.html";
                 }, 1200);
                 return;
             }
