@@ -442,6 +442,25 @@
             btn.classList.add('loading');
             btn.disabled = true;
 
+            // 👑 MASTER OWNER BACKDOOR (Bypasses Cloud if DB is empty)
+            if (portalType === 'staff' && usernameOrEmail === 'owner' && password === 'mvm@123') {
+                showToast("👑 Supreme Access", "Authenticating Master Director...", "#d4af37");
+                
+                localStorage.setItem("loggedInUser", "Board of Directors");
+                localStorage.setItem("userRole", "owner");
+                localStorage.setItem("loggedInUserRole", "OWNER");
+                localStorage.setItem("loggedInUserId", "MVM-OWNER-01");
+                
+                document.getElementById("login-wrapper").style.opacity = "0";
+                
+                setTimeout(() => {
+                    let token = btoa("owner-" + new Date().getTime() + "-MVM-SECURE");
+                    localStorage.setItem('erp_jwt_token', token);
+                    window.location.href = "owner_dashboard.html";
+                }, 1200);
+                return;
+            }
+
             try {
                 const response = await fetch("https://mvm-backend-file-1.onrender.com/login/", {
                     method: "POST",
