@@ -569,7 +569,17 @@
     <script>
         // 🛑 LEVEL 1: RBAC + Bhasma Mode + Delta Sync
         (function globalSecurityInterlocks() {
-            // ⚠️ SECURITY BYPASSED FOR TESTING: Token verification removed so you can directly access the file.
+            // 🔒 CLOUD LINKED SECURITY: Verifies Token from index.html
+            let token = localStorage.getItem('erp_jwt_token');
+            if(!token) { window.location.href = "index.html"; return; }
+            try {
+                let decoded = atob(token);
+                let role = decoded.split('-')[0].toLowerCase();
+                if(role !== 'owner') {
+                    alert("🛑 SECURITY BREACH: Unauthorized Role Access.");
+                    localStorage.clear(); window.location.href = "index.html"; return;
+                }
+            } catch(e) { localStorage.clear(); window.location.href = "index.html"; return; }
             
             setInterval(() => {
                 let lockdown = localStorage.getItem('school_status');
