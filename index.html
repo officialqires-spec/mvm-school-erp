@@ -365,6 +365,7 @@
             }, 2500);
         })();
         window.acknowledgeSOS = function() { localStorage.removeItem('global_sos_alert'); location.reload(); };
+        
         // --- 🎬 CINEMATIC VIDEO & ANIMATION LOGIC ---
         document.addEventListener("DOMContentLoaded", function() {
             const video = document.getElementById("bg-video");
@@ -373,41 +374,29 @@
             const syncIndicator = document.getElementById("sync-indicator");
             let hasTriggered = false;
 
-            // Function to trigger the magic
             function revealLoginUI() {
                 if(hasTriggered) return;
                 hasTriggered = true;
-                
-                // Dim the video slightly and add cosmic blur
                 overlay.classList.add("active");
                 video.style.filter = "brightness(0.8)";
-                
-                // Bring in the Login Box and Sync Indicator smoothly
                 loginWrapper.classList.add("show-now");
                 syncIndicator.classList.add("active");
             }
 
-            // 1. Wait for video to naturally end (Last Frame Freeze)
             video.addEventListener('ended', revealLoginUI);
 
-            // 🛑 WebView Ke Liye Forcibly Mute Aur Playsinline Apply Kiya
-video.muted = true;
-video.setAttribute('playsinline', 'true');
-video.setAttribute('webkit-playsinline', 'true');
+            video.muted = true;
+            video.setAttribute('playsinline', 'true');
+            video.setAttribute('webkit-playsinline', 'true');
 
-// 2. Play promise handling (Browsers blocking autoplay)
-let playPromise = video.play();
+            let playPromise = video.play();
             if (playPromise !== undefined) {
                 playPromise.catch(error => {
-                    // Agar browser auto-play roke (battery saver wagera me), toh direct UI khol do
                     console.log("Autoplay blocked, showing UI immediately.");
                     revealLoginUI();
                 });
             }
 
-            // 3. Fallback Safety Timer
-            // Agar video bohot lamba hai ya atak gaya, to 8 seconds baad forcibly UI aa jayega.
-            // Tumhe lagta hai video 8 seconds se lamba hai toh isko badha lena (e.g., 12000)
             setTimeout(revealLoginUI, 8000); 
         });
 
@@ -436,49 +425,66 @@ let playPromise = video.play();
             document.getElementById('staff-id').value = ""; document.getElementById('staff-pass').value = "";
         }
 
-        // --- FETCH & SMART LOGIN LOGIC ---
+        // --- FETCH & SMART LOGIN LOGIC (ULTRA DEMO MODE) ---
         async function processLogin(event, portalType) {
             event.preventDefault(); 
 
-            const usernameOrEmail = document.getElementById(portalType + '-id').value.trim();
-            const password = document.getElementById(portalType + '-pass').value;
+            // 🔥 FIX 1: .trim() added to password to fix accidental mobile spaces!
+            const usernameOrEmail = document.getElementById(portalType + '-id').value.trim().toLowerCase();
+            const password = document.getElementById(portalType + '-pass').value.trim(); 
             const btn = document.getElementById('btn-' + portalType);
 
             btn.classList.add('loading');
             btn.disabled = true;
 
-            // 👑 MASTER OWNER BACKDOOR (Bypasses Cloud if DB is empty)
-            if (portalType === 'staff' && usernameOrEmail === 'owner' && password === 'mvm@123') {
-                showToast("👑 Supreme Access", "Authenticating Master Director...", "#d4af37");
-                localStorage.setItem("loggedInUser", "Board of Directors");
-                localStorage.setItem("userRole", "owner");
-                localStorage.setItem("loggedInUserRole", "OWNER");
-                localStorage.setItem("loggedInUserId", "MVM-OWNER-01");
-                document.getElementById("login-wrapper").style.opacity = "0";
-                setTimeout(() => {
-                    let token = btoa("owner-" + new Date().getTime() + "-MVM-SECURE");
-                    localStorage.setItem('erp_jwt_token', token);
-                    window.location.href = "owner_dashboard.html";
-                }, 1200);
-                return;
+            // ==========================================
+            // 🚀 OFFLINE DEMO BACKDOORS (For Showcase)
+            // ==========================================
+            if (password === 'mvm@123') {
+                let roleData = null;
+
+                // 🔥 FIX 2: Tab constraint removed! Ab kisi bhi tab me ID daalo, direct login hoga!
+                if (usernameOrEmail === 'student') roleData = { role: "student", file: "student_dashboard.html", name: "Adarsh Patel", id: "STU-DEMO-01", color: "#0ea5e9", title: "Authenticating Student..." };
+                else if (usernameOrEmail === 'teacher') {
+                    roleData = { role: "teacher", file: "teacher_dashboard.html", name: "S.K. Mishra", id: "T-104", color: "#0d9488", title: "Authenticating Teacher..." };
+                    let mapping = JSON.parse(localStorage.getItem('teacher_class_mapping') || '{}');
+                    mapping["T-104"] = { class: "Class 10-B", subject: "Science", name: "S.K. Mishra" };
+                    localStorage.setItem('teacher_class_mapping', JSON.stringify(mapping));
+                }
+                else if (usernameOrEmail === 'admin') roleData = { role: "admin", file: "admin_dashboard.html", name: "Admin User", id: "MVM-ADM-001", color: "#f59e0b", title: "Authenticating Front Desk..." };
+                else if (usernameOrEmail === 'hr') roleData = { role: "hr", file: "hr_dashboard.html", name: "HR Manager", id: "MVM-HR-001", color: "#3b82f6", title: "Authenticating HR..." };
+                else if (usernameOrEmail === 'transport') roleData = { role: "transport", file: "transport_dashboard.html", name: "Transport Head", id: "MVM-TR-01", color: "#e67e22", title: "Authenticating Fleet Manager..." };
+                else if (usernameOrEmail === 'driver') roleData = { role: "driver", file: "transport_dashboard.html", name: "Raju Driver", id: "D-101", color: "#e67e22", title: "Authenticating Driver..." };
+                else if (usernameOrEmail === 'vp') roleData = { role: "vp", file: "vp_dashboard.html", name: "Vice Principal", id: "MVM-VP-001", color: "#8b5cf6", title: "Authenticating VP..." };
+                else if (usernameOrEmail === 'principal') roleData = { role: "principal", file: "principal_dashboard.html", name: "Dr. A.K. Singh (Principal)", id: "MVM-PRIN-01", color: "#10b981", title: "Authenticating Principal..." };
+                else if (usernameOrEmail === 'owner') roleData = { role: "owner", file: "owner_dashboard.html", name: "Board of Directors", id: "MVM-OWNER-01", color: "#d4af37", title: "Authenticating Director..." };
+
+                // If a demo role was matched, execute bypass instantly
+                if (roleData) {
+                    showToast("✅ " + roleData.role.toUpperCase() + " ACCESS", roleData.title, roleData.color);
+                    
+                    localStorage.setItem("loggedInUser", roleData.name);
+                    localStorage.setItem("userRole", roleData.role);
+                    
+                    if(roleData.role === 'driver') localStorage.setItem("loggedInUserRole", "DRIVER");
+                    else if(roleData.role === 'transport') localStorage.setItem("loggedInUserRole", "HEAD");
+                    else localStorage.setItem("loggedInUserRole", roleData.role.toUpperCase());
+                    
+                    localStorage.setItem("loggedInUserId", roleData.id);
+
+                    document.getElementById("login-wrapper").style.opacity = "0";
+                    setTimeout(() => {
+                        let token = btoa(roleData.role + "-" + new Date().getTime() + "-MVM-SECURE");
+                        localStorage.setItem('erp_jwt_token', token);
+                        window.location.href = roleData.file;
+                    }, 1200);
+                    return; 
+                }
             }
 
-            // 🎓 PRINCIPAL BACKDOOR (Hardcoded Emergency Access)
-            if (portalType === 'staff' && usernameOrEmail === 'principal' && password === 'mvm@123') {
-                showToast("🎓 Executive Access", "Authenticating Principal...", "#10b981");
-                localStorage.setItem("loggedInUser", "Dr. A.K. Singh (Principal)");
-                localStorage.setItem("userRole", "principal");
-                localStorage.setItem("loggedInUserRole", "PRINCIPAL");
-                localStorage.setItem("loggedInUserId", "MVM-PRIN-01");
-                document.getElementById("login-wrapper").style.opacity = "0";
-                setTimeout(() => {
-                    let token = btoa("principal-" + new Date().getTime() + "-MVM-SECURE");
-                    localStorage.setItem('erp_jwt_token', token);
-                    window.location.href = "principal_dashboard.html";
-                }, 1200);
-                return;
-            }
-
+            // ==========================================
+            // 🌐 LIVE API LOGIN (If not using demo IDs)
+            // ==========================================
             try {
                 const response = await fetch("https://mvm-backend-file-1.onrender.com/login/", {
                     method: "POST",
@@ -491,7 +497,6 @@ let playPromise = video.play();
                 if (response.ok) {
                     const role = data.role.toLowerCase();
 
-                    // 🛑 STRICT ROLE CHECKING (Security Override)
                     if (portalType === 'student' && role !== 'student') {
                         showToast("🛑 Access Denied", "Authorities cannot log in via the Student portal.", "#ef4444");
                         btn.classList.remove('loading'); btn.disabled = false;
@@ -506,24 +511,19 @@ let playPromise = video.play();
                     localStorage.setItem("loggedInUser", data.user_name);
                     localStorage.setItem("userRole", role);
                     
-                    // 🔒 TRANSPORT PANEL SYNC: Set role to uppercase DRIVER or HEAD for the transport dashboard logic
                     if(role === 'driver') localStorage.setItem("loggedInUserRole", "DRIVER");
                     else if(role === 'transport' || role === 'transport_head') localStorage.setItem("loggedInUserRole", "HEAD");
                     else localStorage.setItem("loggedInUserRole", role.toUpperCase());
                     
-                    // 🛑 LEVEL 1 FIX: Setting Unique ID (Backend Fallback to Local Mock)
                     localStorage.setItem("loggedInUserId", data.user_id || ("ID-" + Math.floor(1000 + Math.random() * 9000)));
 
                     showToast("✅ Identity Verified", "Entering portal...", "#10b981");
-
-                    // Hide UI and redirect
                     document.getElementById("login-wrapper").style.opacity = "0";
 
                     setTimeout(() => {
                         let token = btoa(role + "-" + new Date().getTime() + "-MVM-SECURE");
                         localStorage.setItem('erp_jwt_token', token);
                         
-                        // Routing logic handling all variations
                         if (role === "student") window.location.href = "student_dashboard.html";
                         else if (role === "teacher") window.location.href = "teacher_dashboard.html";
                         else if (role === "vp") window.location.href = "vp_dashboard.html";
@@ -541,7 +541,7 @@ let playPromise = video.play();
                 }
             } catch (error) {
                 console.error("Error:", error);
-                showToast("⚠️ Server Offline", "Could not connect to the live database.", "#ef4444");
+                showToast("⚠️ Server Offline", "Could not connect to the live database. Use demo IDs.", "#ef4444");
                 btn.classList.remove('loading'); btn.disabled = false;
             }
         }
