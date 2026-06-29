@@ -263,6 +263,19 @@
         @keyframes slideDownToast { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeOutToast { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-20px); } }
 
+        /* 🛑 ANDROID WEBVIEW PLAY BUTTON REMOVER */
+video::-webkit-media-controls {
+    display: none !important;
+    opacity: 0 !important;
+}
+video::-webkit-media-controls-start-playback-button {
+    display: none !important;
+    opacity: 0 !important;
+}
+video::-webkit-media-controls-enclosure {
+    display: none !important;
+    opacity: 0 !important;
+}
     </style>
 </head>
 <body>
