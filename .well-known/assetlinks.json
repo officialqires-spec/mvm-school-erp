@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "app.vercel.mvm_school_erp.twa",
+        "sha256_cert_fingerprints": ["7F:B1:3C:38:21:51:15:20:09:17:50:F1:46:05:3B:3B:FD:7B:B8:78:5C:BC:C3:41:62:F1:A0:2C:65:B8:DE:63"]
+      }
+    }]
