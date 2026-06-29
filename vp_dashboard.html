@@ -1293,42 +1293,44 @@
 
         // --- GRIEVANCE CELL ---
         function loadGrievances() {
-            let grev = JSON.parse(localStorage.getItem("grievanceLog"));
-            if(!grev) {
-                grev = [ 
-                    { id: 1, text: "Some senior students are fighting near the basketball court daily.", status: "Pending" }, 
-                    { id: 2, text: "Tap in 2nd floor boy's washroom is broken.", status: "Pending" } 
-                ];
-                localStorage.setItem("grievanceLog", JSON.stringify(grev));
-            }
-            
+            let grev = JSON.parse(localStorage.getItem("grievanceLog")) || [];
             let container = document.getElementById("grievance-list"); 
             container.innerHTML = "";
             
-            grev.forEach((g, idx) => {
-                if(g.status === "Pending") {
+            // 🔥 FIX: Filter specifically for VP target
+            let vpGrievances = grev.filter(g => g.target === "VP");
+            let pendingGrev = vpGrievances.filter(g => g.status === "Pending");
+            
+            if(pendingGrev.length === 0) {
+                container.innerHTML = "<p style='color: var(--text-muted); font-size: 14px; font-weight:600;'>No pending reports for Vice Principal.</p>";
+            } else {
+                pendingGrev.slice().reverse().forEach(g => {
                     container.innerHTML += `
                     <div class="list-card" style="border-left: 4px solid var(--danger);">
                         <p style="font-size:15px; font-weight:800; margin-bottom:15px; color:var(--text-main);">"${g.text}"</p>
-                        <button onclick="solveGrievance(${idx})" class="btn btn-danger btn-small" style="width:100%;">Mark as Solved / Taken Action</button>
+                        <button onclick="solveGrievance(${g.id})" class="btn btn-danger btn-small" style="width:100%;">Mark as Solved / Taken Action</button>
                     </div>`;
-                }
-            });
-            document.getElementById("grev-count").innerText = grev.filter(g=>g.status==="Pending").length;
+                });
+            }
+            // Update Dashboard Badge
+            if(document.getElementById("grev-count")) document.getElementById("grev-count").innerText = pendingGrev.length;
         }
 
-        async function solveGrievance(idx) {
+        async function solveGrievance(id) {
             let grev = JSON.parse(localStorage.getItem("grievanceLog")) || []; 
-            grev[idx].status = "Solved";
-            localStorage.setItem("grievanceLog", JSON.stringify(grev)); 
-            
-            // 🔥 CLOUD SYNC
-            if(typeof fetchAPI === 'function' && grev[idx].id) {
-                fetchAPI(`/api/grievances/${grev[idx].id}`, 'PUT', { status: "Solved" }).catch(e=>{});
+            let item = grev.find(g => g.id === id);
+            if(item) {
+                item.status = "Resolved by VP";
+                localStorage.setItem("grievanceLog", JSON.stringify(grev)); 
+                
+                // 🔥 CLOUD SYNC
+                if(typeof fetchAPI === 'function') {
+                    fetchAPI(`/api/grievances/${id}`, 'PUT', { status: "Resolved by VP" }).catch(e=>{});
+                }
+                
+                showUniversalToast("✅ Action Taken", "Grievance marked as solved in Cloud.", "var(--success)"); 
+                loadGrievances();
             }
-            
-            showUniversalToast("✅ Action Taken", "Grievance marked as solved in Cloud.", "var(--success)"); 
-            loadGrievances();
         }
 
         // --- VP AI & DRAFTER ---
