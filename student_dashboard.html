@@ -1599,9 +1599,9 @@
             if(!text) return showToast("Error", "Type issue!", "var(--danger)");
             
             let grev = JSON.parse(localStorage.getItem("grievanceLog")) || [];
-            let finalMsg = `[To ${target}]: ` + text;
             
-            grev.push({ id: Date.now(), text: finalMsg, status: "Pending", by: loggedInUser }); 
+            // 🔥 FIX: Storing 'target' separately so VP and Principal can filter it easily
+            grev.push({ id: Date.now(), text: escapeHTML(text), target: target, status: "Pending", by: loggedInUser }); 
             localStorage.setItem("grievanceLog", JSON.stringify(grev));
             
             // 🔥 CLOUD SYNC: Send to DB securely
@@ -1619,7 +1619,12 @@
             if(myList.length === 0) return c.innerHTML = "<p style='color: var(--text-muted); font-size: 14px; font-weight:700;'>No reports.</p>";
             myList.slice().reverse().forEach(g => {
                 let color = g.status === "Pending" ? "var(--warning)" : "var(--success)";
-                c.innerHTML += `<div style="padding: 15px; border-left: 4px solid ${color}; background: var(--bg-color); margin-bottom: 12px; border-radius: 12px; border: 1px solid var(--border-color);"><p style="font-size:14px; margin-bottom:8px; font-weight:700; color:var(--text-main);">"${g.text}"</p><span style="font-size:11px; font-weight:900; text-transform:uppercase; color:${color}; border:1px solid ${color}; padding:3px 8px; border-radius:6px;">${g.status === 'Pending'?'⏳':'✅'} ${g.status}</span></div>`;
+                c.innerHTML += `
+                <div style="padding: 15px; border-left: 4px solid ${color}; background: var(--bg-color); margin-bottom: 12px; border-radius: 12px; border: 1px solid var(--border-color);">
+                    <div style="font-size:10px; color:var(--info); font-weight:900; margin-bottom:5px;">SENT TO: ${g.target || 'VP'}</div>
+                    <p style="font-size:14px; margin-bottom:8px; font-weight:700; color:var(--text-main);">"${g.text}"</p>
+                    <span style="font-size:11px; font-weight:900; text-transform:uppercase; color:${color}; border:1px solid ${color}; padding:3px 8px; border-radius:6px;">${g.status === 'Pending'?'⏳':'✅'} ${g.status}</span>
+                </div>`;
             });
         }
 
@@ -1849,7 +1854,10 @@
         }
     // 🔗 LEVEL 2: Result Publish Lock & Dynamic Fee Ledger
 
-
+// 🔥 LIVE SYNC FOR SECRET GRIEVANCE BOX
+    window.addEventListener('storage', function(e) { 
+        if (e.key === 'grievanceLog') loadMyGrievances(); 
+    });
 
     </script>
 </body>
