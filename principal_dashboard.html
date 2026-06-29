@@ -1119,18 +1119,23 @@
             let list = document.getElementById("prin-grievance-list");
             if(!list) return;
 
-            let pendingGrev = grev.filter(g => g.status === "Pending").length;
-            document.getElementById("urgent-grev-count").innerText = pendingGrev;
+            // 🔥 FIX: Filter specifically for Principal target
+            let prinGrievances = grev.filter(g => g.target === "Principal");
+            let pendingGrev = prinGrievances.filter(g => g.status === "Pending");
+            
+            // Safe checking for dashboard badge (if exists)
+            let badge = document.getElementById("urgent-grev-count");
+            if(badge) badge.innerText = pendingGrev.length;
 
-            if(grev.length === 0) {
+            if(prinGrievances.length === 0) {
                 list.innerHTML = "<p style='color: var(--text-muted); font-size: 14px; font-weight:600;'>All good. No active complaints.</p>";
                 return;
             }
 
             list.innerHTML = "";
-            grev.slice().reverse().forEach(g => {
-                let color = g.status === "Pending" ? "var(--warning)" : "var(--success)";
-                let actionBtn = g.status === "Pending" ? `<button onclick="resolvePrinGrievance(${g.id})" class="btn btn-success btn-small" style="margin-top:10px;">Intervene & Mark Resolved</button>` : '';
+            prinGrievances.slice().reverse().forEach(g => {
+                let color = g.status === "Pending" ? "var(--danger)" : "var(--success)";
+                let actionBtn = g.status === "Pending" ? `<button onclick="resolvePrinGrievance(${g.id})" class="btn btn-success btn-small" style="margin-top:10px; width:100%;">Intervene & Mark Resolved</button>` : '';
                 
                 list.innerHTML += `
                 <div class="list-card" style="border-left: 4px solid ${color};">
